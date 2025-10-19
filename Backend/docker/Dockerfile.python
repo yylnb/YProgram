@@ -1,0 +1,11 @@
+# 基于轻量 Python 镜像
+FROM python:3.12-slim
+
+# 设置容器内工作目录
+WORKDIR /code
+
+# 升级 pip（可选）
+RUN python -m pip install --upgrade pip
+
+# 以非 root 用户运行
+USER nobody:nogroup
