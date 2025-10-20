@@ -469,39 +469,4 @@ onBeforeUnmount(() => {
   .energy-numbers { font-size: 12px; }
   .energy-infinite { font-size: 16px; }
 }
-
-/* --------------------------- */
-/* MOBILE (<= 640px) 适配      */
-/* --------------------------- */
-@media (max-width: 640px) {
-  .lib-hero { height: 62px; }
-  .hero-title { font-size: 21px; height: 36px; top: 10px; }
-  .lib-hero::after { left: 6%; right: 6%; bottom: 6px; }
-  .hero-left { left: 13%; }
-  .hero-right { left: 87%; }
-
-
-  .controls { padding: 10px 8px; gap: 8px; align-items: flex-start; }
-
-  .pill { padding: 5px 8px; font-size: 13px; border-radius: 8px; }
-  .languages { gap: 6px; }
-
-  .actions .muted-desc { font-size: 12px; }
-  .btn-white { padding: 6px 8px; font-size: 13px; }
-
-  /* stage buttons 在手机上更紧凑并每行两列 */
-  .stage-btn { min-width: 120px; padding: 8px; gap: 4px; border-radius: 10px; }
-  .stage-title { font-size: 14px; }
-  .stage-sub { font-size: 11px; }
-  .stages-list { gap: 8px; }
-  .stage-btn { flex: 1 1 calc(50% - 8px); } /* 两列布局（随容器换行） */
-
-  /* energy 面板缩小 */
-  .energy-panel { padding: 4px 6px; gap: 6px; border-radius: 8px; }
-  .battery { width: 36px; height: 16px; }
-  .battery-body { width: 28px; height: 16px; border-radius: 3px; }
-  .energy-numbers { font-size: 12px; }
-  .energy-infinite { font-size: 14px; }
-}
-
 </style>
