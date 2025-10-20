@@ -30,7 +30,7 @@
 
         <div
           class="energy-panel"
-          :class="{ vip: isVip }"
+          :class="{ vip: isVip, low: isLow }"
           role="region"
           aria-label="能量面板"
           :title="energyTooltip"
@@ -45,7 +45,7 @@
           <div class="energy-text">
             <template v-if="isVip">
               <div class="energy-numbers" aria-live="polite"><span class="energy-infinite">∞</span></div>
-              <div class="energy-meta text-xs">无限能量（YPro）</div>
+              <div class="energy-meta text-xs">YPro会员</div>
             </template>
             <template v-else>
               <div class="energy-numbers" aria-live="polite">
@@ -121,6 +121,12 @@ const energyPercent = computed(() => {
   if (!maxEnergy.value || maxEnergy.value === 0) return 0
   return Math.round((energy.value / maxEnergy.value) * 100)
 })
+const isLow = computed(() => {
+  if (isVip.value) return false
+  if (!maxEnergy.value || maxEnergy.value === 0) return false
+  return (energy.value / maxEnergy.value) <= 0.2
+})
+
 const energyTooltip = computed(() => {
   if (!token.value) return '请登录以同步能量'
   if (isVip.value) return `会员：无限能量`
@@ -266,7 +272,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   if (_energyPollTimer) { clearInterval(_energyPollTimer); _energyPollTimer = null }
-  if (_tick_TIMER) { clearInterval(_tickTimer); _tick_TIMER = null } // defensive clear
+  if (_tickTimer) { clearInterval(_tickTimer); _tickTimer = null }
   if (_onAuthChanged) window.removeEventListener('auth-changed', _onAuthChanged)
 })
 </script>
@@ -280,14 +286,6 @@ onBeforeUnmount(() => {
   position: relative;
 }
 
-/* 避免外部背景图或样式影响内部元素显示 */
-/* .mapnav-root, .mapnav-root * {
-  color: inherit !important;
-  background: transparent !important;
-  background-image: none !important;
-  box-shadow: none !important;
-} */
-
 /* hero 标题定位与样式 */
 .lib-hero {
   position: relative; 
@@ -298,13 +296,27 @@ onBeforeUnmount(() => {
   border: none !important; 
   box-shadow: none !important; 
 }
+
+/* 白色 1px 条带：位于标题与下面按钮之间 */
+.lib-hero::after {
+  content: "";
+  position: absolute;
+  left: 33%;
+  right: 33%;
+  bottom: 6px; /* 微调位置，确保位于标题下方并在 buttons 上方 */
+  height: 1px;
+  background: #ffffff;
+  opacity: 1;
+  pointer-events: none;
+}
+
 /* 渐变文字：线性渐变 + WebKit 背景裁切（主流浏览器支持） */
 .hero-title {
   position: absolute;
   top: 18px;
   font-weight: 800;
   line-height: 1;
-  font-size: 28px;
+  font-size: 40px;
   height: 56px;
   display: flex;
   align-items: center;
@@ -313,7 +325,7 @@ onBeforeUnmount(() => {
   white-space: nowrap;
 
   /* --- 渐变文字相关 --- */
-  background: linear-gradient(90deg, #0e78e9 0%, #7a3be9 100%);
+  background: linear-gradient(90deg, #0e78e9 0%, #c63be9 100%);
   -webkit-background-clip: text; /* 必需（Chrome、Safari） */
   -webkit-text-fill-color: transparent; /* 必需（Chrome、Safari） */
 
@@ -338,7 +350,7 @@ onBeforeUnmount(() => {
   font-weight: 700;
   background: transparent !important;
   color: #fff !important;
-  border: 1px solid rgba(255,255,255,0.06) !important;
+  border: 1px solid #8b5cf6 !important;
   transition: transform .12s ease, box-shadow .12s ease, color .12s, background .12s;
   opacity: 1 !important;
 }
@@ -369,7 +381,7 @@ onBeforeUnmount(() => {
   border-radius: 12px;
   background: transparent !important;
   color: #fff !important;
-  border: 1px solid rgba(255,255,255,0.04) !important;
+  border: 1px solid #8b5cf6 !important;
   transition: background .12s ease, color .12s ease, box-shadow .12s ease, transform .12s ease;
 }
 
@@ -403,21 +415,93 @@ onBeforeUnmount(() => {
 .stage-sub { font-size: 13px; color: #d1d5db !important; }
 
 /* energy panel and misc (kept dark/white) */
-.energy-panel { display:flex; align-items:center; gap:10px; padding:6px 8px; border-radius:10px; cursor:pointer; user-select:none; transition: transform .12s ease, box-shadow .12s ease; background: rgba(255,255,255,0.02) !important; border: 1px solid rgba(255,255,255,0.04) !important; color: #fff !important; }
+.energy-panel { display:flex; align-items:center; gap:10px; padding:6px 8px; border-radius:10px; cursor:pointer; user-select:none; transition: transform .12s ease, box-shadow .12s ease; background: rgba(176, 176, 176, 0.321) !important; border: 1px solid rgba(255,255,255,0.04) !important; color: #fff !important; }
 .energy-panel:hover { transform: translateY(-2px) !important; box-shadow: 0 10px 20px rgba(255,255,255,0.02) !important; }
 .battery { position: relative; width: 46px; height: 22px; display:flex; align-items:center; overflow: hidden; box-sizing: border-box; }
-.battery-body { width: 36px; height: 22px; border-radius: 4px; border: 2px solid rgba(255,255,255,0.06); position: relative; background: rgba(255,255,255,0.01); overflow:hidden; }
+.battery-body { width: 36px; height: 22px; border-radius: 4px; border: 2px solid rgba(255,255,255,0.12); position: relative; background: rgba(255,255,255,0.08); overflow:hidden; }
+/* 默认电池填充（绿色） */
 .battery-fill { position:absolute; left:0; top:0; bottom:0; width:0%; transition: width 0.6s ease; background: linear-gradient(90deg,#22c55e,#10b981); }
-.energy-text { display:flex; flex-direction:column; line-height:1; color: #d1d5db !important; }
-.energy-numbers { font-weight:800; font-size:13px; color:#fff !important; }
-.energy-infinite { font-size:18px; color:#fbbf24 !important; font-weight:900; }
+
+/* 低电量（非 VIP 且 <=20%）时改成红色渐变 */
+.energy-panel.low .battery-fill { background: linear-gradient(90deg,#ef4444,#f97316); }
+
+/* VIP：电池与文字变金色 */
+.energy-panel.vip .battery-body { border-color: rgba(212,175,55,0.25); background: rgba(212,175,55,0.06); }
+.energy-panel.vip .battery-fill { background: linear-gradient(90deg,#D4AF37,#FBBF24); }
+.energy-panel.vip .energy-text { color: #D4AF37 !important; }
+.energy-panel.vip .energy-numbers { color: #D4AF37 !important; }
+.energy-panel.vip .energy-infinite { color: #D4AF37 !important; }
+
+/* 非 VIP：文字强制黑色（按钮/面板仍保持暗色背景），电池填充保持绿色（或 low 时的红色） */
+.energy-panel:not(.vip) .energy-text { color: #ffffff !important; }
+.energy-panel:not(.vip) .energy-numbers { color: #ffffff !important; }
+
+/* infinite 符号在 VIP 下更醒目 */
+.energy-infinite { font-size:18px; color:#fbbf24; font-weight:900; }
 
 /* focus */
 .pill:focus, .btn-white:focus, .stage-btn:focus { outline: 3px solid rgba(139,92,246,0.18) !important; outline-offset: 2px; border-radius: 10px; }
 
-/* responsive: narrow screens put titles centered */
-@media (max-width: 900px) {
-  .hero-left, .hero-right { left: 50% !important; transform: translateX(-50%); top: 14px; font-size: 20px; }
-  .stage-btn { min-width: 140px; }
+/* --------------------------- */
+/* PAD (641px — 1023px) 调整   */
+/* --------------------------- */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .lib-hero { height: 78px; }
+  .hero-title { font-size: 32px; height: 44px; top: 14px; }
+  .lib-hero::after { left: 18%; right: 18%; bottom: 6px; }
+  .hero-left { left: 30%; }
+  .hero-right { left: 70%; }
+
+  .controls { gap:10px; }
+
+  .pill { padding: 6px 10px; font-size: 14px; border-width: 1px; }
+  .pill:not(.active):hover { transform: translateY(-2px) }
+
+  .stage-btn { min-width: 150px; padding: 10px; gap: 5px; border-radius: 10px; }
+  .stage-title { font-size: 18px; }
+  .stage-sub { font-size: 12px; }
+
+  .stages-list { gap: 12px; }
+
+  .energy-panel { padding: 5px 7px; gap: 8px; }
+  .battery { width: 40px; height: 20px; }
+  .battery-body { width: 32px; height: 20px; border-radius: 4px; }
+  .energy-numbers { font-size: 12px; }
+  .energy-infinite { font-size: 16px; }
 }
+
+/* --------------------------- */
+/* MOBILE (<= 640px) 适配      */
+/* --------------------------- */
+@media (max-width: 640px) {
+  .lib-hero { height: 62px; }
+  .hero-title { font-size: 21px; height: 36px; top: 10px; }
+  .lib-hero::after { left: 6%; right: 6%; bottom: 6px; }
+  .hero-left { left: 13%; }
+  .hero-right { left: 87%; }
+
+
+  .controls { padding: 10px 8px; gap: 8px; align-items: flex-start; }
+
+  .pill { padding: 5px 8px; font-size: 13px; border-radius: 8px; }
+  .languages { gap: 6px; }
+
+  .actions .muted-desc { font-size: 12px; }
+  .btn-white { padding: 6px 8px; font-size: 13px; }
+
+  /* stage buttons 在手机上更紧凑并每行两列 */
+  .stage-btn { min-width: 120px; padding: 8px; gap: 4px; border-radius: 10px; }
+  .stage-title { font-size: 14px; }
+  .stage-sub { font-size: 11px; }
+  .stages-list { gap: 8px; }
+  .stage-btn { flex: 1 1 calc(50% - 8px); } /* 两列布局（随容器换行） */
+
+  /* energy 面板缩小 */
+  .energy-panel { padding: 4px 6px; gap: 6px; border-radius: 8px; }
+  .battery { width: 36px; height: 16px; }
+  .battery-body { width: 28px; height: 16px; border-radius: 3px; }
+  .energy-numbers { font-size: 12px; }
+  .energy-infinite { font-size: 14px; }
+}
+
 </style>

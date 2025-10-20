@@ -4,12 +4,15 @@
 
     <div class="map-canvas relative" :style="{ height: canvasHeight + 'px' }">
       <svg
-        v-if="svgPath"
+        v-if="fullPath"
         class="absolute inset-0 w-full h-full pointer-events-none"
         :viewBox="`0 0 ${svgVW} ${svgVH}`"
         preserveAspectRatio="none"
       >
-        <path :d="svgPath" fill="none" stroke="rgba(132,63,141,0.12)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+        <!-- 背景整条路径（原始颜色） -->
+        <path :d="fullPath" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+        <!-- 进度路径（从第1单元到当前学习单元）——绿色 -->
+        <path v-if="progressPath" :d="progressPath" fill="none" stroke="rgba(34,197,94,0.95)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
 
       <div class="nodes-container relative">
@@ -25,8 +28,17 @@
           }"
         >
           <button
-            :class="['unit-node', nodeStateClass(node.localNumber)]"
+            :class="[
+              'unit-node',
+              nodeStateClass(node.localNumber),
+              { 'is-pressed': pressedNodeKey === node.unitKey }
+            ]"
             @click="onNodeClick(node)"
+            @mousedown="onPress(node)"
+            @mouseup="onRelease"
+            @mouseleave="onRelease"
+            @touchstart.prevent="onPress(node)"
+            @touchend="onRelease"
             :disabled="!isUnitUnlocked(node.localNumber)"
             :aria-label="`单元 ${node.localIndex}（${selectedLang}）`"
           >
@@ -41,10 +53,6 @@
         </div>
       </div>
     </div>
-
-    <p class="mt-4 text-sm text-gray-600">
-      说明：节点按上下曲折排列，已完成显示 ✓，未解锁显示锁。解锁策略由服务器端 progress 控制（按语言区分）。
-    </p>
   </section>
 </template>
 
@@ -64,6 +72,9 @@ const router = useRouter()
 const progressMap = ref({}) // { unitId: { completed: 1, ... } }
 const progressCache = ref({}) // simple per-lang cache
 const loadingProgress = ref(false)
+
+// pressed state for visual pressed effect
+const pressedNodeKey = ref(null)
 
 // layout
 const canvasHeight = ref(950)
@@ -98,23 +109,46 @@ const nodesPositions = computed(() => {
   return arr
 })
 
-// svgPath 依据 nodesPositions 计算
-const svgPath = computed(() => {
-  const nodes = nodesPositions.value
-  if (!nodes || nodes.length === 0) return ''
-  const vw = svgVW.value
-  const vh = svgVH.value
-  const points = nodes.map(n => ({ x: (n.x / 100) * vw, y: (n.y / canvasHeight.value) * vh }))
-  let d = `M ${points[0].x} ${points[0].y}`
-  for (let i = 1; i < points.length; i++) {
-    const prev = points[i - 1]
-    const curr = points[i]
+// build path helper: given points array, construct smooth path
+function buildPathFromPoints(pts) {
+  if (!pts || pts.length === 0) return ''
+  if (pts.length === 1) return `M ${pts[0].x} ${pts[0].y}`
+  let d = `M ${pts[0].x} ${pts[0].y}`
+  for (let i = 1; i < pts.length; i++) {
+    const prev = pts[i - 1]
+    const curr = pts[i]
     const cx = (prev.x + curr.x) / 2
     const cy = (prev.y + curr.y) / 2
     d += ` Q ${prev.x} ${prev.y} ${cx} ${cy}`
     d += ` T ${curr.x} ${curr.y}`
   }
   return d
+}
+
+// fullPath 依据 nodesPositions 计算（整条线路）
+const fullPath = computed(() => {
+  const nodes = nodesPositions.value
+  if (!nodes || nodes.length === 0) return ''
+  const vw = svgVW.value
+  const vh = svgVH.value
+  const points = nodes.map(n => ({ x: (n.x / 100) * vw, y: (n.y / canvasHeight.value) * vh }))
+  return buildPathFromPoints(points)
+})
+
+// progressPath：从第一个点到“当前学习单元”的点
+const progressPath = computed(() => {
+  const nodes = nodesPositions.value
+  if (!nodes || nodes.length === 0) return ''
+  // 找到第一个未完成的节点索引（视为当前在学）；如果都完成则到最后一个
+  let curIdx = nodes.findIndex(n => !isUnitCompleted(n.localNumber))
+  if (curIdx === -1) curIdx = nodes.length - 1
+  // 保证至少有 2 个点，否则不绘制
+  const vw = svgVW.value
+  const vh = svgVH.value
+  const points = nodes.map(n => ({ x: (n.x / 100) * vw, y: (n.y / canvasHeight.value) * vh }))
+  const slicePts = points.slice(0, curIdx + 1)
+  if (slicePts.length === 0) return ''
+  return buildPathFromPoints(slicePts)
 })
 
 // helper functions for local progress logic
@@ -145,6 +179,15 @@ function simpleTitle(localNumber) {
   return `第 ${idx} 关`
 }
 
+// pressed handlers for visual feedback
+function onPress(node) {
+  if (!isUnitUnlocked(node.localNumber)) return
+  pressedNodeKey.value = node.unitKey
+}
+function onRelease() {
+  pressedNodeKey.value = null
+}
+
 // node click 跳转（组件自管）
 async function onNodeClick(node) {
   if (!isUnitUnlocked(node.localNumber)) {
@@ -156,6 +199,8 @@ async function onNodeClick(node) {
     return
   }
   try {
+    // quick visual release before navigate
+    pressedNodeKey.value = null
     router.push({ name: "Study", params: { unitId: String(node.localNumber), lang: props.selectedLang } })
   } catch (e) {}
 }
@@ -170,7 +215,7 @@ function showInlineMessage(text) {
     el.style.left = '50%'
     el.style.bottom = '28px'
     el.style.transform = 'translateX(-50%)'
-    el.style.background = 'rgba(15,23,42,0.9)'
+    el.style.background = 'rgba(20,20,25,0.95)'
     el.style.color = 'white'
     el.style.padding = '10px 14px'
     el.style.borderRadius = '10px'
@@ -268,15 +313,42 @@ watch(() => props.selectedLang, (newLang) => {
 </script>
 
 <style scoped>
-.stage-map { margin-top: 8px; }
+/* 容器：黑底白字 */
+.stage-map {
+  background: #000;        /* 黑底 */
+  margin-top: 1px;
+  color: #ffffff;          /* 默认白字 */
+  box-shadow: none;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* 标题 */
+.stage-map h2 { color: #ffffff; }
 
 /* map canvas */
-.map-canvas { position: relative; min-height: 520px; height: auto; }
+.map-canvas {
+  position: relative;
+  min-height: 520px;
+  height: auto;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: 8px;
+  padding: 12px;
+}
 
 /* nodes container & nodes */
-.nodes-container { position: relative; width: 100%; height: 100%; min-height: 600px; padding: 20px 12px; box-sizing: border-box; }
+.nodes-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 600px;
+  padding: 20px 12px;
+  box-sizing: border-box;
+}
 
-.node-wrapper { width: 160px; height: auto; pointer-events: auto; }
+/* node wrapper 保持大小自适应 */
+.node-wrapper { width: 180px; height: 5%; pointer-events: auto; }
+
+/* 节点：放大一点，光芒，悬停上移，按下填充并放大 */
 .unit-node {
   position: relative;
   z-index: 3;
@@ -284,35 +356,137 @@ watch(() => props.selectedLang, (newLang) => {
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  padding: 12px;
-  width: 160px;
+  padding: 14px;
+  width: 180px;                  /* 比之前大一点 */
   border-radius: 14px;
-  background: linear-gradient(180deg,#fbfdff,#ffffff);
-  border: 1px solid rgba(15,23,42,0.06);
-  box-shadow: 0 10px 26px rgba(2,6,23,0.04);
+  background: linear-gradient(180deg, #071027, #0b1220);
+  border: 1px solid rgba(255,255,255,0.04);
   cursor: pointer;
-  transition: transform .12s ease, box-shadow .12s ease;
+  transition:
+    transform .16s cubic-bezier(.2,.9,.2,1),
+    box-shadow .16s cubic-bezier(.2,.9,.2,1),
+    background .12s ease,
+    border-color .12s ease;
   text-align:center;
+  color: #e6eef8;
+  will-change: transform, box-shadow, background;
 }
-.unit-node:disabled { cursor:not-allowed; opacity:0.8; transform:none; box-shadow:none; }
 
+/* hover 向上位移（只在非禁用时有效） */
+.unit-node:not(:disabled):hover {
+  transform: translateY(-10px) scale(1.02);
+}
+
+/* disabled 状态 */
+.unit-node:disabled { cursor:not-allowed; opacity:0.7; transform:none; box-shadow:none; }
+
+/* 内部文本 */
 .node-inner { display:flex; flex-direction:column; gap:6px; align-items:center; }
-.node-number { font-weight:800; color:#07102a; }
-.node-sub { color:#475569; }
+.node-number { font-weight:800; color:#ffffff; font-size: 16px; }
+.node-sub { color:#bfc8d6; font-size: 12px; }
 
 /* badge / lock */
-.node-badge { position: absolute; right: 8px; top: 8px; background: rgba(34,197,94,0.12); color: #166534; padding: 6px 8px; border-radius: 8px; font-weight:800; border: 1px solid rgba(16,185,129,0.12); z-index:5; }
-.node-lock { position: absolute; right: 8px; top: 8px; font-size: 18px; z-index:5; }
+.node-badge {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  background: rgba(34,197,94,0.14);
+  color: #0f5132;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-weight:800;
+  border: 1px solid rgba(34,197,94,0.12);
+  z-index:5;
+}
+.node-lock {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  font-size: 18px;
+  z-index:5;
+  color: rgba(255,255,255,0.88);
+}
 
-/* states */
-.state-completed { border-color: #16a34a; background: linear-gradient(90deg, rgba(16,185,129,0.06), rgba(16,185,129,0.02)); transform: translateY(-6px); box-shadow: 0 22px 48px rgba(16,185,129,0.06); }
-.state-unlocked { border-color: rgba(37,99,235,0.9); background: linear-gradient(180deg, rgba(37,99,235,0.04), rgba(124,58,237,0.02)); }
-.state-locked { border-color: rgba(15,23,42,0.06); opacity: 0.82; }
+/* states with glow (光芒) */
+/* completed -> green glow */
+.state-completed {
+  border-color: rgba(34,197,94,0.9);
+  background: linear-gradient(90deg, rgba(34, 197, 94, 0.238), rgba(34,197,94,0.01));
+  box-shadow:
+    0 14px 32px rgba(34, 197, 94, 0.238),
+    0 0 36px rgba(34,197,94,0.06);
+  transform: translateY(-6px);
+}
+
+/* unlocked -> purple/blue glow */
+.state-unlocked {
+  border-color: rgba(99,102,241,0.95);
+  background: linear-gradient(90deg, rgba(99, 101, 241, 0.49), rgba(124,58,237,0.02));
+  box-shadow:
+    0 14px 32px rgba(99, 101, 241, 0.49),
+    0 0 40px rgba(124,58,237,0.06);
+}
+
+/* locked -> subtle pale glow so still readable in dark */
+.state-locked {
+  border-color: rgba(255, 255, 255, 0);
+  opacity: 0.9;
+  box-shadow:
+    0 10px 24px rgba(0,0,0,0.6),
+    0 0 12px rgba(255,255,255,0.02);
+  filter: grayscale(10%);
+}
+
+/* 按下（点击）样式：按状态填充颜色并放大 */
+.unit-node.is-pressed {
+  transform: translateY(-10px) scale(1.09) !important;
+}
+
+/* pressed 填充色更明显：按不同状态用更强的背景 */
+.state-completed.is-pressed {
+  background: linear-gradient(180deg, #0b3b1f, #06321a);
+  border-color: rgba(34,197,94,1);
+  box-shadow:
+    0 22px 48px rgba(34,197,94,0.18),
+    0 0 60px rgba(34,197,94,0.12);
+}
+.state-unlocked.is-pressed {
+  background: linear-gradient(180deg, #1b2a67, #5812d9);
+  border-color: rgba(99,102,241,1);
+  box-shadow:
+    0 22px 48px rgba(99,102,241,0.16),
+    0 0 68px rgba(124,58,237,0.12);
+}
+.state-locked.is-pressed {
+  background: linear-gradient(180deg, #111217, #0b0d10);
+  border-color: rgba(255,255,255,0.06);
+  box-shadow:
+    0 18px 36px rgba(0,0,0,0.7),
+    0 0 28px rgba(255,255,255,0.02);
+}
 
 /* small responsive */
 @media (max-width: 900px) {
   .nodes-container { min-height: 760px; }
-  .unit-node { width: 140px; }
-  svg { display: none; }
+  .node-wrapper { width: 150px; }
+  .unit-node { width: 150px; padding: 12px; }
+  /* svg { display: none; } */
+}
+
+/* 说明文字 */
+.note-text {
+  color: rgba(255,255,255,0.68);
+}
+
+/* map inline message（确保暗色下可读） */
+#map-inline-msg {
+  font-size: 14px;
+  letter-spacing: 0.2px;
+}
+
+/* focus 可访问样式 */
+.unit-node:focus {
+  outline: none;
+  box-shadow: 0 10px 36px rgba(99,102,241,0.14);
 }
 </style>
