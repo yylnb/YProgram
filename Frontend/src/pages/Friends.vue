@@ -261,7 +261,7 @@ export default {
       this.searching = true;
       try {
         // 1) 搜索用户
-        const res = await axios.get("/api/users/search", { params: { q, keyword: q } });
+        const res = await axios.get("/api/friends/search", { params: { q, keyword: q } });
         const rows = Array.isArray(res.data) ? res.data : [];
         // normalize -> ensure id and username
         const normalized = rows.map(r => ({
