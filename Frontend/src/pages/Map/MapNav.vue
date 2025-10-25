@@ -229,7 +229,7 @@ async function fetchEnergy() {
 async function fetchMembership() {
   if (!token.value) { isVip.value = false; return }
   try {
-    const r = await axios.get('http://localhost:5000/api/membership', { headers:{ Authorization:`Bearer ${token.value}` }, timeout:6000 })
+    const r = await axios.get('http://localhost:5000/api/user/membership', { headers:{ Authorization:`Bearer ${token.value}` }, timeout:6000 })
     if (r && r.data && r.data.end_at) { isVip.value = new Date(r.data.end_at) > new Date() } else isVip.value = false
   } catch (e) { isVip.value = false }
 }

@@ -367,7 +367,7 @@ async function loadMembership() {
   if (!token) return
   loadingMembership.value = true
   try {
-    const res = await fetch('http://localhost:5000/api/membership', { headers: { 'Authorization': `Bearer ${token}` } })
+    const res = await fetch('http://localhost:5000/api/user/membership', { headers: { 'Authorization': `Bearer ${token}` } })
     if (res.ok) {
       const data = await res.json()
       if (data && data.end_at) {
@@ -417,6 +417,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+
 .profile-root {
   display:flex;
   justify-content:center;

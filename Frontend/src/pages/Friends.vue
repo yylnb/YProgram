@@ -200,7 +200,7 @@ export default {
     // fetch current user id (from /api/me if available)
     async loadMe() {
       try {
-        const res = await axios.get("/api/me");
+        const res = await axios.get("/api/user/me");
         if (res && res.data) this.meId = res.data.id;
       } catch (e) { /* ignore */ }
     },
