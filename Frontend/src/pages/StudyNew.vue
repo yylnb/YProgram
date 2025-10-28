@@ -1,90 +1,103 @@
 <template>
   <div class="study-new-page">
-    <!-- 页面标头：Hero 负责显示页面 title / breadcrumbs / quick filters 等 -->
-    <Hero class="page-hero" />
+    <!-- Hero: 顶部标题 / 进度 / 能量等，由 Hero 负责显示与交互 -->
+    <Hero
+      class="page-hero"
+      :unitData="unitData"
+      :selectedLangLabel="selectedLangLabel"
+      :token="token"
+      :progressPercent="progressPercent"
+      @back-map="onBackMap"
+    />
 
     <div class="container">
-      <!-- 左侧：题目入口列表 / 筛选 -->
-      <aside class="panel left-panel">
+      <!-- Questions 负责题库入口、题目列表以及判断并渲染 Choice / Fill -->
+      <section class="panel questions-panel">
         <Questions
           :language="language"
           :unitId="unitId"
+          :course="course"
           @select-question="onSelectQuestion"
-          @change-language="val => language = val"
-        />
-      </aside>
-
-      <!-- 右侧：题目展示区（根据题目类型切换子组件） -->
-      <main class="panel right-panel">
-        <component
-          :is="activeComponent"
-          v-if="selectedQuestion"
-          :question="selectedQuestion"
-          :language="language"
           @answered="onAnswered"
         />
-        <div v-else class="empty-placeholder">
-          请选择左侧题目开始练习
-        </div>
-      </main>
+      </section>
     </div>
   </div>
 </template>
 
 <script setup>
-/**
- * StudyNew.vue
- * - 总入口：负责顶层布局与子组件切换
- * - 依赖子组件：Hero.vue, Questions.vue, Choice.vue, Fill.vue
- * - 仅保留最少逻辑：选题、根据题目 type 切换 component、传递 language
- *
- * 你可以在 Questions.vue 内实现题目列表查询和筛选逻辑，
- * 并通过 $emit('select-question', questionObject) 将所选题目传回这里。
- *
- * 子组件约定：
- * - selectedQuestion 对象至少包含字段：type ( 'choice' | 'fill' )，其它由子组件自行解析
- * - Choice.vue 接收 props: question, language
- * - Fill.vue 接收 props: question, language
- */
+import { ref, computed, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { ref, computed } from 'vue';
-
-// 子组件（实际文件路径按你项目调整）
+// 仅引入 Hero 和 Questions（Choice/Fill 由 Questions 内部判断并加载）
 import Hero from './Study/Hero.vue';
 import Questions from './Study/Questions.vue';
-import Choice from './Study/Choice.vue';
-import Fill from './Study/Fill.vue';
 
-const language = ref('py'); // 默认语言，可由 Questions.vue 修改
-const unitId = ref(null);   // 当前单元（由 Questions.vue 管理）
-const selectedQuestion = ref(null);
+/**
+ * 说明：
+ * - Map.vue 在跳转到这个页面时应挂载路由 params 或 query，携带 course/unit 信息
+ *   例如： /study/:course/:unit 或 /study?course=Python1&unit=3
+ * - 这里我们优先读取 route.params.course & route.params.unit，然后回退到 route.query
+ */
 
-// 当 Questions 选择题目时触发
-function onSelectQuestion(question) {
-  selectedQuestion.value = question || null;
-  // 如果 question 中包含 language/unit 等，也可以同步回顶层
-  if (question?.language) language.value = question.language;
-  if (question?.unit_id) unitId.value = question.unit_id;
-}
+// 路由
+const route = useRoute();
+const router = useRouter();
 
-// 根据 selectedQuestion.type 决定加载哪个子组件
-const activeComponent = computed(() => {
-  if (!selectedQuestion.value) return null;
-  const t = (selectedQuestion.value.type || '').toLowerCase();
-  if (t === 'choice' || t === 'que_choice' ) return Choice;
-  if (t === 'fill' || t === 'que_fill') return Fill;
-  // 默认回退：如果题目带有 options 则视为选择题
-  if (selectedQuestion.value.options) return Choice;
-  return Choice;
+// 从路由读取 course / unit（兼容 params 与 query）
+const course = ref(route.params.course ?? route.query.course ?? '');
+const unitId = ref(route.params.unit ?? route.query.unit ?? '');
+
+// token（若你项目使用 token，父级或其他地方可能会传入；这里我们简单从 localStorage 读取）
+const token = ref(localStorage.getItem('token') || '');
+
+// unitData：传给 Hero 显示标题等（你可以用更完整的数据结构）
+const unitData = ref({
+  title: route.params.unitTitle ?? route.query.unitTitle ?? (course.value ? `${course.value} - 单元 ${unitId.value || ''}` : '学习单元')
 });
 
-// 接收子组件 answered 事件（示例：用于局部统计或上报后端）
-function onAnswered(payload) {
-  // payload = { correct: boolean, attempts: number, question: {...} }
-  // minimal implementation: console log — 具体上报由你实现
-  console.log('answered:', payload);
-  // 你可以在这里调用后端接口保存用户的作答记录 / 进度
+// 简单根据 course 名称推断语言标签（仅作显示用途，实际以后端字段为准）
+const language = computed(() => {
+  const c = String(course.value || '').toLowerCase();
+  if (c.includes('python')) return 'py';
+  if (c.includes('cpp') || c.includes('c++')) return 'cpp';
+  if (c === 'c' || c.includes(' c ')) return 'c';
+  if (c.includes('java')) return 'java';
+  return 'py';
+});
+
+// 供 Hero 显示的语言标签（可更友好）
+const selectedLangLabel = computed(() => {
+  const map = { py: 'Python', cpp: 'C++', c: 'C', java: 'Java' };
+  return map[language.value] ?? language.value;
+});
+
+// 进度百分比（占位：你可以在 mounted 时请求后端填充真实值）
+const progressPercent = ref(0);
+
+// 当 Hero 发出 back-map 事件时跳回 /map
+function onBackMap() {
+  router.push('/map').catch(() => {});
 }
+
+// 当 Questions 选择题目时触发（你现在不需要在此处理渲染）
+function onSelectQuestion(question) {
+  // 这里保持最小逻辑：打印、或在需要时存储/路由跳转
+  console.log('selected question from Questions.vue:', question);
+}
+
+// 当子组件提交答案/完成时触发（Questions 内部会转发 Choice/Fill 的 answered）
+function onAnswered(payload) {
+  // payload 可能包含：{ correct, attempts, question }
+  console.log('answered payload:', payload);
+  // 你可以在这里调用后端保存用户进度或触发 UI 通知
+}
+
+// 当路由发生变化（用户可能从地图内再次进入不同单元），同步 local state
+onMounted(() => {
+  // 如果 route 在组件挂载后更新，你也可以 watch route changes
+  // 简单的占位：可以在这里请求后端获取 unit/进度信息等
+});
 </script>
 
 <style scoped>
@@ -108,7 +121,7 @@ function onAnswered(payload) {
   box-sizing: border-box;
 }
 
-/* 左侧列表面板 */
+/* Panel 基础样式（让 Questions 占主要区域） */
 .panel {
   background: white;
   border-radius: 10px;
@@ -116,34 +129,16 @@ function onAnswered(payload) {
   box-shadow: 0 6px 18px rgba(12,18,30,0.04);
 }
 
-.left-panel {
-  width: 320px;
+/* Questions 面板：占满主要区域 */
+.questions-panel {
+  width: 100%;
   min-height: 64vh;
   overflow: auto;
 }
 
-/* 右侧题目展示区 */
-.right-panel {
-  flex: 1;
-  min-height: 64vh;
-  overflow: auto;
-  padding: 20px;
-}
-
-/* 占位文字 */
-.empty-placeholder {
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  height:100%;
-  color:#6b7280;
-  font-size:16px;
-}
-
-/* 响应式：窄屏时左侧折叠 */
+/* 响应式 */
 @media (max-width: 900px) {
   .container { flex-direction: column; padding: 12px; }
-  .left-panel { width: 100%; order: 2; }
-  .right-panel { order: 1; }
+  .questions-panel { width: 100%; }
 }
 </style>
