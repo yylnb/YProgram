@@ -24,7 +24,7 @@ USE `questions`;
 -- 索引：q_id, unit_id
 
 DROP TABLE IF EXISTS `que_choice_py_1`;
-CREATE TABLE `que_choice_py_1` (
+CREATE TABLE IF NOT EXISTS `que_choice_py_1` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `q_id` VARCHAR(100) NOT NULL COMMENT '题目外部id/编号（可与 study_app 关联）',
   `unit_id` INT UNSIGNED DEFAULT NULL,
@@ -42,44 +42,46 @@ CREATE TABLE `que_choice_py_1` (
   INDEX (`unit_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-DROP TABLE IF EXISTS `que_choice_cpp_1`;
-CREATE TABLE `que_choice_cpp_1` LIKE `que_choice_py_1`;
+CREATE TABLE IF NOT EXISTS `que_choice_cpp_1` LIKE `que_choice_py_1`;
 -- 注意：CREATE TABLE ... LIKE 会复制结构，但不会复制 COMMENT；为了保证一致性，我们再设置 engine/charset（上面已定义）
 ALTER TABLE `que_choice_cpp_1` ROW_FORMAT=DYNAMIC;
 
-DROP TABLE IF EXISTS `que_choice_c_1`;
-CREATE TABLE `que_choice_c_1` LIKE `que_choice_py_1`;
+CREATE TABLE IF NOT EXISTS `que_choice_c_1` LIKE `que_choice_py_1`;
 ALTER TABLE `que_choice_c_1` ROW_FORMAT=DYNAMIC;
 
-DROP TABLE IF EXISTS `que_choice_java_1`;
-CREATE TABLE `que_choice_java_1` LIKE `que_choice_py_1`;
+CREATE TABLE IF NOT EXISTS `que_choice_java_1` LIKE `que_choice_py_1`;
 ALTER TABLE `que_choice_java_1` ROW_FORMAT=DYNAMIC;
 
 
--- ---------- 填空题表模板 ----------
--- que_fill_py_1 / que_fill_cpp_1 / que_fill_c_1 / que_fill_java_1
+-- ======= 填空题表：模板 (修改后) =======
 -- 字段说明：
--- id            : 自增主键
--- q_id          : 题目全局 id（可与 study_app 中的 id 建关联或单独管理）
--- unit_id       : 单元/章节 id
--- title         : 题目短标题
--- text          : 题目正文（含若干空位说明）
--- options       : JSON，可选项（比如 ["x","y","z"]），也可为空
--- answer        : JSON，存储标准答案的顺序/数组（例如 ["A","B"] 或 [1,3]）——按你要求用 JSON 存储
--- explanation   : 题解或参考解析
--- example       : 示例
+-- id          : 自增主键
+-- q_id        : 题目全局 id（整型，用于与其他表关联）
+-- unit_id     : 单元/章节 id
+-- title       : 题目短标题
+-- text        : JSON 数组，每个元素为一段文本。空位以空字符串 "" 或 null 作为分隔（序列化表达填空位置）
+-- options     : JSON 数组，每个元素为可选填入的字符串（例如 ["s1","s2","s3"]）
+-- answer      : JSON 数组，按空位顺序存放 options 的索引（1-based），例如 [1,2]
+-- explanation : 题解（TEXT）
+-- example     : 示例（TEXT）
 -- created_at/updated_at : 时间戳
 -- 索引：q_id, unit_id
 
+-- 删除旧表（可选）
 DROP TABLE IF EXISTS `que_fill_py_1`;
-CREATE TABLE `que_fill_py_1` (
+DROP TABLE IF EXISTS `que_fill_cpp_1`;
+DROP TABLE IF EXISTS `que_fill_c_1`;
+DROP TABLE IF EXISTS `que_fill_java_1`;
+
+-- 创建 Python 填空表
+CREATE TABLE IF NOT EXISTS `que_fill_py_1` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `q_id` VARCHAR(100) NOT NULL COMMENT '题目外部id/编号（可与 study_app 关联）',
+  `q_id` INT UNSIGNED NOT NULL COMMENT '题目外部id/编号（整型，与 study_app 关联）',
   `unit_id` INT UNSIGNED DEFAULT NULL,
   `title` VARCHAR(255) NOT NULL,
-  `text` TEXT,
-  `options` JSON DEFAULT NULL COMMENT '填空可选项，JSON 数组或对象',
-  `answer` JSON NOT NULL COMMENT '答案顺序或多空答案，JSON 存储（例如 ["A","B"] 或 [1,2]）',
+  `text` JSON NOT NULL COMMENT 'JSON 数组：文本段落与空位分隔，例如 ["a", "b"]',
+  `options` JSON DEFAULT NULL COMMENT '可选填项，JSON 数组，例如 ["s1","s2"]',
+  `answer` JSON NOT NULL COMMENT '答案序列，1-based 索引，例如 [1,2]',
   `explanation` TEXT DEFAULT NULL,
   `example` TEXT DEFAULT NULL,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -89,16 +91,14 @@ CREATE TABLE `que_fill_py_1` (
   INDEX (`unit_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-DROP TABLE IF EXISTS `que_fill_cpp_1`;
-CREATE TABLE `que_fill_cpp_1` LIKE `que_fill_py_1`;
+-- 其它语言表复制结构
+CREATE TABLE IF NOT EXISTS `que_fill_cpp_1` LIKE `que_fill_py_1`;
 ALTER TABLE `que_fill_cpp_1` ROW_FORMAT=DYNAMIC;
 
-DROP TABLE IF EXISTS `que_fill_c_1`;
-CREATE TABLE `que_fill_c_1` LIKE `que_fill_py_1`;
+CREATE TABLE IF NOT EXISTS `que_fill_c_1` LIKE `que_fill_py_1`;
 ALTER TABLE `que_fill_c_1` ROW_FORMAT=DYNAMIC;
 
-DROP TABLE IF EXISTS `que_fill_java_1`;
-CREATE TABLE `que_fill_java_1` LIKE `que_fill_py_1`;
+CREATE TABLE IF NOT EXISTS `que_fill_java_1` LIKE `que_fill_py_1`;
 ALTER TABLE `que_fill_java_1` ROW_FORMAT=DYNAMIC;
 
 -- 可选：显示当前 tables
