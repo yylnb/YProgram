@@ -3,7 +3,9 @@ const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const pool = require('./db'); // mysql2/promise pool
+const { pool, poolQuestions } = require('./db'); // mysql2/promise pool
+// console.log('db export =', require('./db'));
+// const pool = require('./db'); 
 require('dotenv').config();
 
 const bodyParser = require('body-parser');
@@ -53,6 +55,9 @@ app.use('/api/favorites', favoritesRouter);
 
 const userRouter = require('./user')(pool, authMiddleware, { JWT_SECRET: process.env.JWT_SECRET });
 app.use('/api/user', userRouter);
+
+const questionRoutes = require('./questions')(poolQuestions, authMiddleware);
+app.use('/api/question', questionRoutes);
 
 
 // --------- helper: create JWT ----------
