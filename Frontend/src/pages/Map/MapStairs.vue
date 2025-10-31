@@ -63,10 +63,9 @@ import { useRouter } from 'vue-router'
 
 /*
   FIX SUMMARY:
-  - Use course id (e.g. "python1") as primary identifier when fetching/syncing progress.
-  - Pass both course and base lang to backend (`params: { course, lang }`) for compatibility.
-  - Listen to 'yp_course' storage key & 'course-changed' event and refresh using full course id.
-  - Keep backward compatibility with 'yp_lang' / 'language-changed' (fallback).
+  - 保留原有逻辑与接口调用，只加入 currentCourse（可由事件/props/localStorage 更新）
+  - 将渲染与构建路径等依赖 course 的地方改为使用 currentCourse.value
+  - 在收到 course-changed/custom storage/props 改变时同步更新 currentCourse
 */
 
 const props = defineProps({
@@ -104,13 +103,11 @@ watch(() => props.selectedStage, (v) => {
 })
 
 // -----------------------------
-// course handling
+// activeCourse: 计算来源（props/localStorage/fallback） —— 保留以兼容来源
 // -----------------------------
-// activeCourse: prefer selectedCourse prop, then selectedLang (append '1' if needed), then localStorage, then default
 const activeCourse = computed(() => {
   if (props.selectedCourse) return props.selectedCourse
   if (props.selectedLang) {
-    // if caller provided 'python' convert to 'python1' to be consistent
     return String(props.selectedLang).endsWith('1') ? props.selectedLang : `${props.selectedLang}1`
   }
   try {
@@ -119,14 +116,32 @@ const activeCourse = computed(() => {
   } catch (e) {}
   return 'python1'
 })
-// baseLang derived from course id: "python1" -> "python"
+
+// ---- NEW: currentCourse (component-level, can be updated by events) ----
+// currentCourse 是组件的“真实”当前 course 值，用于渲染与路径构建。
+// 初始化为 activeCourse 的当前值；之后会由事件、storage、props watch 同步更新。
+const currentCourse = ref(activeCourse.value)
+
+// keep currentCourse in sync when computed activeCourse changes (props/localStorage source changed)
+watch(activeCourse, (v) => {
+  if (v && v !== currentCourse.value) currentCourse.value = v
+})
+
+// helper: extract trailing digits (course index) from full course id
+function courseIndexFromCourseId(courseId) {
+  if (!courseId || typeof courseId !== 'string') return null
+  const m = courseId.match(/(\d+)$/)
+  return m ? m[1] : null
+}
+
+// baseLang derived from currentCourse: "python1" -> "python"
 const baseLang = computed(() => {
-  const c = activeCourse.value || ''
+  const c = currentCourse.value || activeCourse.value || ''
   return c.replace(/\d+$/, '') || c
 })
 
 // -----------------------------
-// nodesPositions depends on selectedStageInternal & activeCourse
+// nodesPositions depends on selectedStageInternal & currentCourse (FIXED to use currentCourse)
 // -----------------------------
 const nodesPositions = computed(() => {
   const baseUnitStart = Number(selectedStageInternal.value) * 10 + 1
@@ -137,7 +152,7 @@ const nodesPositions = computed(() => {
   for (let i = 0; i < count; i++) {
     const localNumber = baseUnitStart + i
     // unitKey uses full course ID so different courses don't collide
-    const unitKey = `${activeCourse.value}-${localNumber}` // FIX: include course
+    const unitKey = `${currentCourse.value}-${localNumber}` // <-- use currentCourse
     const y = topOffset + i * gap
     const x = (i % 3 === 0) ? 28 : ((i % 3 === 1) ? 72 : 50)
     arr.push({
@@ -153,7 +168,7 @@ const nodesPositions = computed(() => {
 })
 
 // -----------------------------
-// svg path helpers
+// svg path helpers (unchanged)
 // -----------------------------
 function buildPathFromPoints(pts) {
   if (!pts || pts.length === 0) return ''
@@ -182,10 +197,8 @@ const fullPath = computed(() => {
 const progressPath = computed(() => {
   const nodes = nodesPositions.value
   if (!nodes || nodes.length === 0) return ''
-  // 找到第一个未完成的节点索引（视为当前在学）；如果都完成则到最后一个
   let curIdx = nodes.findIndex(n => !isUnitCompleted(n.localNumber))
   if (curIdx === -1) curIdx = nodes.length - 1
-  // 保证至少有 2 个点，否则不绘制
   const vw = svgVW.value
   const vh = svgVH.value
   const points = nodes.map(n => ({ x: (n.x / 100) * vw, y: (n.y / canvasHeight.value) * vh }))
@@ -195,7 +208,7 @@ const progressPath = computed(() => {
 })
 
 // -----------------------------
-// unit state helpers
+// unit state helpers (unchanged; progressMap keys are unit numbers)
 // -----------------------------
 function isUnitCompleted(localNumber) {
   const p = progressMap.value[String(localNumber)]
@@ -214,7 +227,7 @@ function nodeStateClass(localNumber) {
   return 'state-locked'
 }
 function getStageLabel(idx) {
-  // 使用 course 相关的标签（优先 course id）
+  // 使用 currentCourse 为主键来取标签，保证和 Nav 保持一致
   const labels = {
     python1: ['A','B','C','D','E'],
     cpp1: ['F','G','H','I','J'],
@@ -224,7 +237,7 @@ function getStageLabel(idx) {
     cpp: ['F','G','H','I','J'],
     java: ['K','L','M','N','O']
   }
-  const key = activeCourse.value ? activeCourse.value : baseLang.value
+  const key = currentCourse.value ? currentCourse.value : (activeCourse.value || baseLang.value)
   const l = labels[key] || labels[baseLang.value] || null
   if (l && l[idx] !== undefined) return l[idx]
   return String(idx+1)
@@ -235,7 +248,7 @@ function simpleTitle(localNumber) {
 }
 
 // -----------------------------
-// pressed handlers
+// pressed handlers (unchanged)
 // -----------------------------
 function onPress(node) {
   if (!isUnitUnlocked(node.localNumber)) return
@@ -246,11 +259,11 @@ function onRelease() {
 }
 
 // -----------------------------
-// navigation on click
+// navigation on click (unchanged)
 // -----------------------------
 async function onNodeClick(node) {
   if (!isUnitUnlocked(node.localNumber)) {
-    if (!token.value) { // 触发全局打开登录（供 Nav 或其他处理）
+    if (!token.value) {
       try { window.dispatchEvent(new Event('open-login-modal')) } catch(e){}
       return
     }
@@ -258,7 +271,6 @@ async function onNodeClick(node) {
     return
   }
   try {
-    // quick visual release before navigate
     pressedNodeKey.value = null
     router.push({ name: "Study", params: { unitId: String(node.localNumber), lang: baseLang.value } })
   } catch (e) {}
@@ -288,61 +300,77 @@ function showInlineMessage(text) {
 }
 
 // -----------------------------
-// progress fetching (FIX: use course id as primary param)
+// progress fetching (use currentCourse; keep sending both course & lang)
 // -----------------------------
-// NOTE: this function now expects `courseId` (e.g. "python1").
-// It will send both `course` and `lang` to backend as params for compatibility.
 async function refreshProgressForCourse(courseId) {
-  const base = (courseId || '').replace(/\d+$/, '') || courseId || baseLang.value
+  const course = courseId || currentCourse.value || activeCourse.value || 'python1'
+  const base = (course || '').replace(/\d+$/, '') || course
+  const idx = courseIndexFromCourseId(course) // may be null
   const t = localStorage.getItem('yp_token')
   if (!t) {
     progressMap.value = {}
-    progressCache.value[courseId] = {}
+    progressCache.value[course] = {}
     return
   }
   loadingProgress.value = true
   try {
-    // Try bulk fetch first. Send both course and lang so backend can use either.
+    // Try bulk fetch first. Send course, lang and index so backend can use any of them.
     try {
-      const res = await axios.get('http://localhost:5000/api/progress', {
+      const params = { course, lang: base }
+      if (idx) params.index = idx
+      const res = await axios.get('/api/progress', {
         headers: { Authorization: `Bearer ${t}` },
-        params: { course: courseId, lang: base },
+        params,
         timeout: 8000
       })
       if (res && res.status === 200 && res.data) {
         const pm = {}
         const data = res.data
-        if (Array.isArray(data)) data.forEach(r => { if (r && r.unit_id !== undefined) pm[String(r.unit_id)] = r })
-        else if (typeof data === 'object') {
+        if (Array.isArray(data)) {
+          data.forEach(r => {
+            if (r && r.unit_id !== undefined) pm[String(r.unit_id)] = r
+          })
+        } else if (typeof data === 'object') {
           if (data.unit_id !== undefined) pm[String(data.unit_id)] = data
           else Object.keys(data).forEach(k => pm[k] = data[k])
         }
-        progressCache.value[courseId] = pm
+        progressCache.value[course] = pm
         progressMap.value = { ...pm }
         return
       }
     } catch (e) {
-      // fallback below
+      // bulk fetch failed — fallback to per-unit fetch below
     }
 
-    // fallback: per-unit fetch (also pass both params)
+    // fallback: per-unit fetch (also pass course/lang/index params)
     const total = 50, concurrency = 6
     const pm2 = {}
+    const paramsBase = { course, lang: base }
+    if (idx) paramsBase.index = idx
+
     for (let i = 1; i <= total; i += concurrency) {
       const batch = []
       for (let j = i; j < i + concurrency && j <= total; j++) batch.push(j)
       await Promise.all(batch.map(async u => {
         try {
-          const r = await axios.get(`http://localhost:5000/api/progress/${u}`, {
+          const r = await axios.get(`/api/progress/${u}`, {
             headers: { Authorization: `Bearer ${t}` },
-            params: { course: courseId, lang: base },
+            params: paramsBase,
             timeout: 4000
           })
-          if (r && r.status === 200) pm2[String(u)] = r.data || null
-        } catch (e) { pm2[String(u)] = null }
+          if (r && r.status === 200) {
+            if (r.data && typeof r.data === 'object' && r.data.unit_id !== undefined) {
+              pm2[String(u)] = r.data
+            } else {
+              pm2[String(u)] = r.data || null
+            }
+          }
+        } catch (e) {
+          pm2[String(u)] = null
+        }
       }))
     }
-    progressCache.value[courseId] = pm2
+    progressCache.value[course] = pm2
     progressMap.value = { ...pm2 }
   } finally {
     loadingProgress.value = false
@@ -350,16 +378,17 @@ async function refreshProgressForCourse(courseId) {
 }
 
 // -----------------------------
-// events & storage handling (FIX: use yp_course & course-changed properly)
+// events & storage handling
 // -----------------------------
-function handleAuthChanged() { refreshProgressForCourse(activeCourse.value).catch(()=>{}) }
+function handleAuthChanged() { refreshProgressForCourse(currentCourse.value).catch(()=>{}) }
 
 function onStorage(ev) {
   if (!ev) return
-  // course changed in another tab -> refresh using full course id
+  // course changed in another tab -> refresh using full course id and update currentCourse
   if (ev.key === 'yp_course') {
     const newCourse = ev.newValue || null
     if (newCourse) {
+      currentCourse.value = newCourse
       refreshProgressForCourse(newCourse).catch(()=>{})
     }
   }
@@ -368,6 +397,7 @@ function onStorage(ev) {
     const newLang = ev.newValue || null
     if (newLang) {
       const courseMaybe = newLang.endsWith('1') ? newLang : `${newLang}1`
+      currentCourse.value = courseMaybe
       refreshProgressForCourse(courseMaybe).catch(()=>{})
     }
   }
@@ -382,6 +412,8 @@ function onStorage(ev) {
 function onCourseChanged(ev) {
   const c = ev && ev.detail && ev.detail.course ? ev.detail.course : null
   if (!c) return
+  // Update currentCourse right away so rendering labels/nodes follow the event
+  currentCourse.value = c
   refreshProgressForCourse(c).catch(()=>{})
 }
 
@@ -395,6 +427,7 @@ function onLanguageChanged(ev) {
   const newLang = ev && ev.detail && ev.detail.lang ? ev.detail.lang : null
   if (!newLang) return
   const courseMaybe = newLang.endsWith('1') ? newLang : `${newLang}1`
+  currentCourse.value = courseMaybe
   refreshProgressForCourse(courseMaybe).catch(()=>{})
 }
 
@@ -402,8 +435,8 @@ function onLanguageChanged(ev) {
 // initial mount & watches
 // -----------------------------
 onMounted(() => {
-  // Initial load: use activeCourse.value (which may come from prop or localStorage)
-  refreshProgressForCourse(activeCourse.value).catch(()=>{})
+  // Initial load: use currentCourse (which was initialized from activeCourse)
+  refreshProgressForCourse(currentCourse.value).catch(()=>{})
 
   window.addEventListener('auth-changed', handleAuthChanged)
   window.addEventListener('storage', onStorage)
@@ -411,9 +444,10 @@ onMounted(() => {
   window.addEventListener('stage-changed', onStageChanged)
   window.addEventListener('language-changed', onLanguageChanged) // backward compat
 
-  // watch activeCourse change (derived from props/localStorage) -> refresh
+  // watch activeCourse change (derived from props/localStorage) -> update currentCourse & refresh
   const stopWatch = watch(activeCourse, (val, oldVal) => {
-    if (val && val !== oldVal) {
+    if (val && val !== currentCourse.value) {
+      currentCourse.value = val
       refreshProgressForCourse(val).catch(()=>{})
     }
   })
@@ -431,13 +465,17 @@ onBeforeUnmount(() => {
   window.removeEventListener('language-changed', onLanguageChanged)
 })
 
-// also respond when parent props change explicitly
+// also respond when parent props change explicitly (sync into currentCourse)
 watch(() => props.selectedCourse, (v) => {
-  if (v) refreshProgressForCourse(v).catch(()=>{})
+  if (v) {
+    currentCourse.value = v
+    refreshProgressForCourse(v).catch(()=>{})
+  }
 })
 watch(() => props.selectedLang, (v) => {
   if (v) {
     const c = String(v).endsWith('1') ? v : `${v}1`
+    currentCourse.value = c
     refreshProgressForCourse(c).catch(()=>{})
   }
 })
