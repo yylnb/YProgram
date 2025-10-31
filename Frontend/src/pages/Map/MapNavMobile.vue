@@ -6,7 +6,7 @@
       <div class="hero-title hero-right">闯关模式</div>
     </div>
 
-    <!-- 控件区：电池在上，语言在下（语言左对齐） -->
+    <!-- 控件区：电池在上，课程在下（课程左对齐） -->
     <div class="controls p-4 mb-4 flex flex-col gap-6 items-center">
        <!-- 能量面板 -->
       <div class="energy-wrap w-full flex justify-end px-4">
@@ -43,17 +43,17 @@
         </div>
       </div>
 
-      <!-- 语言选择 -->
-      <div class="languages w-90" role="tablist" aria-label="语言选择">
+      <!-- 课程选择 -->
+      <div class="languages w-90" role="tablist" aria-label="课程选择">
         <button
-          v-for="lang in languages"
-          :key="lang.value"
-          :class="['pill', { active: localLang === lang.value }]"
-          @click="selectLanguage(lang.value)"
+          v-for="course in courses"
+          :key="course.value"
+          :class="['pill', { active: localCourse === course.value }]"
+          @click="selectCourse(course.value)"
           role="tab"
-          :aria-pressed="localLang === lang.value"
+          :aria-pressed="localCourse === course.value"
         >
-          {{ lang.label }}
+          {{ course.label }}
         </button>
       </div>
 
@@ -118,12 +118,12 @@
 
 <script setup>
 /*
-  说明（实现要点）：
-  - stagesVisible: 控制容器是否在 DOM（v-if）
-  - animateChildren: 控制子项是否进入“目标可见态”（这样能触发从 opacity:0->1 的过渡）
-  - stageStyleForIndex: 为每个按钮按 idx 生成 transition-delay，确保 stagger
-  - 关闭时先把 animateChildren=false（触发子项反向动画），等待容器时长再把 stagesVisible=false（从 DOM 移除）
-  - JS 会读取 CSS 变量 --stages-container-duration 和 --stages-stagger（若存在）以保持同步
+  Mobile 版 MapNav —— 与 MapNav.vue 行为保持一致：
+  - 使用 course（course 替代原先的 lang）
+  - 将 course 与 stage 都持久化到 localStorage（yp_course / yp_stage）
+  - 发出 update:course / update:stage 事件给父组件
+  - 触发全局事件 course-changed / stage-changed，方便 MapStairs 或其他监听者响应
+  - 保持原有能量/会员/轮询逻辑不变
 */
 
 import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
@@ -132,20 +132,20 @@ import LoginModal from '@/components/LoginModal.vue'
 import { useUIStore } from '@/stores/ui'
 
 const props = defineProps({
-  lang: { type: String, default: 'python' },
+  course: { type: String, default: 'python1' },
   stage: { type: Number, default: 0 }
 })
-const emit = defineEmits(['update:lang','update:stage'])
+const emit = defineEmits(['update:course','update:stage'])
 
-const languages = [
-  { value: 'python', label: 'Python' },
-  { value: 'cpp', label: 'C++' },
-  { value: 'java', label: 'Java' }
+const courses = [
+  { value: 'python1', label: 'Python' },
+  { value: 'cpp1', label: 'C++' },
+  { value: 'java1', label: 'Java' }
 ]
 
-const localLang = ref(props.lang)
+const localCourse = ref(props.course)
 const localStage = ref(props.stage)
-watch(() => props.lang, (v) => { localLang.value = v })
+watch(() => props.course, (v) => { localCourse.value = v })
 watch(() => props.stage, (v) => { localStage.value = v })
 
 // stages states
@@ -205,11 +205,12 @@ function closeStages() {
   }, delay)
 }
 
+// When user chooses a stage from expanded list
 function onSelectStage(idx) {
   if (typeof idx !== 'number') return
-  localStage.value = idx
-  emit('update:stage', idx)
-  // collapse with animation (closeStages handles timing)
+  // delegate to selectStage to preserve same behavior (storage, emit, event)
+  selectStage(idx)
+  // collapse with animation
   closeStages()
 }
 
@@ -226,7 +227,7 @@ function stageStyleForIndex(idx) {
   }
 }
 
-// language, energy, membership logic (kept same as before)
+// language/course, energy, membership logic (kept same as MapNav but with course names)
 const energy = ref(0)
 const maxEnergy = ref(30)
 const secondsToNext = ref(null)
@@ -258,27 +259,27 @@ const energyTooltip = computed(() => {
   return `当前能量 ${energy.value}/${maxEnergy.value}，恢复中…`
 })
 
-const langStageLabels = {
-  python: ['A','B','C','D','E'],
-  cpp: ['F','G','H','I','J'],
-  java: ['K','L','M','N','O']
+const courseStageLabels = {
+  python1: ['A','B','C','D','E'],
+  cpp1: ['F','G','H','I','J'],
+  java1: ['K','L','M','N','O']
 }
-const langStages = {
-  python: [
+const courseStages = {
+  python1: [
     { subtitle: '入门基础：变量、类型与输出（Python 风格）' },
     { subtitle: '流程控制与列表/字典' },
     { subtitle: '函数、模块与文件操作（实践）' },
     { subtitle: '面向对象与异步入门（async/await）' },
     { subtitle: '实战项目：小爬虫与数据处理' }
   ],
-  cpp: [
+  cpp1: [
     { subtitle: '基础语法与编译流程（C++ 特性）' },
     { subtitle: '指针、引用与内存管理' },
     { subtitle: 'STL 容器与算法' },
     { subtitle: '类与模板编程' },
     { subtitle: '实战项目：算法题与性能优化' }
   ],
-  java: [
+  java1: [
     { subtitle: 'Java 基础：类、方法与编译运行' },
     { subtitle: '集合框架与异常处理' },
     { subtitle: '多线程与并发基础' },
@@ -293,20 +294,28 @@ const defaultStages = [
   { subtitle: "面向对象与异步" },
   { subtitle: "实战项目练习" }
 ]
-const currentStages = computed(() => langStages[localLang.value] || defaultStages)
+const currentStages = computed(() => courseStages[localCourse.value] || defaultStages)
 
 function getStageLabel(idx) {
-  const labels = langStageLabels[localLang.value]
+  const labels = courseStageLabels[localCourse.value]
   if (labels && labels[idx] !== undefined) return labels[idx]
   return String(idx + 1)
 }
 
-function selectLanguage(lang) {
-  if (!lang || lang === localLang.value) return
-  localLang.value = lang
-  try { localStorage.setItem('yp_lang', lang) } catch (e) {}
-  emit('update:lang', lang)
-  try { window.dispatchEvent(new CustomEvent('language-changed', { detail: { lang, source: 'mapnav' } })) } catch (e) {}
+function selectCourse(course) {
+  if (!course || course === localCourse.value) return
+  localCourse.value = course
+  try { localStorage.setItem('yp_course', course) } catch (e) {}
+  emit('update:course', course)
+  try { window.dispatchEvent(new CustomEvent('course-changed', { detail: { course, source: 'mapnav-mobile' } })) } catch (e) {}
+}
+
+function selectStage(idx) {
+  if (typeof idx !== 'number' || idx === localStage.value) return
+  localStage.value = idx
+  try { localStorage.setItem('yp_stage', String(idx)) } catch (e) {}
+  emit('update:stage', idx)
+  try { window.dispatchEvent(new CustomEvent('stage-changed', { detail: { stage: idx, source: 'mapnav-mobile' } })) } catch (e) {}
 }
 
 function openLoginModal() {
@@ -392,6 +401,20 @@ function onDocClick(e) {
 }
 
 onMounted(() => {
+  // 优先从 localStorage 恢复用户选择（若存在）
+  try {
+    const storedCourse = localStorage.getItem('yp_course')
+    if (storedCourse && typeof storedCourse === 'string') { localCourse.value = storedCourse }
+  } catch (e) {}
+
+  try {
+    const storedStage = localStorage.getItem('yp_stage')
+    if (storedStage !== null) {
+      const n = Number(storedStage)
+      if (!isNaN(n)) localStage.value = n
+    }
+  } catch (e) {}
+
   fetchEnergy().catch(()=>{})
   fetchMembership().catch(()=>{})
   if (token.value) _energyPollTimer = setInterval(()=>{ fetchEnergy().catch(()=>{}) }, 15000) // minor name diff ok
@@ -438,7 +461,7 @@ onBeforeUnmount(() => {
 /* controls */
 .controls { display: flex; flex-direction: column; width: 100%; align-items: center; gap: 8px; }
 
-/* languages left-aligned, 90% width */
+/* courses left-aligned, 90% width */
 .languages.w-90 { width: 90%; display:flex; flex-wrap:wrap; justify-content:flex-start; gap:6px; padding-left:2%; box-sizing:border-box; }
 .pill { display:inline-flex; align-items:center; justify-content:center; padding:6px 10px; font-size:13px; font-weight:700; border-radius:8px; border:1px solid #8b5cf6 !important; background:transparent; color:#fff !important; transition: all .15s ease; }
 .pill.active { background: linear-gradient(180deg,#8b5cf6,#6d28d9); border-color: rgba(139,92,246,0.22); color:#fff !important; transform: translateY(-2px); box-shadow: 0 8px 22px rgba(109,40,217,0.14); }

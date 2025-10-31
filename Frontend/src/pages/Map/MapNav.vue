@@ -6,16 +6,16 @@
     </div>
 
     <div class="controls p-4 mb-4 flex flex-wrap gap-4 items-center">
-      <div class="languages flex gap-2 items-center" role="tablist" aria-label="语言选择">
+      <div class="languages flex gap-2 items-center" role="tablist" aria-label="课程选择">
         <button
-          v-for="lang in languages"
-          :key="lang.value"
-          :class="['pill', { active: localLang === lang.value }]"
-          @click="selectLanguage(lang.value)"
+          v-for="course in courses"
+          :key="course.value"
+          :class="['pill', { active: localCourse === course.value }]"
+          @click="selectCourse(course.value)"
           role="tab"
-          :aria-pressed="localLang === lang.value"
+          :aria-pressed="localCourse === course.value"
         >
-          {{ lang.label }}
+          {{ course.label }}
         </button>
       </div>
 
@@ -86,21 +86,21 @@ import LoginModal from '@/components/LoginModal.vue'
 import { useUIStore } from '@/stores/ui'
 
 const props = defineProps({
-  lang: { type: String, default: 'python' },
+  course: { type: String, default: 'python1' },
   stage: { type: Number, default: 0 }
 })
-const emit = defineEmits(['update:lang','update:stage'])
+const emit = defineEmits(['update:course','update:stage'])
 
-const languages = [
-  { value: 'python', label: 'Python' },
-  { value: 'cpp', label: 'C++' },
-  { value: 'java', label: 'Java' }
+const courses = [
+  { value: 'python1', label: 'Python' },
+  { value: 'cpp1', label: 'C++' },
+  { value: 'java1', label: 'Java' }
 ]
 
-const localLang = ref(props.lang)
+const localCourse = ref(props.course)
 const localStage = ref(props.stage)
 
-watch(() => props.lang, (v) => { localLang.value = v })
+watch(() => props.course, (v) => { localCourse.value = v })
 watch(() => props.stage, (v) => { localStage.value = v })
 
 // energy / membership state
@@ -135,27 +135,27 @@ const energyTooltip = computed(() => {
   return `当前能量 ${energy.value}/${maxEnergy.value}，恢复中…`
 })
 
-const langStageLabels = {
-  python: ['A','B','C','D','E'],
-  cpp: ['F','G','H','I','J'],
-  java: ['K','L','M','N','O']
+const courseStageLabels = {
+  python1: ['A','B','C','D','E'],
+  cpp1: ['F','G','H','I','J'],
+  java1: ['K','L','M','N','O']
 }
-const langStages = {
-  python: [
+const courseStages = {
+  python1: [
     { subtitle: '入门基础：变量、类型与输出（Python 风格）' },
     { subtitle: '流程控制与列表/字典' },
     { subtitle: '函数、模块与文件操作（实践）' },
     { subtitle: '面向对象与异步入门（async/await）' },
     { subtitle: '实战项目：小爬虫与数据处理' }
   ],
-  cpp: [
+  cpp1: [
     { subtitle: '基础语法与编译流程（C++ 特性）' },
     { subtitle: '指针、引用与内存管理' },
     { subtitle: 'STL 容器与算法' },
     { subtitle: '类与模板编程' },
     { subtitle: '实战项目：算法题与性能优化' }
   ],
-  java: [
+  java1: [
     { subtitle: 'Java 基础：类、方法与编译运行' },
     { subtitle: '集合框架与异常处理' },
     { subtitle: '多线程与并发基础' },
@@ -170,26 +170,28 @@ const defaultStages = [
   { subtitle: "面向对象与异步" },
   { subtitle: "实战项目练习" }
 ]
-const currentStages = computed(() => langStages[localLang.value] || defaultStages)
+const currentStages = computed(() => courseStages[localCourse.value] || defaultStages)
 
 function getStageLabel(idx) {
-  const labels = langStageLabels[localLang.value]
+  const labels = courseStageLabels[localCourse.value]
   if (labels && labels[idx] !== undefined) return labels[idx]
-  return String(idx + 1)
+  return String(idx + 1) 
 }
 
-function selectLanguage(lang) {
-  if (!lang || lang === localLang.value) return
-  localLang.value = lang
-  try { localStorage.setItem('yp_lang', lang) } catch (e) {}
-  emit('update:lang', lang)
-  try { window.dispatchEvent(new CustomEvent('language-changed', { detail: { lang, source: 'mapnav' } })) } catch (e) {}
+function selectCourse(course) {
+  if (!course || course === localCourse.value) return
+  localCourse.value = course
+  try { localStorage.setItem('yp_course', course) } catch (e) {}
+  emit('update:course', course)
+  try { window.dispatchEvent(new CustomEvent('course-changed', { detail: { course, source: 'mapnav' } })) } catch (e) {}
 }
 
 function selectStage(idx) {
   if (typeof idx !== 'number' || idx === localStage.value) return
   localStage.value = idx
+  try { localStorage.setItem('yp_stage', String(idx)) } catch (e) {}
   emit('update:stage', idx)
+  try { window.dispatchEvent(new CustomEvent('stage-changed', { detail: { stage: idx, source: 'mapnav' } })) } catch (e) {}
 }
 
 function openLoginModal() {
@@ -261,6 +263,20 @@ async function onRefresh() {
 }
 
 onMounted(() => {
+  // 优先从 localStorage 恢复用户选择（若存在）
+  try {
+    const storedCourse = localStorage.getItem('yp_course')
+    if (storedCourse && typeof storedCourse === 'string') { localCourse.value = storedCourse }
+  } catch (e) {}
+
+  try {
+    const storedStage = localStorage.getItem('yp_stage')
+    if (storedStage !== null) {
+      const n = Number(storedStage)
+      if (!isNaN(n)) localStage.value = n
+    }
+  } catch (e) {}
+
   fetchEnergy().catch(()=>{})
   fetchMembership().catch(()=>{})
   if (token.value) _energyPollTimer = setInterval(()=>{ fetchEnergy().catch(()=>{}) }, 15000)
@@ -442,9 +458,9 @@ onBeforeUnmount(() => {
 /* focus */
 .pill:focus, .btn-white:focus, .stage-btn:focus { outline: 3px solid rgba(139,92,246,0.18) !important; outline-offset: 2px; border-radius: 10px; }
 
-/* --------------------------- */
-/* PAD (641px — 1023px) 调整   */
-/* --------------------------- */
+ /* --------------------------- */
+ /* PAD (641px — 1023px) 调整   */
+ /* --------------------------- */
 @media (min-width: 641px) and (max-width: 1023px) {
   .lib-hero { height: 78px; }
   .hero-title { font-size: 32px; height: 44px; top: 14px; }
