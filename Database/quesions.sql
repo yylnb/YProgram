@@ -5,7 +5,7 @@ CREATE DATABASE IF NOT EXISTS `questions`
 
 USE `questions`;
 
--- 公共约束说明：MySQL 5.7+ 支持 JSON 类型
+-- ----------------------------------------------题目表格----------------------------------------------
 
 -- ---------- 选择题表模板 ----------
 -- que_choice_py_1 / que_choice_cpp_1 / que_choice_c_1 / que_choice_java_1
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `que_choice_py_1` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `que_choice_cpp_1` LIKE `que_choice_py_1`;
--- 注意：CREATE TABLE ... LIKE 会复制结构，但不会复制 COMMENT；为了保证一致性，我们再设置 engine/charset（上面已定义）
+
 ALTER TABLE `que_choice_cpp_1` ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE IF NOT EXISTS `que_choice_c_1` LIKE `que_choice_py_1`;
@@ -67,13 +67,8 @@ ALTER TABLE `que_choice_java_1` ROW_FORMAT=DYNAMIC;
 -- created_at/updated_at : 时间戳
 -- 索引：q_id, unit_id
 
--- 删除旧表（可选）
-DROP TABLE IF EXISTS `que_fill_py_1`;
-DROP TABLE IF EXISTS `que_fill_cpp_1`;
-DROP TABLE IF EXISTS `que_fill_c_1`;
-DROP TABLE IF EXISTS `que_fill_java_1`;
 
--- 创建 Python 填空表
+-- -- 创建 Python 填空表
 CREATE TABLE IF NOT EXISTS `que_fill_py_1` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `q_id` INT UNSIGNED NOT NULL COMMENT '题目外部id/编号（整型，与 study_app 关联）',
@@ -91,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `que_fill_py_1` (
   INDEX (`unit_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 其它语言表复制结构
+
 CREATE TABLE IF NOT EXISTS `que_fill_cpp_1` LIKE `que_fill_py_1`;
 ALTER TABLE `que_fill_cpp_1` ROW_FORMAT=DYNAMIC;
 
@@ -101,5 +96,81 @@ ALTER TABLE `que_fill_c_1` ROW_FORMAT=DYNAMIC;
 CREATE TABLE IF NOT EXISTS `que_fill_java_1` LIKE `que_fill_py_1`;
 ALTER TABLE `que_fill_java_1` ROW_FORMAT=DYNAMIC;
 
--- 可选：显示当前 tables
--- SHOW TABLES FROM `questions`;
+
+-- ----------------------------------------------进度表格----------------------------------------------
+
+-- Python 进度表
+CREATE TABLE IF NOT EXISTS progress_py_1 (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  unit_id INT NOT NULL,
+  current_index INT NOT NULL,
+  completed INT NOT NULL DEFAULT 0,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS progress_py_2 (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  unit_id INT NOT NULL,
+  current_index INT NOT NULL,
+  completed INT NOT NULL DEFAULT 0,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- C 进度表
+CREATE TABLE IF NOT EXISTS progress_c_1 (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  unit_id INT NOT NULL,
+  current_index INT NOT NULL,
+  completed INT NOT NULL DEFAULT 0,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS progress_c_2 (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  unit_id INT NOT NULL,
+  current_index INT NOT NULL,
+  completed INT NOT NULL DEFAULT 0,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- C++ 进度表
+CREATE TABLE IF NOT EXISTS progress_cpp_1 (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  unit_id INT NOT NULL,
+  current_index INT NOT NULL,
+  completed INT NOT NULL DEFAULT 0,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS progress_cpp_2 (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  unit_id INT NOT NULL,
+  current_index INT NOT NULL,
+  completed INT NOT NULL DEFAULT 0,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Java 进度表
+CREATE TABLE IF NOT EXISTS progress_java_1 (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  unit_id INT NOT NULL,
+  current_index INT NOT NULL,
+  completed INT NOT NULL DEFAULT 0,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS progress_java_2 (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  unit_id INT NOT NULL,
+  current_index INT NOT NULL,
+  completed INT NOT NULL DEFAULT 0,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
