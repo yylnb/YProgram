@@ -13,7 +13,8 @@ const routes = [
   { path: '/friends', name: 'Friends', component: Friends },
   { path: '/profile', name: 'Profile', component: Profile },
   { path: "/map", name: "map", component: Map },
-  { path: '/study/:unitId', name: 'Study', component: Study },
+  // { path: '/study/:unitId', name: 'Study', component: Study },
+  { path: '/study/:course/:unitId', name: 'Study', component: Study, props: true },
   { path: '/library/:id', name: 'LibraryView', component: LibraryView },
 ]
 

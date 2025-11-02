@@ -118,12 +118,11 @@
 
 <script setup>
 /*
-  Mobile 版 MapNav —— 与 MapNav.vue 行为保持一致：
-  - 使用 course（course 替代原先的 lang）
-  - 将 course 与 stage 都持久化到 localStorage（yp_course / yp_stage）
-  - 发出 update:course / update:stage 事件给父组件
-  - 触发全局事件 course-changed / stage-changed，方便 MapStairs 或其他监听者响应
-  - 保持原有能量/会员/轮询逻辑不变
+  Mobile 版 MapNav —— 与 MapNav.vue 行为保持一致（只使用 yp_current + yp_select）：
+  - yp_current: { course, stage }
+  - yp_select: { "<course>": <stage>, ... }  （之前名为 yp_progress）
+  - 选择课程时优先从 yp_select 恢复该课程阶段
+  - 切换阶段时同时写入 yp_current 与 yp_select
 */
 
 import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
@@ -302,22 +301,80 @@ function getStageLabel(idx) {
   return String(idx + 1)
 }
 
+/* ---- storage helpers: yp_current and yp_select (rename from yp_progress) ---- */
+function readJsonKey(key) {
+  try {
+    const v = localStorage.getItem(key)
+    if (!v) return null
+    return JSON.parse(v)
+  } catch (e) { return null }
+}
+function writeJsonKey(key, obj) {
+  try { localStorage.setItem(key, JSON.stringify(obj)) } catch (e) {}
+}
+
+function loadSelectMap() {
+  const p = readJsonKey('yp_select') // renamed
+  if (p && typeof p === 'object') return p
+  return {}
+}
+function saveSelectMap(map) {
+  if (!map || typeof map !== 'object') map = {}
+  writeJsonKey('yp_select', map)
+}
+
+/* yp_current: { course, stage } */
+function saveCurrent(course, stage) {
+  if (!course) return
+  const cur = { course, stage: Number(stage || 0) }
+  try { localStorage.setItem('yp_current', JSON.stringify(cur)) } catch (e) {}
+}
+
+/* update both yp_current & yp_select when needed */
+function persistCourseAndStage(course, stage) {
+  if (!course) return
+  saveCurrent(course, stage)
+  try {
+    const map = loadSelectMap()
+    map[course] = Number(stage || 0)
+    saveSelectMap(map)
+  } catch (e) {}
+}
+
+/* ---- select handlers ---- */
 function selectCourse(course) {
   if (!course || course === localCourse.value) return
   localCourse.value = course
-  try { localStorage.setItem('yp_course', course) } catch (e) {}
+
+  // load saved stage for this course from yp_select if exists
+  try {
+    const map = loadSelectMap()
+    const saved = (map && typeof map[course] !== 'undefined') ? Number(map[course]) : undefined
+    if (typeof saved !== 'undefined') {
+      localStage.value = saved
+    } else {
+      localStage.value = Number.isFinite(Number(localStage.value)) ? localStage.value : 0
+      map[course] = Number(localStage.value || 0)
+      saveSelectMap(map)
+    }
+  } catch (e) {}
+
+  // persist combined state
+  persistCourseAndStage(localCourse.value, localStage.value)
+
   emit('update:course', course)
-  try { window.dispatchEvent(new CustomEvent('course-changed', { detail: { course, source: 'mapnav-mobile' } })) } catch (e) {}
+  try { window.dispatchEvent(new CustomEvent('course-changed', { detail: { course, stage: localStage.value, source: 'mapnav-mobile' } })) } catch (e) {}
 }
 
 function selectStage(idx) {
   if (typeof idx !== 'number' || idx === localStage.value) return
   localStage.value = idx
-  try { localStorage.setItem('yp_stage', String(idx)) } catch (e) {}
+  try { persistCourseAndStage(localCourse.value, localStage.value) } catch (e) {}
   emit('update:stage', idx)
-  try { window.dispatchEvent(new CustomEvent('stage-changed', { detail: { stage: idx, source: 'mapnav-mobile' } })) } catch (e) {}
+  try { window.dispatchEvent(new CustomEvent('stage-changed', { detail: { course: localCourse.value, stage: idx, source: 'mapnav-mobile' } })) } catch (e) {}
 }
 
+/* ---- login modal / energy (unchanged) ---- */
 function openLoginModal() {
   try {
     const ui = useUIStore()
@@ -386,7 +443,7 @@ async function onRefresh() {
   setTimeout(()=>{ loadingProgress.value = false }, 600)
 }
 
-// keyboard / outside click handling
+/* keyboard / outside click handling */
 function onKeydown(e) {
   if (!stagesVisible.value) return
   if (e.key === 'Escape') closeStages()
@@ -400,20 +457,70 @@ function onDocClick(e) {
   }
 }
 
-onMounted(() => {
-  // 优先从 localStorage 恢复用户选择（若存在）
-  try {
-    const storedCourse = localStorage.getItem('yp_course')
-    if (storedCourse && typeof storedCourse === 'string') { localCourse.value = storedCourse }
-  } catch (e) {}
-
-  try {
-    const storedStage = localStorage.getItem('yp_stage')
-    if (storedStage !== null) {
-      const n = Number(storedStage)
-      if (!isNaN(n)) localStage.value = n
+/* ---- storage event handler: listen to yp_current & yp_select ---- */
+function onStorage(ev) {
+  if (!ev) return
+  if (ev.key === 'yp_current') {
+    const cur = readJsonKey('yp_current')
+    if (cur && cur.course) {
+      localCourse.value = cur.course
+      localStage.value = Number.isFinite(Number(cur.stage)) ? cur.stage : 0
+      emit('update:course', localCourse.value)
+      emit('update:stage', localStage.value)
     }
-  } catch (e) {}
+  }
+  if (ev.key === 'yp_select') {
+    const map = loadSelectMap()
+    if (localCourse.value && typeof map[localCourse.value] !== 'undefined') {
+      const s = Number(map[localCourse.value]) || 0
+      if (!isNaN(s) && s !== localStage.value) {
+        localStage.value = s
+        emit('update:stage', s)
+      }
+    }
+  }
+}
+
+/* backward compat: language-changed -> convert to course (append 1) */
+function onLanguageChanged(ev) {
+  const newLang = ev && ev.detail && ev.detail.lang ? ev.detail.lang : null
+  if (!newLang) return
+  const c = String(newLang).endsWith('1') ? newLang : `${newLang}1`
+  selectCourse(c)
+}
+
+onMounted(() => {
+  // 初始化：优先读取 yp_current，否则 props，再从 yp_select 恢复对应课程阶段
+  try {
+    const cur = readJsonKey('yp_current')
+    if (cur && cur.course) {
+      localCourse.value = cur.course
+      localStage.value = Number.isFinite(Number(cur.stage)) ? cur.stage : (props.stage || 0)
+    } else if (props.course) {
+      localCourse.value = props.course
+      localStage.value = Number.isFinite(Number(props.stage)) ? props.stage : 0
+      const map = loadSelectMap()
+      if (map && typeof map[localCourse.value] !== 'undefined') {
+        localStage.value = Number(map[localCourse.value]) || localStage.value
+      }
+    } else {
+      const map = loadSelectMap()
+      const keys = Object.keys(map || {})
+      if (keys.length > 0) {
+        localCourse.value = keys[0]
+        localStage.value = Number(map[localCourse.value]) || 0
+      } else {
+        localCourse.value = props.course || 'python1'
+        localStage.value = props.stage || 0
+      }
+    }
+  } catch (e) {
+    localCourse.value = props.course || 'python1'
+    localStage.value = props.stage || 0
+  }
+
+  // ensure persisted values exist
+  try { persistCourseAndStage(localCourse.value, localStage.value) } catch (e) {}
 
   fetchEnergy().catch(()=>{})
   fetchMembership().catch(()=>{})
@@ -425,6 +532,9 @@ onMounted(() => {
 
   document.addEventListener('keydown', onKeydown)
   document.addEventListener('click', onDocClick, true)
+
+  window.addEventListener('storage', onStorage)
+  window.addEventListener('language-changed', onLanguageChanged)
 })
 
 onBeforeUnmount(() => {
@@ -434,6 +544,9 @@ onBeforeUnmount(() => {
 
   document.removeEventListener('keydown', onKeydown)
   document.removeEventListener('click', onDocClick, true)
+
+  window.removeEventListener('storage', onStorage)
+  window.removeEventListener('language-changed', onLanguageChanged)
 })
 </script>
 

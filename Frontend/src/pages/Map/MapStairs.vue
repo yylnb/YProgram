@@ -62,19 +62,17 @@ import axios from 'axios'
 import { useRouter } from 'vue-router'
 
 /*
-  FIX SUMMARY:
-  - 保留原有逻辑与接口调用，只加入 currentCourse（可由事件/props/localStorage 更新）
-  - 将渲染与构建路径等依赖 course 的地方改为使用 currentCourse.value
-  - 在收到 course-changed/custom storage/props 改变时同步更新 currentCourse
+  更新说明（与 MapNav 一致）：
+  - 只使用 yp_current (主记录 { course, stage }) 与 yp_select (每门课对应阶段映射)
+  - MapStairs 作为消费者：优先读取 yp_current，读到后设置 currentCourse 和 selectedStageInternal 并 refreshProgress
+  - 监听 storage / course-changed / stage-changed / language-changed 等事件以同步
 */
 
 const props = defineProps({
-  // support both new and legacy props:
-  selectedCourse: { type: String, default: null }, // preferred (e.g. "python1")
-  selectedLang: { type: String, default: null },   // fallback (e.g. "python")
+  selectedCourse: { type: String, default: null },
+  selectedLang: { type: String, default: null },
   selectedStage: { type: Number, required: true }
 })
-
 const router = useRouter()
 
 // local progress map managed by MapStairs（组件自管）
@@ -95,54 +93,70 @@ const svgVH = ref(600)
 const token = computed(() => localStorage.getItem('yp_token') || null)
 
 // -----------------------------
-// selectedStage internal (mirrors prop but also listens to storage/event changes)
-// -----------------------------
-const selectedStageInternal = ref(props.selectedStage != null ? props.selectedStage : Number(localStorage.getItem('yp_stage') || 0))
+// stage internal sync (use yp_current priority)
+const selectedStageInternal = ref(
+  typeof props.selectedStage === 'number' ? props.selectedStage : Number(localStorage.getItem('yp_stage') || 0)
+)
 watch(() => props.selectedStage, (v) => {
   if (typeof v === 'number') selectedStageInternal.value = v
 })
 
 // -----------------------------
-// activeCourse: 计算来源（props/localStorage/fallback） —— 保留以兼容来源
-// -----------------------------
-const activeCourse = computed(() => {
-  if (props.selectedCourse) return props.selectedCourse
-  if (props.selectedLang) {
-    return String(props.selectedLang).endsWith('1') ? props.selectedLang : `${props.selectedLang}1`
-  }
+// helpers: normalize course id like "python" -> "python1", "python1" -> "python1"
+function normalizeCourse(course) {
+  if (!course) return null
   try {
-    const stored = localStorage.getItem('yp_course')
-    if (stored) return stored
-  } catch (e) {}
-  return 'python1'
-})
-
-// ---- NEW: currentCourse (component-level, can be updated by events) ----
-// currentCourse 是组件的“真实”当前 course 值，用于渲染与路径构建。
-// 初始化为 activeCourse 的当前值；之后会由事件、storage、props watch 同步更新。
-const currentCourse = ref(activeCourse.value)
-
-// keep currentCourse in sync when computed activeCourse changes (props/localStorage source changed)
-watch(activeCourse, (v) => {
-  if (v && v !== currentCourse.value) currentCourse.value = v
-})
-
-// helper: extract trailing digits (course index) from full course id
-function courseIndexFromCourseId(courseId) {
-  if (!courseId || typeof courseId !== 'string') return null
-  const m = courseId.match(/(\d+)$/)
-  return m ? m[1] : null
+    course = String(course).trim()
+    const m = course.match(/^(python|cpp|java)(\d+)?$/i)
+    if (m) {
+      const name = m[1].toLowerCase()
+      const idx = m[2] ? m[2] : '1'
+      return `${name}${idx}`
+    }
+    return course.toLowerCase()
+  } catch (e) {
+    return String(course).toLowerCase()
+  }
 }
 
-// baseLang derived from currentCourse: "python1" -> "python"
+// storage JSON helpers
+function readJsonKey(key) {
+  try {
+    const v = localStorage.getItem(key)
+    if (!v) return null
+    return JSON.parse(v)
+  } catch (e) { return null }
+}
+function writeJsonKey(key, obj) {
+  try { localStorage.setItem(key, JSON.stringify(obj)) } catch (e) {}
+}
+
+// yp_select helpers (mapping course -> stage)
+function loadSelectMap() {
+  const p = readJsonKey('yp_select')
+  if (p && typeof p === 'object') return p
+  return {}
+}
+
+// yp_current helper
+function loadCurrent() {
+  const c = readJsonKey('yp_current')
+  if (c && c.course) return { course: normalizeCourse(c.course), stage: Number.isFinite(Number(c.stage)) ? Number(c.stage) : 0 }
+  return null
+}
+
+// -----------------------------
+// currentCourse: canonical course id used for rendering (component-level source)
+const currentCourse = ref('python1') // will be initialized on mount
+
+// keep derived baseLang (for routing / label)
 const baseLang = computed(() => {
-  const c = currentCourse.value || activeCourse.value || ''
+  const c = currentCourse.value || 'python1'
   return c.replace(/\d+$/, '') || c
 })
 
 // -----------------------------
-// nodesPositions depends on selectedStageInternal & currentCourse (FIXED to use currentCourse)
-// -----------------------------
+// nodesPositions depends on selectedStageInternal & currentCourse
 const nodesPositions = computed(() => {
   const baseUnitStart = Number(selectedStageInternal.value) * 10 + 1
   const arr = []
@@ -152,7 +166,7 @@ const nodesPositions = computed(() => {
   for (let i = 0; i < count; i++) {
     const localNumber = baseUnitStart + i
     // unitKey uses full course ID so different courses don't collide
-    const unitKey = `${currentCourse.value}-${localNumber}` // <-- use currentCourse
+    const unitKey = `${currentCourse.value}-${localNumber}`
     const y = topOffset + i * gap
     const x = (i % 3 === 0) ? 28 : ((i % 3 === 1) ? 72 : 50)
     arr.push({
@@ -168,8 +182,7 @@ const nodesPositions = computed(() => {
 })
 
 // -----------------------------
-// svg path helpers (unchanged)
-// -----------------------------
+// svg helpers (unchanged)
 function buildPathFromPoints(pts) {
   if (!pts || pts.length === 0) return ''
   if (pts.length === 1) return `M ${pts[0].x} ${pts[0].y}`
@@ -184,7 +197,6 @@ function buildPathFromPoints(pts) {
   }
   return d
 }
-
 const fullPath = computed(() => {
   const nodes = nodesPositions.value
   if (!nodes || nodes.length === 0) return ''
@@ -193,7 +205,6 @@ const fullPath = computed(() => {
   const points = nodes.map(n => ({ x: (n.x / 100) * vw, y: (n.y / canvasHeight.value) * vh }))
   return buildPathFromPoints(points)
 })
-
 const progressPath = computed(() => {
   const nodes = nodesPositions.value
   if (!nodes || nodes.length === 0) return ''
@@ -208,8 +219,7 @@ const progressPath = computed(() => {
 })
 
 // -----------------------------
-// unit state helpers (unchanged; progressMap keys are unit numbers)
-// -----------------------------
+// unit helpers (unchanged)
 function isUnitCompleted(localNumber) {
   const p = progressMap.value[String(localNumber)]
   return !!(p && (p.completed === 1 || p.completed === true || p.completed === '1'))
@@ -226,21 +236,23 @@ function nodeStateClass(localNumber) {
   if (isUnitUnlocked(localNumber)) return 'state-unlocked'
   return 'state-locked'
 }
+
+// -----------------------------
+// stage label mapping — use currentCourse as key
 function getStageLabel(idx) {
-  // 使用 currentCourse 为主键来取标签，保证和 Nav 保持一致
   const labels = {
     python1: ['A','B','C','D','E'],
     cpp1: ['F','G','H','I','J'],
     java1: ['K','L','M','N','O'],
-    // backward compat
+    // compatibility
     python: ['A','B','C','D','E'],
     cpp: ['F','G','H','I','J'],
     java: ['K','L','M','N','O']
   }
-  const key = currentCourse.value ? currentCourse.value : (activeCourse.value || baseLang.value)
+  const key = currentCourse.value ? currentCourse.value : baseLang.value
   const l = labels[key] || labels[baseLang.value] || null
   if (l && l[idx] !== undefined) return l[idx]
-  return String(idx+1)
+  return String(idx + 1)
 }
 function simpleTitle(localNumber) {
   const idx = ((localNumber - 1) % 10) + 1
@@ -248,19 +260,15 @@ function simpleTitle(localNumber) {
 }
 
 // -----------------------------
-// pressed handlers (unchanged)
-// -----------------------------
+// pressed handlers
 function onPress(node) {
   if (!isUnitUnlocked(node.localNumber)) return
   pressedNodeKey.value = node.unitKey
 }
-function onRelease() {
-  pressedNodeKey.value = null
-}
+function onRelease() { pressedNodeKey.value = null }
 
 // -----------------------------
-// navigation on click (unchanged)
-// -----------------------------
+// navigation on click
 async function onNodeClick(node) {
   if (!isUnitUnlocked(node.localNumber)) {
     if (!token.value) {
@@ -272,10 +280,9 @@ async function onNodeClick(node) {
   }
   try {
     pressedNodeKey.value = null
-    router.push({ name: "Study", params: { unitId: String(node.localNumber), lang: baseLang.value } })
+    router.push({ name: "Study", params: { course: currentCourse.value, unitId: String(node.localNumber)} })
   } catch (e) {}
 }
-
 function showInlineMessage(text) {
   const id = 'map-inline-msg'
   let el = document.getElementById(id)
@@ -301,11 +308,13 @@ function showInlineMessage(text) {
 
 // -----------------------------
 // progress fetching (use currentCourse; keep sending both course & lang)
-// -----------------------------
 async function refreshProgressForCourse(courseId) {
-  const course = courseId || currentCourse.value || activeCourse.value || 'python1'
+  const course = normalizeCourse(courseId || currentCourse.value || 'python1')
   const base = (course || '').replace(/\d+$/, '') || course
-  const idx = courseIndexFromCourseId(course) // may be null
+  const idx = (() => {
+    const m = String(course).match(/(\d+)$/)
+    return m ? m[1] : null
+  })()
   const t = localStorage.getItem('yp_token')
   if (!t) {
     progressMap.value = {}
@@ -314,7 +323,6 @@ async function refreshProgressForCourse(courseId) {
   }
   loadingProgress.value = true
   try {
-    // Try bulk fetch first. Send course, lang and index so backend can use any of them.
     try {
       const params = { course, lang: base }
       if (idx) params.index = idx
@@ -339,10 +347,9 @@ async function refreshProgressForCourse(courseId) {
         return
       }
     } catch (e) {
-      // bulk fetch failed — fallback to per-unit fetch below
+      // bulk fetch failed — fallback to per-unit
     }
 
-    // fallback: per-unit fetch (also pass course/lang/index params)
     const total = 50, concurrency = 6
     const pm2 = {}
     const paramsBase = { course, lang: base }
@@ -365,11 +372,8 @@ async function refreshProgressForCourse(courseId) {
               pm2[String(u)] = r.data || null
             }
           }
-        } catch (e) {
-          pm2[String(u)] = null
-        }
-      }))
-    }
+        } catch (e) { pm2[String(u)] = null }
+      }))}
     progressCache.value[course] = pm2
     progressMap.value = { ...pm2 }
   } finally {
@@ -378,82 +382,151 @@ async function refreshProgressForCourse(courseId) {
 }
 
 // -----------------------------
-// events & storage handling
-// -----------------------------
+// events & storage handling (synchronize currentCourse immediately)
 function handleAuthChanged() { refreshProgressForCourse(currentCourse.value).catch(()=>{}) }
 
 function onStorage(ev) {
   if (!ev) return
-  // course changed in another tab -> refresh using full course id and update currentCourse
-  if (ev.key === 'yp_course') {
-    const newCourse = ev.newValue || null
-    if (newCourse) {
-      currentCourse.value = newCourse
-      refreshProgressForCourse(newCourse).catch(()=>{})
+  // yp_current changed -> update currentCourse & selectedStageInternal and refresh progress
+  if (ev.key === 'yp_current') {
+    const cur = loadCurrent()
+    if (cur && cur.course) {
+      currentCourse.value = cur.course
+      selectedStageInternal.value = Number.isFinite(Number(cur.stage)) ? cur.stage : 0
+      refreshProgressForCourse(currentCourse.value).catch(()=>{})
     }
   }
-  // backward compat: old key
-  if (ev.key === 'yp_lang') {
-    const newLang = ev.newValue || null
-    if (newLang) {
-      const courseMaybe = newLang.endsWith('1') ? newLang : `${newLang}1`
-      currentCourse.value = courseMaybe
-      refreshProgressForCourse(courseMaybe).catch(()=>{})
+
+  // yp_select changed -> if mapping contains current course, update selectedStageInternal
+  if (ev.key === 'yp_select') {
+    const map = loadSelectMap()
+    if (map && typeof map[currentCourse.value] !== 'undefined') {
+      const s = Number(map[currentCourse.value]) || 0
+      if (!isNaN(s) && s !== selectedStageInternal.value) {
+        selectedStageInternal.value = s
+        // also refresh progress because stage influences nodesPositions / progressPath
+        refreshProgressForCourse(currentCourse.value).catch(()=>{})
+      }
     }
-  }
-  // stage changed in another tab
-  if (ev.key === 'yp_stage') {
-    const v = ev.newValue
-    const n = Number(v)
-    if (!isNaN(n)) selectedStageInternal.value = n
   }
 }
 
+// event listeners for custom events
 function onCourseChanged(ev) {
   const c = ev && ev.detail && ev.detail.course ? ev.detail.course : null
+  const s = (ev && ev.detail && typeof ev.detail.stage !== 'undefined') ? Number(ev.detail.stage) : null
   if (!c) return
-  // Update currentCourse right away so rendering labels/nodes follow the event
-  currentCourse.value = c
-  refreshProgressForCourse(c).catch(()=>{})
+  const n = normalizeCourse(c)
+  currentCourse.value = n
+  if (s !== null && !isNaN(s)) selectedStageInternal.value = s
+  // ensure persisted as yp_current is authoritative (write only if event source is local UI)
+  try { /* we don't override persistent store here—MapNav already writes yp_current */ } catch(e) {}
+  refreshProgressForCourse(n).catch(()=>{})
 }
-
 function onStageChanged(ev) {
   const s = ev && ev.detail && typeof ev.detail.stage !== 'undefined' ? Number(ev.detail.stage) : null
-  if (s !== null && !isNaN(s)) selectedStageInternal.value = s
+  const c = ev && ev.detail && ev.detail.course ? normalizeCourse(ev.detail.course) : null
+  if (s === null || isNaN(s)) return
+  if (c) {
+    // if event carries course, use it
+    currentCourse.value = c
+    selectedStageInternal.value = s
+  } else {
+    selectedStageInternal.value = s
+  }
+  refreshProgressForCourse(currentCourse.value).catch(()=>{})
 }
 
-// compatibility with older event name
+// backward compat event
 function onLanguageChanged(ev) {
   const newLang = ev && ev.detail && ev.detail.lang ? ev.detail.lang : null
   if (!newLang) return
-  const courseMaybe = newLang.endsWith('1') ? newLang : `${newLang}1`
-  currentCourse.value = courseMaybe
-  refreshProgressForCourse(courseMaybe).catch(()=>{})
+  const c = String(newLang).endsWith('1') ? newLang : `${newLang}1`
+  currentCourse.value = normalizeCourse(c)
+  // try load stage from yp_select
+  const map = loadSelectMap()
+  if (map && typeof map[currentCourse.value] !== 'undefined') {
+    selectedStageInternal.value = Number(map[currentCourse.value]) || 0
+  }
+  refreshProgressForCourse(currentCourse.value).catch(()=>{})
 }
 
 // -----------------------------
-// initial mount & watches
-// -----------------------------
+// mount / unmount / watches
 onMounted(() => {
-  // Initial load: use currentCourse (which was initialized from activeCourse)
+  // initialize currentCourse: priority:
+  // 1. yp_current -> { course, stage }
+  // 2. props.selectedCourse or props.selectedLang
+  // 3. yp_select first key or fallback to 'python1'
+  const cur = loadCurrent()
+  if (cur && cur.course) {
+    currentCourse.value = cur.course
+    selectedStageInternal.value = Number.isFinite(Number(cur.stage)) ? cur.stage : (props.selectedStage || 0)
+  } else if (props.selectedCourse) {
+    currentCourse.value = normalizeCourse(props.selectedCourse)
+    // attempt to load saved stage for this course from yp_select
+    const map = loadSelectMap()
+    if (map && typeof map[currentCourse.value] !== 'undefined') {
+      selectedStageInternal.value = Number(map[currentCourse.value]) || Number(props.selectedStage || 0)
+    } else {
+      selectedStageInternal.value = Number.isFinite(Number(props.selectedStage)) ? props.selectedStage : 0
+    }
+  } else if (props.selectedLang) {
+    currentCourse.value = normalizeCourse(props.selectedLang)
+    const map = loadSelectMap()
+    if (map && typeof map[currentCourse.value] !== 'undefined') {
+      selectedStageInternal.value = Number(map[currentCourse.value]) || 0
+    } else {
+      selectedStageInternal.value = Number.isFinite(Number(props.selectedStage)) ? props.selectedStage : 0
+    }
+  } else {
+    const map = loadSelectMap()
+    const keys = Object.keys(map || {})
+    if (keys.length > 0) {
+      currentCourse.value = normalizeCourse(keys[0])
+      selectedStageInternal.value = Number(map[currentCourse.value]) || 0
+    } else {
+      currentCourse.value = 'python1'
+      selectedStageInternal.value = Number.isFinite(Number(props.selectedStage)) ? props.selectedStage : 0
+    }
+  }
+
+  // initial refresh
   refreshProgressForCourse(currentCourse.value).catch(()=>{})
 
   window.addEventListener('auth-changed', handleAuthChanged)
   window.addEventListener('storage', onStorage)
   window.addEventListener('course-changed', onCourseChanged)
   window.addEventListener('stage-changed', onStageChanged)
-  window.addEventListener('language-changed', onLanguageChanged) // backward compat
+  window.addEventListener('language-changed', onLanguageChanged)
 
-  // watch activeCourse change (derived from props/localStorage) -> update currentCourse & refresh
-  const stopWatch = watch(activeCourse, (val, oldVal) => {
-    if (val && val !== currentCourse.value) {
-      currentCourse.value = val
-      refreshProgressForCourse(val).catch(()=>{})
+  // watch props changes explicitly (sync if parent updates)
+  watch(() => props.selectedCourse, (v) => {
+    if (v) {
+      const n = normalizeCourse(v)
+      if (n !== currentCourse.value) {
+        currentCourse.value = n
+        // attempt to use yp_select mapping for stage
+        const map = loadSelectMap()
+        if (map && typeof map[n] !== 'undefined') {
+          selectedStageInternal.value = Number(map[n]) || 0
+        }
+        refreshProgressForCourse(n).catch(()=>{})
+      }
     }
   })
-
-  onBeforeUnmount(() => {
-    stopWatch()
+  watch(() => props.selectedLang, (v) => {
+    if (v) {
+      const n = normalizeCourse(v)
+      if (n !== currentCourse.value) {
+        currentCourse.value = n
+        const map = loadSelectMap()
+        if (map && typeof map[n] !== 'undefined') {
+          selectedStageInternal.value = Number(map[n]) || 0
+        }
+        refreshProgressForCourse(n).catch(()=>{})
+      }
+    }
   })
 })
 
@@ -464,22 +537,6 @@ onBeforeUnmount(() => {
   window.removeEventListener('stage-changed', onStageChanged)
   window.removeEventListener('language-changed', onLanguageChanged)
 })
-
-// also respond when parent props change explicitly (sync into currentCourse)
-watch(() => props.selectedCourse, (v) => {
-  if (v) {
-    currentCourse.value = v
-    refreshProgressForCourse(v).catch(()=>{})
-  }
-})
-watch(() => props.selectedLang, (v) => {
-  if (v) {
-    const c = String(v).endsWith('1') ? v : `${v}1`
-    currentCourse.value = c
-    refreshProgressForCourse(c).catch(()=>{})
-  }
-})
-
 </script>
 
 <style scoped>
@@ -640,12 +697,6 @@ watch(() => props.selectedLang, (v) => {
   .nodes-container { min-height: 760px; }
   .node-wrapper { width: 150px; }
   .unit-node { width: 150px; padding: 12px; }
-  /* svg { display: none; } */
-}
-
-/* 说明文字 */
-.note-text {
-  color: rgba(255,255,255,0.68);
 }
 
 /* map inline message（确保暗色下可读） */
