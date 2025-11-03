@@ -274,65 +274,88 @@ module.exports = (pool, authMiddleware) => {
     }
   });
 
-  // =============================
-  // 3. POST /api/progress
-  //    body: { unit_id, current_index, completed, lang, index }
-  //    lang 可以是 'python' 或 'python_1'；index 可单独传
-  // =============================
-  router.post('/', authMiddleware, async (req, res) => {
-    const userId = req.user && req.user.id;
-    if (!userId) return res.status(401).json({ error: 'unauthorized' });
+// =============================
+// 3. POST /api/progress
+//    body: { unit_id, current_index, completed, lang, index }
+//    lang 可以是 'python' 或 'python_1'；index 可单独传
+// =============================
+router.post('/', authMiddleware, async (req, res) => {
+  const userId = req.user && req.user.id;
+  if (!userId) return res.status(401).json({ error: 'unauthorized' });
 
-    const unit_id = toUnitId(req.body.unit_id);
-    const current_index = Number(req.body.current_index || 0);
-    const completedRaw = req.body.completed;
-    const completed = (completedRaw === 1 || completedRaw === '1' || completedRaw === true) ? 1 : 0;
+  const unit_id = toUnitId(req.body.unit_id);
+  const current_index = Number(req.body.current_index || 0);
+  const completedRaw = req.body.completed;
+  const completed = (completedRaw === 1 || completedRaw === '1' || completedRaw === true) ? 1 : 0;
 
-    const rawLang = (typeof req.body.lang === 'string' && req.body.lang.trim()) ? req.body.lang.trim() : null;
-    const rawIndex = (typeof req.body.index !== 'undefined') ? req.body.index : null;
-    const parsed = parseLangAndIndex(rawLang, rawIndex);
+  const rawLang = (typeof req.body.lang === 'string' && req.body.lang.trim()) ? req.body.lang.trim() : null;
+  const rawIndex = (typeof req.body.index !== 'undefined') ? req.body.index : null;
+  const parsed = parseLangAndIndex(rawLang, rawIndex);
 
-    if (!unit_id || !parsed.lang) {
-      return res.status(400).json({ error: 'unit_id and lang are required (lang may include index like python_1 or provide index separately)' });
+  if (!unit_id || !parsed.lang) {
+    return res.status(400).json({ error: 'unit_id and lang are required (lang may include index like python_1 or provide index separately)' });
+  }
+
+  try {
+    let targetTable = null;
+    if (parsed.index) {
+      const candidate = `progress${LANG_SUFFIX[parsed.lang]}_${parsed.index}`;
+      const exists = await tableExists(candidate);
+      if (!exists) return res.status(400).json({ error: `table ${candidate} not found` });
+      targetTable = candidate;
+    } else {
+      // 没有 index：如果该语言只有一张表则自动使用，否则要求客户端指定 index（避免误写入）
+      const tables = await listTablesForLang(parsed.lang);
+      if (!tables || tables.length === 0) {
+        return res.status(400).json({ error: `no progress tables found for lang ${parsed.lang}` });
+      }
+      if (tables.length === 1) {
+        targetTable = tables[0];
+      } else {
+        return res.status(400).json({ error: `multiple tables found for lang ${parsed.lang}, please specify index` });
+      }
     }
 
+    // 使用连接与事务，先删除旧记录，再插入新记录（保证原子性）
+    const conn = await pool.getConnection();
     try {
-      let targetTable = null;
-      if (parsed.index) {
-        const candidate = `progress${LANG_SUFFIX[parsed.lang]}_${parsed.index}`;
-        const exists = await tableExists(candidate);
-        if (!exists) return res.status(400).json({ error: `table ${candidate} not found` });
-        targetTable = candidate;
-      } else {
-        // 没有 index：如果该语言只有一张表则自动使用，否则要求客户端指定 index（避免误写入）
-        const tables = await listTablesForLang(parsed.lang);
-        if (!tables || tables.length === 0) {
-          return res.status(400).json({ error: `no progress tables found for lang ${parsed.lang}` });
-        }
-        if (tables.length === 1) {
-          targetTable = tables[0];
-        } else {
-          return res.status(400).json({ error: `multiple tables found for lang ${parsed.lang}, please specify index` });
-        }
-      }
+      await conn.beginTransaction();
 
-      const [result] = await pool.query(
-        `INSERT INTO \`${targetTable}\`
-          (user_id, unit_id, current_index, completed, updated_at)
-         VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
-         ON DUPLICATE KEY UPDATE
-           current_index = VALUES(current_index),
-           completed = VALUES(completed),
-           updated_at = CURRENT_TIMESTAMP`,
+      // 删除同 user_id + unit_id 的旧记录（无论 current_index 为多少，全部删除）
+      const [deleteResult] = await conn.query(
+        `DELETE FROM \`${targetTable}\` WHERE user_id = ? AND unit_id = ?`,
+        [userId, unit_id]
+      );
+
+      // 插入新的记录
+      const [insertResult] = await conn.query(
+        `INSERT INTO \`${targetTable}\` (user_id, unit_id, current_index, completed, updated_at)
+         VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)`,
         [userId, unit_id, current_index, completed]
       );
 
-      return res.json({ success: true, insertedId: result.insertId || null, table: targetTable });
-    } catch (err) {
-      console.error('POST /api/progress error:', err);
-      return res.status(500).json({ error: err.message || '保存进度失败' });
+      await conn.commit();
+      conn.release();
+
+      return res.json({
+        success: true,
+        deletedRows: deleteResult.affectedRows || 0,
+        insertedId: insertResult.insertId || null,
+        table: targetTable
+      });
+    } catch (txErr) {
+      // 事务中出错，回滚
+      try { await conn.rollback(); } catch (e) { /* ignore rollback error */ }
+      conn.release();
+      console.error('POST /api/progress transaction error:', txErr);
+      return res.status(500).json({ error: txErr.message || '保存进度失败（事务失败）' });
     }
-  });
+  } catch (err) {
+    console.error('POST /api/progress error:', err);
+    return res.status(500).json({ error: err.message || '保存进度失败' });
+  }
+});
+
 
   return router;
 };
