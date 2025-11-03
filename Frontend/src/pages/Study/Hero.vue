@@ -12,7 +12,7 @@
     <section class="header">
       <div class="title-wrap">
         <div class="title-center">
-          <h1 class="unit-title">{{ unitData.title }}</h1>
+          <h1 class="unit-title">{{ displayTitle }}</h1>
           <p class="unit-sub lang-label">
             语言：<span style="text-transform: capitalize">{{ selectedLangLabel }}</span>
           </p>
@@ -70,14 +70,24 @@
         <div
           class="progress-bar-outer"
           role="progressbar"
-          :aria-valuenow="progressPercent"
+          :aria-valuenow="computedProgressPercent"
           aria-valuemin="0"
           aria-valuemax="100"
         >
           <div
             class="progress-bar-inner"
-            :style="{ width: progressPercent + '%' }"
+            :style="{ width: computedProgressPercent + '%' }"
           ></div>
+        </div>
+
+        <div class="progress-meta" style="margin-top:8px; text-align:center; font-size:13px; opacity:0.92;">
+          <template v-if="progressData">
+            <span v-if="progressData.completed">已完成：{{ totalQuestions }} / {{ totalQuestions }}</span>
+            <span v-else>已学习：{{ safeCurrentIndex }} / {{ totalQuestions }} （{{ computedProgressPercent }}%）</span>
+          </template>
+          <template v-else>
+            <span>进度：{{ computedProgressPercent }}%</span>
+          </template>
         </div>
       </div>
 
@@ -102,10 +112,14 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 
 const props = defineProps({
+  // unitData.title 示例： "python1 · 单元 3"（但这次不会被用来编辑，只用于解析 key 作为后备）
   unitData: { type: Object, default: () => ({ title: '学习单元' }) },
+  // 新增：如果父组件能直接传入 courseFull（例如 "python1"），Hero 优先使用它进行映射
+  courseFull: { type: String, default: '' },
   selectedLangLabel: { type: String, default: 'Python' },
   token: { type: String, default: '' },          // 可由父组件传入（若使用 token 认证）
-  progressPercent: { type: Number, default: 0 }
+  progressPercent: { type: Number, default: 0 }, // 后备值
+  progressData: { type: [Object, null], default: null } // 后端返回的进度对象（StudyNew 已传）
 });
 
 const router = useRouter();
@@ -124,15 +138,78 @@ const loggedIn = ref(Boolean(props.token));
 
 watch(() => props.token, (v) => {
   loggedIn.value = Boolean(v);
-  // 尝试刷新数据（如果 token 改变）
   fetchMembershipAndEnergy();
 });
 
 onMounted(() => {
-  // 尝试获取一次（若使用 cookie/session，withCredentials 会携带）
   fetchMembershipAndEnergy();
 });
 
+// ------------------ 固定的课程显示名映射（在代码中手动维护） ------------------
+// 在此对象中直接修改/添加课程映射，例如： python1 -> 'Python入门'
+const COURSE_DISPLAY_MAP = {
+  python1: 'Python入门',
+  python2: 'Python进阶',
+  cpp1: 'C++入门',
+  cpp2: 'c++进阶',
+  c1: 'C语言入门',
+  c2: 'C语言进阶',
+  // 若需更多课程，请在这里扩展，例如：
+  // js1: 'JavaScript入门',
+  // java1: 'Java基础'
+};
+
+// ------------------ 解析 courseKey（优先使用 props.courseFull，其次从 unitData.title 提取） ----------
+function parseCourseKeyFromTitle(title) {
+  if (!title || typeof title !== 'string') return null;
+  // 尝试提取开头的连续字母数字下划线部分，例如 python1 python_advanced1
+  const m = title.match(/^[\s]*([A-Za-z_]+\d*)/i);
+  if (m) return m[1];
+  const m2 = title.match(/([A-Za-z_]+\d*)/i);
+  return m2 ? m2[1] : null;
+}
+
+const currentCourseKey = computed(() => {
+  if (props.courseFull && typeof props.courseFull === 'string' && props.courseFull.trim()) {
+    return props.courseFull.trim();
+  }
+  return parseCourseKeyFromTitle(props.unitData?.title || '') || '';
+});
+
+// computed displayTitle: 用映射替换 course key（若找不到映射则保留原始标题）
+const displayTitle = computed(() => {
+  const raw = props.unitData?.title ?? '学习单元';
+  const key = currentCourseKey.value;
+  if (!key) return raw;
+  const mapped = COURSE_DISPLAY_MAP[key];
+  if (!mapped) return raw;
+  return raw.replace(new RegExp(key, 'i'), mapped);
+});
+
+// ------------------ 进度计算（固定总题数 15） ------------------
+const totalQuestions = 15;
+
+const safeCurrentIndex = computed(() => {
+  const p = props.progressData || null;
+  if (!p) return 0;
+  const ci = p.current_index ?? p.currentIndex ?? 0;
+  const n = Number(ci);
+  if (Number.isNaN(n) || n < 0) return 0;
+  return Math.min(totalQuestions, Math.max(0, Math.round(n)));
+});
+
+const computedProgressPercent = computed(() => {
+  const p = props.progressData || null;
+  if (!p) {
+    return Math.max(0, Math.min(100, Math.round(props.progressPercent || 0)));
+  }
+  if (p.completed) return 100;
+  const percent = Math.floor((safeCurrentIndex.value / totalQuestions) * 100);
+  if (safeCurrentIndex.value >= totalQuestions && !p.completed) return 99;
+  return Math.max(0, Math.min(99, percent));
+});
+
+// ------------------ 原有的能量 / membership 逻辑（保持不变） ------------------
 async function handleBackMapClick() {
   try {
     navigatingToMap.value = true;
@@ -155,7 +232,6 @@ async function fetchMembershipAndEnergy() {
   entryError.value = '';
   noServerData.value = false;
 
-  // prepare axios options: headers + withCredentials
   const headers = {};
   if (props.token) {
     headers['Authorization'] = `Bearer ${props.token}`;
@@ -164,14 +240,12 @@ async function fetchMembershipAndEnergy() {
 
   try {
     const [mRes, eRes] = await Promise.allSettled([
-      axios.get('http://localhost:5000/api/user/membership', axiosConfig),
-      axios.get('http://localhost:5000/api/user/energy', axiosConfig)
+      axios.get('/api/user/membership', axiosConfig),
+      axios.get('/api/user/energy', axiosConfig)
     ]);
 
-    // membership
     if (mRes.status === 'fulfilled') {
       const mData = mRes.value?.data ?? {};
-      console.debug('membership response', mData);
       if (mData && Object.keys(mData).length > 0 && mData.end_at) {
         try {
           const now = new Date();
@@ -184,10 +258,8 @@ async function fetchMembershipAndEnergy() {
       } else {
         isVip.value = false;
       }
-      // mark loggedIn true if membership returned anything (some servers return {} for non-members but still 200)
       if (mRes.value && mRes.value.status === 200) loggedIn.value = true;
     } else {
-      // membership failed: log and continue
       console.warn('/api/user/membership failed:', mRes.reason);
       if (mRes.reason?.response?.status === 401) {
         entryError.value = '未登录或凭证无效（membership）';
@@ -196,21 +268,17 @@ async function fetchMembershipAndEnergy() {
       isVip.value = false;
     }
 
-    // energy
     if (eRes.status === 'fulfilled') {
       const payload = eRes.value?.data ?? null;
-      console.debug('energy response', payload);
       if (!payload || Object.keys(payload).length === 0) {
         noServerData.value = true;
       } else {
-        // try to extract fields robustly
         const energy = payload.energy ?? payload.current ?? payload.value ?? null;
         const maxEnergy = payload.maxEnergy ?? payload.max ?? payload.capacity ?? null;
         const nextFull = payload.timeToFullSeconds ?? payload.nextFullSeconds ?? payload.next_full_seconds ?? null;
         energyData.energy = (energy === undefined) ? null : energy;
         energyData.maxEnergy = (maxEnergy === undefined) ? null : maxEnergy;
         timeToFullSeconds.value = nextFull === undefined ? null : nextFull;
-        // server responded successfully -> consider logged in
         loggedIn.value = true;
       }
     } else {
@@ -224,16 +292,13 @@ async function fetchMembershipAndEnergy() {
       noServerData.value = true;
     }
 
-    // VIP handling
     if (isVip.value) {
       energyData.energy = Infinity;
       energyData.maxEnergy = Infinity;
       timeToFullSeconds.value = null;
     }
 
-    // If both endpoints returned 401 or were unreachable, instruct debugging
     if (!loggedIn.value) {
-      // helpful message for debugging
       entryError.value = entryError.value || '未检测到登录凭证；请检查 token 或 Cookie (withCredentials) 设置。';
     }
   } catch (err) {
@@ -295,5 +360,6 @@ function formatDuration(seconds) {
 .progress-bar-inner { height:100%; background: linear-gradient(90deg,#0e78e9,#ed3aed); transition: width .35s; }
 .hint-box { background: rgba(255,255,255,0.06); padding:10px; border-radius:8px; font-size:14px; color:#ffe58f; margin-top:8px; }
 .loading-box { margin-top:10px; padding:10px; border-radius:10px; background: rgba(255,255,255,0.95); display:flex; align-items:center; gap:10px; color:#000; }
+.progress-meta { color: rgba(255,255,255,0.9); }
 @media (max-width:640px){ .title-wrap{ flex-direction:column; align-items:center; gap:12px } .energy-block{ align-items:center } .back-map{ left:10px; top:10px; padding:6px 10px } }
 </style>
