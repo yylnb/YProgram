@@ -58,7 +58,6 @@
             role="listitem"
             :aria-label="`选项 ${item.uid}: ${item.text}`"
           >
-            <!-- We keep text in DOM for accessibility, but hide it visually when placeholderActive -->
             <span class="pool-item-text">{{ item.text }}</span>
           </div>
         </template>
@@ -100,12 +99,17 @@
 
 <script setup>
 /*
-  说明：
-  - 仅将 .drag-ghost 的样式放到全局（非 scoped）style 中，其他交互逻辑不变。
-  - 其余实现与之前版本一致（pointer-based ghost, pool placeholders, click auto-fill 等）。
+  完整实现（按你的新规则）：
+
+  - A 方案（优先 blank -> pool -> restore） 保留
+  - 计时法：在 pointerdown 记录时间；pointerup 时按时长 (< CLICK_TIME_THRESHOLD => 使用点击逻辑；>= => 使用拖拽逻辑)
+  - 在判断落点时临时隐藏 ghost（避免 ghost 覆盖导致 elementFromPoint 误判）
+  - 更可靠的落点判定：先查 closest('[data-blank-index]')，若无则判断坐标是否在 poolWrap 的 bounding rect 内 -> pool
+  - 创建 ghost 时立刻设置 left/top 到 pointer 坐标，避免左上角闪动
+  - 清理和占位行为保持（占位为纯灰、放下补位、点击自动填入、从 placed 拖出时 pool 显示占位等）
 */
 
-import { ref, computed, watch, onBeforeUnmount } from 'vue';
+import { ref, computed, watch, onBeforeUnmount, nextTick } from 'vue';
 
 const props = defineProps({
   question: { type: Object, required: true },
@@ -132,15 +136,21 @@ const poolItems = ref([]); // { uid, text }
 const placedAnswers = ref([]);
 
 // drag state
-const draggingId = ref(null);
-const draggingFrom = ref(null);
-const draggingSourceIndex = ref(null);
+const draggingId = ref(null);             // uid
+const draggingFrom = ref(null);           // 'pool' | 'placed'
+const draggingSourceIndex = ref(null);    // original source index
 const placeholderPoolIndex = ref(null);
 const placeholderActive = ref(false);
 const currentOverBlank = ref(null);
 const poolWrap = ref(null);
-const ghostEl = ref(null);
+
+// ghost element reference (plain variable - DOM node appended to body)
+let ghostEl = null;
 const showGhost = ref(false);
+
+// timing rule
+let dragStartTime = 0;
+const CLICK_TIME_THRESHOLD = 200; // ms — 小于则视作短时（用点击逻辑），否则用拖拽逻辑
 
 // computed
 const blanksCount = computed(() => Math.max(0, textSegments.value.length - 1));
@@ -173,7 +183,7 @@ function safeParseJSON(val) {
   try { return JSON.parse(val); } catch { return null; }
 }
 
-// init
+// init from question
 function initFromQuestion(q) {
   localQuestion.value = q ? { ...q } : {};
   let ts = safeParseJSON(localQuestion.value?.text);
@@ -196,38 +206,45 @@ function initFromQuestion(q) {
   const tstamp = Date.now();
   poolItems.value = opts.map((t, i) => ({ uid: `i${i}-${tstamp}`, text: String(t) }));
 
+  // reset state
   draggingId.value = null; draggingFrom.value = null; draggingSourceIndex.value = null;
   placeholderPoolIndex.value = null; placeholderActive.value = false; currentOverBlank.value = null;
   attempts.value = 0; state.value = 'idle'; internalError.value = ''; nextDisabled.value = false;
   destroyGhost();
 }
 
-// Ghost creation (use drag-ghost class that copies pool-item visuals)
-function createGhostFromText(text) {
+/* ---------- Ghost helpers ---------- */
+// Create ghost and immediately set left/top to pointer coords to avoid 0,0 flash
+function createGhostFromTextAt(text, x, y) {
   destroyGhost();
   const el = document.createElement('div');
   el.className = 'drag-ghost';
   el.innerText = text;
   el.style.position = 'fixed';
-  el.style.top = '0px';
-  el.style.left = '0px';
+  el.style.left = `${x}px`;
+  el.style.top = `${y}px`;
+  el.style.transform = 'translate(-50%, -50%)';
   el.style.pointerEvents = 'none';
   el.style.zIndex = 99999;
   document.body.appendChild(el);
-  ghostEl.value = el;
+  ghostEl = el;
   showGhost.value = true;
 }
+// Move ghost
 function moveGhost(x, y) {
-  if (!ghostEl.value) return;
-  ghostEl.value.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+  if (!ghostEl) return;
+  // use left/top updates (avoid transform-only issues)
+  ghostEl.style.left = `${x}px`;
+  ghostEl.style.top = `${y}px`;
 }
+// Destroy ghost
 function destroyGhost() {
-  if (ghostEl.value && ghostEl.value.parentElement) ghostEl.value.parentElement.removeChild(ghostEl.value);
-  ghostEl.value = null;
+  if (ghostEl && ghostEl.parentElement) ghostEl.parentElement.removeChild(ghostEl);
+  ghostEl = null;
   showGhost.value = false;
 }
 
-// pointer handlers
+/* ---------- Pointer handlers ---------- */
 function attachPointerHandlers() {
   window.addEventListener('pointermove', onPointerMove, { passive: false });
   window.addEventListener('pointerup', onPointerUp);
@@ -239,6 +256,7 @@ function detachPointerHandlers() {
   window.removeEventListener('pointercancel', onPointerUp);
 }
 
+// begin dragging from pool
 function beginPointerDragFromPool(evt, poolIndex) {
   if (inputDisabled.value) return;
   const item = poolItems.value[poolIndex];
@@ -248,11 +266,17 @@ function beginPointerDragFromPool(evt, poolIndex) {
   draggingSourceIndex.value = poolIndex;
   placeholderPoolIndex.value = poolIndex;
   placeholderActive.value = true;
-  createGhostFromText(item.text);
-  moveGhost(evt.clientX, evt.clientY);
+
+  // start timing
+  dragStartTime = performance.now();
+
+  // create ghost at pointer pos immediately (avoid 0,0)
+  createGhostFromTextAt(item.text, evt.clientX || evt.pageX, evt.clientY || evt.pageY);
+
   attachPointerHandlers();
 }
 
+// begin dragging from placed
 function beginPointerDragFromPlaced(evt, blankIndex) {
   if (inputDisabled.value) return;
   const item = placedAnswers.value[blankIndex];
@@ -260,17 +284,22 @@ function beginPointerDragFromPlaced(evt, blankIndex) {
   draggingId.value = item.uid;
   draggingFrom.value = 'placed';
   draggingSourceIndex.value = blankIndex;
+  // show placeholder at pool tail
   placeholderPoolIndex.value = poolItems.value.length;
   placeholderActive.value = true;
-  createGhostFromText(item.text);
-  moveGhost(evt.clientX, evt.clientY);
+
+  dragStartTime = performance.now();
+
+  createGhostFromTextAt(item.text, evt.clientX || evt.pageX, evt.clientY || evt.pageY);
+
   attachPointerHandlers();
 }
 
+// pointer move
 function onPointerMove(evt) {
   if (!draggingId.value) return;
-  try { evt.preventDefault(); } catch {}
-  moveGhost(evt.clientX, evt.clientY);
+  try { evt.preventDefault(); } catch (e) {}
+  moveGhost(evt.clientX || evt.pageX, evt.clientY || evt.pageY);
 
   // highlight blank under pointer
   if (currentOverBlank.value != null) {
@@ -278,7 +307,7 @@ function onPointerMove(evt) {
     if (prev) prev.classList.remove('drag-over');
     currentOverBlank.value = null;
   }
-  const el = document.elementFromPoint(evt.clientX, evt.clientY);
+  const el = document.elementFromPoint(evt.clientX || evt.pageX, evt.clientY || evt.pageY);
   if (!el) return;
   const blankEl = el.closest && el.closest('[data-blank-index]');
   if (blankEl) {
@@ -288,20 +317,79 @@ function onPointerMove(evt) {
   }
 }
 
+// pointer up -> decide by timing: short => click logic; long => A scheme (drag logic)
 function onPointerUp(evt) {
   if (!draggingId.value) {
-    detachPointerHandlers(); destroyGhost(); return;
+    detachPointerHandlers();
+    destroyGhost();
+    return;
   }
-  const el = document.elementFromPoint(evt.clientX, evt.clientY);
+  const endTime = performance.now();
+  const duration = endTime - (dragStartTime || endTime);
+  // save pointer coords
+  const x = evt.clientX || evt.pageX;
+  const y = evt.clientY || evt.pageY;
+
+  // Temporarily hide ghost to avoid elementFromPoint hitting it.
+  if (ghostEl) ghostEl.style.display = 'none';
+
+  // compute drop target using elementFromPoint (after ghost hidden)
+  const elAt = document.elementFromPoint(x, y);
   let droppedOnBlankIndex = null;
-  if (el) {
-    const bEl = el.closest && el.closest('[data-blank-index]');
+  if (elAt) {
+    const bEl = elAt.closest && elAt.closest('[data-blank-index]');
     if (bEl) droppedOnBlankIndex = Number(bEl.getAttribute('data-blank-index'));
   }
-  const droppedOnPool = el && el.closest && !!el.closest('[data-pool-area]');
 
+  // compute droppedOnPool by bounding rect check (more robust)
+  let droppedOnPool = false;
+  if (poolWrap?.value) {
+    const r = poolWrap.value.getBoundingClientRect();
+    if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) droppedOnPool = true;
+  }
+
+  // Restore ghost visibility (we'll destroy later)
+  if (ghostEl) ghostEl.style.display = '';
+
+  // If short duration -> use click logic (as you requested)
+  if (duration < CLICK_TIME_THRESHOLD) {
+    if (draggingFrom.value === 'pool') {
+      // find current pool index by uid (if still present)
+      const uid = draggingId.value;
+      const idx = poolItems.value.findIndex(it => it.uid === uid);
+      if (idx !== -1) {
+        // simulate click fill
+        onClickPool(idx);
+      }
+    } else if (draggingFrom.value === 'placed') {
+      // simulate click placed -> return to pool
+      const sIdx = draggingSourceIndex.value;
+      // ensure sIdx valid
+      if (placedAnswers.value[sIdx] && placedAnswers.value[sIdx].uid === draggingId.value) {
+        onClickPlaced(sIdx);
+      } else {
+        // if not matching (maybe swapped), try find by uid
+        const found = placedAnswers.value.findIndex(p => p && p.uid === draggingId.value);
+        if (found !== -1) onClickPlaced(found);
+      }
+    }
+    // cleanup
+    placeholderPoolIndex.value = null;
+    placeholderActive.value = false;
+    if (currentOverBlank.value != null) {
+      const prev = document.querySelector(`[data-blank-index="${currentOverBlank.value}"]`);
+      if (prev) prev.classList.remove('drag-over');
+    }
+    draggingId.value = null; draggingFrom.value = null; draggingSourceIndex.value = null;
+    destroyGhost();
+    detachPointerHandlers();
+    return;
+  }
+
+  // ELSE: duration >= threshold -> true drag logic (A scheme)
   if (draggingFrom.value === 'pool') {
     const uid = draggingId.value;
+    // locate current pool index of item (safe)
     const poolIndex = poolItems.value.findIndex(it => it.uid === uid);
     const sourceIdx = poolIndex === -1 ? draggingSourceIndex.value : poolIndex;
 
@@ -309,6 +397,7 @@ function onPointerUp(evt) {
       const item = poolItems.value[sourceIdx];
       if (item) {
         const replaced = placeIntoBlank(droppedOnBlankIndex, item);
+        // remove from pool by uid
         const idxToRemove = poolItems.value.findIndex(it => it.uid === item.uid);
         if (idxToRemove !== -1) poolItems.value.splice(idxToRemove, 1);
         if (replaced) poolItems.value.push(replaced);
@@ -321,9 +410,10 @@ function onPointerUp(evt) {
         }
       }
     } else if (droppedOnPool) {
-      // dropped back to pool, nothing to change
+      // dropped on pool area -> interpret as return to pool (do nothing because pool item still exists)
+      // Optionally, we could insert at placeholderPoolIndex; current behavior leaves item in place and placeholder removed.
     } else {
-      // dropped elsewhere: restore (no-op)
+      // dropped elsewhere -> restore (no-op)
     }
     placeholderPoolIndex.value = null;
     placeholderActive.value = false;
@@ -353,23 +443,19 @@ function onPointerUp(evt) {
     placeholderActive.value = false;
   }
 
+  // remove blank highlight if any
   if (currentOverBlank.value != null) {
     const prev = document.querySelector(`[data-blank-index="${currentOverBlank.value}"]`);
     if (prev) prev.classList.remove('drag-over');
   }
 
+  // final cleanup
   draggingId.value = null; draggingFrom.value = null; draggingSourceIndex.value = null;
   destroyGhost();
   detachPointerHandlers();
 }
 
-function placeIntoBlank(blankIdx, itemObj) {
-  const replaced = placedAnswers.value[blankIdx];
-  placedAnswers.value[blankIdx] = { uid: itemObj.uid, text: itemObj.text };
-  return replaced;
-}
-
-// native drag handlers (desktop)
+/* ---------- native drag handlers (desktop support) ---------- */
 function onDragStartPool(e, poolIndex) {
   if (inputDisabled.value) { e.preventDefault(); return; }
   const item = poolItems.value[poolIndex];
@@ -410,7 +496,7 @@ function onDropToBlankNative(e, blankIndex) {
   placeholderPoolIndex.value = null; placeholderActive.value = false;
 }
 
-// click behaviors
+/* ---------- Click behaviors ---------- */
 function onClickPool(poolIdx) {
   if (inputDisabled.value) return;
   const item = poolItems.value[poolIdx];
@@ -428,16 +514,7 @@ function onClickPlaced(blankIdx) {
   poolItems.value.push(item);
 }
 
-// answer checking
-function safeCanon(raw) {
-  if (raw == null) return null;
-  if (Array.isArray(raw)) return raw;
-  if (typeof raw === 'string') {
-    try { const p = JSON.parse(raw); if (Array.isArray(p)) return p; } catch {}
-    return [raw];
-  }
-  return [String(raw)];
-}
+/* ---------- answer checking ---------- */
 function normalize(str) {
   if (str == null) return '';
   return String(str).trim().replace(/\s+/g, ' ').toLowerCase();
@@ -469,7 +546,7 @@ function checkAnswers() {
   return false;
 }
 
-// submit / next
+/* ---------- submit / next ---------- */
 function onSubmit() {
   if (inputDisabled.value) return;
   attempts.value += 1;
@@ -490,11 +567,16 @@ function onNextClick() {
   setTimeout(() => { nextDisabled.value = false; }, 600);
 }
 
-// watch
+/* ---------- utilities ---------- */
+function placeIntoBlank(blankIdx, itemObj) {
+  const replaced = placedAnswers.value[blankIdx];
+  placedAnswers.value[blankIdx] = { uid: itemObj.uid, text: itemObj.text };
+  return replaced;
+}
+
+/* ---------- watchers & lifecycle ---------- */
 watch(() => props.question, (q) => initFromQuestion(q || {}), { immediate: true });
 watch(() => props.questionIndex, () => initFromQuestion(localQuestion.value));
-
-// cleanup
 onBeforeUnmount(() => {
   destroyGhost();
   detachPointerHandlers();
@@ -545,9 +627,7 @@ onBeforeUnmount(() => {
   justify-content:center;
 }
 
-/* ************** */
 /* Placeholder: pure gray and hide text when active */
-/* ************** */
 .pool-item.pool-placeholder,
 .pool-item.dragging-placeholder {
   background:#6b6b6b !important; /* 纯灰 */
@@ -585,16 +665,11 @@ onBeforeUnmount(() => {
 @media (max-width: 640px) {
   .blank-slot { min-width: 120px; margin: 4px; }
   .pool-item { padding: 8px 10px; min-width: 56px; font-size: 14px; }
-  .drag-ghost { font-size: 13px; padding: 6px 10px; }
 }
 </style>
 
 <!-- GLOBAL styles (not scoped) so ghost appended to document.body can receive them -->
 <style>
-/* Ensure ghost has full background + border and matches pool-item visually.
-   This block is global (no scoped) so the dynamically-added ghost DOM node
-   will be styled correctly even though it's outside the component tree.
-*/
 .drag-ghost {
   position: fixed !important;
   pointer-events: none !important;
@@ -605,8 +680,8 @@ onBeforeUnmount(() => {
   justify-content: center !important;
   padding:8px 12px !important;
   border-radius:10px !important;
-  background:#2e2e2e !important;        /* 深灰背景 */
-  border:2px solid #ffffff !important;  /* 白色边框 */
+  background:#2e2e2e !important;
+  border:2px solid #ffffff !important;
   color:#ffffff !important;
   box-shadow: 0 14px 36px rgba(0,0,0,0.6) !important;
   font-size:14px !important;
