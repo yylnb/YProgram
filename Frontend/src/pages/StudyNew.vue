@@ -208,17 +208,13 @@ onMounted(() => {
   display: flex;
   gap: 20px;
   width: 100%;
-  max-width: 1200px;
-  margin: 18px auto;
-  padding: 0 16px;
+  margin: auto;
   box-sizing: border-box;
 }
 
 /* Panel 基础样式（让 Questions 占主要区域） */
 .panel {
   background: white;
-  border-radius: 10px;
-  padding: 12px;
   box-shadow: 0 6px 18px rgba(12,18,30,0.04);
 }
 
@@ -230,8 +226,8 @@ onMounted(() => {
 }
 
 /* 响应式 */
-@media (max-width: 900px) {
+/* @media (max-width: 900px) {
   .container { flex-direction: column; padding: 12px; }
   .questions-panel { width: 100%; }
-}
+} */
 </style>
