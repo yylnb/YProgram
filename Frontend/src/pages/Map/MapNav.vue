@@ -481,7 +481,7 @@ onBeforeUnmount(() => {
   justify-content: center;
   transform: translateX(-50%);
   white-space: nowrap;
-  background: linear-gradient(90deg, #0e78e9 0%, #c63be9 100%);
+  background: linear-gradient(144deg, #AF40FF, #5B42F3 50%, #00DDEB);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -553,6 +553,8 @@ onBeforeUnmount(() => {
 }
 .stage-title { font-weight: 800; color: #fff !important; }
 .stage-sub { font-size: 13px; color: #d1d5db !important; }
+.stage-btn:not(.active):hover .stage-title { color: #1f0346 !important;}
+.stage-btn:not(.active):hover .stage-sub {color: #1f0346 !important; }
 
 /* energy panel */
 .energy-panel { display:flex; align-items:center; gap:10px; padding:6px 8px; border-radius:10px; cursor:pointer; user-select:none; transition: transform .12s ease, box-shadow .12s ease; background: rgba(176, 176, 176, 0.321) !important; border: 1px solid rgba(255,255,255,0.04) !important; color: #fff !important; }

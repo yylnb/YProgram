@@ -58,7 +58,7 @@
       </div>
     </div>
 
-    <!-- hints area (shown when wrong and hint available) -->
+    <!-- hints area (shown only when last submission was wrong) -->
     <div v-if="currentHint" class="hint-box" style="margin-top:10px;">
       <strong>提示：</strong>
       <div v-html="currentHint"></div>
@@ -111,6 +111,9 @@ const nextDisabled = ref(false);
 
 // 已尝试错误集合（0-based index）—— 错误选项保持红色并不可再选
 const wrongSet = ref(new Set());
+
+// 记录最近一次提交是否为错误 —— 用于控制提示显示逻辑
+const lastSubmissionWasWrong = ref(false);
 
 // 全局禁用（父组件禁用或已答对）
 const inputDisabled = computed(() => props.disabled || state.value === 'correct');
@@ -173,8 +176,9 @@ function optionKey(i) {
   return String.fromCharCode(65 + i);
 }
 
-// current hint only when attempts > 0
+// current hint only when last submission was wrong and attempts > 0
 const currentHint = computed(() => {
+  if (!lastSubmissionWasWrong.value) return null;
   if (attempts.value <= 0) return null;
   const hs = localQuestion.value?.hints ?? null;
   if (!hs) return null;
@@ -182,6 +186,9 @@ const currentHint = computed(() => {
     try { const p = JSON.parse(hs); if (Array.isArray(p)) return p; } catch {} return hs.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
   })() : null);
   if (!arr || arr.length === 0) return null;
+  // attempts counts number of submissions (including correct first try)
+  // for hints we index by wrong-attempts count. If you prefer hints to base on total attempts,
+  // keep as-is; otherwise we could track wrongAttempts separately. For now use attempts index:
   const idx = Math.max(0, Math.min(arr.length - 1, attempts.value - 1));
   return arr[idx] ?? null;
 });
@@ -206,6 +213,7 @@ function reset() {
   saveNotice.value = '';
   nextDisabled.value = false;
   wrongSet.value = new Set();
+  lastSubmissionWasWrong.value = false;
 }
 
 // submission handling
@@ -222,12 +230,15 @@ function onSubmit() {
   if (correct) {
     // 答对：显示绿色，禁止进一步操作，通知父组件
     state.value = 'correct';
+    lastSubmissionWasWrong.value = false; // <-- important: correct -> do not show hint
+    console.log('[Choice] emit correct', { questionIndex: props.questionIndex, attempts: attempts.value });
     emit('correct', { questionIndex: props.questionIndex, attempts: attempts.value });
   } else {
     // 错误：把该选项加入 wrongSet，显示 wrong 动画，不显示正确项
     wrongSet.value.add(chosenIndex);
 
     state.value = 'wrong';
+    lastSubmissionWasWrong.value = true; // <-- important: wrong -> allow hint to show
 
     // 清除 selectedOption 以便用户选择新选项时显示蓝色（但错误项保持红色）
     selectedOption.value = null;
@@ -244,6 +255,7 @@ function onNextClick() {
   if (state.value !== 'correct') return;
   nextDisabled.value = true;
   const nextIndex = props.questionIndex + 1;
+  console.log('[Choice] emit next', { questionIndex: props.questionIndex, nextIndex });
   emit('next', { questionIndex: props.questionIndex, nextIndex });
   setTimeout(() => { nextDisabled.value = false; }, 800);
 }
@@ -263,9 +275,13 @@ watch(() => props.questionIndex, () => {
 /* 容器：黑底白字 */
 .choice-root {
   padding: 22px;
-  background: #000;
+  margin-top: 10px;
+  margin-left: 15%;
+  margin-right: 15%;
+  border-radius: 30px;
+  background: #1c1c1c;
   color: #fff;
-  box-shadow: 0 12px 36px rgba(0,0,0,0.7);
+  box-shadow: 12px 12px 36px rgba(194, 194, 194, 0.7);
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
@@ -310,10 +326,10 @@ watch(() => props.questionIndex, () => {
 
 /* 问题文本仍居中 */
 .q-text {
-  margin:12px 0 16px 0;
+  margin:12px 0 24px 0;
   color:#e6eef8;
   text-align:center;
-  font-size:15px;
+  font-size:19px;
 }
 
 /* 选项使用 2 列网格：AB 第一行，CD 第二行 */
@@ -336,7 +352,7 @@ watch(() => props.questionIndex, () => {
   cursor:pointer;
   transition: all .14s ease;
   background: rgba(255,255,255,0.02);
-  min-height:92px;              /* 更大尺寸 */
+  min-height:72px;              /* 更大尺寸 */
   box-sizing:border-box;
   overflow:hidden;
 }

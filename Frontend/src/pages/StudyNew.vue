@@ -21,6 +21,9 @@
           :progressData="progressData"
           @select-question="onSelectQuestion"
           @answered="onAnswered"
+          @progress-updated="onQuestionsProgressUpdated"
+          @unit-complete="onQuestionsUnitComplete"
+          @next-clicked="onQuestionsNextClicked"
         />
       </section>
     </div>
@@ -99,20 +102,118 @@ const progressData = ref(null);
 // 进度百分比（给 Hero 快速展示）：默认 0；当后端返回 completed 或 current_index 时做简单映射
 const progressPercent = ref(0);
 
+// 常量：题目总数（与 Questions.vue 保持一致）
+const TOTAL_QUESTIONS = 15;
+
 // 当 Hero 发出 back-map 事件时跳回 /map
 function onBackMap() {
   router.push('/map').catch(() => {});
 }
 
 // 当 Questions 选择题目时触发（你现在不需要在此处理渲染）
+// 现在我们也把选择题号映射为 progressPercent（可选）
 function onSelectQuestion(question) {
   console.log('selected question from Questions.vue:', question);
+  let idx = null;
+  if (question && typeof question.questionIndex === 'number') idx = question.questionIndex;
+  else if (typeof question === 'number') idx = question;
+  else if (question && question.currentIndex) idx = Number(question.currentIndex);
+
+  if (idx !== null && !Number.isNaN(Number(idx))) {
+    const n = Number(idx);
+    progressPercent.value = Math.min(99, Math.max(0, Math.round((n / TOTAL_QUESTIONS) * 100)));
+  }
 }
 
 // 当子组件提交答案/完成时触发（Questions 内部会转发 Choice/Fill 的 answered）
 function onAnswered(payload) {
   console.log('answered payload:', payload);
-  // 你可以在这里调用后端保存用户进度或触发 UI 通知
+  // 如果 Questions 把 progress 放在 payload.progress 中，请同步（但不切题，切题由 Questions 控制）
+  if (payload && payload.progress) {
+    updateProgressFromPayload(payload.progress);
+    progressData.value = payload.progress;
+  }
+}
+
+// 统一由后端或权威对象来更新 progressData / progressPercent
+function updateProgressFromPayload(pd) {
+  if (!pd) return;
+  progressData.value = pd;
+
+  // 优先使用后端 percent 字段
+  if (typeof pd.percent !== 'undefined' && pd.percent !== null) {
+    const p = Number(pd.percent);
+    if (!Number.isNaN(p)) {
+      progressPercent.value = Math.max(0, Math.min(100, Math.round(p)));
+      return;
+    }
+  }
+
+  // completed -> 100%
+  if (pd.completed) {
+    progressPercent.value = 100;
+    return;
+  }
+
+  // 使用 current_index 映射到百分比（0-99）
+  const ci = pd.current_index ?? pd.currentIndex ?? null;
+  if (ci !== null && typeof ci !== 'undefined') {
+    const num = Number(ci);
+    if (!Number.isNaN(num)) {
+      const raw = Math.round((num / TOTAL_QUESTIONS) * 100);
+      progressPercent.value = pd.completed ? 100 : Math.min(99, Math.max(0, raw));
+      return;
+    }
+  }
+
+  // fallback
+  progressPercent.value = 0;
+}
+
+// 当 Questions 通过 API 拉取到后端进度并 emit('progress-updated', pd)
+function onQuestionsProgressUpdated(pd) {
+  console.log('Questions -> parent progress-updated:', pd);
+  if (pd) updateProgressFromPayload(pd);
+}
+
+// 当用户在 Questions 中点击“下一题”时（Questions 已 emit('next-clicked', {...})）
+// 我们在此把该“下一题”事件的进度信息下发给 Hero（短暂同步 UI），但不替代 Questions 的跳题逻辑
+function onQuestionsNextClicked(payload) {
+  // payload: { nextIndex, progress }
+  console.log('收到 next-clicked:', payload);
+  const nextIdx = payload && typeof payload.nextIndex === 'number' ? payload.nextIndex : null;
+
+  if (payload && payload.progress) {
+    // 优先使用 Questions 带回的 progress（可能已经是保存后的对象）
+    updateProgressFromPayload(payload.progress);
+    progressData.value = payload.progress;
+    return;
+  }
+
+  // 若没有 progress 对象，则用 nextIndex 做临时映射用于 Hero 显示
+  if (nextIdx !== null) {
+    const pd = {
+      current_index: nextIdx,
+      completed: nextIdx > TOTAL_QUESTIONS ? 1 : 0
+    };
+    progressData.value = pd;
+    progressPercent.value = pd.completed ? 100 : Math.min(99, Math.round((nextIdx / TOTAL_QUESTIONS) * 100));
+  }
+}
+
+// 当 Questions 发出 unit-complete（全部题完成）
+function onQuestionsUnitComplete(payload) {
+  console.log('unit complete:', payload);
+  if (payload && payload.progress) {
+    updateProgressFromPayload(payload.progress);
+    progressData.value = payload.progress;
+  } else {
+    progressPercent.value = 100;
+    if (progressData.value) progressData.value.completed = 1;
+  }
+
+  // 可选：若你想在单元完成后自动回地图，取消下面注释
+  // router.push('/map').catch(()=>{});
 }
 
 // 构建请求参数并拉取进度
@@ -136,26 +237,12 @@ async function fetchProgressForUnit() {
     const url = `/api/progress/${encodeURIComponent(unitId.value)}`;
     const res = await axios.get(url, { params, headers });
     // 后端可能返回 null 或者进度对象
-    progressData.value = res && res.data ? res.data : null;
+    const pd = res && res.data ? res.data : null;
+    progressData.value = pd;
 
-    // 简单映射进度百分比（如果后端将来提供 percent 字段，可直接使用）
-    if (!progressData.value) {
-      progressPercent.value = 0;
-    } else if (progressData.value.completed) {
-      progressPercent.value = 100;
-    } else if (typeof progressData.value.current_index !== 'undefined' && progressData.value.current_index !== null) {
-      // 这里只是把 current_index 直接作为百分比占位（如果 current_index 是题号而非百分比，
-      // 你可以在后端返回明确的 percent 字段，或把 total_question_count 一并返回后在前端计算）
-      const num = Number(progressData.value.current_index);
-      if (!Number.isNaN(num)) {
-        // 限制到 0-99，避免误把题号当 100%。
-        progressPercent.value = Math.min(99, Math.max(0, Math.round(num)));
-      } else {
-        progressPercent.value = 0;
-      }
-    } else {
-      progressPercent.value = 0;
-    }
+    // 统一用 updateProgressFromPayload 来计算 progressPercent
+    updateProgressFromPayload(pd);
+
   } catch (err) {
     // 请求失败：如果是 401（未授权），可以考虑跳转登录或保持为空
     console.error('fetchProgressForUnit error:', err && err.response ? err.response.status : err);
@@ -198,7 +285,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: #f7fafc;
+  background: black;
   color: #111827;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
@@ -214,14 +301,14 @@ onMounted(() => {
 
 /* Panel 基础样式（让 Questions 占主要区域） */
 .panel {
-  background: white;
+  background: black;
   box-shadow: 0 6px 18px rgba(12,18,30,0.04);
 }
 
 /* Questions 面板：占满主要区域 */
 .questions-panel {
   width: 100%;
-  min-height: 64vh;
+  min-height: 85vh;
   overflow: auto;
 }
 

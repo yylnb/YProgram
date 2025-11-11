@@ -1,105 +1,115 @@
 <template>
   <div class="fill-root" @contextmenu.prevent>
-    <header class="fill-header">
-      <div class="q-number">题号：{{ displayIndex }}</div>
+    <!-- Header: 与 Choice.vue 风格一致（圆形题号 + 标题同一行） -->
+    <header class="fill-header choice-header">
+      <div class="q-number-wrap">
+        <div class="q-number">{{ displayIndex }}</div>
+      </div>
       <h2 class="q-title" v-html="localQuestion.title || '未命名题目'"></h2>
     </header>
 
-    <!-- Text segments with blanks -->
-    <div class="q-text" v-if="textSegments && textSegments.length">
-      <template v-for="(seg, idx) in textSegments" :key="idx">
-        <span class="seg-text" v-if="seg" v-html="seg"></span>
+    <!-- 中心容器：问题文本、可选项池、提交按钮均居中 -->
+    <div class="fill-center">
+      <!-- Text segments with blanks -->
+      <div class="q-text" v-if="textSegments && textSegments.length">
+        <template v-for="(seg, idx) in textSegments" :key="idx">
+          <span class="seg-text" v-if="seg" v-html="seg"></span>
 
-        <!-- blank slot -->
-        <span
-          v-if="idx < blanksCount"
-          class="blank-slot"
-          :class="{ 'blank-filled': !!placedAnswers[idx], 'disabled': inputDisabled }"
-          :data-blank-index="idx"
-          role="region"
-          aria-label="'空 ' + (idx + 1)"
-          @dragover.prevent
-          @drop.prevent="onDropToBlankNative($event, idx)"
-        >
-          <template v-if="placedAnswers[idx]">
-            <div
-              class="placed-item"
-              @pointerdown.stop.prevent="beginPointerDragFromPlaced($event, idx)"
-              @dragstart.prevent="onDragStartPlaced($event, idx)"
-              @click.stop.prevent="onClickPlaced(idx)"
-              draggable="true"
-              :aria-label="`已填入: ${placedAnswers[idx].text}`"
-            >
-              {{ placedAnswers[idx].text }}
-            </div>
-          </template>
-          <template v-else>
-            <span class="blank-placeholder">拖入选项</span>
-          </template>
-        </span>
-      </template>
-    </div>
-
-    <!-- Pool -->
-    <div class="pool-wrap" ref="poolWrap" data-pool-area>
-      <div class="pool-header">可选项</div>
-      <div class="pool-list" role="list">
-        <template v-for="(item, idx) in poolItems" :key="item.uid">
-          <div
-            class="pool-item"
-            :class="{
-              'pool-placeholder': placeholderPoolIndex === idx && placeholderActive,
-              'dragging-placeholder': draggingId === item.uid && draggingFrom === 'pool' && placeholderActive
-            }"
-            @pointerdown.prevent="beginPointerDragFromPool($event, idx)"
-            @click.stop.prevent="onClickPool(idx)"
-            @dragstart.prevent="onDragStartPool($event, idx)"
-            draggable="true"
-            role="listitem"
-            :aria-label="`选项 ${item.uid}: ${item.text}`"
+          <!-- blank slot -->
+          <span
+            v-if="idx < blanksCount"
+            class="blank-slot"
+            :class="{ 'blank-filled': !!placedAnswers[idx], 'disabled': inputDisabled }"
+            :data-blank-index="idx"
+            role="region"
+            aria-label="'空 ' + (idx + 1)"
+            @dragover.prevent
+            @drop.prevent="onDropToBlankNative($event, idx)"
           >
-            <span class="pool-item-text">{{ item.text }}</span>
-          </div>
+            <template v-if="placedAnswers[idx]">
+              <div
+                class="placed-item"
+                @pointerdown.stop.prevent="beginPointerDragFromPlaced($event, idx)"
+                @dragstart.prevent="onDragStartPlaced($event, idx)"
+                @click.stop.prevent="onClickPlaced(idx)"
+                draggable="true"
+                :aria-label="`已填入: ${placedAnswers[idx].text}`"
+              >
+                {{ placedAnswers[idx].text }}
+              </div>
+            </template>
+            <template v-else>
+              <span class="blank-placeholder">拖入选项</span>
+            </template>
+          </span>
         </template>
       </div>
-    </div>
 
-    <!-- Submit -->
-    <form class="fill-form" @submit.prevent="onSubmit" aria-label="填空题表单">
-      <div class="controls">
-        <button type="submit" :disabled="inputDisabled" class="btn-submit">提交</button>
+      <!-- Pool -->
+      <div class="pool-wrap" ref="poolWrap" data-pool-area>
+        <div class="pool-header">可选项</div>
+        <div class="pool-list" role="list">
+          <template v-for="(item, idx) in poolItems" :key="item.uid">
+            <div
+              class="pool-item"
+              :class="{
+                'pool-placeholder': placeholderPoolIndex === idx && placeholderActive,
+                'dragging-placeholder': draggingId === item.uid && draggingFrom === 'pool' && placeholderActive
+              }"
+              @pointerdown.prevent="beginPointerDragFromPool($event, idx)"
+              @click.stop.prevent="onClickPool(idx)"
+              @dragstart.prevent="onDragStartPool($event, idx)"
+              draggable="true"
+              role="listitem"
+              :aria-label="`选项 ${item.uid}: ${item.text}`"
+            >
+              <span class="pool-item-text">{{ item.text }}</span>
+            </div>
+          </template>
+        </div>
       </div>
-    </form>
 
-    <!-- Feedback and extras -->
-    <div class="feedback" aria-live="polite">
-      <div v-if="state === 'correct'" class="feedback-correct">✅ 回答正确</div>
-      <div v-else-if="state === 'wrong'" class="feedback-wrong">❌ 回答错误，请再试一次</div>
-    </div>
+      <!-- Submit -->
+      <form class="fill-form" @submit.prevent="onSubmit" aria-label="填空题表单">
+        <div class="controls">
+          <button type="submit" :disabled="inputDisabled" class="btn-submit">提交</button>
+        </div>
+      </form>
 
-    <div v-if="currentHint" class="hint-box" style="margin-top:10px;">
-      <strong>提示：</strong>
-      <div v-html="currentHint"></div>
-    </div>
-
-    <div v-if="state === 'correct'" class="explain-box" style="margin-top:12px;">
-      <div v-if="localQuestion.explanation" class="explanation" v-html="localQuestion.explanation"></div>
-      <div style="margin-top:10px; display:flex; gap:8px; align-items:center;">
-        <button class="btn-next" @click="onNextClick" :disabled="nextDisabled">
-          {{ isLastQuestion ? '完成单元' : '下一题' }}
-        </button>
+      <!-- Feedback and extras (居中显示的简短反馈) -->
+      <div class="feedback" aria-live="polite">
+        <div v-if="state === 'correct'" class="feedback-correct">✅ 回答正确</div>
+        <div v-else-if="state === 'wrong'" class="feedback-wrong">❌ 回答错误，请再试一次</div>
       </div>
-    </div>
 
-    <div v-if="internalError" class="hint-box" style="margin-top:10px; color:#ff8b87;">
-      {{ internalError }}
+      <!-- 下面区域：改动点 —— 把 hint / explanation / next 按钮 放入 .left-block 以左对齐显示 -->
+      <!-- left-block 宽度与 q-text 最大宽度一致，保持在页面中居中但内部内容左对齐 -->
+      <div class="left-block">
+        <div v-if="currentHint" class="hint-box" style="margin-top:10px;">
+          <strong>提示：</strong>
+          <div v-html="currentHint"></div>
+        </div>
+
+        <div v-if="state === 'correct'" class="explain-box" style="margin-top:12px;">
+          <div v-if="localQuestion.explanation" class="explanation" v-html="localQuestion.explanation"></div>
+          <div style="margin-top:10px; display:flex; gap:8px; align-items:center;">
+            <button class="btn-next" @click="onNextClick" :disabled="nextDisabled">
+              {{ isLastQuestion ? '完成单元' : '下一题' }}
+            </button>
+          </div>
+        </div>
+
+        <div v-if="internalError" class="hint-box" style="margin-top:10px; color:#ff8b87;">
+          {{ internalError }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 /*
-  完整实现（按你的新规则）：
+  完整实现（按你的新规则）:
 
   - A 方案（优先 blank -> pool -> restore） 保留
   - 计时法：在 pointerdown 记录时间；pointerup 时按时长 (< CLICK_TIME_THRESHOLD => 使用点击逻辑；>= => 使用拖拽逻辑)
@@ -134,6 +144,7 @@ const nextDisabled = ref(false);
 const textSegments = ref([]);
 const poolItems = ref([]); // { uid, text }
 const placedAnswers = ref([]);
+const originalOptions = ref([]); // 新增：保留题目原始 options 文本（用于索引型答案映射）
 
 // drag state
 const draggingId = ref(null);             // uid
@@ -203,6 +214,7 @@ function initFromQuestion(q) {
       opts = localQuestion.value.options.split(/\r?\n|,/).map(x => x.trim()).filter(Boolean);
     } else opts = [];
   }
+  originalOptions.value = opts.slice(); // 保存原始选项文本，后续用于将索引答案映射成文本
   const tstamp = Date.now();
   poolItems.value = opts.map((t, i) => ({ uid: `i${i}-${tstamp}`, text: String(t) }));
 
@@ -520,30 +532,107 @@ function normalize(str) {
   return String(str).trim().replace(/\s+/g, ' ').toLowerCase();
 }
 function checkAnswers() {
+  // if zero blanks -> cannot be correct
   if (blanksCount.value === 0) return false;
-  const placedUids = placedAnswers.value.map(p => (p ? p.uid : null));
-  if (placedUids.some(v => v == null)) return false;
+
+  // all blanks must be filled
+  if (placedAnswers.value.some(p => !p || !p.text)) return false;
+
   const raw = localQuestion.value?.answer;
-  if (!raw) return false;
+  if (raw == null) return false;
+
+  // normalize helper
+  const norm = s => (s == null ? '' : String(s).trim().replace(/\s+/g, ' ').toLowerCase());
+
+  // build canonical array: array-of-arrays, each inner array = allowed strings for that blank
   let canonArr = null;
+
+  // If answer is an array (already parsed)
   if (Array.isArray(raw)) {
-    if (raw.every(x => typeof x === 'string')) canonArr = raw.map(x => [normalize(x)]);
+    // handle numeric/index answers -> map to originalOptions (1-based assumed)
+    if (raw.every(x => typeof x === 'number' || (/^\d+$/.test(String(x).trim())) )) {
+      // map numeric indices to option texts (support 1-based indices)
+      canonArr = raw.map(idx => {
+        const i = Number(idx);
+        const optText = originalOptions.value && originalOptions.value[i - 1] != null
+          ? String(originalOptions.value[i - 1])
+          : String(idx); // fallback to the index string if no option text
+        return [ norm(optText) ];
+      });
+    } else {
+      // treat each raw item as allowed text (or alternatives)
+      canonArr = raw.map(item => {
+        if (Array.isArray(item)) return item.map(it => norm(it));
+        return [ norm(item) ];
+      });
+    }
   } else if (typeof raw === 'string') {
+    // try parse JSON if string-encoded
     try {
       const p = JSON.parse(raw);
-      if (Array.isArray(p) && p.every(x => typeof x === 'string')) canonArr = p.map(x => [normalize(x)]);
-      else canonArr = [[normalize(raw)]];
-    } catch { canonArr = [[normalize(raw)]]; }
-  }
-  if (canonArr && canonArr.length === placedAnswers.value.length) {
-    for (let i = 0; i < canonArr.length; i++) {
-      const allowed = canonArr[i];
-      const u = normalize(placedAnswers.value[i].text);
-      if (!allowed.some(a => normalize(a) === u)) return false;
+      if (Array.isArray(p)) {
+        // recursively reuse logic: p is array
+        if (p.every(x => typeof x === 'number' || (/^\d+$/.test(String(x).trim())) )) {
+          canonArr = p.map(idx => {
+            const i = Number(idx);
+            const optText = originalOptions.value && originalOptions.value[i - 1] != null
+              ? String(originalOptions.value[i - 1])
+              : String(idx);
+            return [ norm(optText) ];
+          });
+        } else {
+          canonArr = p.map(item => (Array.isArray(item) ? item.map(it => norm(it)) : [norm(item)]));
+        }
+      } else {
+        // not an array after parse, treat as single canonical text
+        canonArr = [[ norm(String(p)) ]];
+      }
+    } catch (e) {
+      // not JSON -> maybe single text or pipe-separated alternatives
+      if (raw.includes('|')) {
+        canonArr = [ raw.split('|').map(s => norm(s)) ];
+      } else {
+        // if raw looks like "1,2" treat as indices
+        const maybeNums = raw.split(/[,;]/).map(s => s.trim()).filter(Boolean);
+        if (maybeNums.length > 1 && maybeNums.every(x => /^\d+$/.test(x))) {
+          // treat as array of indices
+          canonArr = maybeNums.map(idx => {
+            const i = Number(idx);
+            const optText = originalOptions.value && originalOptions.value[i - 1] != null
+              ? String(originalOptions.value[i - 1])
+              : String(idx);
+            return [ norm(optText) ];
+          });
+        } else {
+          canonArr = [[ norm(raw) ]];
+        }
+      }
     }
-    return true;
+  } else if (typeof raw === 'number') {
+    // single numeric index -> map to option text
+    const i = Number(raw);
+    const optText = originalOptions.value && originalOptions.value[i - 1] != null
+      ? String(originalOptions.value[i - 1])
+      : String(raw);
+    canonArr = [[ norm(optText) ]];
+  } else {
+    // fallback: convert to string
+    canonArr = [[ norm(String(raw)) ]];
   }
-  return false;
+
+  // now canonArr is array-of-arrays (allowed normalized strings)
+  if (!Array.isArray(canonArr)) return false;
+
+  // if count mismatch, cannot be correct (must match number of blanks)
+  if (canonArr.length !== placedAnswers.value.length) return false;
+
+  for (let i = 0; i < canonArr.length; i++) {
+    const allowed = canonArr[i] || [''];
+    const u = norm(placedAnswers.value[i].text);
+    const matched = allowed.some(alt => norm(alt) === u);
+    if (!matched) return false;
+  }
+  return true;
 }
 
 /* ---------- submit / next ---------- */
@@ -584,82 +673,192 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-/* Dark theme whole component */
-.fill-root { padding: 14px; background: #0b0b0d; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,0.6); font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; color: #ffffff; }
-.fill-header { display:flex; flex-direction:column; gap:6px; margin-bottom:10px; }
-.q-number { font-size:13px; color:#aeb6bd; }
-.q-title { margin:0; font-size:18px; color:#ffffff; }
-.q-text { margin-bottom:12px; color:#e6eef8; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+/* Dark theme whole component - 更贴近 Choice.vue 的黑底风格 */
+.fill-root {
+  padding: 22px;
+  margin-top: 10px;
+  margin-left: 15%;
+  margin-right: 15%;
+  background: #1c1c1c;
+  border-radius: 30px;
+  color: #fff;
+  box-shadow: 12px 12px 36px rgba(194, 194, 194, 0.7);
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Header: 横排（题号 + 标题）—— 使用 Choice.vue 风格 */
+.choice-header {
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  gap:12px;
+  margin-bottom:16px;
+  padding-left:12px;
+}
+.q-number-wrap {
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: linear-gradient(135deg,#ff7a18 0%, #af002d 50%, #6a11cb 100%);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6), inset 0 -6px 18px rgba(255,255,255,0.04);
+}
+.q-number {
+  font-size:18px;
+  font-weight:800;
+  color:#fff;
+  line-height:1;
+}
+.q-title {
+  margin:0;
+  font-size:18px;
+  color:#fff;
+  font-weight:700;
+}
+
+/* 中心容器：所有交互元素居中对齐 */
+.fill-center {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  gap:12px;
+  padding: 6px 14px;
+}
+
+/* q-text 保持行内空位布局，但整体居中 */
+.q-text {
+  margin-bottom:12px;
+  color:#e6eef8;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+  justify-content:center; /* 居中所有段与空位 */
+  max-width: 900px;
+  text-align:center;
+}
+
+/* ---------- 新增：left-block 用于左对齐显示 hints/explain/next ---------- */
+/* 这个容器宽度与 q-text 的 max-width 一致，align-self: flex-start 使其左贴到容器左侧 */
+.left-block {
+  width:100%;
+  max-width:900px;
+  align-self:flex-start;   /* 关键：在垂直排列的父容器中左对齐 */
+  text-align:left;         /* 内容左对齐 */
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
 
 /* text segments */
 .seg-text { white-space:pre-wrap; color:#e6eef8; }
 
 /* blank slot */
-.blank-slot { min-width:160px; min-height:44px; display:inline-flex; align-items:center; justify-content:center; padding:6px 10px; border-radius:8px; border:1px dashed rgba(255,255,255,0.06); background:#07070a; margin:0 6px; transition:all .12s ease; color:#eaf3ff; }
+.blank-slot {
+  min-width:160px;
+  min-height:44px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:6px 10px;
+  border-radius:8px;
+  border:2px solid rgba(255,255,255,0.06);
+  background: rgba(0,0,0,0.35);
+  margin:0 6px;
+  transition:all .12s ease;
+  color:#eaf3ff;
+}
 .blank-slot.drag-over { border-color:#4fb0ff; box-shadow:0 10px 24px rgba(79,176,255,0.06); transform:translateY(-2px); }
 .blank-slot.blank-filled { border-style:solid; border-color:rgba(79,176,255,0.14); background:rgba(255,255,255,0.02); }
 .blank-placeholder { color:#98a6b3; font-size:13px; }
 
-/* placed item */
-.placed-item { padding:6px 10px; border-radius:6px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.04); color:#fff; cursor:grab; user-select:none; display:inline-block; }
+/* placed item (可拖动) */
+.placed-item {
+  padding:6px 10px;
+  border-radius:6px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border:2px solid rgba(255,255,255,0.04);
+  color:#fff;
+  cursor:grab;
+  user-select:none;
+  display:inline-block;
+}
 .placed-item:active { cursor:grabbing; }
 
 /* Pool */
-.pool-wrap { margin: 12px 0 6px; }
-.pool-header { font-size:13px; color:#cfd8df; margin-bottom:6px; }
-.pool-list { display:flex; flex-wrap:wrap; gap:8px; }
+.pool-wrap { margin: 12px 0 6px; width:100%; display:flex; flex-direction:column; align-items:center; }
+.pool-header { font-size:13px; color:#cfd8df; margin-bottom:6px; text-align:center; }
+.pool-list { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; max-width:900px; }
 
-/* pool item: white border, deep gray background */
+/* pool item: 使用 Choice.vue 风格的按钮感受——白边、深背景 */
 .pool-item {
   padding:8px 12px;
-  border-radius:10px;
-  background:#2e2e2e;          /* 深灰背景 */
-  border:2px solid #ffffff;    /* 白色边框 */
+  border-radius:12px;
+  background: rgba(255,255,255,0.02);
+  border:2px solid #fff;
   cursor:grab;
   user-select:none;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.6);
-  color:#ffffff;
-  transition: transform .08s ease, box-shadow .08s ease, background .08s ease;
-  min-width:64px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+  color:#fff;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+  min-width:84px;
   text-align:center;
   display:inline-flex;
   align-items:center;
   justify-content:center;
+  font-weight:700;
 }
+.pool-item:hover { transform: translateY(-4px); box-shadow: 0 12px 26px rgba(0,0,0,0.65); }
 
 /* Placeholder: pure gray and hide text when active */
 .pool-item.pool-placeholder,
 .pool-item.dragging-placeholder {
-  background:#6b6b6b !important; /* 纯灰 */
-  color: #ffffff;
+  background:#6b6b6b !important;
+  color:#ffffff;
   border:2px solid #6b6b6b !important;
 }
-/* hide inner text visually but keep in DOM for accessibility */
 .pool-item.pool-placeholder .pool-item-text,
 .pool-item.dragging-placeholder .pool-item-text {
   visibility: hidden;
 }
 
-/* pool item text element (for screen readers etc.) */
-.pool-item-text { display:inline-block; }
-
-/* form / controls */
-.fill-form { display:flex; flex-direction:column; gap:10px; margin-top:8px; }
-.controls { display:flex; align-items:center; gap:12px; margin-top:8px; }
-.btn-submit { padding:8px 14px; background:#1677ff; color:#fff; border-radius:8px; border:none; cursor:pointer; box-shadow:0 6px 18px rgba(22,119,255,0.12); }
+/* form / controls: 提交按钮居中 */
+.fill-form { display:flex; flex-direction:column; gap:10px; margin-top:8px; width:100%; align-items:center; }
+.controls { display:flex; align-items:center; gap:12px; margin-top:8px; justify-content:center; }
+.btn-submit {
+  padding:12px 18px;
+  background:#0e78e9;
+  color:#fff;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+  font-weight:700;
+  font-size:15px;
+}
 .btn-submit:disabled { opacity:0.5; cursor:not-allowed; }
 
 /* feedback */
-.feedback { margin-top:12px; min-height:24px; }
-.feedback-correct { color:#5fe07a; font-weight:700; animation: popIn .28s ease both; }
-.feedback-wrong { color:#ff8b87; font-weight:700; animation: popShake .45s cubic-bezier(.36,.07,.19,.97) both; }
+.feedback { margin-top:12px; min-height:24px; text-align:center; }
+.feedback-correct { color:#7ff1b1; font-weight:800; animation: popIn .28s ease both; }
+.feedback-wrong { color:#ff9b9b; font-weight:800; animation: popShake .45s cubic-bezier(.36,.07,.19,.97) both; }
 
-.hint-box { padding:8px 12px; border-radius:8px; background:#2b0b0c; color:#ffb6b0; margin-top:8px; }
-.explain-box { padding:12px; border-radius:8px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); border:1px solid rgba(255,255,255,0.03); color:#e6f7ff; }
-.btn-next { padding:8px 12px; background:#1677ff; color:#fff; border-radius:8px; border:none; cursor:pointer; }
+.hint-box { padding:8px 12px; border-radius:8px; background: rgba(255,255,255,0.02); color:#ffb4b4; margin-top:8px; border:1px solid rgba(255,255,255,0.03); text-align:left; }
+.explain-box { padding:12px; border-radius:8px; background: rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04); color:#dbeefe; text-align:left; }
+.btn-next { padding:10px 14px; background:#0e78e9; color:#fff; border-radius:10px; border:none; cursor:pointer; font-weight:700; }
 
-@keyframes popIn { 0% { transform: scale(.9); opacity: 0; } 60% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
-@keyframes popShake { 0% { transform: translateX(0); } 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-6px); } 80% { transform: translateX(6px); } 100% { transform: translateX(0); } }
+/* animations */
+@keyframes popIn { 0% { transform: scale(.95); opacity: 0; } 60% { transform: scale(1.04); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+@keyframes popShake { 0% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } 100% { transform: translateX(0); } }
+
+/* 错误时整体抖动 */
+.state-wrong .q-text { animation: shakeContainer .45s cubic-bezier(.36,.07,.19,.97); }
+@keyframes shakeContainer { 0% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } 100% { transform: translateX(0); } }
+
+/* 答对时视觉（微光效果） */
+.state-correct { box-shadow: 0 14px 40px rgba(34,197,94,0.08); transition: box-shadow .3s ease; outline: 1px solid rgba(34,197,94,0.06); }
 
 /* responsive tweaks */
 @media (max-width: 640px) {

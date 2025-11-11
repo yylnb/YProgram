@@ -48,7 +48,8 @@ const props = defineProps({
   progressData: { type: [Object, null], default: null }
 });
 
-const emit = defineEmits(['select-question', 'answered', 'progress-updated', 'unit-complete']);
+// 新增 next-clicked 到 emits 列表
+const emit = defineEmits(['select-question', 'answered', 'progress-updated', 'unit-complete', 'next-clicked']);
 
 // state
 const loading = ref(false);
@@ -84,35 +85,24 @@ function parseCourseString(str) {
 const parsedCourse = computed(() => parseCourseString(props.courseFull));
 
 // ----------------------- language mapping (for question GET) -----------------------
-// For asking question endpoint, backend expects short code (e.g. 'py','cpp','c','java').
-// This map converts common inputs to short code.
 function langShortForQuestionApi() {
-  // try to use props.language if it's already a short code
   const m = String(props.language || parsedCourse.value.lang || '').toLowerCase();
   const shortMap = { py: 'py', python: 'py', python3: 'py', cpp: 'cpp', 'c++': 'cpp', c: 'c', java: 'java' };
-  return shortMap[m] ?? (m || 'py'); // fallback to 'py'
+  return shortMap[m] ?? (m || 'py');
 }
 
 // ----------------------- lang and index for progress POST -----------------------
 function langForProgressApi() {
-  // backend accepts lang like 'python' or 'python_1'; we'll pass base language (e.g. 'python')
-  // prefer parsedCourse.lang (e.g. 'python' extracted from courseFull), else map short code
   const raw = parsedCourse.value.lang ?? String(props.language || '').toLowerCase();
   const map = { py: 'python', python: 'python', cpp: 'cpp', c: 'c', java: 'java' };
   return map[raw] ?? (raw || 'python');
 }
 
 function idxForApi() {
-  // priority:
-  // 1) props.progressData.index (if parent provided progressData that includes 'index')
-  // 2) props.progressData?.index (same)
-  // 3) parsedCourse.index (from courseFull like 'python1')
-  // 4) fallback undefined (we won't send index if truly unknown)
   if (props.progressData && (typeof props.progressData.index !== 'undefined' && props.progressData.index !== null)) {
     return props.progressData.index;
   }
   if (props.progressData && (typeof props.progressData.lang !== 'undefined' && props.progressData.lang)) {
-    // some backends may put lang like 'python_1' - try to extract trailing number
     const m = String(props.progressData.lang).match(/_(\d+)$/);
     if (m) return m[1];
   }
@@ -156,7 +146,6 @@ function clampIndex(n) {
 }
 
 async function determineIndexAndLoad() {
-  // priority: explicit props.questionIndex -> progressDataLocal.current_index -> default 1
   const fromProp = (typeof props.questionIndex === 'number' && !Number.isNaN(props.questionIndex)) ? Number(props.questionIndex) : null;
   let fromProgress = null;
   if (progressDataLocal.value) {
@@ -187,7 +176,6 @@ async function fetchQuestion(qid) {
   try {
     const form = isFillByIndex(Number(qid)) ? 'fill' : 'choice';
     const langShort = langShortForQuestionApi();
-    // index for question table selection: try progressDataLocal.index -> parsedCourse.index -> 1
     const idx = (progressDataLocal.value && (typeof progressDataLocal.value.index !== 'undefined' && progressDataLocal.value.index !== null))
       ? progressDataLocal.value.index
       : (parsedCourse.value.index ?? 1);
@@ -229,7 +217,6 @@ async function saveProgress(nextIndex) {
 
   const lang = langForProgressApi(); // e.g. 'python'
   let idx = idxForApi();
-  // if still undefined try parsedCourse.index
   if (typeof idx === 'undefined' && parsedCourse.value.index) idx = parsedCourse.value.index;
 
   const body = {
@@ -238,7 +225,6 @@ async function saveProgress(nextIndex) {
     completed: nextIndex > totalQuestions ? 1 : 0,
     lang: lang
   };
-  // ensure we include index if available (important when a language has multiple tables)
   if (typeof idx !== 'undefined' && idx !== null) body.index = idx;
 
   try {
@@ -248,7 +234,6 @@ async function saveProgress(nextIndex) {
     if (props.token) cfg.headers = { Authorization: `Bearer ${props.token}` };
     const res = await axios.post(url, body, cfg);
     const pd = res?.data ?? null;
-    // build a lightweight progressData for local use
     progressDataLocal.value = {
       current_index: nextIndex,
       completed: body.completed,
@@ -273,7 +258,6 @@ async function saveProgress(nextIndex) {
 // Child will emit 'correct' only when user answers correctly.
 // We then attempt to save progress (nextIndex = current + 1) but wait for the child's 'next' to actually change UI.
 async function onChildCorrect(payload) {
-  // payload may include attempts
   const nextIdx = clampIndex(currentQuestionIndex.value + 1);
 
   // optionally disable child while saving
@@ -290,6 +274,9 @@ async function onChildNext(payload) {
   let nextIdx = null;
   if (payload && typeof payload.nextIndex === 'number') nextIdx = clampIndex(payload.nextIndex);
   else nextIdx = clampIndex(currentQuestionIndex.value + 1);
+
+  // --- 新：立即向上层广播用户点击“下一题”的意图（携带 nextIndex 与当前 progress） ---
+  emit('next-clicked', { nextIndex: nextIdx, progress: progressDataLocal.value });
 
   if (nextIdx > totalQuestions) {
     // ensure completed saved
@@ -319,16 +306,29 @@ watch(
 watch(
   () => props.progressData,
   async (val) => {
-    if (val) {
-      progressDataLocal.value = val;
-      // sync if parent updated progressData and no explicit questionIndex was provided
-      if (typeof props.questionIndex !== 'number' || props.questionIndex === null) {
-        const ci = val.current_index ?? val.currentIndex ?? null;
-        if (ci) {
-          currentQuestionIndex.value = clampIndex(Number(ci));
-          emit('select-question', { questionIndex: currentQuestionIndex.value });
-          await fetchQuestion(currentQuestionIndex.value);
-        }
+    if (!val) return;
+
+    // 先把 incoming 的 index 与本地的 index 做比较
+    const incomingIdx = val.current_index ?? val.currentIndex ?? null;
+    const localIdx = progressDataLocal.value ? (progressDataLocal.value.current_index ?? progressDataLocal.value.currentIndex ?? null) : null;
+
+    // 更新本地的 progressDataLocal（保持最新）
+    progressDataLocal.value = val;
+
+    // 如果 incomingIdx 与 localIdx 相等 (数字相同)，很可能是本组件刚刚保存后父组件回传的同一数据
+    // 在这种情况下我们不要再次把它当作“外部指令”来切题，避免自动跳转。
+    if (incomingIdx !== null && localIdx !== null && Number(incomingIdx) === Number(localIdx)) {
+      // 相同：只更新本地数据，不触发选题 / fetch
+      return;
+    }
+
+    // 否则，incoming 来自外部（父组件/其它来源），当没有明确 props.questionIndex 提供时，按父组件的 progress 同步题号
+    if (typeof props.questionIndex !== 'number' || props.questionIndex === null) {
+      const ci = val.current_index ?? val.currentIndex ?? null;
+      if (ci) {
+        currentQuestionIndex.value = clampIndex(Number(ci));
+        emit('select-question', { questionIndex: currentQuestionIndex.value });
+        await fetchQuestion(currentQuestionIndex.value);
       }
     }
   },
@@ -342,5 +342,5 @@ onMounted(async () => {
 
 <style scoped>
 div { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
-.hint-box { padding:8px 12px; border-radius:8px; background: #fff6f6; color:#c23a2b; margin-top:8px; }
+.hint-box { padding:8px 12px; border-radius:8px; background: black; color:#c23a2b; margin-top:8px; }
 </style>
