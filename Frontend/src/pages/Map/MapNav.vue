@@ -482,6 +482,9 @@ onBeforeUnmount(() => {
   transform: translateX(-50%);
   white-space: nowrap;
   background: linear-gradient(144deg, #AF40FF, #5B42F3 50%, #00DDEB);
+  /* background: linear-gradient(180deg, #f85414, #d3c5fa);
+  background: linear-gradient(180deg, #4435aa, #d9d3f7); */
+
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -516,6 +519,7 @@ onBeforeUnmount(() => {
   transform: translateY(-3px)
 }
 .pill.active {
+  /* background: linear-gradient(180deg,rgb(132, 63, 141), rgb(94, 25, 95)) !important; */
   background: linear-gradient(180deg,#8b5cf6,#6d28d9) !important;
   color: #fff !important;
   border-color: rgba(255,255,255,0.06) !important;
@@ -545,6 +549,7 @@ onBeforeUnmount(() => {
   transform: translateY(-5px);
 }
 .stage-btn.active {
+  /* background: linear-gradient(180deg,rgb(132, 63, 141), rgb(94, 25, 95)) !important; */
   background: linear-gradient(180deg,#8b5cf6,#6d28d9) !important;
   color: #fff !important;
   border-color: rgba(139,92,246,0.22) !important;
