@@ -542,11 +542,13 @@ onBeforeUnmount(() => {
 <style scoped>
 /* 容器：黑底白字 */
 .stage-map {
-  background: #000;        /* 黑底 */
-  margin-top: 1px;
+  background: #1c1c1c;
+  margin-top: 30px;
+  margin-left: 10%;
+  margin-right: 10%;
   color: #ffffff;          /* 默认白字 */
-  box-shadow: none;
-  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 30px;
+  box-shadow: 12px 12px 36px rgba(194, 194, 194, 0.7);
 }
 
 /* 标题 */
@@ -557,7 +559,8 @@ onBeforeUnmount(() => {
   position: relative;
   min-height: 520px;
   height: auto;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  /* background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); */
+  background: #1c1c1c;
   border-radius: 8px;
   padding: 12px;
 }

@@ -437,10 +437,14 @@ onBeforeUnmount(() => {
 
 <style scoped>
 /* 强制黑底、白字，且覆盖任何全局冲突 */
+/* .mapnav-root {
+  background-color: #000 !important;
+  padding: 18px 16px 12px !important;
+  position: relative;
+} */
 .mapnav-root {
   background-color: #000 !important;
-  /* color: #fff !important; */
-  padding: 18px 16px 12px !important;
+  padding: 18px 30px 12px !important;
   position: relative;
 }
 

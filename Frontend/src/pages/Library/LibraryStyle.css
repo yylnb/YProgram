@@ -7,6 +7,7 @@
   --card-border: rgba(255,255,255,0.06);
   --muted: #bdbdbd;
   --text-strong: #ffffff;       /* 全局主文字为白 */
+  --text-hover: #1f0346;
   --glass-shadow: 0 14px 40px rgba(0,0,0,0.6);
   --code-bg: #0b1220;
   --code-fg: #e6eef8;
@@ -118,17 +119,24 @@
   font-weight: 700;
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   color: var(--text-strong);
-  border: 1px solid rgba(255,255,255,0.04);
+  border: 1px solid #8b5cf6;
   -webkit-backdrop-filter: blur(6px) saturate(110%);
   backdrop-filter: blur(6px) saturate(110%);
   transition: transform .12s ease, box-shadow .12s ease, color .12s;
 }
-.pill:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,0.6); }
+/* .pill:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,0.6); } */
+.pill:not(.active):hover {
+  background: linear-gradient(180deg, #f1eaff, #f7eefe);
+  transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,0.6);
+  color: var(--text-hover);
+}
 .pill.active {
   /* background: linear-gradient(180deg, var(--primary), var(--primary-600)); */
   background: linear-gradient(180deg,#8b5cf6,#6d28d9);
   color: #ffffff;
   border-color: rgba(255,255,255,0.08);
+  border-radius: 999px;
+  transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,0.6);
 }
 
 /* search input */
@@ -195,7 +203,20 @@ select.input {
 select.input:focus { box-shadow: 0 10px 30px rgba(132,63,141,0.12); border-color: var(--primary-600); transform: translateY(-1px); }
 
 /* grid & cards */
-section.grid { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(1, 1fr); gap: 18px; margin-top: 18px; padding: 0 4px; }
+section.grid { 
+  background: #1c1c1c;
+  position: relative; 
+  margin-top: 25px;
+  margin-left: 10%;
+  margin-right: 10%;
+  padding: 30px 30px 70px 30px; 
+  border-radius: 30px;
+  box-shadow: 12px 12px 36px rgba(194, 194, 194, 0.7);
+  z-index: 2; 
+  display: grid; 
+  grid-template-columns: repeat(1, 1fr); 
+  gap: 15px; 
+}
 @media (min-width: 640px) { section.grid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1024px) { section.grid { grid-template-columns: repeat(3, 1fr); } }
 
@@ -211,6 +232,7 @@ section.grid { position: relative; z-index: 2; display: grid; grid-template-colu
   backdrop-filter: blur(6px) saturate(110%);
   box-shadow: 0 10px 30px rgba(0,0,0,0.6);
   color: var(--text-strong);
+  height: 135px;
 }
 .card:hover {
   transform: translateY(-8px) scale(1.01);

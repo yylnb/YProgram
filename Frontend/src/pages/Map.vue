@@ -81,4 +81,8 @@ const navComponent = computed(() => {
 </script>
 
 <style scoped>
+.map-root{
+  background: black;
+  min-height: 250vh;
+}
 </style>
