@@ -195,7 +195,7 @@
                   <strong>操作</strong>
                   <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
                     <!-- 先复制链接（无色），再在新窗口中打开（紫色底白字） -->
-                    <button class="btn-ghost" @click="copyToClipboard(window.location.origin + '/library/' + detail.id)">复制链接</button>
+                    <button class="btn-ghost" @click="copyToClipboard(`${window.location.origin.replace(/\/$/,'')}/library/${detail.lang}/${detail.lb_id}`)">复制链接</button>
                     <button class="btn-primary" @click="openInNewTab(detail.id)">在新窗口打开</button>
                   </div>
                 </div>
@@ -404,19 +404,20 @@ function findIndexById(id) {
 }
 
 async function openTopic(id) {
-  const nid = Number(id)
-  if (!nid) {
-    alert('非法的 topic id')
-    return
-  }
+  if (!id) return alert('非法的 topic id')
+  const idx = findIndexById(id)
+  if (idx >= 0) currentIndex = idx
 
   showDetail.value = true
   detailLoading.value = true
-  // update currentIndex if possible
-  currentIndex = findIndexById(nid)
 
   try {
-    const res = await axios.get(`/api/library/${nid}`)
+    const topicItem = topics.value.find(t => Number(t.id) === Number(id))
+    const lang = topicItem?.lang || selectedLang.value
+    const lb_id = topicItem?.lb_id
+    if (!lang || lb_id === undefined || lb_id === null) throw new Error('缺少 lang 或 lb_id 信息')
+
+    const res = await axios.get(`/api/library/${encodeURIComponent(lang)}/${encodeURIComponent(lb_id)}`)
     if (res.status === 200 && res.data) {
       const r = res.data
       detail.value = {
@@ -435,11 +436,11 @@ async function openTopic(id) {
         updated_at: r.updated_at || r.created_at || null
       }
     } else {
-      detail.value = { id: nid, title: '加载失败', content: `<p>未能获取详情</p>` }
+      detail.value = { id, title: '加载失败', content: `<p>未能获取详情</p>` }
     }
   } catch (e) {
     console.error('openTopic error', e)
-    detail.value = { id: nid, title: '加载失败', content: `<p>${(e && e.message) ? e.message : '网络错误'}</p>` }
+    detail.value = { id, title: '加载失败', content: `<p>${e?.message || '网络错误'}</p>` }
   } finally {
     detailLoading.value = false
   }
@@ -513,14 +514,23 @@ async function copyToClipboard(text) {
 }
 
 function openInNewTab(id) {
-  const nid = id !== undefined && id !== null ? Number(id) : (detail.value && Number(detail.value.id))
-  if (!nid) {
-    alert('无效的 id，无法在新窗口打开')
+  // 优先使用 detail.lb_id + detail.lang；如传入参数则支持对象/数字/字符串
+  const nid = id !== undefined && id !== null ? Number(id) : null
+
+  // 如果传入了数字（旧用法），尝试判断是否为 db id —— 但我们强制使用 detail.lb_id 和 detail.lang
+  const lb = detail.value && (detail.value.lb_id ?? detail.value.lbId ?? detail.value.lb) 
+  const lang = detail.value && detail.value.lang
+
+  if (!lang || !lb) {
+    alert('无法打开：缺少语言或 lb_id 信息')
     return
   }
+
   const origin = window.location.origin.replace(/\/$/, '')
-  const url = origin + '/library/' + nid
-  window.open(url, '_blank')
+  const url = `${origin}/library/${encodeURIComponent(lang)}/${encodeURIComponent(lb)}`
+
+  const newWin = window.open(url, '_blank', 'noopener,noreferrer')
+  try { if (newWin) newWin.opener = null } catch (e) {}
 }
 
 // placeholder: run example

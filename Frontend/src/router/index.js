@@ -15,7 +15,7 @@ const routes = [
   { path: "/map", name: "map", component: Map },
   // { path: '/study/:unitId', name: 'Study', component: Study },
   { path: '/study/:course/:unitId', name: 'Study', component: Study, props: true },
-  { path: '/library/:id', name: 'LibraryView', component: LibraryView },
+  { path: '/library/:lang/:id', name: 'LibraryView', component: LibraryView },
 ]
 
 const router = createRouter({

@@ -1,88 +1,73 @@
 <template>
-  <div class="library-view p-6 max-w-4xl mx-auto">
+  <div class="library-view p-6 mx-auto">
     <button
-      class="mb-4 px-4 py-2 rounded bg-white border hover:shadow-sm flex items-center gap-2"
+      class="mb-4 px-4 py-2 rounded btn-back flex items-center gap-2"
       @click="goBack()"
       aria-label="返回"
     >
       ← 返回
     </button>
 
-    <div v-if="loading" class="text-gray-500">加载中...</div>
-    <div v-else-if="error" class="text-red-500">{{ error }}</div>
+    <div v-if="loading" class="text-muted">加载中...</div>
+    <div v-else-if="error" class="text-error">{{ error }}</div>
 
-    <div v-else-if="topic" class="bg-white shadow rounded-lg p-6">
+    <div v-else-if="topic" class="card p-6">
       <!-- 标题区 -->
       <div class="flex items-start justify-between gap-4 mb-4">
         <div>
-          <h1 class="text-2xl font-bold mb-2">{{ topic.title }}</h1>
-          <div class="flex items-center gap-3 text-sm text-gray-600">
-            <span class="inline-flex items-center px-2 py-1 rounded text-xs font-semibold bg-indigo-50 text-indigo-700">
-              {{ displayLangLabel(topic.lang) }}
+          <h1 class="title mb-2">{{ topic.title }}</h1>
+          <div class="flex items-center gap-3 text-sm meta">
+            <span class="lang-badge">
+              {{ displayLangLabel(topic.lang || routeLang) }}
             </span>
-            <span :class="difficultyClass(topic.difficulty)" class="px-2 py-1 rounded text-xs font-semibold">
+            <span :class="difficultyClass(topic.difficulty)" class="difficulty-badge">
               {{ difficultyLabel(topic.difficulty) }}
             </span>
-            <span class="text-xs text-gray-400">最后更新：{{ formatDate(topic.updated_at) }}</span>
+            <span class="text-xs text-muted">最后更新：{{ formatDate(topic.updated_at) }}</span>
           </div>
         </div>
 
         <div class="flex items-center gap-2">
-          <button class="btn-action" @click="toggleEditor">
-            {{ showEditor ? '隐藏编辑器' : '在线运行' }}
-          </button>
           <button class="btn-action" @click="downloadContent" title="下载当前代码">下载</button>
         </div>
       </div>
 
       <!-- 概要与正文 -->
-      <p class="mb-4 text-gray-700">{{ topic.summary }}</p>
-      <div class="prose max-w-none mb-6" v-html="topic.content"></div>
+      <p class="mb-4 summary">{{ topic.summary }}</p>
+      <div class="prose max-w-none mb-6 content-html" v-html="topic.content"></div>
 
       <!-- 代码示例展示（只读）-->
-      <div v-if="topic.code_example && !showEditor" class="bg-gray-900 text-green-100 p-4 rounded-lg font-mono text-sm overflow-x-auto mb-6">
+      <div v-if="topic.code_example" class="code-readonly p-4 rounded-lg font-mono text-sm overflow-x-auto mb-6">
         <pre class="whitespace-pre-wrap"><code>{{ topic.code_example }}</code></pre>
       </div>
 
-      <!-- 在线编辑器（可切换显示） -->
-      <div v-if="showEditor" class="mb-6">
+      <!-- 在线运行控制（不展示代码编辑与输出框） -->
+      <div class="mb-6 run-controls">
         <div class="flex items-center gap-3 mb-3">
-          <label class="text-sm text-gray-600">语言：</label>
+          <label class="text-sm text-muted">语言：</label>
           <select v-model="editorLang" class="input-sm">
             <option value="python">Python</option>
             <option value="cpp">C++</option>
           </select>
 
-          <label class="text-sm text-gray-600 ml-4">输入（stdin，可选）：</label>
-          <input v-model="stdin" class="input-sm w-48" placeholder="标准输入（回车分行）" />
           <div class="ml-auto flex gap-2">
-            <button class="btn-primary" @click="runCode" :disabled="execLoading">
-              {{ execLoading ? '运行中…' : '运行' }}
+            <!-- 在线运行按钮，当前仅弹窗提示 -->
+            <button class="btn-primary" @click="onOnlineRunClick">
+              在线运行
             </button>
-            <button class="btn-try" @click="resetEditor" :disabled="execLoading">重置</button>
-            <button class="btn-try" @click="clearOutput" :disabled="execLoading">清空输出</button>
           </div>
         </div>
 
-        <textarea v-model="editorCode" class="editor-area" rows="12" spellcheck="false"></textarea>
-
-        <div class="mt-3 text-sm text-gray-500">注：示例运行在后端短时沙箱，耗时或安全性取决于服务器配置。</div>
-
-        <!-- 输出区 -->
-        <div class="mt-4">
-          <div class="flex items-center justify-between mb-2">
-            <div class="text-sm font-medium">运行输出</div>
-            <div class="flex items-center gap-2">
-              <button class="btn-try" @click="copyOutput" :disabled="!execOutput && !execError">复制</button>
-              <button class="btn-try" @click="downloadOutput" :disabled="!execOutput && !execError">下载</button>
-            </div>
+        <!-- 示例输入 / 输出：以友好文本格式显示（非 JSON） -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <div class="text-sm font-medium mb-2">示例输入</div>
+            <textarea v-model="egInDisplay" class="editor-area" rows="6" spellcheck="false" placeholder="示例输入（多行）"></textarea>
           </div>
 
-          <div class="output-area border rounded p-3 bg-black text-green-100 font-mono text-sm whitespace-pre-wrap min-h-[80px]">
-            <div v-if="execLoading" class="text-yellow-300">正在运行，请稍候…</div>
-            <div v-else-if="execError" class="text-red-400">{{ execError }}</div>
-            <div v-else-if="execOutput">{{ execOutput }}</div>
-            <div v-else class="text-gray-500">尚无输出 — 点击运行以查看结果。</div>
+          <div>
+            <div class="text-sm font-medium mb-2">示例输出</div>
+            <textarea v-model="egOutDisplay" class="editor-area" rows="6" spellcheck="false" placeholder="示例输出（多行）"></textarea>
           </div>
         </div>
       </div>
@@ -92,52 +77,213 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 
 const route = useRoute()
 const router = useRouter()
 
-// existing refs (kept names)
+const routeLang = route.params.lang || route.query.lang || null
+const routeId = () => route.params.id || route.params.lb_id || route.query.id || null
+
+// state
 const topic = ref(null)
 const loading = ref(true)
 const error = ref('')
 
-// editor & exec state (new)
-const showEditor = ref(false)
-const editorCode = ref('')
-const editorLang = ref('python') // 'python' | 'cpp'
-const stdin = ref('')
-const execLoading = ref(false)
-const execOutput = ref('')
-const execError = ref('')
+// simplified run-related state (no editor/output UI)
+const editorCode = ref('')     // keep for download fallback
+const editorLang = ref('python')
 
-// load topic (same endpoint you already have)
+// Display-friendly fields (plain text shown to user)
+const egInDisplay = ref('')    // plain text for eg_in
+const egOutDisplay = ref('')   // plain text for eg_out
+
+// remember original types so we can convert back when needed
+let _egInType = null   // 'array' | 'object' | 'string' | null
+let _egOutType = null
+
+// ---------- loadTopic: use new API GET /api/library/:lang/:id ----------
 async function loadTopic() {
   loading.value = true
   error.value = ''
-  try {
-    const res = await axios.get(`/api/library/${route.params.id}`)
-    topic.value = res.data
+  topic.value = null
 
-    // 初始化编辑器代码与语言
-    if (topic.value) {
-      // pick code example if exists
-      editorCode.value = topic.value.code_example || ''
-      // normalize language: backend stores 'c++' or 'cpp' or 'python' -> map to our editorLang
-      const l = (topic.value.lang || '').toLowerCase()
-      if (l.includes('c++') || l === 'cpp' || l === 'cxx') editorLang.value = 'cpp'
-      else editorLang.value = 'python'
+  const idParam = routeId()
+  const langParam = routeLang
+
+  try {
+    if (langParam && idParam) {
+      try {
+        const path = `/api/library/${encodeURIComponent(String(langParam))}/${encodeURIComponent(String(idParam))}`
+        const res = await axios.get(path, { timeout: 10000 })
+        if (res && res.status === 200 && res.data) {
+          topic.value = res.data
+        }
+      } catch (err) {
+        console.warn('GET /api/library/:lang/:id failed, will attempt fallback:', err && err.message ? err.message : err)
+      }
     }
+
+    if (!topic.value && idParam) {
+      try {
+        const numeric = Number(idParam)
+        const path = (!Number.isNaN(numeric) && String(idParam).trim() === String(numeric)) ? `/api/library/${numeric}` : `/api/library/${encodeURIComponent(String(idParam))}`
+        const res2 = await axios.get(path, { timeout: 10000 })
+        if (res2 && res2.status === 200 && res2.data) {
+          topic.value = res2.data
+        }
+      } catch (err) {
+        console.warn('Fallback GET /api/library/:id failed:', err && err.message ? err.message : err)
+      }
+    }
+
+    if (!topic.value) {
+      throw new Error('未能获取到条目（请确认路由或后端接口）')
+    }
+
+    // init editorCode
+    editorCode.value = topic.value.code_example || ''
+    const detectedLang = (topic.value.lang || routeLang || '').toLowerCase()
+    if (detectedLang.includes('c++') || detectedLang === 'cpp' || detectedLang === 'cxx') editorLang.value = 'cpp'
+    else editorLang.value = 'python'
+
+    // initialize egInDisplay / egOutDisplay from topic.eg_in / topic.eg_out
+    initEgFields(topic.value.eg_in, egInDisplay, '_egInType')
+    initEgFields(topic.value.eg_out, egOutDisplay, '_egOutType')
+
   } catch (err) {
     console.error('loadTopic error', err)
-    error.value = '加载失败，请稍后再试'
+    error.value = (err && err.message) ? err.message : '加载失败，请稍后再试'
   } finally {
     loading.value = false
   }
 }
 
+/**
+ * Initialize a display ref from an original eg value.
+ * - value: original value (could be JSON object/array/string)
+ * - displayRef: ref to write plain-text output
+ * - typeVarName: name of the module-level variable to set ('_egInType' or '_egOutType')
+ */
+function initEgFields(value, displayRef, typeVarName) {
+  let t = null
+  try {
+    if (value === null || value === undefined) {
+      displayRef.value = ''
+      t = null
+    } else if (typeof value === 'string') {
+      // try to see if string actually contains JSON
+      try {
+        const parsed = JSON.parse(value)
+        t = detectType(parsed)
+        displayRef.value = prettyFromParsed(parsed)
+      } catch {
+        // plain string
+        displayRef.value = value
+        t = 'string'
+      }
+    } else {
+      // already an object/array
+      t = detectType(value)
+      displayRef.value = prettyFromParsed(value)
+    }
+  } catch (e) {
+    // fallback: convert to string
+    displayRef.value = String(value)
+    t = 'string'
+  }
+
+  // assign to module-level var by name
+  if (typeVarName === '_egInType') _egInType = t
+  if (typeVarName === '_egOutType') _egOutType = t
+}
+
+function detectType(val) {
+  if (Array.isArray(val)) return 'array'
+  if (val !== null && typeof val === 'object') return 'object'
+  return 'string'
+}
+
+/**
+ * Convert parsed JSON (array/object/primitive) into user-friendly plain text.
+ * - array -> each element on its own line
+ * - object -> each "key: value" on its own line (value stringified if needed)
+ * - primitive -> toString
+ */
+function prettyFromParsed(parsed) {
+  if (Array.isArray(parsed)) {
+    return parsed.map(item => {
+      if (item === null || item === undefined) return ''
+      if (typeof item === 'object') return JSON.stringify(item)
+      return String(item)
+    }).join('\n')
+  }
+  if (parsed !== null && typeof parsed === 'object') {
+    return Object.entries(parsed).map(([k, v]) => {
+      if (v !== null && typeof v === 'object') return `${k}: ${JSON.stringify(v)}`
+      return `${k}: ${String(v)}`
+    }).join('\n')
+  }
+  return String(parsed)
+}
+
+/**
+ * Convert user-edited display text back into JSON-like value according to original type.
+ * - if original type is 'array' -> split lines into array (trim each non-empty)
+ * - if original type is 'object' -> try parse lines "k: v" into object; if parse fails, return the raw string
+ * - if original type is 'string' or unknown -> return the raw string
+ */
+function displayToOriginal(displayText, originalType) {
+  const txt = (displayText || '').replace(/\r\n/g, '\n')
+  if (!originalType) {
+    // if unknown, try to infer: multiple lines -> array, else string
+    if (txt.includes('\n')) {
+      return txt.split('\n').map(s => s)
+    }
+    return txt
+  }
+
+  if (originalType === 'array') {
+    return txt === '' ? [] : txt.split('\n').map(line => line)
+  }
+
+  if (originalType === 'object') {
+    // try to parse as JSON first
+    try {
+      return JSON.parse(txt)
+    } catch {
+      // fallback: parse lines like "key: value"
+      const obj = {}
+      const lines = txt.split('\n').map(l => l.trim()).filter(l => l !== '')
+      for (const line of lines) {
+        const idx = line.indexOf(':')
+        if (idx === -1) {
+          // if there's a line without colon, store under special key or skip
+          // we'll append it to a special "_extra" array
+          if (!obj._extra) obj._extra = []
+          obj._extra.push(line)
+        } else {
+          const k = line.slice(0, idx).trim()
+          const vStr = line.slice(idx + 1).trim()
+          // try to parse vStr as JSON primitive
+          try {
+            obj[k] = JSON.parse(vStr)
+          } catch {
+            obj[k] = vStr
+          }
+        }
+      }
+      return obj
+    }
+  }
+
+  // default: string
+  return txt
+}
+
+// UI helpers kept
 function formatDate(dateStr) {
   if (!dateStr) return ''
   return new Date(dateStr).toLocaleString()
@@ -147,11 +293,11 @@ const goBack = () => {
   if (window.history.length > 1) {
     router.back()
   } else {
-    router.push('/library')
+    if (routeLang) router.push({ path: '/library', query: { lang: routeLang } })
+    else router.push({ path: '/library' })
   }
 }
 
-// UI helpers
 function difficultyLabel(v) {
   if (!v) return '入门'
   if (v === 'beginner') return '入门'
@@ -160,11 +306,12 @@ function difficultyLabel(v) {
   return v
 }
 function difficultyClass(v) {
-  if (v === 'advanced') return 'bg-red-100 text-red-700'
-  if (v === 'intermediate') return 'bg-yellow-100 text-yellow-800'
-  return 'bg-green-50 text-green-800'
+  if (v === 'advanced') return 'badge-adv'
+  if (v === 'intermediate') return 'badge-mid'
+  return 'badge-beg'
 }
 function displayLangLabel(l) {
+  if (!l && routeLang) l = routeLang
   if (!l) return ''
   const s = (l + '').toLowerCase()
   if (s.includes('c++') || s === 'cpp') return 'C++'
@@ -172,188 +319,52 @@ function displayLangLabel(l) {
   return l
 }
 
-// editor helpers
-function toggleEditor() {
-  showEditor.value = !showEditor.value
-  // lazy-init editor code if empty and topic has example
-  if (showEditor.value && (!editorCode.value || !editorCode.value.trim()) && topic.value && topic.value.code_example) {
-    editorCode.value = topic.value.code_example
-  }
-}
-function resetEditor() {
-  editorCode.value = topic.value?.code_example || ''
-  stdin.value = ''
-  execOutput.value = ''
-  execError.value = ''
-}
-function clearOutput() {
-  execOutput.value = ''
-  execError.value = ''
-}
-
-// run code via backend exec API (注意：后端需提供 /api/exec 路由）
-async function runCode() {
-  if (!editorCode.value || !editorCode.value.trim()) {
-    execError.value = '代码为空，无法运行'
-    execOutput.value = ''
-    return
-  }
-
-  execLoading.value = true
-  execOutput.value = ''
-  execError.value = ''
-
-  const payloadLang = (editorLang.value === 'cpp') ? 'cpp' : 'python'
-  try {
-    // 注意：后端接口在本建议里为 /api/exec，若你的后端不同，请修改此处。
-    const res = await axios.post('/api/exec', {
-      lang: payloadLang,
-      code: editorCode.value,
-      stdin: stdin.value || ''
-    }, { timeout: 20000 })
-
-    if (res && res.data) {
-      // 兼容后端返回 { stdout, stderr, code }
-      const stdout = res.data.output ?? res.data.stdout ?? ''
-      const stderr = res.data.stderr ?? ''
-      const code = typeof res.data.code === 'number' ? res.data.code : (res.data.exitCode ?? 0)
-
-      let out = ''
-      if (stdout) out += stdout
-      if (stderr) out += (out ? '\n--- stderr ---\n' : '') + stderr
-      if (!out && (code === 0)) out = `(exit ${code})`
-
-      execOutput.value = out
-      execError.value = code !== 0 ? `程序退出码 ${code}` : ''
-    } else {
-      execError.value = '无效的执行返回'
+// 在线运行按钮：当前以 alert 提示（后续可换成项目的 modal）
+function onOnlineRunClick() {
+  alert('Sorry，该功能尚未实现。开发者研发中，敬请期待！')
+  // 如果将来需要构造 payload 发给后端，可以用如下方式将显示文本还原成 JSON/原始类型：
+  /*
+    const payload = {
+      lang: editorLang.value === 'cpp' ? 'cpp' : 'python',
+      code: editorCode.value || topic.value?.code_example || '',
+      eg_in: displayToOriginal(egInDisplay.value, _egInType),
+      eg_out: displayToOriginal(egOutDisplay.value, _egOutType)
     }
-  } catch (err) {
-    console.error('runCode error', err)
-    // 优先显示后端返回的错误信息
-    const serverMsg = err?.response?.data?.error || err?.response?.data?.message
-    execError.value = serverMsg || err.message || '运行异常'
-  } finally {
-    execLoading.value = false
-  }
+  */
 }
 
-// copy & download utilities
-async function copyOutput() {
-  const text = execOutput.value || execError.value || ''
-  if (!text) return
-  try {
-    await navigator.clipboard.writeText(text)
-    alert('已复制到剪贴板')
-  } catch (e) {
-    alert('复制失败：' + (e.message || e))
-  }
-}
-function downloadOutput() {
-  const text = execOutput.value || execError.value || ''
-  if (!text) return
-  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = `output_${route.params.id || 'topic'}.txt`
-  document.body.appendChild(a)
-  a.click()
-  a.remove()
-  URL.revokeObjectURL(url)
-}
+// downloadContent 保持不变
 function downloadContent() {
   const code = editorCode.value || topic.value?.code_example || ''
+  if (!code) {
+    alert('无可下载的代码')
+    return
+  }
   const ext = (editorLang.value === 'cpp') ? '.cpp' : '.py'
+  const safeTitle = (topic.value?.title || 'code').replace(/\s+/g, '_').replace(/[^\w\-_.]/g, '')
+  const idPart = routeId() || 'topic'
+  const langPart = routeLang ? String(routeLang) + '_' : ''
   const blob = new Blob([code], { type: 'text/plain;charset=utf-8' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
-  a.download = `${(topic.value?.title || 'code').replace(/\s+/g, '_')}${ext}`
+  a.download = `${safeTitle}_${langPart}${idPart}${ext}`
   document.body.appendChild(a)
   a.click()
   a.remove()
   URL.revokeObjectURL(url)
 }
 
-// initial load
+// initial load + react to param change
 onMounted(() => {
+  loadTopic()
+})
+
+watch(() => [route.params.id, route.params.lang, route.query.id, route.query.lang], () => {
   loadTopic()
 })
 </script>
 
 <style scoped>
-.library-view {
-  min-height: 100vh;
-  background-color: #f3f6fb;
-}
-
-/* small utility buttons to fit your theme */
-.btn-action {
-  background: linear-gradient(90deg,#2563eb,#7c3aed);
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 10px;
-  font-weight: 700;
-  cursor: pointer;
-}
-.btn-action:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(124,58,237,0.12); }
-
-/* small buttons used inside editor region */
-.btn-primary {
-  background: linear-gradient(90deg,#06b6d4,#2563eb);
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-weight: 700;
-  cursor: pointer;
-}
-.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
-.btn-try {
-  background: white;
-  border: 1px solid rgba(15,23,42,0.06);
-  padding: 8px 10px;
-  border-radius: 8px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-/* small input style */
-.input-sm {
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: 1px solid rgba(15,23,42,0.06);
-  outline: none;
-}
-
-/* editor area */
-.editor-area {
-  width: 100%;
-  box-sizing: border-box;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
-  background: #0b1220;
-  color: #dbeafe;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(15,23,42,0.06);
-  resize: vertical;
-  min-height: 180px;
-  white-space: pre;
-}
-
-/* output area style */
-.output-area {
-  min-height: 80px;
-  max-height: 360px;
-  overflow: auto;
-  white-space: pre-wrap;
-}
-
-/* small responsive tweaks */
-@media (max-width: 900px) {
-  .editor-area { font-size: 13px; }
-  .btn-action, .btn-primary { padding: 6px 10px; }
-}
+  @import './LibraryView/LibraryViewStyle.css';
 </style>

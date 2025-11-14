@@ -59,6 +59,7 @@ body { margin: 0; font-family: 'Inter', sans-serif; }
 html, body {
   overflow-x: hidden;   /* 禁止横向滚动条 */
   /*scrollbar-gutter: stable;  保留右侧位置，避免布局抖动 */
+  background-color: black;
 }
 
 /* .fluid-cursor-root { pointer-events: none; z-index: 9999; position: fixed; inset: 0; } */

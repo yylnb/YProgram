@@ -127,7 +127,8 @@
 /* .pill:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,0.6); } */
 .pill:not(.active):hover {
   background: linear-gradient(180deg, #f1eaff, #f7eefe);
-  transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,0.6);
+  transform: translateY(-2px); 
+  box-shadow: 0 8px 18px rgba(0,0,0,0.6);
   color: var(--text-hover);
 }
 .pill.active {
@@ -211,6 +212,7 @@ section.grid {
   margin-right: 10%;
   padding: 30px 30px 70px 30px; 
   border-radius: 30px;
+  /* border: 1px solid white; */
   box-shadow: 12px 12px 36px rgba(194, 194, 194, 0.7);
   z-index: 2; 
   display: grid; 
@@ -302,18 +304,19 @@ section.grid {
 .modal {
   max-width: 920px;
   width: calc(100% - 32px);
-  border-radius: 12px;
+  border-radius: 24px;
   overflow: hidden;
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255,255,255,0.04);
+  border: 1px solid white;
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   color: var(--text-strong);
   display: flex;
   flex-direction: column;
   max-height: 85vh;
   z-index: 70;
-  box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 10px 30px rgba(132,63,141,0.06);
+  /* box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 10px 30px rgba(132,63,141,0.06); */
+  box-shadow: 12px 12px 36px rgba(194, 194, 194, 0.7);
 }
 
 /* modal header */
@@ -396,7 +399,8 @@ section.grid {
   cursor:pointer;
   box-shadow: 0 12px 30px rgba(132,63,141,0.14);
 }
-.btn-primary:hover { filter: brightness(0.95); }
+.btn-primary:hover { filter: brightness(0.95); transform: translateY(-2px); }
+.res-card-foot button{ margin-left: 10px;}
 
 /* 白底按钮（用于在深色界面上做对比的操作） */
 .btn-white {
@@ -446,3 +450,8 @@ section.grid {
 
 /* 小工具颜色 */
 .loading-note { color: var(--muted); font-weight:700; }
+
+option{
+  background-color: #000000;
+  color: white;
+}
