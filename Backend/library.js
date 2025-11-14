@@ -6,12 +6,10 @@ const express = require('express');
  * @param {Function} authMiddleware - 用户认证中间件
  */
 
-function safeParseJSON(str) {
-  try {
-    return JSON.parse(str);
-  } catch {
-    return null;
-  }
+function safeParseJSON(val) {
+  if (val == null) return null;
+  if (typeof val === 'object') return val;
+  try { return JSON.parse(val) } catch (e) { return null }
 }
 
 module.exports = function (pool, authMiddleware) {
@@ -179,21 +177,35 @@ module.exports = function (pool, authMiddleware) {
     }
   });
 
-  // ---------- LIBRARY detail ----------
-  router.get('/:id', async (req, res) => {
-    const id = Number(req.params.id);
-    if (!id) return res.status(400).json({ error: 'invalid id' });
-
+  // ---------- LIBRARY detail by lang + lb_id ----------
+  // GET /api/library/:lang/:id
+  // 示例： GET /api/library/python/3
+  router.get('/:lang/:id', async (req, res) => {
     try {
-      const [rows] = await pool.query(
-        `SELECT id, lang, lb_id, title, tags, summary, content, eg_in, eg_out, difficulty, page
-         FROM library
-         WHERE id = ? LIMIT 1`,
-        [id]
-      );
-      if (!rows || !rows.length) return res.status(404).json({ error: 'not found' });
+      const rawLang = (req.params.lang || '').trim()
+      const rawId = (req.params.id || '').trim()
 
-      const r = rows[0];
+      if (!rawLang || !rawId) {
+        return res.status(400).json({ error: 'invalid params: require lang and id' })
+      }
+
+      const lang = rawLang
+      const lb_id = rawId
+
+      const [rows] = await pool.query(
+        `SELECT id, lang, lb_id, title, tags, summary, content,
+                eg_in, eg_out, difficulty, page, created_at
+        FROM library
+        WHERE lang = ? AND lb_id = ?
+        LIMIT 1`,
+        [lang, lb_id]
+      )
+
+      if (!rows || !rows.length) {
+        return res.status(404).json({ error: 'not found' })
+      }
+
+      const r = rows[0]
       res.json({
         id: r.id,
         lang: r.lang,
@@ -205,13 +217,15 @@ module.exports = function (pool, authMiddleware) {
         eg_in: safeParseJSON(r.eg_in) || [],
         eg_out: safeParseJSON(r.eg_out) || [],
         difficulty: r.difficulty,
-        page: r.page
-      });
+        page: r.page,
+        created_at: r.created_at,
+        updated_at: r.created_at
+      })
     } catch (err) {
-      console.error('GET /library/:id error:', err);
-      res.status(500).json({ error: 'Server error' });
+      console.error('GET /api/library/:lang/:id error:', err)
+      res.status(500).json({ error: 'Server error' })
     }
-  });
+  })
 
   return router;
 };
