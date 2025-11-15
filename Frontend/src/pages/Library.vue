@@ -542,14 +542,69 @@ function runExample(code) {
 function clearSearch() { q.value = ''; page.value = 1; loadTopics() }
 const onSearchDebounced = debounce(() => { page.value = 1; loadTopics() }, 400)
 
+// ----------------- Dynamic CSS loading (minimal, with dynamic change on resize) -----------------
+const CSS_DESKTOP = (() => {
+  try { return new URL('./Library/LibraryStyleDesktop.css', import.meta.url).href } catch { return './Library/LibraryStyleDesktop.css' }
+})()
+const CSS_MOBILE = (() => {
+  try { return new URL('./Library/LibraryStyleMobile.css', import.meta.url).href } catch { return './Library/LibraryStyleMobile.css' }
+})()
+
+const D_ATTR = 'data-library-dynamic-style'
+
+function insertCssIfNotExists(href) {
+  // 使用 data attribute 来标识我们插入的样式，防止误删或重复
+  if (document.head.querySelector(`link[rel="stylesheet"][${D_ATTR}][href="${href}"]`)) return
+  const link = document.createElement('link')
+  link.rel = 'stylesheet'
+  link.href = href
+  link.setAttribute(D_ATTR, 'true')
+  document.head.appendChild(link)
+}
+
+function removeInjectedStyles() {
+  const nodes = document.head.querySelectorAll(`link[rel="stylesheet"][${D_ATTR}]`)
+  nodes.forEach(n => n.remove())
+}
+
+function cssForWidth(w) {
+  if (w > 1024) return CSS_DESKTOP
+  if (w >= 641) return CSS_DESKTOP // pad 合并到 desktop
+  return CSS_MOBILE
+}
+
+let currentCssHref = null
+const applyCssNow = () => {
+  const target = cssForWidth(window.innerWidth)
+  if (target === currentCssHref) return
+  // 卸载旧的、插入新的（简单安全的做法）
+  removeInjectedStyles()
+  insertCssIfNotExists(target)
+  currentCssHref = target
+}
+
+const resizeHandler = debounce(() => {
+  applyCssNow()
+}, 120)
+
 // ----------------- Lifecycle -----------------
 onMounted(() => {
   page.value = 1
   loadTopics()
   loadFavorites()
+
+  applyCssNow()
+  window.addEventListener('resize', resizeHandler)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', resizeHandler)
+  // 若希望组件卸载时移除样式，取消下面注释：
+  // removeInjectedStyles()
 })
 </script>
 
+
 <style scoped>
-  @import './Library/LibraryStyle.css';
+  /* @import './Library/LibraryStyleDesktop.css'; */
 </style>

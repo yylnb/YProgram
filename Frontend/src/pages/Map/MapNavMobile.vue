@@ -562,12 +562,43 @@ onBeforeUnmount(() => {
 .mapnav-root { background-color: #000 !important; padding: 18px 12px 18px !important; display: block; }
 
 /* 顶部标题 */
-.lib-hero { position: relative; z-index: 2; height: 62px; padding: 0; background: transparent !important; border: none !important; box-shadow: none !important; }
-.lib-hero::after { content: ""; position: absolute; left: 6%; right: 6%; bottom: 6px; height: 1px; background: #ffffff; opacity: 1; pointer-events: none; }
+.lib-hero { 
+  position: relative; 
+  z-index: 2; 
+  height: 62px; 
+  padding: 0; 
+  background: transparent !important; 
+  border: none !important; 
+  box-shadow: none !important; 
+}
+.lib-hero::after { 
+  content: ""; 
+  position: absolute; 
+  left: 6%; 
+  right: 6%; 
+  bottom: 6px; 
+  height: 1px; 
+  background: #ffffff; 
+  opacity: 1; 
+  pointer-events: none; 
+}
 .hero-title {
-  position: absolute; top: 10px; font-weight: 800; line-height: 1; font-size: 21px; height: 36px; display: flex; align-items: center; justify-content: center;
-  transform: translateX(-50%); white-space: nowrap;
-  background: linear-gradient(90deg, #0e78e9 0%, #c63be9 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
+  position: absolute; 
+  top: 10px; 
+  font-weight: 800; 
+  line-height: 1; 
+  font-size: 21px; 
+  height: 36px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  transform: translateX(-50%); 
+  white-space: nowrap;
+  background: linear-gradient(90deg, #0e78e9 0%, #c63be9 100%); 
+  -webkit-background-clip: text; 
+  background-clip: text; 
+  -webkit-text-fill-color: transparent; 
+  color: transparent;
 }
 .hero-left { left: 13%; } .hero-right { left: 87%; }
 
