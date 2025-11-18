@@ -600,7 +600,7 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('resize', resizeHandler)
   // 若希望组件卸载时移除样式，取消下面注释：
-  // removeInjectedStyles()
+  removeInjectedStyles()
 })
 </script>
 
