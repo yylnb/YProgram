@@ -903,4 +903,5 @@ Request JSON:
 
 
 const port = process.env.PORT || 5000;
-app.listen(port, () => console.log(`YProgram backend running on http://localhost:${port}`));
+const host = process.env.HOST || '0.0.0.0';
+app.listen(port, host,() => console.log(`YProgram backend running on http://${host}:${port}`));

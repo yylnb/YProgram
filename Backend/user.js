@@ -228,6 +228,67 @@ module.exports = (pool, authMiddleware, opts = {}) => {
     }
   });
 
+  // GET /api/user/memberships?ids=1,2,3
+  router.get('/memberships', authMiddleware, async (req, res) => {
+    try {
+      const idsRaw = (req.query.ids || '').toString().trim();
+      if (!idsRaw) {
+        return res.status(400).json({ error: '请提供 ids 查询参数，例如 ?ids=1,2,3' });
+      }
+
+      // 解析并只保留数字 id，防止注入
+      const ids = idsRaw.split(',')
+        .map(s => s.trim())
+        .filter(s => s !== '' && /^[0-9]+$/.test(s))
+        .map(s => Number(s));
+
+      if (ids.length === 0) {
+        return res.status(400).json({ error: '提供的 ids 无效' });
+      }
+
+      // 限制一次请求最多处理的 id 数量，防止滥用（可根据业务调整）
+      const MAX_IDS = 200;
+      if (ids.length > MAX_IDS) {
+        return res.status(400).json({ error: `一次最多查询 ${MAX_IDS} 个 id` });
+      }
+
+      // 构建占位符列表用于 IN (...)
+      const placeholders = ids.map(() => '?').join(',');
+
+      // 我们想取每个 user_id 最新的 end_at 对应的那一条记录
+      // 先用子查询取每个 user_id 的 max(end_at)，再 join 回 memberships 取得完整记录
+      const sql = `
+        SELECT m.user_id, m.start_at, m.end_at, m.source
+        FROM memberships m
+        JOIN (
+          SELECT user_id, MAX(end_at) AS max_end
+          FROM memberships
+          WHERE user_id IN (${placeholders})
+          GROUP BY user_id
+        ) t ON m.user_id = t.user_id AND m.end_at = t.max_end
+      `;
+
+      // 执行查询
+      const [rows] = await pool.query(sql, ids);
+
+      // rows 可能包含多行（每个 user_id 一行），构造 map 返回
+      const result = {};
+      for (const r of rows) {
+        // toISO 函数假设在项目中存在（与你现有的 /membership 路由一致）
+        result[String(r.user_id)] = {
+          start_at: r.start_at ? toISO(r.start_at) : null,
+          end_at: r.end_at ? toISO(r.end_at) : null,
+          source: r.source || null
+        };
+      }
+
+      return res.json(result);
+    } catch (e) {
+      console.error('/memberships error:', e);
+      return res.status(500).json({ error: '批量获取会员信息失败' });
+    }
+  });
+
   // -------------------------
   // ENERGY helpers & endpoints
   // -------------------------

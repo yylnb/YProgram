@@ -25,6 +25,6 @@ onMounted(() => {
 
 <style scoped>
 /* Home 只保留最基本的页面根样式（其他样式都在子组件里） */
-.home-root { width:100%; overflow-x:hidden; box-sizing:border-box; background:#fff; }
+.home-root { width:100%; overflow-x:hidden; box-sizing:border-box;}
 :root, .home-root { box-sizing: border-box; }
 </style>
