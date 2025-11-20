@@ -5,17 +5,24 @@ CREATE DATABASE IF NOT EXISTS study_app
   DEFAULT COLLATE = utf8mb4_unicode_ci;
 USE study_app;
 
--- ===========================
--- 用户表
+
+-- =========================== 
+-- 用户表 
 -- ===========================
 CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(100) NOT NULL UNIQUE,
-  password VARCHAR(255) NOT NULL, -- 存 bcrypt 哈希
-  energy INT DEFAULT 30,       -- 能量值
+  password VARCHAR(255) NOT NULL,           -- 存 bcrypt/hash
+  user_color VARCHAR(20) DEFAULT NULL,      -- 头像背景色，例如 '#2563eb'
+  user_emoji VARCHAR(10) DEFAULT NULL,      -- 头像 emoji，例如 '😄'
+  checkin_days INT UNSIGNED DEFAULT 0,      -- 用户总打卡天数（累计）
+  max_streak_days INT UNSIGNED DEFAULT 0,   -- 最大连续打卡天数
+  lang JSON DEFAULT NULL,                   -- 学习语言（JSON 格式），例如 '["python","cpp"]'
+  energy INT DEFAULT 30,                    -- 能量值
   last_enregy_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 -- ===========================
 -- 题目表：选择题（Python / C++ / Java）
