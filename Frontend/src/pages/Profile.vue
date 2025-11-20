@@ -148,7 +148,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
-import Calendar from './Calendar.vue'
+import Calendar from './Profile/Calendar.vue'
 
 const router = useRouter()
 const storedToken = ref(localStorage.getItem('yp_token') || null)
