@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS users (
   lang JSON DEFAULT NULL,                   -- 学习语言（JSON 格式），例如 '["python","cpp"]'
   energy INT DEFAULT 30,                    -- 能量值
   last_enregy_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  contact VARCHAR(255) DEFAULT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
