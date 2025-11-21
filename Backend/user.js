@@ -1,16 +1,4 @@
 // user.js
-/**
- * User / Auth / Energy 模块
- * module.exports = (pool, authMiddleware, opts) => router
- *
- * opts 可选字段：
- *  - JWT_SECRET, JWT_EXPIRES_IN
- *  - REFRESH_JWT_SECRET, REFRESH_EXPIRES_IN
- *  - signToken(payload) (可选)
- *  - signRefreshTokenStateless(payload) (可选)
- *  - setRefreshTokenCookie(res, token) (可选)
- *  - toISO(date) (可选)
- */
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -93,9 +81,9 @@ module.exports = (pool, authMiddleware, opts = {}) => {
     }
   }
 
-  // -------------------------
+
+  // ------------------------- 登录/注册 -------------------------
   // POST /register
-  // -------------------------
   router.post('/register', async (req, res) => {
     const { username, password } = req.body || {};
     if (!username || !password) return res.status(400).json({ error: 'username and password required' });
@@ -135,11 +123,15 @@ module.exports = (pool, authMiddleware, opts = {}) => {
 
       const userId = r.insertId;
 
+      // 查询刚插入行的 created_at（保证返回给前端准确的时间）
+      const [uRows] = await pool.query('SELECT created_at FROM users WHERE id = ? LIMIT 1', [userId]);
+      const createdAt = (uRows && uRows[0] && uRows[0].created_at) ? toISO(uRows[0].created_at) : null;
+
       const token = signToken({ id: userId, username });
       const refreshToken = signRefreshTokenStateless({ id: userId, username });
       setRefreshTokenCookie(res, refreshToken);
 
-      // 返回给前端：lang 始终以数组形式
+      // 返回给前端：lang 始终以数组形式，包含 created_at
       res.json({
         success: true,
         token,
@@ -153,6 +145,7 @@ module.exports = (pool, authMiddleware, opts = {}) => {
           max_streak_days: defaultStreak,
           lang: ['python'],
           energy: 30,
+          created_at: createdAt,
           membership: null
         }
       });
@@ -162,9 +155,7 @@ module.exports = (pool, authMiddleware, opts = {}) => {
     }
   });
 
-  // -------------------------
   // POST /login
-  // -------------------------
   router.post('/login', async (req, res) => {
     const { username, password } = req.body || {};
     if (!username || !password) return res.status(400).json({ error: 'username and password required' });
@@ -216,6 +207,9 @@ module.exports = (pool, authMiddleware, opts = {}) => {
       // 稳健解析 lang 字段，确保返回给前端始终为数组
       const langArray = parseLangField(user.lang);
 
+      // 格式化 created_at（如果存在）
+      const createdAt = user.created_at ? toISO(user.created_at) : null;
+
       res.json({
         success: true,
         token,
@@ -229,6 +223,7 @@ module.exports = (pool, authMiddleware, opts = {}) => {
           max_streak_days: user.max_streak_days,
           lang: langArray,
           energy: user.energy,
+          created_at: createdAt,
           membership
         }
       });
@@ -238,10 +233,7 @@ module.exports = (pool, authMiddleware, opts = {}) => {
     }
   });
 
-
-  // -------------------------
   // POST /logout
-  // -------------------------
   router.post('/logout', async (req, res) => {
     try {
       // clear cookie and header
@@ -254,9 +246,7 @@ module.exports = (pool, authMiddleware, opts = {}) => {
     }
   });
 
-  // -------------------------
   // POST /invite  (auth required)
-  // -------------------------
   router.post('/invite', authMiddleware, async (req, res) => {
     const referrer = (req.body && req.body.referrer || '').trim();
     if (!referrer) return res.status(400).json({ error: 'referrer required' });
@@ -285,9 +275,9 @@ module.exports = (pool, authMiddleware, opts = {}) => {
     }
   });
 
-  // -------------------------
+
+  // ------------------------- 获取信息 -------------------------
   // GET /me
-  // -------------------------
   router.get('/me', authMiddleware, async (req, res) => {
     const userId = req.user && req.user.id;
     if (!userId) return res.status(401).json({ error: 'unauthorized' });
@@ -311,9 +301,273 @@ module.exports = (pool, authMiddleware, opts = {}) => {
     }
   });
 
-  // -------------------------
+  
+  // ------------------------- 修改信息 -------------------------
+  // PATCH /profile  (仅更新头像相关：user_color / user_emoji)
+  router.patch('/profile', authMiddleware, async (req, res) => {
+    const userId = req.user && req.user.id;
+    if (!userId) return res.status(401).json({ error: 'unauthorized' });
+
+    // 只处理头像背景色与 emoji
+    const { user_color, user_emoji } = req.body || {};
+
+    // If neither provided -> nothing to update
+    if (typeof user_color === 'undefined' && typeof user_emoji === 'undefined') {
+      return res.status(400).json({ error: 'no updatable fields provided (user_color or user_emoji)' });
+    }
+
+    const updates = [];
+    const params = [];
+
+    try {
+      // user_color: accept string (trim), ignore empty-string (no update) — if you want to allow clearing, change logic
+      if (typeof user_color === 'string') {
+        const c = user_color.trim();
+        if (c !== '') {
+          updates.push('user_color = ?');
+          params.push(c);
+        } else {
+          // 如果传空字符串，我们把它设为 NULL（即清除颜色）
+          updates.push('user_color = NULL');
+        }
+      }
+
+      // user_emoji: accept string (trim) — allow empty string to clear
+      if (typeof user_emoji === 'string') {
+        const e = user_emoji.trim();
+        if (e !== '') {
+          updates.push('user_emoji = ?');
+          params.push(e);
+        } else {
+          updates.push('user_emoji = NULL');
+        }
+      }
+
+      if (updates.length === 0) {
+        return res.status(400).json({ error: 'no valid user_color or user_emoji provided' });
+      }
+
+      // 构建并执行 UPDATE（使用 UPDATE，不会产生 INSERT 或影响自增 id）
+      const sql = `UPDATE users SET ${updates.join(', ')} WHERE id = ?`;
+      params.push(userId);
+      await pool.query(sql, params);
+
+      // 返回更新后的用户行（只取必要字段）
+      const [rows] = await pool.query(
+        `SELECT id, username, user_color, user_emoji, checkin_days, max_streak_days, lang, energy, contact, created_at
+        FROM users WHERE id = ? LIMIT 1`,
+        [userId]
+      );
+      if (!rows || !rows.length) return res.status(404).json({ error: 'user not found' });
+
+      const u = rows[0];
+
+      // 若你希望返回 lang 解析为数组，可在前端使用现有 parseLangField；此接口只返回数据库值并解析 created_at
+      // 这里我们尽量返回和 login/register 一致的结构：lang 解析为数组
+      let parsedLang = [];
+      try {
+        if (u.lang) {
+          if (typeof u.lang === 'object') parsedLang = Array.isArray(u.lang) ? u.lang : [String(u.lang)];
+          else parsedLang = JSON.parse(String(u.lang));
+          if (!Array.isArray(parsedLang)) parsedLang = Array.isArray(parsedLang) ? parsedLang : [String(parsedLang)];
+        }
+      } catch (e) {
+        // 如果解析失败，兜底为空数组
+        parsedLang = [];
+      }
+
+      return res.json({
+        success: true,
+        user: {
+          id: u.id,
+          username: u.username,
+          user_color: u.user_color,
+          user_emoji: u.user_emoji,
+          checkin_days: u.checkin_days,
+          max_streak_days: u.max_streak_days,
+          lang: parsedLang,
+          energy: u.energy,
+          contact: u.contact,
+          created_at: toISO(u.created_at)
+        }
+      });
+    } catch (err) {
+      console.error('PATCH /profile error:', err && err.stack ? err.stack : err);
+      return res.status(500).json({ error: 'update profile failed' });
+    }
+  });
+
+  // POST /username  (修改用户名，需鉴权，确保唯一)
+  router.patch('/username', authMiddleware, async (req, res) => {
+    const userId = req.user && req.user.id;
+    if (!userId) return res.status(401).json({ error: 'unauthorized' });
+
+    const { newUsername } = req.body || {};
+    if (!newUsername || typeof newUsername !== 'string' || !newUsername.trim()) {
+      return res.status(400).json({ error: 'newUsername required' });
+    }
+    const cleanName = newUsername.trim();
+
+    // basic validation: allow letters/numbers/underscores/dashes and 2-30 chars (你可根据需要调整)
+    if (!/^[\w\-]{2,30}$/.test(cleanName)) {
+      return res.status(400).json({ error: 'invalid username format' });
+    }
+
+    try {
+      // check uniqueness (exclude current user)
+      const [exists] = await pool.query('SELECT id FROM users WHERE username = ? AND id <> ? LIMIT 1', [cleanName, userId]);
+      if (exists && exists.length) {
+        return res.status(409).json({ error: 'username exists' });
+      }
+
+      // update username (UPDATE only)
+      await pool.query('UPDATE users SET username = ? WHERE id = ?', [cleanName, userId]);
+
+      // fetch updated user
+      const [rows] = await pool.query(
+        `SELECT id, username, user_color, user_emoji, checkin_days, max_streak_days, lang, energy, contact, created_at
+        FROM users WHERE id = ? LIMIT 1`,
+        [userId]
+      );
+      if (!rows || !rows.length) return res.status(404).json({ error: 'user not found' });
+
+      const u = rows[0];
+      let parsedLang = [];
+      try {
+        parsedLang = parseLangField(u.lang);
+      } catch (e) { parsedLang = []; }
+
+      return res.json({
+        success: true,
+        user: {
+          id: u.id,
+          username: u.username,
+          user_color: u.user_color,
+          user_emoji: u.user_emoji,
+          checkin_days: u.checkin_days,
+          max_streak_days: u.max_streak_days,
+          lang: parsedLang,
+          energy: u.energy,
+          contact: u.contact,
+          created_at: toISO(u.created_at)
+        }
+      });
+    } catch (err) {
+      console.error('POST /username error:', err && err.stack ? err.stack : err);
+      return res.status(500).json({ error: 'change username failed' });
+    }
+  });
+
+  // POST /contact  (修改联系方式 contact，需鉴权)
+  router.patch('/contact', authMiddleware, async (req, res) => {
+    const userId = req.user && req.user.id;
+    if (!userId) return res.status(401).json({ error: 'unauthorized' });
+
+    const { contact } = req.body || {};
+
+    try {
+      // if contact is undefined => nothing to update
+      if (typeof contact === 'undefined') {
+        return res.status(400).json({ error: 'contact required' });
+      }
+
+      // allow clearing contact by sending empty string or null
+      if (contact === null || (typeof contact === 'string' && contact.trim() === '')) {
+        await pool.query('UPDATE users SET contact = NULL WHERE id = ?', [userId]);
+      } else {
+        const cVal = String(contact).trim();
+        // optional: add basic validation for email/phone here; currently accept as-is per your request
+        await pool.query('UPDATE users SET contact = ? WHERE id = ?', [cVal, userId]);
+      }
+
+      // fetch updated user
+      const [rows] = await pool.query(
+        `SELECT id, username, user_color, user_emoji, checkin_days, max_streak_days, lang, energy, contact, created_at
+        FROM users WHERE id = ? LIMIT 1`,
+        [userId]
+      );
+      if (!rows || !rows.length) return res.status(404).json({ error: 'user not found' });
+
+      const u = rows[0];
+      let parsedLang = [];
+      try {
+        parsedLang = parseLangField(u.lang);
+      } catch (e) { parsedLang = []; }
+
+      return res.json({
+        success: true,
+        user: {
+          id: u.id,
+          username: u.username,
+          user_color: u.user_color,
+          user_emoji: u.user_emoji,
+          checkin_days: u.checkin_days,
+          max_streak_days: u.max_streak_days,
+          lang: parsedLang,
+          energy: u.energy,
+          contact: u.contact,
+          created_at: toISO(u.created_at)
+        }
+      });
+    } catch (err) {
+      console.error('POST /contact error:', err && err.stack ? err.stack : err);
+      return res.status(500).json({ error: 'update contact failed' });
+    }
+  });
+
+  // POST /change-password  (修改密码，需鉴权)
+  router.post('/change-password', authMiddleware, async (req, res) => {
+    const userId = req.user && req.user.id;
+    if (!userId) return res.status(401).json({ error: 'unauthorized' });
+
+    const { oldPassword, newPassword } = req.body || {};
+    if (!oldPassword || !newPassword) {
+      return res.status(400).json({ error: 'oldPassword and newPassword required' });
+    }
+
+    // 基本密码策略（可根据需要增强）
+    if (typeof newPassword !== 'string' || newPassword.length < 8) {
+      return res.status(400).json({ error: 'newPassword must be at least 8 characters' });
+    }
+
+    try {
+      // 获取当前密码哈希
+      const [rows] = await pool.query('SELECT password FROM users WHERE id = ? LIMIT 1', [userId]);
+      if (!rows || !rows.length) return res.status(404).json({ error: 'user not found' });
+
+      const currentHash = rows[0].password;
+      // compare
+      const ok = await bcrypt.compare(oldPassword, currentHash || '');
+      if (!ok) {
+        return res.status(401).json({ error: 'invalid current password' });
+      }
+
+      // hash new password
+      const newHash = await bcrypt.hash(newPassword, 10);
+
+      // update DB (UPDATE only)
+      await pool.query('UPDATE users SET password = ? WHERE id = ?', [newHash, userId]);
+
+      // rotate refresh token (optional but recommended)
+      try {
+        const refreshToken = signRefreshTokenStateless({ id: userId, /* optionally include username in payload if available */ });
+        setRefreshTokenCookie(res, refreshToken);
+      } catch (e) {
+        // 非致命：如果旋转 refresh token 失败，继续返回 success，但记录日志
+        console.warn('rotate refresh token failed after password change', e);
+      }
+
+      // 返回成功（不回传敏感信息）
+      return res.json({ success: true });
+    } catch (err) {
+      console.error('POST /change-password error:', err && err.stack ? err.stack : err);
+      return res.status(500).json({ error: 'change password failed' });
+    }
+  });
+
+
+  // ------------------------- 会员相关 -------------------------
   // GET /membership
-  // -------------------------
   router.get('/membership', authMiddleware, async (req, res) => {
     try {
       const [rows] = await pool.query(
@@ -389,9 +643,9 @@ module.exports = (pool, authMiddleware, opts = {}) => {
     }
   });
 
-  // -------------------------
+
+  // ------------------------- 能量相关 -------------------------
   // ENERGY helpers & endpoints
-  // -------------------------
   async function refreshUserEnergy(userId) {
     const [rows] = await pool.query('SELECT energy, last_energy_update FROM users WHERE id = ? LIMIT 1', [userId]);
     if (!rows || rows.length === 0) throw new Error('User not found');
