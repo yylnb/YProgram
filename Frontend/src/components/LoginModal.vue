@@ -131,6 +131,20 @@ async function handleSubmit() {
       // 登录失败 -> fallthrough 到注册
     }
 
+    // 在这里插入密码校验
+    if (password.value.length < 6) {
+      error.value = '密码长度至少需要 6 个字符'
+      return
+    }
+    if (!/^[A-Za-z0-9]+$/.test(password.value)) {
+      error.value = '密码只能包含英文字母和数字，不能包含其它字符'
+      return
+    }
+    if (!/[A-Za-z]/.test(password.value) || !/[0-9]/.test(password.value)) {
+      error.value = '密码必须同时包含字母和数字'
+      return
+    }
+
     // 尝试注册
     try {
       const r = await axios.post('http://localhost:5000/api/user/register', { username: username.value, password: password.value })

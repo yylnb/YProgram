@@ -1,10 +1,19 @@
 <template>
-  <div class="card p-6 basic-root">
+  <div class="p-6 basic-root">
     <div class="basic-grid">
       <!-- 左侧：头像 + 名称 -->
       <div class="left">
         <div class="avatar-wrap" title="用户头像或首字母">
-          <div class="avatar">{{ avatarText }}</div>
+          <!-- avatar: 支持 user_color + user_emoji，如果没有则显示首字母并使用渐变 -->
+          <div
+            class="avatar"
+            :style="avatarStyle"
+            role="img"
+            :aria-label="avatarEmoji ? `avatar ${avatarEmoji}` : `avatar ${avatarText}`"
+          >
+            <span v-if="avatarEmoji" class="avatar-emoji">{{ avatarEmoji }}</span>
+            <span v-else class="avatar-text">{{ avatarText }}</span>
+          </div>
         </div>
 
         <div class="name-block">
@@ -32,40 +41,52 @@
             <div class="stat-label">加入时长</div>
             <div class="stat-value" v-if="joinDays !== null">{{ joinDays }} 天</div>
             <div class="stat-value muted" v-else>未知</div>
-            <div class="stat-sub muted">基于注册时间计算</div>
           </div>
 
           <div class="stat-card">
             <div class="stat-label">打卡天数</div>
-            <div class="stat-value" v-if="streakDisplay !== null">{{ streakDisplay }}</div>
-            <div class="stat-value muted" v-else>—</div>
-            <div class="stat-sub muted">连续 / 累计（若可用）</div>
+            <div class="stat-value" v-if="streakDisplay !== null">{{ streakDisplay }} 天</div>
+            <div class="stat-value muted" v-else>— 天</div>
+            <div class="stat-sub muted" v-if="localMaxStreak !== null">最大连续打卡：{{ localMaxStreak }} 天</div>
+            <div class="stat-sub muted" v-else>最大连续打卡：— 天</div>
           </div>
 
           <div class="stat-card">
             <div class="stat-label">学习的语言</div>
             <div class="stat-value" v-if="languagesDisplay && languagesDisplay.length">
               <div class="lang-list">
-                <span class="lang-pill" v-for="(l, i) in languagesDisplay" :key="i">{{ langLabel(l) }}</span>
+                <button
+                  class="lang-pill"
+                  v-for="(l, i) in languagesDisplay"
+                  :key="i"
+                  @click="onLangClick(l)"
+                >
+                  {{ langLabel(l) }}
+                </button>
               </div>
             </div>
             <div class="stat-value muted" v-else>未设置</div>
-            <div class="stat-sub muted">可在学习页面切换语言</div>
           </div>
         </div>
 
         <div class="actions">
-          <button class="btn btn-primary" @click="$emit('edit')">编辑个人资料</button>
-          <button class="btn btn-outlined" @click="$emit('open-settings')">账户设置</button>
+          <button class="btn btn-primary" @click="openEdit">编辑个人资料</button>
+          <!-- 账户设置 已移除 -->
         </div>
       </div>
     </div>
+
+    <!-- BasicChange modal -->
+    <BasicChange v-if="showChangeModal" @close="showChangeModal = false" @saved="onProfileSaved" />
   </div>
 </template>
 
 <script setup>
 import { toRef, ref, watch, computed, onMounted } from 'vue'
-import axios from 'axios'
+import { useRouter } from 'vue-router'
+import BasicChange from './BasicChange.vue'
+
+const router = useRouter()
 
 const props = defineProps({
   profile: { type: Object, default: () => ({ id: null, username: '', created_at: null }) }
@@ -74,71 +95,90 @@ const props = defineProps({
 const prof = toRef(props, 'profile')
 const joinDays = ref(null)
 const copied = ref(false)
+const showChangeModal = ref(false)
 
-// 快速统计数据（优先从后端 /api/user/stats 获取）
-const stats = ref(null)
+// localStorage 缓存用户（优先从 localStorage 读取某些字段）
+const localUser = ref(null)
+const localCheckin = ref(null)       // 累计打卡
+const localMaxStreak = ref(null)     // 最大连续打卡
+const localCurrentStreak = ref(null) // 当前连续（如果你后端有此字段可填）
+const localLang = ref([])
 
-// 打卡显示（例如 "5 / 120" 或 单一数字）
-const streakDisplay = computed(() => {
-  if (!stats.value) {
-    // try profile fallback fields
-    const p = prof.value || {}
-    if (p.streak_days != null && p.total_checkin_days != null) {
-      return `${p.streak_days} / ${p.total_checkin_days}`
-    }
-    if (p.streak_days != null) return String(p.streak_days)
-    if (p.checkin_days != null) return String(p.checkin_days)
-    return null
-  }
-  // stats 优先级： 连续 streak_days 与 累计 total_checkin_days
-  const s = stats.value
-  if (s.streak_days != null && s.total_checkin_days != null) return `${s.streak_days} / ${s.total_checkin_days}`
-  if (s.streak_days != null) return String(s.streak_days)
-  if (s.total_checkin_days != null) return String(s.total_checkin_days)
-  return null
+const createdRawFromProfile = computed(() => prof.value && (prof.value.created_at ?? prof.value.createdAt ?? prof.value.created ?? null))
+const createdRawFromLocal = computed(() => {
+  if (!localUser.value) return null
+  return localUser.value.created_at ?? localUser.value.createdAt ?? localUser.value.created ?? null
 })
+const createdRaw = computed(() => createdRawFromProfile.value ?? createdRawFromLocal.value)
 
-// 学习语言显示（数组）
-// 优先从 stats.languages 或 profile.languages，兜底用 localStorage 的 yp_lang（单项）
-const languagesDisplay = computed(() => {
-  if (stats.value && Array.isArray(stats.value.languages) && stats.value.languages.length) return stats.value.languages
-  const p = prof.value || {}
-  if (Array.isArray(p.languages) && p.languages.length) return p.languages
-  // profile 可能使用 csv 字符串
-  if (typeof p.languages === 'string' && p.languages.trim()) return p.languages.split(',').map(s => s.trim()).filter(Boolean)
-  // fallback to localStorage yp_lang
-  const cur = localStorage.getItem('yp_lang')
-  if (cur) return [cur]
-  return []
-})
-
-// 兼容 created_at / createdAt / created
-const createdRaw = computed(() => prof.value && (prof.value.created_at ?? prof.value.createdAt ?? prof.value.created ?? null))
-
-const createdAtFormatted = computed(() => {
-  const v = createdRaw.value
-  if (!v) return null
-  const d = new Date(v)
-  if (isNaN(d.getTime())) return null
-  return d.toLocaleString()
-})
-
+// 计算加入时长
 function calcJoinDays() {
-  if (!createdRaw.value) { joinDays.value = null; return }
-  const created = new Date(createdRaw.value)
+  const v = createdRaw.value
+  if (!v) { joinDays.value = null; return }
+  const created = new Date(v)
   if (isNaN(created.getTime())) { joinDays.value = null; return }
   const now = new Date()
   const diff = Math.floor((now - created) / (1000*60*60*24))
   joinDays.value = diff
 }
 
+// 打卡显示（优先使用 localStorage -> profile -> stats）
+const streakDisplay = computed(() => {
+  if (localCurrentStreak.value != null && localCheckin.value != null) {
+    return `${localCurrentStreak.value} / ${localCheckin.value}`
+  }
+  if (localCheckin.value != null) return String(localCheckin.value)
+  const p = prof.value || {}
+  if (p.current_streak != null && p.checkin_days != null) return `${p.current_streak} / ${p.checkin_days}`
+  if (p.checkin_days != null) return String(p.checkin_days)
+  if (p.streak_days != null && p.total_checkin_days != null) return `${p.streak_days} / ${p.total_checkin_days}`
+  if (p.streak_days != null) return String(p.streak_days)
+  return null
+})
+
+// languages 显示（优先 localUser.lang -> profile.languages -> localStorage yp_lang）
+const languagesDisplay = computed(() => {
+  if (localLang.value && localLang.value.length) return localLang.value
+  const p = prof.value || {}
+  if (Array.isArray(p.languages) && p.languages.length) return p.languages
+  if (typeof p.languages === 'string' && p.languages.trim()) return p.languages.split(',').map(s => s.trim()).filter(Boolean)
+  const cur = localStorage.getItem('yp_lang')
+  if (cur) return [cur]
+  return []
+})
+
+// helper: safe parse lang value into array
+function parseLangValue(raw) {
+  if (raw == null) return []
+  if (Array.isArray(raw)) return raw
+  if (typeof raw === 'object') {
+    try { return Array.isArray(raw) ? raw : [String(raw)] } catch (e) { return [] }
+  }
+  const s = String(raw).trim()
+  if (!s) return []
+  try {
+    const parsed = JSON.parse(s)
+    if (Array.isArray(parsed)) return parsed
+    if (typeof parsed === 'string') return [parsed]
+    return [String(parsed)]
+  } catch (e) {
+    return [s]
+  }
+}
+
 const displayId = computed(() => {
   const p = prof.value || {}
-  return String(p.id ?? p.user_id ?? p.uid ?? '—')
+  const fromProfile = p.id ?? p.user_id ?? p.uid
+  if (fromProfile != null) return String(fromProfile)
+  if (localUser.value) {
+    const lu = localUser.value
+    return String(lu.id ?? lu.user_id ?? lu.uid ?? '—')
+  }
+  return '—'
 })
 
 const avatarText = computed(() => {
-  const name = (prof.value && (prof.value.username ?? prof.value.name)) || ''
+  const name = (prof.value && (prof.value.username ?? prof.value.name)) || (localUser.value && (localUser.value.username ?? localUser.value.name)) || ''
   const s = String(name).trim()
   if (!s) return 'U'
   return s[0].toUpperCase()
@@ -146,7 +186,38 @@ const avatarText = computed(() => {
 
 const roleLabel = computed(() => {
   const p = prof.value || {}
-  return p.role ?? p.membership_role ?? null
+  return p.role ?? p.membership_role ?? (localUser.value && (localUser.value.role ?? localUser.value.membership_role)) ?? null
+})
+
+// ---------- avatar color & emoji support ----------
+const avatarBg = computed(() => {
+  const p = prof.value || {}
+  const fromProfile = p.user_color ?? p.avatar_color ?? null
+  if (fromProfile) return fromProfile
+  if (localUser.value) {
+    return localUser.value.user_color ?? localUser.value.avatar_color ?? '#2563eb'
+  }
+  return '#2563eb'
+})
+const avatarEmoji = computed(() => {
+  const p = prof.value || {}
+  const fromProfile = p.user_emoji ?? p.avatar_emoji ?? null
+  if (fromProfile) return fromProfile
+  if (localUser.value) return localUser.value.user_emoji ?? localUser.value.avatar_emoji ?? null
+  return null
+})
+
+const avatarStyle = computed(() => {
+  if (avatarEmoji.value) {
+    return {
+      background: avatarBg.value,
+      color: '#fff'
+    }
+  }
+  return {
+    background: 'linear-gradient(90deg,#2563eb,#7c3aed)',
+    color: '#fff'
+  }
 })
 
 async function copyId() {
@@ -167,43 +238,92 @@ async function copyId() {
 }
 
 function langLabel(l) {
-  const map = { python: 'Python', cpp: 'C++', java: 'Java', javascript: 'JavaScript', ts: 'TypeScript' }
+  const map = { python1: 'Python入门', cpp1: 'C++入门', c1: 'C入门', java1: 'Java入门', javascript1: 'JavaScript入门' }
   return map[l] || (typeof l === 'string' ? l : String(l))
 }
 
-/*
-  自动加载 /api/user/stats（如果用户已登录）
-  期望后端返回结构示例：
-  {
-    streak_days: 5,
-    total_checkin_days: 120,
-    languages: ['python','cpp'],
-    completed_courses: 3,
-    completed_units: 24
-  }
-*/
-async function loadQuickStats() {
-  const token = localStorage.getItem('yp_token')
-  if (!token) { stats.value = null; return }
+// === language click handling & yp_current/yp_select sync ===
+function courseKeyFromLang(l) {
+  if (!l) return 'python1'
+  const s = String(l).trim()
+  if (/\d$/.test(s)) return s
+  const base = s.replace(/[^a-zA-Z]/g, '').toLowerCase()
+  return `${base}1`
+}
+
+function onLangClick(l) {
   try {
-    const res = await axios.get('http://localhost:5000/api/user/stats', { headers: { Authorization: `Bearer ${token}` }, timeout: 6000 })
-    if (res && res.data) stats.value = res.data
-    else stats.value = null
+    const course = courseKeyFromLang(l)
+    // read yp_select
+    const rawSelect = localStorage.getItem('yp_select')
+    let selectObj = {}
+    if (rawSelect) {
+      try { selectObj = JSON.parse(rawSelect) } catch (e) { selectObj = {} }
+    }
+    const stage = Number(selectObj[course] ?? 0)
+    const newCurrent = { course, stage }
+    localStorage.setItem('yp_current', JSON.stringify(newCurrent))
   } catch (e) {
-    // 静默失败即可
-    stats.value = null
+    // fallback: set python1
+    localStorage.setItem('yp_current', JSON.stringify({ course: 'python1', stage: 0 }))
+  } finally {
+    router.push('/map')
+  }
+}
+
+// open edit modal
+function openEdit() {
+  showChangeModal.value = true
+}
+
+// when BasicChange emits saved -> reload local user data
+function onProfileSaved() {
+  loadLocalUser()
+  showChangeModal.value = false
+}
+
+// 加载 localStorage 中的 yp_user（并从中提取需要的字段）
+function loadLocalUser() {
+  try {
+    const raw = localStorage.getItem('yp_user')
+    if (!raw) {
+      localUser.value = null
+      localCheckin.value = null
+      localMaxStreak.value = null
+      localCurrentStreak.value = null
+      localLang.value = []
+      return
+    }
+    const parsed = JSON.parse(raw)
+    localUser.value = parsed
+
+    // checkin / streak fields
+    localCheckin.value = parsed.checkin_days ?? parsed.total_checkin_days ?? parsed.checkin ?? null
+    localMaxStreak.value = parsed.max_streak_days ?? parsed.max_streak ?? parsed.max_streak ?? null
+    localCurrentStreak.value = parsed.current_streak ?? parsed.streak_days ?? parsed.streak ?? null
+
+    // lang: may be JSON array, string like 'python' or single token
+    localLang.value = parseLangValue(parsed.lang ?? parsed.languages ?? null)
+  } catch (e) {
+    localUser.value = null
+    localCheckin.value = null
+    localMaxStreak.value = null
+    localCurrentStreak.value = null
+    localLang.value = []
   }
 }
 
 onMounted(() => {
+  loadLocalUser()
   calcJoinDays()
-  loadQuickStats()
 })
+
 watch(createdRaw, calcJoinDays)
 </script>
 
 <style scoped>
 .basic-root {
+  background: #1c1c1c;
   padding: 18px;
   min-height: 220px; /* 增大最小高度，使布局更舒展 */
 }
@@ -242,15 +362,20 @@ watch(createdRaw, calcJoinDays)
   width:64px;
   height:64px;
   border-radius:14px;
-  background: linear-gradient(90deg,#2563eb,#7c3aed);
-  color: #fff;
+  /* default gradient removed in favor of inline style via avatarStyle */
   display:flex;
   align-items:center;
   justify-content:center;
   font-weight:900;
   font-size:22px;
   box-shadow: 0 8px 20px rgba(37,99,235,0.12);
+  transition: transform .12s ease;
 }
+.avatar:hover { transform: translateY(-2px); }
+
+/* emoji 与文字样式 */
+.avatar-emoji { font-size:32px; line-height:1; }
+.avatar-text { font-size:22px; color: #fff; }
 
 /* 名字部分 */
 .name-block { display:flex; flex-direction:column; gap:8px; }
@@ -307,14 +432,14 @@ watch(createdRaw, calcJoinDays)
   border:1px solid rgba(15,23,42,0.06);
   font-weight:800;
   font-size:13px;
+  cursor: pointer;
 }
+.lang-pill:active { transform: translateY(1px); }
 
 /* 按钮 */
 .actions { display:flex; gap:12px; margin-top:6px; }
 .btn { padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:800; font-size:14px; }
 .btn-primary { background: linear-gradient(90deg,#2563eb,#7c3aed); color:white; border:none; }
-.btn-outlined { background: white; border:1px solid rgba(15,23,42,0.08); color:#0f172a; }
 
-/* muted 文本 */
 .muted { color:#6b7280; }
 </style>
