@@ -321,11 +321,15 @@ onMounted(() => {
 watch(createdRaw, calcJoinDays)
 </script>
 
+
 <style scoped>
 .basic-root {
   background: #1c1c1c;
+  color: #fff;
   padding: 18px;
-  min-height: 220px; /* 增大最小高度，使布局更舒展 */
+  min-height: 220px;
+  border-radius: 30px;
+  box-shadow: 12px 12px 36px rgba(194, 194, 194, 0.7);
 }
 
 /* 网格布局：左侧固定宽度，右侧自适应 */
@@ -355,21 +359,23 @@ watch(createdRaw, calcJoinDays)
   align-items:center;
   justify-content:center;
   border-radius:18px;
-  box-shadow: 0 10px 30px rgba(2,6,23,0.06);
-  background: linear-gradient(135deg, rgba(37,99,235,0.12), rgba(124,58,237,0.08));
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.04);
 }
 .avatar {
   width:64px;
   height:64px;
   border-radius:14px;
-  /* default gradient removed in favor of inline style via avatarStyle */
   display:flex;
   align-items:center;
   justify-content:center;
   font-weight:900;
   font-size:22px;
-  box-shadow: 0 8px 20px rgba(37,99,235,0.12);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.6);
   transition: transform .12s ease;
+  background: linear-gradient(90deg,#111827,#374151); /* 深色默认 */
+  color: #fff;
 }
 .avatar:hover { transform: translateY(-2px); }
 
@@ -380,36 +386,37 @@ watch(createdRaw, calcJoinDays)
 /* 名字部分 */
 .name-block { display:flex; flex-direction:column; gap:8px; }
 .username { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
-.name-txt { font-size:20px; font-weight:900; color: #0f172a; }
-.name-txt.muted { color:#6b7280; font-weight:700; }
+.name-txt { font-size:20px; font-weight:900; color: #fff; }
+.name-txt.muted { color:#9CA3AF; font-weight:700; }
 
 .role-badge {
   padding:5px 10px;
   border-radius:999px;
   font-weight:800;
   font-size:12px;
-  color:#fff;
+  color:#0f172a;
   background: linear-gradient(90deg,#10b981,#06b6d4);
 }
 
 /* meta 小字 */
-.meta-small { display:flex; align-items:center; gap:10px; color:#6b7280; font-size:13px; }
-.id-txt { font-weight:800; color:#0f172a; }
+.meta-small { display:flex; align-items:center; gap:10px; color:#9CA3AF; font-size:13px; }
+.id-txt { font-weight:800; color:#fff; }
 .icon-btn {
-  border:1px solid rgba(15,23,42,0.06);
-  background:white;
+  border:1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
   padding:6px 10px;
   border-radius:10px;
   cursor:pointer;
   font-weight:800;
   font-size:13px;
+  color: #fff;
 }
 
 /* 右侧信息：统计卡片 */
 .right { display:flex; flex-direction:column; gap:16px; }
 .stats-row { display:flex; gap:14px; flex-wrap:wrap; }
 .stat-card {
-  background: rgba(15,23,42,0.02);
+  background: rgba(255,255,255,0.02);
   padding:14px;
   border-radius:12px;
   min-width:160px;
@@ -417,29 +424,37 @@ watch(createdRaw, calcJoinDays)
   display:flex;
   flex-direction:column;
   gap:8px;
+  border: 1px solid rgba(255,255,255,0.03);
 }
-.stat-label { font-size:13px; color:#6b7280; }
-.stat-value { font-weight:900; font-size:18px; color:#0f172a; }
-.stat-value.muted { color:#6b7280; font-weight:700; }
-.stat-sub { font-size:12px; color:#6b7280; }
+.stat-label { font-size:13px; color:#9CA3AF; }
+.stat-value { font-weight:900; font-size:18px; color:#fff; }
+.stat-value.muted { color:#9CA3AF; font-weight:700; }
+.stat-sub { font-size:12px; color:#9CA3AF; }
 
 /* 语言 pill 列表 */
 .lang-list { display:flex; gap:8px; flex-wrap:wrap; }
 .lang-pill {
   padding:6px 10px;
   border-radius:999px;
-  background: white;
-  border:1px solid rgba(15,23,42,0.06);
+  background: rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.04);
   font-weight:800;
   font-size:13px;
   cursor: pointer;
+  color: #fff;
 }
 .lang-pill:active { transform: translateY(1px); }
 
 /* 按钮 */
 .actions { display:flex; gap:12px; margin-top:6px; }
 .btn { padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:800; font-size:14px; }
-.btn-primary { background: linear-gradient(90deg,#2563eb,#7c3aed); color:white; border:none; }
+.btn-primary {
+  background: linear-gradient(90deg,#2563eb,#7c3aed);
+  color:white;
+  border:none;
+  box-shadow: 0 6px 18px rgba(124,58,237,0.18);
+}
 
-.muted { color:#6b7280; }
+/* 其他暗色调整 */
+.muted { color:#9CA3AF; }
 </style>

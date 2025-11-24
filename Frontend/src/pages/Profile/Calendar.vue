@@ -394,11 +394,12 @@ onMounted(() => { init() })
   background: #1c1c1c;
   color: #fff;
   padding: 18px;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+  border-radius: 30px;
+  box-shadow: 12px 12px 36px rgba(194, 194, 194, 0.7);
   display: flex;
   flex-direction: column;
   align-items: center;
+  
 }
 
 .header { width: 100%; display:flex; flex-direction: column; align-items:center; gap:8px; }
