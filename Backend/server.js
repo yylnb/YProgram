@@ -50,7 +50,7 @@ app.use('/api/progress', progressRouter);
 const friendsRouter = require('./friends')(pool, authMiddleware);
 app.use('/api/friends', friendsRouter);
 
-const favoritesRouter = require('./favorites')(pool, authMiddleware);
+const favoritesRouter = require('./favorites')(poolQuestions, authMiddleware);
 app.use('/api/favorites', favoritesRouter);
 
 const userRouter = require('./user')(pool, authMiddleware, { JWT_SECRET: process.env.JWT_SECRET });

@@ -1,43 +1,38 @@
+// favorites.js
 const express = require('express');
-
-/**
- * 收藏（Favorites）模块（按语言拆表）
- * @param {import('mysql2/promise').Pool} pool
- * @param {Function} authMiddleware
- */
-
 
 module.exports = (pool, authMiddleware) => {
   const router = express.Router();
 
-  // ==========================
-  // 内部语言映射（如需同步项目其它地方，请保持一致）
-  // ==========================
-  const LANG_SUFFIX = {
-    python: '_py',
-    javascript: '_js',
-    cpp: '_cpp',
-    // add more langs if needed
+  // 语言到短码映射（必要时扩展）
+  const LANG_CODE = {
+    python: 'py',
+    javascript: 'js',
+    js: 'js',
+    cpp: 'cpp',
+    c: 'c',
+    java: 'java',
+    // add more mappings if needed
   };
 
-  function getTablesForLang(lang) {
-    if (!lang || typeof lang !== 'string') return null;
-    lang = lang.toLowerCase();
-    const suffix = LANG_SUFFIX[lang];
-    if (!suffix) return null;
-    return {
-      lang,
-      questionsTable: `questions${suffix}`,       // e.g. questions_py
-      favoritesTable: `favorites${suffix}`,       // e.g. favorites_py
-    };
+  // 解析 course 字符串（严格要求 "python_1" 形式）
+  // 返回 null 或 { base: 'python', idx: '1', code: 'py', suffix: '_py_1', questionsTable, favoritesTable }
+  function getTablesForCourse(course) {
+    if (!course || typeof course !== 'string') return null;
+    const s = course.trim().toLowerCase();
+    const m = s.match(/^([a-z]+)_(\d+)$/i);
+    if (!m) return null;
+    const base = m[1];
+    const idx = m[2];
+    const code = LANG_CODE[base];
+    if (!code) return null;
+    const suffix = `_${code}_${idx}`; // e.g. _py_1
+    const questionsTable = `questions${suffix}`; // e.g. questions_py_1
+    const favoritesTable = `que_fav${suffix}`;   // e.g. que_fav_py_1
+    return { base, idx, code, suffix, questionsTable, favoritesTable };
   }
 
-  // helper: compute page_id from 1-based index
-  function computePageIdFromIndex(idx) {
-    return Math.max(1, Math.ceil(idx / 5));
-  }
-
-  // helper: normalize q_id param (keep numeric if pure digits)
+  // normalize q_id param (keep number if purely digits, else string)
   function normalizeQid(q) {
     const s = String(q).trim();
     return (/^\d+$/.test(s) ? Number(s) : s);
@@ -45,206 +40,152 @@ module.exports = (pool, authMiddleware) => {
 
   // ================
   // POST /api/favorites
-  // body: { q_id, lang, unit_id, page_id? }
+  // body: { q_id, course, unit_id?, title? }
   // ================
   router.post('/', authMiddleware, async (req, res) => {
     const userId = req.user && req.user.id;
     if (!userId) return res.status(401).json({ error: '未登录' });
 
-    let { q_id, lang, unit_id, page_id } = req.body || {};
-
+    let { q_id, course, unit_id, title } = req.body || {};
     if (!q_id) return res.status(400).json({ error: 'q_id required' });
-    if (!lang) return res.status(400).json({ error: 'lang required' });
+    if (!course) return res.status(400).json({ error: 'course required (e.g. python_1)' });
 
-    lang = String(lang).toLowerCase();
-    const t = getTablesForLang(lang);
-    if (!t) return res.status(400).json({ error: 'unsupported lang' });
+    const t = getTablesForCourse(String(course));
+    if (!t) return res.status(400).json({ error: 'unsupported course format or language' });
 
     const qidParam = normalizeQid(q_id);
+    const unitIdParam = (unit_id != null && !isNaN(Number(unit_id))) ? Number(unit_id) : null;
+    const titleParam = (typeof title === 'string' && title.trim()) ? title.trim() : null;
 
-    const conn = await pool.getConnection();
+    let conn;
     try {
+      conn = await pool.getConnection();
       await conn.beginTransaction();
 
-      // verify q_id exists in questions table or questions_exec table
+      // verify q_id exists in questions table (no exec table usage)
       const questionsTable = t.questionsTable;
-      const execTable = `${questionsTable}_exec`;
-
       let found = false;
       try {
         const [rowsQ] = await conn.query(`SELECT 1 FROM \`${questionsTable}\` WHERE q_id = ? LIMIT 1`, [qidParam]);
         if (Array.isArray(rowsQ) && rowsQ.length > 0) found = true;
       } catch (e) {
-        // ignore: table may not exist
-      }
-
-      if (!found) {
-        try {
-          const [rowsE] = await conn.query(`SELECT 1 FROM \`${execTable}\` WHERE q_id = ? LIMIT 1`, [qidParam]);
-          if (Array.isArray(rowsE) && rowsE.length > 0) found = true;
-        } catch (e) {
-          // ignore
-        }
+        // table may not exist or other error -> treat as not found
       }
 
       if (!found) {
         await conn.rollback().catch(()=>{});
-        return res.status(400).json({ error: `q_id not found in questions for lang=${lang}` });
+        return res.status(400).json({ error: `q_id not found in questions for course=${course}` });
       }
 
-      // determine final page_id
-      let finalPageId = null;
-      if (page_id != null) {
-        finalPageId = Number(page_id) || 1;
-      } else {
-        const [cntRows] = await conn.query(`SELECT COUNT(*) AS cnt FROM \`${t.favoritesTable}\` WHERE user_id = ?`, [userId]);
-        const cnt = (cntRows && cntRows[0] && cntRows[0].cnt) ? Number(cntRows[0].cnt) : 0;
-        const nextIndex = cnt + 1;
-        finalPageId = computePageIdFromIndex(nextIndex);
-      }
-
-      const unitIdParam = (unit_id != null && !isNaN(Number(unit_id))) ? Number(unit_id) : null;
-
-      // Upsert (requires UNIQUE(user_id, q_id) on favorites table)
-      await conn.query(
-        `INSERT INTO \`${t.favoritesTable}\` (user_id, q_id, unit_id, page_id, created_at)
-         VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
-         ON DUPLICATE KEY UPDATE
-           page_id = VALUES(page_id),
-           unit_id = VALUES(unit_id),
-           created_at = CURRENT_TIMESTAMP`,
-        [userId, qidParam, unitIdParam, finalPageId]
-      );
+      // Insert or update favorite (requires UNIQUE(user_id, q_id) on favorite table)
+      const sql = `
+        INSERT INTO \`${t.favoritesTable}\` (user_id, q_id, unit_id, title, created_at)
+        VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
+        ON DUPLICATE KEY UPDATE
+          unit_id = VALUES(unit_id),
+          title = COALESCE(VALUES(title), title),
+          created_at = CURRENT_TIMESTAMP
+      `;
+      await conn.query(sql, [userId, qidParam, unitIdParam, titleParam]);
 
       await conn.commit();
-      return res.json({ success: true, page_id: finalPageId });
+      return res.json({ success: true });
     } catch (err) {
-      await conn.rollback().catch(()=>{});
+      if (conn) await conn.rollback().catch(()=>{});
       console.error('POST /favorites error:', err && (err.message || err));
       return res.status(500).json({ error: err && err.message ? err.message : '收藏失败' });
     } finally {
-      conn.release();
+      if (conn) conn.release();
     }
   });
 
   /**
    * GET /api/favorites
-   * query: ?lang=python&page=1
-   * 返回：favorites 数组，支持从 questions table 与 exec table 中取题目文本（兼容两类题）
+   * query: ?course=python_1&page=1&pageSize=5
    */
   router.get('/', authMiddleware, async (req, res) => {
     const userId = req.user && req.user.id;
     if (!userId) return res.status(401).json({ error: '未登录' });
 
-    const lang = (req.query.lang || '').toLowerCase();
+    const course = (req.query.course || '').toString().trim().toLowerCase();
     const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+    const pageSize = Math.max(1, Math.min(100, parseInt(req.query.pageSize, 10) || 5));
 
-    const t = getTablesForLang(lang);
-    if (!t) return res.status(400).json({ error: 'unsupported lang' });
+    if (!course) return res.status(400).json({ error: 'Missing course parameter' });
+
+    const t = getTablesForCourse(course);
+    if (!t) return res.status(400).json({ error: 'unsupported course' });
 
     try {
+      // total count
       const [countRows] = await pool.query(
         `SELECT COUNT(*) AS cnt FROM \`${t.favoritesTable}\` WHERE user_id = ?`,
         [userId]
       );
       const total = countRows && countRows[0] ? Number(countRows[0].cnt || 0) : 0;
-      const totalPages = Math.max(1, Math.ceil(total / 5));
+      const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
-      const offset = (page - 1) * 5;
-      const questionsTable = t.questionsTable;
-      const execTable = `${questionsTable}_exec`;
+      const offset = (page - 1) * pageSize;
 
       const [rows] = await pool.query(
-        `SELECT
-           f.q_id,
-           f.unit_id,
-           f.page_id,
-           f.created_at,
-           COALESCE(q.question_text, q.title, e.question_text, e.title, '') AS question_text,
-           q.options AS options_json,
-           e.link AS exec_link,
-           q.energy AS energy,
-           e.energy AS exec_energy
-         FROM \`${t.favoritesTable}\` f
-         LEFT JOIN \`${questionsTable}\` q ON f.q_id = q.q_id
-         LEFT JOIN \`${execTable}\` e ON f.q_id = e.q_id
-         WHERE f.user_id = ?
-         ORDER BY f.created_at ASC
-         LIMIT 5 OFFSET ?`,
-        [userId, offset]
+        `SELECT id, q_id, unit_id, title, created_at
+         FROM \`${t.favoritesTable}\`
+         WHERE user_id = ?
+         ORDER BY created_at DESC
+         LIMIT ? OFFSET ?`,
+        [userId, pageSize, offset]
       );
 
       const favorites = (rows || []).map(r => ({
+        id: r.id,
         q_id: r.q_id,
         unit_id: r.unit_id,
-        page_id: r.page_id,
-        created_at: r.created_at,
-        question_text: r.question_text || '',
-        options: r.options_json ? r.options_json : null,
-        link: r.exec_link || null,
-        energy: (r.energy != null ? r.energy : (r.exec_energy != null ? r.exec_energy : null))
+        title: r.title,
+        created_at: r.created_at
       }));
 
-      res.json({ favorites, totalPages, currentPage: page });
+      return res.json({ favorites, totalPages, currentPage: page, total });
     } catch (err) {
       console.error('GET /favorites error:', err && (err.message || err));
-      res.status(500).json({ error: '服务器错误' });
+      return res.status(500).json({ error: '服务器错误' });
     }
   });
 
   // DELETE /api/favorites/:identifier
-  // identifier may be q_id (string) — we attempt to delete that q_id in the given lang or across all langs
+  // identifier may be q_id (string/number)
+  // query param course=python_1 is required
   router.delete('/:identifier', authMiddleware, async (req, res) => {
     const userId = req.user && req.user.id;
     if (!userId) return res.status(401).json({ error: '未登录' });
 
     const identifier = req.params.identifier;
-    const langParam = (typeof req.query.lang === 'string' && req.query.lang.trim()) ? req.query.lang.trim().toLowerCase() : null;
-
     if (!identifier) return res.status(400).json({ error: 'identifier required' });
 
-    // languages to process
-    const langsToProcess = langParam ? [langParam] : Object.keys(LANG_SUFFIX);
+    const courseParam = (typeof req.query.course === 'string' && req.query.course.trim()) ? req.query.course.trim().toLowerCase() : null;
+    if (!courseParam) return res.status(400).json({ error: 'course query parameter required (e.g. course=python_1)' });
 
+    const t = getTablesForCourse(courseParam);
+    if (!t) return res.status(400).json({ error: 'unsupported course' });
+
+    const idStr = String(identifier).trim();
+    const idNum = (/^\d+$/.test(idStr) ? Number(idStr) : null);
+    const idParam = (idNum !== null) ? idNum : idStr;
+
+    let conn;
     try {
-      for (const l of langsToProcess) {
-        const t = getTablesForLang(l);
-        if (!t) continue;
+      conn = await pool.getConnection();
+      await conn.beginTransaction();
 
-        const conn = await pool.getConnection();
-        try {
-          await conn.beginTransaction();
+      await conn.query(`DELETE FROM \`${t.favoritesTable}\` WHERE user_id = ? AND q_id = ?`, [userId, idParam]);
 
-          const idStr = String(identifier).trim();
-          const idNum = (/^\d+$/.test(idStr) ? Number(idStr) : null);
-          const idParam = (idNum !== null) ? idNum : idStr;
-
-          // delete favorites rows for this user and q_id
-          await conn.query(`DELETE FROM \`${t.favoritesTable}\` WHERE user_id = ? AND q_id = ?`, [userId, idParam]);
-
-          // reflow page_id for remaining favorites
-          const [rows] = await conn.query(`SELECT id FROM \`${t.favoritesTable}\` WHERE user_id = ? ORDER BY created_at ASC, id ASC`, [userId]);
-
-          for (let i = 0; i < rows.length; i++) {
-            const rid = rows[i].id;
-            const newPage = computePageIdFromIndex(i + 1);
-            await conn.query(`UPDATE \`${t.favoritesTable}\` SET page_id = ? WHERE id = ?`, [newPage, rid]);
-          }
-
-          await conn.commit();
-        } catch (e) {
-          await conn.rollback().catch(()=>{});
-          console.error(`DELETE/REFLOW in ${t.favoritesTable} failed:`, e && (e.message || e));
-          // continue to next lang
-        } finally {
-          conn.release();
-        }
-      }
-
+      await conn.commit();
       return res.json({ success: true });
     } catch (err) {
+      if (conn) await conn.rollback().catch(()=>{});
       console.error('DELETE /favorites/:identifier error:', err && (err.message || err));
       return res.status(500).json({ error: err && err.message ? err.message : '删除收藏失败' });
+    } finally {
+      if (conn) conn.release();
     }
   });
 

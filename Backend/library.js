@@ -1,11 +1,5 @@
 const express = require('express');
 
-/**
- * 学习资源（library）路由模块
- * @param {import('mysql2/promise').Pool} pool - MySQL 连接池
- * @param {Function} authMiddleware - 用户认证中间件
- */
-
 function safeParseJSON(val) {
   if (val == null) return null;
   if (typeof val === 'object') return val;
@@ -177,6 +171,98 @@ module.exports = function (pool, authMiddleware) {
     }
   });
 
+    // GET /api/library/favorites/page?page=1&pageSize=5&lang=python
+  router.get('/favorites/page', authMiddleware, async (req, res) => {
+    const userId = req.user && req.user.id;
+    if (!userId) return res.status(401).json({ error: '未登录' });
+
+    const rawPage = Number(req.query.page || 1);
+    const rawPageSize = Number(req.query.pageSize || 5);
+    const rawLang = req.query.lang ? String(req.query.lang).trim() : null;
+
+    const page = Number.isFinite(rawPage) && rawPage > 0 ? Math.floor(rawPage) : 1;
+    const MAX_PAGE_SIZE = 100;
+    const pageSize = Number.isFinite(rawPageSize) && rawPageSize > 0 ? Math.min(Math.floor(rawPageSize), MAX_PAGE_SIZE) : 10;
+    const offset = (page - 1) * pageSize;
+
+    try {
+      // 1) 可选的总数统计（按 lang 过滤或不过滤）
+      let countSql = `
+        SELECT COUNT(*) AS cnt
+        FROM library_favorites f
+        JOIN library l ON f.lang = l.lang AND f.lb_id = l.lb_id
+        WHERE f.user_id = ?
+      `;
+      const countParams = [userId];
+      if (rawLang) {
+        countSql += ` AND l.lang = ?`;
+        countParams.push(rawLang);
+      }
+      const [[countRow]] = await pool.query(countSql, countParams);
+      const total = Number(countRow?.cnt || 0);
+
+      // 2) 获取当前页的数据（按 created_at 倒序）
+      let dataSql = `
+        SELECT l.id AS id,
+              l.lang AS lang,
+              l.lb_id AS lb_id,
+              l.title AS title,
+              l.summary AS summary,
+              l.difficulty AS difficulty,
+              f.created_at AS favorited_at
+        FROM library_favorites f
+        JOIN library l ON f.lang = l.lang AND f.lb_id = l.lb_id
+        WHERE f.user_id = ?
+      `;
+      const dataParams = [userId];
+      if (rawLang) {
+        dataSql += ` AND l.lang = ?`;
+        dataParams.push(rawLang);
+      }
+      dataSql += ` ORDER BY f.created_at DESC LIMIT ? OFFSET ?`;
+      dataParams.push(pageSize, offset);
+
+      const [rows] = await pool.query(dataSql, dataParams);
+
+      const favorites = rows.map(r => ({
+        id: r.id,
+        lang: r.lang,
+        lb_id: r.lb_id,
+        title: r.title,
+        summary: r.summary,
+        difficulty: r.difficulty,
+        favorited_at: r.favorited_at
+      }));
+
+      // 3) 同时查询该用户现有收藏中出现过的语言列表（用于前端只显示用户已有的语言选项）
+      //    我把这个查询做成不受 `lang` 过滤影响（始终返回用户全部收藏的语言），
+      //    这样前端可以用它来渲染“只显示用户已有的语言”下拉。
+      const [langRows] = await pool.query(`
+        SELECT DISTINCT l.lang AS lang
+        FROM library_favorites f
+        JOIN library l ON f.lang = l.lang AND f.lb_id = l.lb_id
+        WHERE f.user_id = ?
+        ORDER BY l.lang
+      `, [userId]);
+      const availableLangs = (langRows || []).map(r => String(r.lang));
+
+      // 4) 计算分页元信息：当 total 为 0 时 totalPages 为 0
+      const totalPages = total > 0 ? Math.max(1, Math.ceil(total / pageSize)) : 0;
+
+      res.json({
+        favorites,
+        total,
+        totalPages,
+        currentPage: page,
+        pageSize,
+        availableLangs
+      });
+    } catch (err) {
+      console.error('GET /library/favorites/page error:', err);
+      res.status(500).json({ error: '获取收藏失败' });
+    }
+  });
+
   // ---------- LIBRARY detail by lang + lb_id ----------
   // GET /api/library/:lang/:id
   // 示例： GET /api/library/python/3
@@ -226,6 +312,8 @@ module.exports = function (pool, authMiddleware) {
       res.status(500).json({ error: 'Server error' })
     }
   })
+
+
 
   return router;
 };
