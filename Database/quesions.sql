@@ -23,7 +23,6 @@ USE `questions`;
 -- created_at/updated_at : 时间戳
 -- 索引：q_id, unit_id
 
-DROP TABLE IF EXISTS `que_choice_py_1`;
 CREATE TABLE IF NOT EXISTS `que_choice_py_1` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `q_id` VARCHAR(100) NOT NULL COMMENT '题目外部id/编号（可与 study_app 关联）',
@@ -173,4 +172,93 @@ CREATE TABLE IF NOT EXISTS progress_java_2 (
   current_index INT NOT NULL,
   completed INT NOT NULL DEFAULT 0,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- ----------------------------------------------收藏表格----------------------------------------------
+-- Python 1
+CREATE TABLE IF NOT EXISTS que_fav_py_1 (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  q_id INT NOT NULL,
+  unit_id INT NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_user_q (user_id, q_id)
+);
+
+-- Python 2
+CREATE TABLE IF NOT EXISTS que_fav_py_2 (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  q_id INT NOT NULL,
+  unit_id INT NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_user_q (user_id, q_id)
+);
+
+-- C 1
+CREATE TABLE IF NOT EXISTS que_fav_c_1 (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  q_id INT NOT NULL,
+  unit_id INT NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_user_q (user_id, q_id)
+);
+
+-- C 2
+CREATE TABLE IF NOT EXISTS que_fav_c_2 (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  q_id INT NOT NULL,
+  unit_id INT NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_user_q (user_id, q_id)
+);
+
+-- C++ 1
+CREATE TABLE IF NOT EXISTS que_fav_cpp_1 (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  q_id INT NOT NULL,
+  unit_id INT NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_user_q (user_id, q_id)
+);
+
+-- C++ 2
+CREATE TABLE IF NOT EXISTS que_fav_cpp_2 (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  q_id INT NOT NULL,
+  unit_id INT NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_user_q (user_id, q_id)
+);
+
+-- Java 1
+CREATE TABLE IF NOT EXISTS que_fav_java_1 (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  q_id INT NOT NULL,
+  unit_id INT NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_user_q (user_id, q_id)
+);
+
+-- Java 2
+CREATE TABLE IF NOT EXISTS que_fav_java_2 (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  q_id INT NOT NULL,
+  unit_id INT NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_user_q (user_id, q_id)
 );
