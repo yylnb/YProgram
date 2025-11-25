@@ -26,6 +26,9 @@
 
         <!-- 收藏题目 -->
         <QuestionFavorites />
+
+        <!-- 收藏资料库-->
+         <LibraryFavorites />
       </div>
     </div>
   </div>
@@ -39,6 +42,8 @@ import Basic from './Profile/Basic.vue'
 import Calendar from './Profile/Calendar.vue' // 已有
 import Membership from './Profile/Membership.vue'
 import QuestionFavorites from './Profile/QuestionFavorites.vue'
+import LibraryFavorites from './Profile/LibraryFavorites.vue'
+
 
 const router = useRouter()
 

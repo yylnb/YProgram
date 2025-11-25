@@ -101,7 +101,7 @@
               <!-- 邀请为主操作 -->
               <button class="btn btn-primary" @click="handleInvite">
                 <svg class="icon" viewBox="0 0 24 24" aria-hidden><path d="M4 12v7a1 1 0 0 0 1 1h14"/></svg>
-                邀请好友获权益
+                邀请好友获取YPro
               </button>
 
               <!-- 充值 -> 打开弹窗说明（没有在线支付） -->
@@ -223,7 +223,10 @@ async function loadMembership() {
 function handleInvite() {
   const base = location.origin
   const inviteCode = props.profile && props.profile.invite_code ? props.profile.invite_code : (Math.random().toString(36).slice(2,8))
-  const link = `${base}/invite/${inviteCode}`
+  const username = (props.profile && props.profile.username) ? props.profile.username : '你的朋友'
+  // const link = `${base}/invite/${inviteCode}`
+  const weblink = `http://ypro.online`
+  const link = `朋友，我在 YProgram 找到了一套很棒的编程题库和，点击链接查看并注册：\n${weblink}\n（由 ${username} 推荐）`
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(link).then(() => {
@@ -373,7 +376,7 @@ onUnmounted(() => {
 /* left panel */
 .panel-left { flex:0 0 36%; display:flex; flex-direction:column; gap:18px; }
 .big-badge {
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.668), rgba(88, 88, 88, 0.581));
   border-radius: 12px;
   padding:18px;
   display:flex;

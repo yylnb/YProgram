@@ -3,12 +3,12 @@
     <div class="card">
       <div class="card-header">
         <div class="title-block">
-          <h3 class="title">收藏题目</h3>
-          <p class="subtitle">快速访问你收藏的练习题与跳转练习</p>
+          <h3 class="title">收藏资料</h3>
+          <p class="subtitle">快速访问你收藏的资料与跳转阅读</p>
         </div>
 
         <div class="controls">
-          <!-- 使用自定义下拉：语言 -->
+          <!-- 语言选择 -->
           <CustomDropdown
             v-model="favSelectedLang"
             :options="langOptions"
@@ -18,17 +18,6 @@
             class="control-dropdown"
             @change="onLangChanged"
           />
-
-          <!-- 使用自定义下拉：难度（阶段 index） -->
-          <CustomDropdown
-            v-model="favSelectedDifficulty"
-            :options="difficultyOptions"
-            labelKey="label"
-            valueKey="value"
-            placeholder="选择阶段"
-            class="control-dropdown"
-            @change="onDiffChanged"
-          />
         </div>
       </div>
 
@@ -37,33 +26,39 @@
 
         <div v-else>
           <p v-if="favorites.length === 0" class="empty">
-            你还没有收藏题目（当前课程：<strong class="mono">{{ apiCourse }}</strong>）。
+            你还没有收藏资料。
           </p>
 
           <ul v-else class="fav-list">
-            <li v-for="(q, idx) in favorites" :key="q.id ?? q.q_id ?? idx" class="fav-item">
+            <li v-for="(f, idx) in favorites" :key="f.id ?? idx" class="fav-item">
               <div class="fav-main">
                 <div class="fav-meta">
                   <div class="meta-top">
-                    <span class="meta-id">题目 ID：<strong>{{ displayQid(q) }}</strong></span>
+                    <span class="meta-id">资料 ID：<strong>{{ f.id }}</strong></span>
                     <span class="meta-sep">|</span>
-                    <span class="meta-unit">单元 {{ q.unit_id ?? '-' }}</span>
-                    <span class="meta-time">· {{ formatTime(q.created_at) }}</span>
+                    <span class="meta-lang">语言 {{ f.lang ?? '-' }}</span>
+                    <span class="meta-time">· 收藏于 {{ formatTime(f.favorited_at) }}</span>
                   </div>
-                  <div class="meta-title" v-if="displayText(q)" v-html="displayText(q)"></div>
-                  <div class="meta-missing" v-else>（题目标题不可用）</div>
+
+                  <div class="meta-title" v-if="f.title" v-html="f.title"></div>
+                  <div class="meta-summary" v-if="f.summary">{{ f.summary }}</div>
+                  <div class="meta-missing" v-else>（标题/简介不可用）</div>
                 </div>
 
                 <div class="fav-actions">
-                  <button class="btn btn-outline" @click="removeFavorite(displayQid(q))" :disabled="removing">取消收藏</button>
-                  <button class="btn btn-primary" :disabled="!(q.unit_id)" @click="goToPractice(q)">去练习</button>
+                  <button class="btn btn-outline" @click="removeFavorite(f.id)" :disabled="removing">
+                    取消收藏
+                  </button>
+                  <button class="btn btn-primary" @click="goToLibraryDetail(f)" :disabled="!f.lb_id">
+                    前往资料
+                  </button>
                 </div>
               </div>
             </li>
           </ul>
 
-          <!-- pagination: 使用自定义下拉作为页码选择 -->
-          <div class="pager">
+          <!-- pager（用后端返回的 totalPages/currentPage） -->
+          <div class="pager" v-if="favTotalPages > 1">
             <button class="btn btn-outline" :disabled="favCurrentPage <= 1 || loadingFavs" @click="changePage(favCurrentPage - 1)">
               上一页
             </button>
@@ -94,120 +89,118 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
-import CustomDropdown from '../../components/CustomDropdown.vue' // <- 确保路径正确
+import CustomDropdown from '../../components/CustomDropdown.vue' // 确认路径
 
 const router = useRouter()
-const BASE_API = 'http://localhost:5000'
+const BASE_API = 'http://localhost:5000' // 如需修改请替换
 
-// state
+// state (服务器分页)
 const favorites = ref([])
 const loadingFavs = ref(false)
-const favTotalPages = ref(1)
-const favCurrentPage = ref(1)
 const removing = ref(false)
+const favCurrentPage = ref(1)
+const favTotalPages = ref(1)
+const pageSize = ref(10) // 每页条数：默认 10，可按需调整
 
-// selection state: use simple value objects for dropdown compatibility
-const langOptions = [
-  { value: 'python', label: 'Python' },
-  { value: 'cpp', label: 'C++' },
-  { value: 'c', label: 'C' },
-  { value: 'java', label: 'Java' },
-]
-const difficultyOptions = [
-  { value: 1, label: '入门' },
-  { value: 2, label: '进阶' },
-]
+// language filter
+const favSelectedLang = ref('all')
+// language options: 初始给“全部”，会在接口返回时用 availableLangs 覆盖（只展示用户实际有的语言）
+const langOptions = ref([{ value: 'all', label: '全部语言' }])
 
-// v-model bindings
-const favSelectedLang = ref('python')
-const favSelectedDifficulty = ref(1)
-
-// computed course strings:
-// - for API: e.g. "python_1"
-// - for route: e.g. "python1" (no underscore)
-const apiCourse = computed(() => `${favSelectedLang.value}_${favSelectedDifficulty.value}`)
-const routeCourse = computed(() => `${favSelectedLang.value}${favSelectedDifficulty.value}`)
-
-// pages dropdown options computed from favTotalPages
+// page dropdown options computed from favTotalPages
 const pageOptions = computed(() => {
   const n = Math.max(1, Number(favTotalPages.value || 1))
   const arr = []
-  for (let i = 1; i <= n; i++) {
-    arr.push({ value: i, label: String(i) })
-  }
+  for (let i = 1; i <= n; i++) arr.push({ value: i, label: String(i) })
   return arr
 })
 
 // helpers
-function displayQid(q) {
-  if (!q) return ''
-  return String(q.q_id ?? q.qid ?? q.id ?? '')
-}
-function displayText(q) {
-  if (!q) return ''
-  return q.title ?? q.question_text ?? ''
-}
 function formatTime(t) {
   if (!t) return ''
   try { return new Date(t).toLocaleString() } catch (e) { return String(t) }
 }
 
-// lifecycle: initial load
-onMounted(async () => {
-  await loadFavorites(1)
+// lifecycle
+onMounted(() => {
+  loadFavorites(1)
 })
 
-// called when language dropdown changes
+// watch language change: reset to page 1 and reload (bound to dropdown change)
 function onLangChanged() {
   favCurrentPage.value = 1
   loadFavorites(1)
 }
-function onDiffChanged() {
-  favCurrentPage.value = 1
-  loadFavorites(1)
-}
 
-// load favorites from backend using apiCourse
+// load favorites from server with page, pageSize, lang
 async function loadFavorites(page = 1) {
   const token = localStorage.getItem('yp_token')
   if (!token) {
     favorites.value = []; favTotalPages.value = 1; favCurrentPage.value = 1; return
   }
 
-  const course = apiCourse.value
   loadingFavs.value = true
   try {
-    const url = new URL(`${BASE_API}/api/favorites`)
-    url.searchParams.set('course', course)
+    const url = new URL(`${BASE_API}/api/library/favorites/page`)
     url.searchParams.set('page', String(page))
-    url.searchParams.set('pageSize', '5')
+    url.searchParams.set('pageSize', String(pageSize.value))
+    // 只有在用户选择了具体语言（非 'all'）时才传 lang
+    if (favSelectedLang.value && favSelectedLang.value !== 'all') {
+      url.searchParams.set('lang', String(favSelectedLang.value))
+    }
 
     const res = await fetch(url.toString(), {
       headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' }
     })
 
-    if (res.ok) {
-      const data = await res.json().catch(()=>null)
-      if (data && typeof data === 'object' && Array.isArray(data.favorites)) {
-        favorites.value = data.favorites.map(item => ({
-          id: item.id ?? null,
-          q_id: item.q_id ?? item.qid ?? null,
-          unit_id: item.unit_id ?? item.unitId ?? null,
-          title: item.title ?? '',
-          created_at: item.created_at ?? null
-        }))
-        favTotalPages.value = data.totalPages && Number(data.totalPages) > 0 ? Number(data.totalPages) : Math.max(1, Math.ceil((data.total || favorites.value.length) / 5))
-        favCurrentPage.value = data.currentPage ? Number(data.currentPage) : page
+    if (!res.ok) {
+      // 请求失败：清空并保持页数
+      favorites.value = []
+      favTotalPages.value = 1
+      favCurrentPage.value = 1
+      return
+    }
+
+    const data = await res.json().catch(() => null)
+    if (data && Array.isArray(data.favorites)) {
+      // 填充当前页数据
+      favorites.value = data.favorites.map(item => ({
+        id: item.id ?? null,
+        lang: item.lang ?? '',
+        lb_id: item.lb_id ?? null,
+        title: item.title ?? '',
+        summary: item.summary ?? '',
+        difficulty: item.difficulty ?? null,
+        favorited_at: item.favorited_at ?? item.created_at ?? null
+      }))
+
+      // 填充分页元信息（后端会返回 totalPages/currentPage）
+      favTotalPages.value = (typeof data.totalPages === 'number') ? Number(data.totalPages) : Math.max(1, Math.ceil((data.total || favorites.value.length) / pageSize.value))
+      favCurrentPage.value = (typeof data.currentPage === 'number') ? Number(data.currentPage) : page
+
+      // 使用后端返回的 availableLangs 来渲染下拉（只显示用户实际收藏的语言）
+      if (Array.isArray(data.availableLangs)) {
+        const opts = [{ value: 'all', label: '全部语言' }]
+        data.availableLangs.forEach(l => {
+          if (l && l !== 'all') opts.push({ value: String(l), label: String(l).toUpperCase() })
+        })
+        // 如果 availableLangs 只有一个语言并且你希望默认选择该语言，可在此设置 favSelectedLang
+        // 目前保留默认 'all'，但如果你想让它默认选单一语言，可以取消下面注释：
+        // if (opts.length === 2) favSelectedLang.value = opts[1].value
+
+        langOptions.value = opts
       } else {
-        favorites.value = []
-        favTotalPages.value = 1
-        favCurrentPage.value = 1
+        // 如果后端没有返回 availableLangs，尽量从当前页数据提取语言
+        const langs = new Set()
+        favorites.value.forEach(f => { if (f.lang) langs.add(f.lang) })
+        const opts = [{ value: 'all', label: '全部语言' }, ...Array.from(langs).sort().map(l => ({ value: l, label: String(l).toUpperCase() })) ]
+        langOptions.value = opts
       }
     } else {
       favorites.value = []
       favTotalPages.value = 1
       favCurrentPage.value = 1
+      // 保持或清空下拉不动
     }
   } catch (e) {
     console.error('loadFavorites error:', e)
@@ -219,39 +212,37 @@ async function loadFavorites(page = 1) {
   }
 }
 
-// pagination
+// pagination handlers
 function changePage(p) {
   if (!p || p < 1) return
   if (p === favCurrentPage.value) return
   favCurrentPage.value = p
   loadFavorites(p)
 }
-function onPageFromDropdown(val) {
-  // val already updated via v-model; ensure numeric
+function onPageFromDropdown() {
   const num = Number(favCurrentPage.value) || 1
   changePage(num)
 }
 
-// remove favorite
-async function removeFavorite(qid) {
-  if (!qid) return
-  if (!confirm('确认取消收藏该题？')) return
+// remove favorite: 调用 DELETE /api/library/favorite/:id
+async function removeFavorite(libraryId) {
+  if (!libraryId) return
+  if (!confirm('确认取消收藏该资料？')) return
   const token = localStorage.getItem('yp_token')
   if (!token) { alert('请先登录'); return }
 
   removing.value = true
   try {
-    const url = new URL(`${BASE_API}/api/favorites/${encodeURIComponent(String(qid))}`)
-    url.searchParams.set('course', apiCourse.value)
-
-    const res = await fetch(url.toString(), {
+    const res = await fetch(`${BASE_API}/api/library/favorite/${encodeURIComponent(String(libraryId))}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${token}` }
     })
     if (res.ok) {
+      // 删除成功后刷新当前页：
       await loadFavorites(favCurrentPage.value)
-      if (favCurrentPage.value > favTotalPages.value) {
-        favCurrentPage.value = favTotalPages.value
+      // 若当前页无数据并且不是第一页，则回退一页后加载
+      if (favorites.value.length === 0 && favCurrentPage.value > 1) {
+        favCurrentPage.value = Math.max(1, favCurrentPage.value - 1)
         await loadFavorites(favCurrentPage.value)
       }
     } else {
@@ -266,39 +257,13 @@ async function removeFavorite(qid) {
   }
 }
 
-// goToPractice: 跳转到 /study/course/unit （course 不含下划线，例如 python1）
-async function goToPractice(fav) {
-  if (!fav) return
-  const unit = fav.unit_id ?? null
-  if (!unit) { alert('无法跳转：该收藏条目没有绑定单元信息。'); return }
-
-  // build course without underscore
-  const courseForRoute = routeCourse.value // e.g. python1
-  // compute qIndex best-effort (try to find index inside unit)
-  let qIndex = 1
-  const qid = fav.q_id ?? fav.id ?? null
+// 跳转到资料详情页
+async function goToLibraryDetail(fav) {
+  if (!fav || !fav.lang || !fav.lb_id) { alert('无法跳转：缺少 lang 或 lb_id'); return }
   try {
-    if (qid) {
-      const res = await axios.get(`${BASE_API}/api/questions`, {
-        params: { unit: unit, lang: favSelectedLang.value },
-        timeout: 6000
-      })
-      const data = res && res.data ? res.data : null
-      if (Array.isArray(data) && data.length > 0) {
-        const arrQids = data.map(item => (item.q_id ?? item.id ?? null)).map(x => x != null ? String(x) : null)
-        const foundIndex = arrQids.findIndex(x => x === String(qid))
-        if (foundIndex >= 0) qIndex = foundIndex + 1
-      }
-    }
+    await router.push({ path: `/library/${encodeURIComponent(String(fav.lang))}/${encodeURIComponent(String(fav.lb_id))}` })
   } catch (e) {
-    console.warn('goToPractice: find index failed, fallback to q=1', e)
-  }
-
-  // push route: /study/<courseNoUnderscore>/<unit>?q=<qIndex>
-  try {
-    router.push({ path: `/study/${courseForRoute}/${unit}`, query: { q: String(Math.max(1, Math.floor(qIndex))) } })
-  } catch (e) {
-    window.location.href = `/study/${courseForRoute}/${unit}?q=${String(Math.max(1, Math.floor(qIndex)))}`
+    window.location.href = `/library/${encodeURIComponent(String(fav.lang))}/${encodeURIComponent(String(fav.lb_id))}`
   }
 }
 </script>
@@ -366,6 +331,7 @@ async function goToPractice(fav) {
 .meta-top { color: #cbd5e1; font-size: 13px; margin-bottom: 8px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
 .meta-top .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace; }
 .meta-title { color: #f8fafc; font-weight:700; font-size:15px; line-height:1.3; }
+.meta-summary { color: #cbd5e1; font-size:13px; margin-top:6px; }
 .meta-missing { color: #94a3b8; font-size:14px; }
 
 /* Actions */
