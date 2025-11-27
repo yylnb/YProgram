@@ -29,6 +29,9 @@
 
         <!-- 收藏资料库-->
          <LibraryFavorites />
+
+        <!-- 开发者信息 -->
+        <DevelopInfo />
       </div>
     </div>
   </div>
@@ -43,6 +46,7 @@ import Calendar from './Profile/Calendar.vue' // 已有
 import Membership from './Profile/Membership.vue'
 import QuestionFavorites from './Profile/QuestionFavorites.vue'
 import LibraryFavorites from './Profile/LibraryFavorites.vue'
+import DevelopInfo from './Profile/DevelopInfo.vue'
 
 
 const router = useRouter()

@@ -100,7 +100,7 @@ const loadingFavs = ref(false)
 const removing = ref(false)
 const favCurrentPage = ref(1)
 const favTotalPages = ref(1)
-const pageSize = ref(10) // 每页条数：默认 10，可按需调整
+const pageSize = ref(5) // 每页条数：默认 5，可按需调整
 
 // language filter
 const favSelectedLang = ref('all')
