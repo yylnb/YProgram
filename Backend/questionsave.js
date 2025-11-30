@@ -29,45 +29,6 @@ module.exports = (poolQuestions, authMiddleware) => {
     }
   }
 
-  /**
-   * 根据 form 类型集中解析一行数据（row）
-   * - 对于 fill: text 保持为字符串（TEXT），input/output/code 尽量解析为对象/数组
-   * - 对于 choice: 保持原有行为（尝试解析 text/options/hints/answer 为 JSON）
-   */
-  function parseRowForForm(row, form) {
-    if (!row) return row;
-    // shallow copy to avoid mutating original
-    const r = { ...row };
-
-    if (form === 'fill') {
-      // text is stored as TEXT now — return as-is (string)
-      r.text = row.text == null ? row.text : String(row.text);
-
-      // parse the new JSON fields so frontend receives JS objects/arrays
-      r.input = tryParseJSONField(row.input);
-      r.output = tryParseJSONField(row.output);
-      r.code = tryParseJSONField(row.code);
-
-      // keep other fields parsed if needed
-      r.options = tryParseJSONField(row.options);
-      r.hints = tryParseJSONField(row.hints);
-      r.answer = tryParseJSONField(row.answer);
-      // explanation/example already text fields; leave as-is
-      return r;
-    }
-
-    // default (choice or others) — keep original parsing behavior
-    r.text = tryParseJSONField(row.text);
-    r.options = tryParseJSONField(row.options);
-    r.hints = tryParseJSONField(row.hints);
-    r.answer = tryParseJSONField(row.answer);
-    // input/output/code may not exist for choice tables, but parse defensively if present
-    if ('input' in row) r.input = tryParseJSONField(row.input);
-    if ('output' in row) r.output = tryParseJSONField(row.output);
-    if ('code' in row) r.code = tryParseJSONField(row.code);
-    return r;
-  }
-
   // ----------------------------
   // 1) 批量获取（列表）/ 包含 answer（按 unit_id、分页）
   // GET /:form/:lang/:index?unit_id=...&page=...&pageSize=...
@@ -84,13 +45,7 @@ module.exports = (poolQuestions, authMiddleware) => {
       const pageSize = Math.min(200, parseInt(req.query.pageSize || '50', 10)); // 前端控制批量大小
       const offset = (page - 1) * pageSize;
 
-      // 当 form === 'fill' 时，需要额外 SELECT input/output/code
-      let selectCols = 'id, q_id, unit_id, title, text, options, hints, explanation, example, answer, created_at, updated_at';
-      if (form === 'fill') {
-        selectCols += ', input, output, code';
-      }
-
-      let sql = `SELECT ${selectCols} FROM \`${table}\``;
+      let sql = `SELECT id, q_id, unit_id, title, text, options, hints, explanation, example, answer, created_at, updated_at FROM \`${table}\``;
       const params = [];
       if (unitId) {
         sql += ' WHERE unit_id = ?';
@@ -101,7 +56,13 @@ module.exports = (poolQuestions, authMiddleware) => {
 
       const [rows] = await poolQuestions.query(sql, params);
 
-      const data = rows.map(r => parseRowForForm(r, form));
+      const data = rows.map(r => ({
+        ...r,
+        text: tryParseJSONField(r.text),
+        options: tryParseJSONField(r.options),
+        hints: tryParseJSONField(r.hints),
+        answer: tryParseJSONField(r.answer) // 现在列表包含 answer（按你要求）
+      }));
 
       return res.json({ data, page, pageSize });
     } catch (err) {
@@ -130,7 +91,13 @@ module.exports = (poolQuestions, authMiddleware) => {
       if (!rows || rows.length === 0) return res.status(404).json({ error: 'Question not found' });
 
       const row = rows[0];
-      const parsed = parseRowForForm(row, form);
+      const parsed = {
+        ...row,
+        text: tryParseJSONField(row.text),
+        options: tryParseJSONField(row.options),
+        hints: tryParseJSONField(row.hints),
+        answer: tryParseJSONField(row.answer)
+      };
 
       if (req.query.hide_answer === 'true') delete parsed.answer;
 
@@ -171,7 +138,6 @@ module.exports = (poolQuestions, authMiddleware) => {
         const ok = userAnsNum === correct;
         return res.json({ correct: ok, correctAnswer: correct });
       } else {
-        // fill 题：确保从 DB 中把 answer 解析成数组（若 stored as JSON string）
         let correctAnswer = tryParseJSONField(question.answer);
         if (!Array.isArray(correctAnswer)) {
           try { correctAnswer = JSON.parse(question.answer); } catch (e) { correctAnswer = []; }
@@ -209,7 +175,13 @@ module.exports = (poolQuestions, authMiddleware) => {
       const params = [...qIds, ...qIds];
       const [rows] = await poolQuestions.query(sql, params);
 
-      const data = rows.map(r => parseRowForForm(r, form));
+      const data = rows.map(r => ({
+        ...r,
+        text: tryParseJSONField(r.text),
+        options: tryParseJSONField(r.options),
+        hints: tryParseJSONField(r.hints),
+        answer: tryParseJSONField(r.answer)
+      }));
 
       return res.json({ data });
     } catch (err) {
