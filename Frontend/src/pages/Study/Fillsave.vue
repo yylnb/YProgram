@@ -10,75 +10,12 @@
 
     <!-- 中心容器：问题文本、可选项池、提交按钮均居中 -->
     <div class="fill-center">
-
-      <!-- 题目：直接作为普通文本渲染（你的新 DB text = TEXT） -->
-      <div class="q-text-plain" v-if="plainText" v-html="plainText"></div>
-
-      <!-- 代码区域（若存在），渲染 segments 并在 inline slots 中放置 blank-slot（支持拖放） -->
-      <div class="code-area" v-if="codeSegments && codeSegments.length" role="region" aria-label="代码片段">
-        <template v-for="(seg, sidx) in codeSegments" :key="`seg-${sidx}`">
-          <!-- code_block: 每行使用 escapeHtml(line) 并手动换行 -->
-          <div v-if="seg.type === 'code_block'" class="code-block" aria-hidden="false">
-            <template v-for="(line, li) in seg.lines" :key="`line-${sidx}-${li}`">
-              <span class="code-line-text" v-html="escapeHtml(line)"></span><br />
-            </template>
-          </div>
-
-          <!-- code_inline: parts 渲染 -->
-          <div v-else-if="seg.type === 'code_inline'" class="code-inline" :data-seg-index="sidx">
-            <template v-for="(part, pi) in seg.parts" :key="`part-${sidx}-${pi}`">
-              <!-- code part -->
-              <span
-                v-if="part.type === 'code'"
-                class="code-part code-inline-code"
-                v-html="escapeHtml(part.text)"
-                aria-hidden="true"
-              ></span>
-
-              <!-- slot part -->
-              <span
-                v-else-if="part.type === 'slot'"
-                class="blank-slot code-blank-slot"
-                :class="{ 'blank-filled': !!placedAnswers[part.slotIndex], 'disabled': inputDisabled }"
-                :data-blank-index="part.slotIndex"
-                role="region"
-                :aria-label="`空 ${part.slotIndex + 1}`"
-                @dragover.prevent
-                @drop.prevent="onDropToBlankNative($event, part.slotIndex)"
-              >
-                <template v-if="placedAnswers[part.slotIndex]">
-                  <div
-                    class="placed-item"
-                    @pointerdown.stop.prevent="beginPointerDragFromPlaced($event, part.slotIndex)"
-                    @dragstart.prevent="onDragStartPlaced($event, part.slotIndex)"
-                    @click.stop.prevent="onClickPlaced(part.slotIndex)"
-                    draggable="true"
-                    :aria-label="`已填入: ${placedAnswers[part.slotIndex].text}`"
-                  >
-                    {{ placedAnswers[part.slotIndex].text }}
-                  </div>
-                </template>
-                <template v-else>
-                  <span class="blank-placeholder">拖入选项</span>
-                </template>
-              </span>
-
-              <!-- fallback -->
-              <span v-else class="code-part" v-html="escapeHtml(part.text ?? '')"></span>
-            </template>
-          </div>
-
-          <!-- unknown segment -->
-          <div v-else class="code-unknown-seg" v-html="escapeHtml(seg.content || '')"></div>
-        </template>
-      </div>
-
-      <!-- 如果没有 codeSegments，则保留原先的 q-text segments + blank-slot 行为（兼容旧题） -->
-      <div class="q-text" v-else-if="textSegments && textSegments.length">
+      <!-- Text segments with blanks -->
+      <div class="q-text" v-if="textSegments && textSegments.length">
         <template v-for="(seg, idx) in textSegments" :key="idx">
           <span class="seg-text" v-if="seg" v-html="seg"></span>
 
-          <!-- blank slot (旧逻辑，仍支持)： -->
+          <!-- blank slot -->
           <span
             v-if="idx < blanksCount"
             class="blank-slot"
@@ -106,18 +43,6 @@
             </template>
           </span>
         </template>
-      </div>
-
-      <!-- Input / Output 区域：后端提供，可能为空。已改为只读，且数组每项单行显示 -->
-      <div class="io-area">
-        <div class="io-row">
-          <label class="io-label">输入（input）</label>
-          <textarea class="io-textarea" :value="inputText" readonly aria-readonly="true" :placeholder="'后端未提供输入示例'"></textarea>
-        </div>
-        <div class="io-row">
-          <label class="io-label">预期输出（output）</label>
-          <textarea class="io-textarea" :value="outputText" readonly aria-readonly="true" :placeholder="'后端未提供输出示例'"></textarea>
-        </div>
       </div>
 
       <!-- Pool -->
@@ -158,6 +83,7 @@
       </div>
 
       <!-- 下面区域：改动点 —— 把 hint / explanation / next 按钮 放入 .left-block 以左对齐显示 -->
+      <!-- left-block 宽度与 q-text 最大宽度一致，保持在页面中居中但内部内容左对齐 -->
       <div class="left-block">
         <div v-if="currentHint" class="hint-box" style="margin-top:10px;">
           <strong>提示：</strong>
@@ -183,14 +109,17 @@
 
 <script setup>
 /*
-  完整实现说明（重点）：
-  - 修复 code_block 显示 [object Object] 的问题：新增 `lineToString` 与 `extractTextFromObject`，能从嵌套对象里取出 value/text/code/line 字段，或将对象 stringify 为可读字符串。
-  - code_inline 保持并使用之前可靠的解析（partToNormalized）。
-  - input / output: parse JSON; 若为数组则每项一行；只读 textarea 显示。
-  - 其余拖拽 / 提交 / 校验 逻辑保持不变。
+  完整实现（按你的新规则）:
+
+  - A 方案（优先 blank -> pool -> restore） 保留
+  - 计时法：在 pointerdown 记录时间；pointerup 时按时长 (< CLICK_TIME_THRESHOLD => 使用点击逻辑；>= => 使用拖拽逻辑)
+  - 在判断落点时临时隐藏 ghost（避免 ghost 覆盖导致 elementFromPoint 误判）
+  - 更可靠的落点判定：先查 closest('[data-blank-index]')，若无则判断坐标是否在 poolWrap 的 bounding rect 内 -> pool
+  - 创建 ghost 时立刻设置 left/top 到 pointer 坐标，避免左上角闪动
+  - 清理和占位行为保持（占位为纯灰、放下补位、点击自动填入、从 placed 拖出时 pool 显示占位等）
 */
 
-import { ref, computed, watch, onBeforeUnmount } from 'vue';
+import { ref, computed, watch, onBeforeUnmount, nextTick } from 'vue';
 
 const props = defineProps({
   question: { type: Object, required: true },
@@ -211,53 +140,31 @@ const inputDisabled = computed(() => props.disabled || state.value === 'correct'
 const internalError = ref('');
 const nextDisabled = ref(false);
 
-// parsed / rendering
-const plainText = ref('');            // 直接渲染 question.text 字段
-const textSegments = ref([]);         // 回退：旧式段落分割（若需要）
-const codeSegments = ref([]);         // 处理后的 code segments（slot 部分带 slotIndex）
-const poolItems = ref([]);            // { uid, text }
-const placedAnswers = ref([]);        // array sized to blanksCount
-const originalOptions = ref([]);
+// parsed
+const textSegments = ref([]);
+const poolItems = ref([]); // { uid, text }
+const placedAnswers = ref([]);
+const originalOptions = ref([]); // 新增：保留题目原始 options 文本（用于索引型答案映射）
 
-// IO areas (只读显示)
-const inputText = ref('');
-const outputText = ref('');
-
-// drag state (保留原变量名)
-const draggingId = ref(null);
-const draggingFrom = ref(null);
-const draggingSourceIndex = ref(null);
+// drag state
+const draggingId = ref(null);             // uid
+const draggingFrom = ref(null);           // 'pool' | 'placed'
+const draggingSourceIndex = ref(null);    // original source index
 const placeholderPoolIndex = ref(null);
 const placeholderActive = ref(false);
 const currentOverBlank = ref(null);
 const poolWrap = ref(null);
 
-// ghost
+// ghost element reference (plain variable - DOM node appended to body)
 let ghostEl = null;
 const showGhost = ref(false);
 
 // timing rule
 let dragStartTime = 0;
-const CLICK_TIME_THRESHOLD = 200;
+const CLICK_TIME_THRESHOLD = 200; // ms — 小于则视作短时（用点击逻辑），否则用拖拽逻辑
 
 // computed
-const blanksCount = computed(() => {
-  // 优先使用 codeSegments 中定义的 slot 数量（若存在）
-  if (codeSegments.value && codeSegments.value.length) {
-    let n = 0;
-    for (const seg of codeSegments.value) {
-      if (seg.type === 'code_inline' && Array.isArray(seg.parts)) {
-        for (const p of seg.parts) {
-          if (p && p.type === 'slot' && typeof p.slotIndex === 'number') n++;
-        }
-      }
-    }
-    return n;
-  }
-  // 回退：旧逻辑，textSegments 长度 - 1
-  return Math.max(0, (textSegments.value && textSegments.value.length ? textSegments.value.length - 1 : 0));
-});
-
+const blanksCount = computed(() => Math.max(0, textSegments.value.length - 1));
 const displayIndex = computed(() => {
   if (props.questionIndex) return props.questionIndex;
   if (localQuestion.value?.q_id) return localQuestion.value.q_id;
@@ -287,235 +194,39 @@ function safeParseJSON(val) {
   try { return JSON.parse(val); } catch { return null; }
 }
 
-function escapeHtml(str) {
-  if (str == null) return '';
-  const s = String(str);
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-// 递归尝试从对象中提取最有可能的文本字段（value/text/code/line）
-function extractTextFromObject(obj) {
-  if (obj == null) return '';
-  if (typeof obj === 'string') return obj;
-  if (typeof obj === 'number' || typeof obj === 'boolean') return String(obj);
-  if (Array.isArray(obj)) {
-    // join array items with single space fallback (caller may map lines separately)
-    return obj.map(it => extractTextFromObject(it)).join(' ');
-  }
-  if (typeof obj === 'object') {
-    const candidates = ['value','text','code','line','content','v','val'];
-    for (const key of candidates) {
-      if (key in obj && obj[key] != null) {
-        // if nested object, recurse
-        if (typeof obj[key] === 'object') return extractTextFromObject(obj[key]);
-        return String(obj[key]);
-      }
-    }
-    // if object has a single key whose value is string-like, use it
-    const keys = Object.keys(obj);
-    for (const k of keys) {
-      if (typeof obj[k] === 'string' || typeof obj[k] === 'number' || typeof obj[k] === 'boolean') return String(obj[k]);
-      if (typeof obj[k] === 'object') {
-        const v = extractTextFromObject(obj[k]);
-        if (v) return v;
-      }
-    }
-    // fallback to JSON string (shorten if huge)
-    try {
-      const s = JSON.stringify(obj);
-      return s.length > 500 ? s.slice(0,500) + '...' : s;
-    } catch (e) {
-      return String(obj);
-    }
-  }
-  return String(obj);
-}
-
-// 把 code_block 的 line 规范为纯字符串（优先取可能的 text/code/value/line 字段）
-function lineToString(line) {
-  if (line == null) return '';
-  if (typeof line === 'string') return line;
-  if (typeof line === 'number' || typeof line === 'boolean') return String(line);
-  return extractTextFromObject(line);
-}
-
-// 把 code_inline 的 part 规范化成 { type: 'code'|'slot', text?, slotIndex? }
-function partToNormalized(p, slotCounterRef) {
-  if (p == null) return { type: 'code', text: '' };
-
-  if (typeof p === 'string') return { type: 'code', text: p };
-
-  if (typeof p === 'object') {
-    // explicit slot markers
-    if (p.type === 'slot' || p.slot === true || p.isSlot === true) {
-      const idx = slotCounterRef && typeof slotCounterRef.v === 'number' ? slotCounterRef.v++ : 0;
-      return { type: 'slot', slotIndex: idx };
-    }
-
-    // explicit code/text fields
-    if (p.type === 'code' || p.type === 'text' || p.type === 'part') {
-      const t = p.text ?? p.code ?? p.value ?? p.content ?? p.line ?? null;
-      return { type: 'code', text: t == null ? '' : String(t) };
-    }
-
-    // If object contains text/value/code fields, use them
-    if ('text' in p || 'value' in p || 'code' in p || 'content' in p) {
-      const t = p.text ?? p.value ?? p.code ?? p.content;
-      return { type: 'code', text: t == null ? '' : String(t) };
-    }
-
-    // If object contains a marker that likely indicates slot index already
-    if ('slotIndex' in p && (p.slotIndex !== undefined && p.slotIndex !== null)) {
-      return { type: 'slot', slotIndex: Number(p.slotIndex) };
-    }
-
-    // fallback: stringify / extract
-    const tFallback = extractTextFromObject(p);
-    return { type: 'code', text: tFallback };
-  }
-
-  // fallback
-  return { type: 'code', text: String(p) };
-}
-
-/* ---------- 初始化题目数据（解析 text / options / code / input / output） -------------- */
+// init from question
 function initFromQuestion(q) {
   localQuestion.value = q ? { ...q } : {};
-
-  // 1) plainText / textSegments
-  if (localQuestion.value && localQuestion.value.text != null) {
-    if (typeof localQuestion.value.text === 'string') {
-      plainText.value = localQuestion.value.text;
-      textSegments.value = [ plainText.value ];
-    } else {
-      const parsed = safeParseJSON(localQuestion.value.text);
-      if (Array.isArray(parsed)) {
-        textSegments.value = parsed.map(s => (s == null ? '' : String(s)));
-        plainText.value = textSegments.value.join('');
-      } else {
-        plainText.value = String(localQuestion.value.text);
-        textSegments.value = [ plainText.value ];
-      }
-    }
-  } else {
-    plainText.value = '';
-    textSegments.value = [''];
+  let ts = safeParseJSON(localQuestion.value?.text);
+  if (!ts) {
+    if (typeof localQuestion.value?.text === 'string') ts = [localQuestion.value.text];
+    else ts = [''];
   }
+  if (!Array.isArray(ts)) ts = [String(ts)];
+  textSegments.value = ts.map(s => s == null ? '' : String(s));
 
-  // 2) input / output 解析：如果是 JSON 数组 -> 每项一行；对象 -> pretty JSON
-  const parsedInput = safeParseJSON(localQuestion.value?.input);
-  if (parsedInput != null) {
-    if (Array.isArray(parsedInput)) {
-      // each item one line; items that are objects -> JSON.stringify
-      inputText.value = parsedInput.map(it => (typeof it === 'object' ? JSON.stringify(it) : String(it))).join('\n');
-    } else if (typeof parsedInput === 'object') {
-      inputText.value = JSON.stringify(parsedInput, null, 2);
-    } else {
-      inputText.value = String(parsedInput);
-    }
-  } else {
-    // if backend gave string (non-JSON) or null
-    if (localQuestion.value?.input != null) inputText.value = String(localQuestion.value.input);
-    else inputText.value = '';
-  }
+  const bcount = Math.max(0, textSegments.value.length - 1);
+  placedAnswers.value = Array(bcount).fill(null);
 
-  const parsedOutput = safeParseJSON(localQuestion.value?.output);
-  if (parsedOutput != null) {
-    if (Array.isArray(parsedOutput)) {
-      outputText.value = parsedOutput.map(it => (typeof it === 'object' ? JSON.stringify(it) : String(it))).join('\n');
-    } else if (typeof parsedOutput === 'object') {
-      outputText.value = JSON.stringify(parsedOutput, null, 2);
-    } else {
-      outputText.value = String(parsedOutput);
-    }
-  } else {
-    if (localQuestion.value?.output != null) outputText.value = String(localQuestion.value.output);
-    else outputText.value = '';
-  }
-
-  // 3) code 字段解析并构建 codeSegments（支持嵌套 line 对象）
-  codeSegments.value = [];
-  const rawCode = safeParseJSON(localQuestion.value?.code) ?? localQuestion.value?.code;
-  if (rawCode && Array.isArray(rawCode.segments)) {
-    let slotCounter = 0;
-    for (const seg of rawCode.segments) {
-      if (!seg || !seg.type) {
-        if (Array.isArray(seg)) {
-          // assume array of lines
-          const lines = seg.map(l => lineToString(l));
-          codeSegments.value.push({ type: 'code_block', lines });
-        } else {
-          codeSegments.value.push({ type: seg?.type || 'unknown', content: seg?.content ?? JSON.stringify(seg) });
-        }
-        continue;
-      }
-
-      if (seg.type === 'code_block') {
-        // seg.lines might be array of objects like {type:'code_line', value: '...'}
-        const linesRaw = Array.isArray(seg.lines) ? seg.lines : (Array.isArray(seg.content) ? seg.content : []);
-        const lines = linesRaw.map(l => lineToString(l));
-        codeSegments.value.push({ type: 'code_block', lines });
-      } else if (seg.type === 'code_inline') {
-        const rawParts = Array.isArray(seg.parts) ? seg.parts : (Array.isArray(seg.content) ? seg.content : []);
-        const parts = rawParts.map(p => partToNormalized(p, { v: slotCounter++ }));
-        // Note: partToNormalized above expects slotCounterRef to be an object to keep incrementing;
-        // since we used {v: slotCounter++}, the slotIndex may not be continuous across segments.
-        // To ensure continuous slotIndex across all inline parts, we reassign sequentially below:
-        // (We will normalize again to ensure ascending slotIndex)
-        let realCounter = 0;
-        const normalizedParts = parts.map(pt => {
-          if (pt.type === 'slot') {
-            const out = { type: 'slot', slotIndex: realCounter++ };
-            return out;
-          }
-          return { type: 'code', text: pt.text ?? '' };
-        });
-        codeSegments.value.push({ type: 'code_inline', parts: normalizedParts });
-      } else {
-        codeSegments.value.push({ type: seg.type, content: seg.content ?? (seg.lines ? seg.lines : '') });
-      }
-    }
-    // Re-index slots globally to ensure unique sequential indexes (walk parts)
-    let globalIdx = 0;
-    for (const seg of codeSegments.value) {
-      if (seg.type === 'code_inline' && Array.isArray(seg.parts)) {
-        seg.parts = seg.parts.map(p => {
-          if (p.type === 'slot') {
-            const old = { ...p, slotIndex: globalIdx++ };
-            return old;
-          }
-          return p;
-        });
-      }
-    }
-  } else {
-    codeSegments.value = [];
-  }
-
-  // 4) pool items / options
   let opts = safeParseJSON(localQuestion.value?.options);
   if (!opts || !Array.isArray(opts)) {
     if (typeof localQuestion.value?.options === 'string') {
       opts = localQuestion.value.options.split(/\r?\n|,/).map(x => x.trim()).filter(Boolean);
     } else opts = [];
   }
-  originalOptions.value = opts.slice();
+  originalOptions.value = opts.slice(); // 保存原始选项文本，后续用于将索引答案映射成文本
   const tstamp = Date.now();
   poolItems.value = opts.map((t, i) => ({ uid: `i${i}-${tstamp}`, text: String(t) }));
 
-  // 5) prepare placedAnswers 长度等于 blanksCount（基于 code slots 优先）
-  const bc = blanksCount.value;
-  placedAnswers.value = Array(bc).fill(null);
-
-  // reset drag states
+  // reset state
   draggingId.value = null; draggingFrom.value = null; draggingSourceIndex.value = null;
   placeholderPoolIndex.value = null; placeholderActive.value = false; currentOverBlank.value = null;
   attempts.value = 0; state.value = 'idle'; internalError.value = ''; nextDisabled.value = false;
-
   destroyGhost();
 }
 
 /* ---------- Ghost helpers ---------- */
+// Create ghost and immediately set left/top to pointer coords to avoid 0,0 flash
 function createGhostFromTextAt(text, x, y) {
   destroyGhost();
   const el = document.createElement('div');
@@ -531,18 +242,21 @@ function createGhostFromTextAt(text, x, y) {
   ghostEl = el;
   showGhost.value = true;
 }
+// Move ghost
 function moveGhost(x, y) {
   if (!ghostEl) return;
+  // use left/top updates (avoid transform-only issues)
   ghostEl.style.left = `${x}px`;
   ghostEl.style.top = `${y}px`;
 }
+// Destroy ghost
 function destroyGhost() {
   if (ghostEl && ghostEl.parentElement) ghostEl.parentElement.removeChild(ghostEl);
   ghostEl = null;
   showGhost.value = false;
 }
 
-/* ---------- Pointer / Drag handlers (保持你的原实现，未改动核心流程) ---------- */
+/* ---------- Pointer handlers ---------- */
 function attachPointerHandlers() {
   window.addEventListener('pointermove', onPointerMove, { passive: false });
   window.addEventListener('pointerup', onPointerUp);
@@ -554,6 +268,7 @@ function detachPointerHandlers() {
   window.removeEventListener('pointercancel', onPointerUp);
 }
 
+// begin dragging from pool
 function beginPointerDragFromPool(evt, poolIndex) {
   if (inputDisabled.value) return;
   const item = poolItems.value[poolIndex];
@@ -564,10 +279,16 @@ function beginPointerDragFromPool(evt, poolIndex) {
   placeholderPoolIndex.value = poolIndex;
   placeholderActive.value = true;
 
+  // start timing
   dragStartTime = performance.now();
+
+  // create ghost at pointer pos immediately (avoid 0,0)
   createGhostFromTextAt(item.text, evt.clientX || evt.pageX, evt.clientY || evt.pageY);
+
   attachPointerHandlers();
 }
+
+// begin dragging from placed
 function beginPointerDragFromPlaced(evt, blankIndex) {
   if (inputDisabled.value) return;
   const item = placedAnswers.value[blankIndex];
@@ -575,19 +296,24 @@ function beginPointerDragFromPlaced(evt, blankIndex) {
   draggingId.value = item.uid;
   draggingFrom.value = 'placed';
   draggingSourceIndex.value = blankIndex;
+  // show placeholder at pool tail
   placeholderPoolIndex.value = poolItems.value.length;
   placeholderActive.value = true;
 
   dragStartTime = performance.now();
+
   createGhostFromTextAt(item.text, evt.clientX || evt.pageX, evt.clientY || evt.pageY);
+
   attachPointerHandlers();
 }
 
+// pointer move
 function onPointerMove(evt) {
   if (!draggingId.value) return;
   try { evt.preventDefault(); } catch (e) {}
   moveGhost(evt.clientX || evt.pageX, evt.clientY || evt.pageY);
 
+  // highlight blank under pointer
   if (currentOverBlank.value != null) {
     const prev = document.querySelector(`[data-blank-index="${currentOverBlank.value}"]`);
     if (prev) prev.classList.remove('drag-over');
@@ -603,6 +329,7 @@ function onPointerMove(evt) {
   }
 }
 
+// pointer up -> decide by timing: short => click logic; long => A scheme (drag logic)
 function onPointerUp(evt) {
   if (!draggingId.value) {
     detachPointerHandlers();
@@ -611,39 +338,54 @@ function onPointerUp(evt) {
   }
   const endTime = performance.now();
   const duration = endTime - (dragStartTime || endTime);
+  // save pointer coords
   const x = evt.clientX || evt.pageX;
   const y = evt.clientY || evt.pageY;
 
+  // Temporarily hide ghost to avoid elementFromPoint hitting it.
   if (ghostEl) ghostEl.style.display = 'none';
+
+  // compute drop target using elementFromPoint (after ghost hidden)
   const elAt = document.elementFromPoint(x, y);
   let droppedOnBlankIndex = null;
   if (elAt) {
     const bEl = elAt.closest && elAt.closest('[data-blank-index]');
     if (bEl) droppedOnBlankIndex = Number(bEl.getAttribute('data-blank-index'));
   }
+
+  // compute droppedOnPool by bounding rect check (more robust)
   let droppedOnPool = false;
   if (poolWrap?.value) {
     const r = poolWrap.value.getBoundingClientRect();
     if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) droppedOnPool = true;
   }
+
+  // Restore ghost visibility (we'll destroy later)
   if (ghostEl) ghostEl.style.display = '';
 
+  // If short duration -> use click logic (as you requested)
   if (duration < CLICK_TIME_THRESHOLD) {
     if (draggingFrom.value === 'pool') {
+      // find current pool index by uid (if still present)
       const uid = draggingId.value;
       const idx = poolItems.value.findIndex(it => it.uid === uid);
       if (idx !== -1) {
+        // simulate click fill
         onClickPool(idx);
       }
     } else if (draggingFrom.value === 'placed') {
+      // simulate click placed -> return to pool
       const sIdx = draggingSourceIndex.value;
+      // ensure sIdx valid
       if (placedAnswers.value[sIdx] && placedAnswers.value[sIdx].uid === draggingId.value) {
         onClickPlaced(sIdx);
       } else {
+        // if not matching (maybe swapped), try find by uid
         const found = placedAnswers.value.findIndex(p => p && p.uid === draggingId.value);
         if (found !== -1) onClickPlaced(found);
       }
     }
+    // cleanup
     placeholderPoolIndex.value = null;
     placeholderActive.value = false;
     if (currentOverBlank.value != null) {
@@ -656,8 +398,10 @@ function onPointerUp(evt) {
     return;
   }
 
+  // ELSE: duration >= threshold -> true drag logic (A scheme)
   if (draggingFrom.value === 'pool') {
     const uid = draggingId.value;
+    // locate current pool index of item (safe)
     const poolIndex = poolItems.value.findIndex(it => it.uid === uid);
     const sourceIdx = poolIndex === -1 ? draggingSourceIndex.value : poolIndex;
 
@@ -665,6 +409,7 @@ function onPointerUp(evt) {
       const item = poolItems.value[sourceIdx];
       if (item) {
         const replaced = placeIntoBlank(droppedOnBlankIndex, item);
+        // remove from pool by uid
         const idxToRemove = poolItems.value.findIndex(it => it.uid === item.uid);
         if (idxToRemove !== -1) poolItems.value.splice(idxToRemove, 1);
         if (replaced) poolItems.value.push(replaced);
@@ -677,9 +422,10 @@ function onPointerUp(evt) {
         }
       }
     } else if (droppedOnPool) {
-      // no-op
+      // dropped on pool area -> interpret as return to pool (do nothing because pool item still exists)
+      // Optionally, we could insert at placeholderPoolIndex; current behavior leaves item in place and placeholder removed.
     } else {
-      // no-op
+      // dropped elsewhere -> restore (no-op)
     }
     placeholderPoolIndex.value = null;
     placeholderActive.value = false;
@@ -703,23 +449,25 @@ function onPointerUp(evt) {
         poolItems.value.push(item);
       }
     } else {
-      // no-op
+      // restore (no-op)
     }
     placeholderPoolIndex.value = null;
     placeholderActive.value = false;
   }
 
+  // remove blank highlight if any
   if (currentOverBlank.value != null) {
     const prev = document.querySelector(`[data-blank-index="${currentOverBlank.value}"]`);
     if (prev) prev.classList.remove('drag-over');
   }
 
+  // final cleanup
   draggingId.value = null; draggingFrom.value = null; draggingSourceIndex.value = null;
   destroyGhost();
   detachPointerHandlers();
 }
 
-/* ---------- native drag handlers ---------- */
+/* ---------- native drag handlers (desktop support) ---------- */
 function onDragStartPool(e, poolIndex) {
   if (inputDisabled.value) { e.preventDefault(); return; }
   const item = poolItems.value[poolIndex];
@@ -778,40 +526,52 @@ function onClickPlaced(blankIdx) {
   poolItems.value.push(item);
 }
 
-/* ---------- answer checking（保持原逻辑） ---------- */
+/* ---------- answer checking ---------- */
 function normalize(str) {
   if (str == null) return '';
   return String(str).trim().replace(/\s+/g, ' ').toLowerCase();
 }
 function checkAnswers() {
+  // if zero blanks -> cannot be correct
   if (blanksCount.value === 0) return false;
+
+  // all blanks must be filled
   if (placedAnswers.value.some(p => !p || !p.text)) return false;
 
   const raw = localQuestion.value?.answer;
   if (raw == null) return false;
 
+  // normalize helper
   const norm = s => (s == null ? '' : String(s).trim().replace(/\s+/g, ' ').toLowerCase());
+
+  // build canonical array: array-of-arrays, each inner array = allowed strings for that blank
   let canonArr = null;
 
+  // If answer is an array (already parsed)
   if (Array.isArray(raw)) {
+    // handle numeric/index answers -> map to originalOptions (1-based assumed)
     if (raw.every(x => typeof x === 'number' || (/^\d+$/.test(String(x).trim())) )) {
+      // map numeric indices to option texts (support 1-based indices)
       canonArr = raw.map(idx => {
         const i = Number(idx);
         const optText = originalOptions.value && originalOptions.value[i - 1] != null
           ? String(originalOptions.value[i - 1])
-          : String(idx);
+          : String(idx); // fallback to the index string if no option text
         return [ norm(optText) ];
       });
     } else {
+      // treat each raw item as allowed text (or alternatives)
       canonArr = raw.map(item => {
         if (Array.isArray(item)) return item.map(it => norm(it));
         return [ norm(item) ];
       });
     }
   } else if (typeof raw === 'string') {
+    // try parse JSON if string-encoded
     try {
       const p = JSON.parse(raw);
       if (Array.isArray(p)) {
+        // recursively reuse logic: p is array
         if (p.every(x => typeof x === 'number' || (/^\d+$/.test(String(x).trim())) )) {
           canonArr = p.map(idx => {
             const i = Number(idx);
@@ -824,14 +584,18 @@ function checkAnswers() {
           canonArr = p.map(item => (Array.isArray(item) ? item.map(it => norm(it)) : [norm(item)]));
         }
       } else {
+        // not an array after parse, treat as single canonical text
         canonArr = [[ norm(String(p)) ]];
       }
     } catch (e) {
+      // not JSON -> maybe single text or pipe-separated alternatives
       if (raw.includes('|')) {
         canonArr = [ raw.split('|').map(s => norm(s)) ];
       } else {
+        // if raw looks like "1,2" treat as indices
         const maybeNums = raw.split(/[,;]/).map(s => s.trim()).filter(Boolean);
         if (maybeNums.length > 1 && maybeNums.every(x => /^\d+$/.test(x))) {
+          // treat as array of indices
           canonArr = maybeNums.map(idx => {
             const i = Number(idx);
             const optText = originalOptions.value && originalOptions.value[i - 1] != null
@@ -845,16 +609,21 @@ function checkAnswers() {
       }
     }
   } else if (typeof raw === 'number') {
+    // single numeric index -> map to option text
     const i = Number(raw);
     const optText = originalOptions.value && originalOptions.value[i - 1] != null
       ? String(originalOptions.value[i - 1])
       : String(raw);
     canonArr = [[ norm(optText) ]];
   } else {
+    // fallback: convert to string
     canonArr = [[ norm(String(raw)) ]];
   }
 
+  // now canonArr is array-of-arrays (allowed normalized strings)
   if (!Array.isArray(canonArr)) return false;
+
+  // if count mismatch, cannot be correct (must match number of blanks)
   if (canonArr.length !== placedAnswers.value.length) return false;
 
   for (let i = 0; i < canonArr.length; i++) {
@@ -959,63 +728,7 @@ onBeforeUnmount(() => {
   padding: 6px 14px;
 }
 
-/* 纯文本题目 */
-.q-text-plain {
-  color:#e6eef8;
-  max-width:900px;
-  text-align:left;
-  width:100%;
-  white-space:pre-wrap;
-  padding:8px 12px;
-  border-radius:8px;
-  background: rgba(255,255,255,0.02);
-  border:1px solid rgba(255,255,255,0.02);
-}
-
-/* 代码区域 */
-.code-area {
-  max-width:900px;
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  background: rgba(10,10,10,0.45);
-  border:1px solid rgba(255,255,255,0.03);
-  color:#e6eef8;
-  text-align:left;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Helvetica Neue", monospace;
-  font-size:13px;
-}
-
-/* code_block */
-.code-block { margin-bottom:8px; }
-.code-line-text {
-  display:inline-block;       /* inline-block 保证占位且对齐 */
-  white-space: pre;           /* 保留空格 */
-  line-height:1.35;
-  font-family: inherit;
-}
-
-/* code_inline: parts inline, slots inline-block 保证精确对齐 */
-.code-inline { display:inline; white-space:pre; font-family: inherit; }
-.code-part { display:inline-block; white-space: pre; line-height:1.35; }
-.code-inline-code { /* regular inline code piece */ padding:0 2px; }
-
-/* code slot 与普通 blank-slot 保持视觉一致，但 inline 样式以消除错位 */
-.code-blank-slot {
-  min-width:84px;
-  min-height:28px;
-  display:inline-flex;        /* inline-flex 保持在文本行内但支持居中对齐 */
-  align-items:center;
-  justify-content:center;
-  padding:2px 8px;
-  border-radius:6px;
-  border:1px dashed rgba(255,255,255,0.06);
-  background: rgba(0,0,0,0.25);
-  margin:0 4px;
-  color:#eaf3ff;
-}
-
-/* q-text 回退样式（当没有 codeSegments） */
+/* q-text 保持行内空位布局，但整体居中 */
 .q-text {
   margin-bottom:12px;
   color:#e6eef8;
@@ -1023,13 +736,27 @@ onBeforeUnmount(() => {
   flex-wrap:wrap;
   gap:8px;
   align-items:center;
-  justify-content:center;
+  justify-content:center; /* 居中所有段与空位 */
   max-width: 900px;
   text-align:center;
 }
+
+/* ---------- 新增：left-block 用于左对齐显示 hints/explain/next ---------- */
+/* 这个容器宽度与 q-text 的 max-width 一致，align-self: flex-start 使其左贴到容器左侧 */
+.left-block {
+  width:100%;
+  max-width:900px;
+  align-self:flex-start;   /* 关键：在垂直排列的父容器中左对齐 */
+  text-align:left;         /* 内容左对齐 */
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+/* text segments */
 .seg-text { white-space:pre-wrap; color:#e6eef8; }
 
-/* blank slot（旧式） */
+/* blank slot */
 .blank-slot {
   min-width:160px;
   min-height:44px;
@@ -1048,7 +775,7 @@ onBeforeUnmount(() => {
 .blank-slot.blank-filled { border-style:solid; border-color:rgba(79,176,255,0.14); background:rgba(255,255,255,0.02); }
 .blank-placeholder { color:#98a6b3; font-size:13px; }
 
-/* placed item */
+/* placed item (可拖动) */
 .placed-item {
   padding:6px 10px;
   border-radius:6px;
@@ -1066,7 +793,7 @@ onBeforeUnmount(() => {
 .pool-header { font-size:13px; color:#cfd8df; margin-bottom:6px; text-align:center; }
 .pool-list { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; max-width:900px; }
 
-/* pool item */
+/* pool item: 使用 Choice.vue 风格的按钮感受——白边、深背景 */
 .pool-item {
   padding:8px 12px;
   border-radius:12px;
@@ -1086,7 +813,7 @@ onBeforeUnmount(() => {
 }
 .pool-item:hover { transform: translateY(-4px); box-shadow: 0 12px 26px rgba(0,0,0,0.65); }
 
-/* Placeholder */
+/* Placeholder: pure gray and hide text when active */
 .pool-item.pool-placeholder,
 .pool-item.dragging-placeholder {
   background:#6b6b6b !important;
@@ -1096,22 +823,6 @@ onBeforeUnmount(() => {
 .pool-item.pool-placeholder .pool-item-text,
 .pool-item.dragging-placeholder .pool-item-text {
   visibility: hidden;
-}
-
-/* IO area */
-.io-area { width:100%; max-width:900px; display:flex; flex-direction:column; gap:8px; align-items:stretch; margin-top:8px; }
-.io-row { display:flex; flex-direction:column; gap:6px; }
-.io-label { color:#cfe8ff; font-weight:700; font-size:13px; }
-.io-textarea {
-  min-height:84px;
-  resize:vertical;
-  padding:10px;
-  border-radius:8px;
-  background: rgba(0,0,0,0.35);
-  border:1px solid rgba(255,255,255,0.03);
-  color:#e6eef8;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Helvetica Neue", monospace;
-  white-space:pre-wrap;
 }
 
 /* form / controls: 提交按钮居中 */
@@ -1129,20 +840,11 @@ onBeforeUnmount(() => {
 }
 .btn-submit:disabled { opacity:0.5; cursor:not-allowed; }
 
-/* feedback & left-block */
+/* feedback */
 .feedback { margin-top:12px; min-height:24px; text-align:center; }
 .feedback-correct { color:#7ff1b1; font-weight:800; animation: popIn .28s ease both; }
 .feedback-wrong { color:#ff9b9b; font-weight:800; animation: popShake .45s cubic-bezier(.36,.07,.19,.97) both; }
 
-.left-block {
-  width:100%;
-  max-width:900px;
-  align-self:flex-start;
-  text-align:left;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
 .hint-box { padding:8px 12px; border-radius:8px; background: rgba(255,255,255,0.02); color:#ffb4b4; margin-top:8px; border:1px solid rgba(255,255,255,0.03); text-align:left; }
 .explain-box { padding:12px; border-radius:8px; background: rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04); color:#dbeefe; text-align:left; }
 .btn-next { padding:10px 14px; background:#0e78e9; color:#fff; border-radius:10px; border:none; cursor:pointer; font-weight:700; }
@@ -1151,14 +853,16 @@ onBeforeUnmount(() => {
 @keyframes popIn { 0% { transform: scale(.95); opacity: 0; } 60% { transform: scale(1.04); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
 @keyframes popShake { 0% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } 100% { transform: translateX(0); } }
 
+/* 错误时整体抖动 */
 .state-wrong .q-text { animation: shakeContainer .45s cubic-bezier(.36,.07,.19,.97); }
 @keyframes shakeContainer { 0% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } 100% { transform: translateX(0); } }
 
+/* 答对时视觉（微光效果） */
 .state-correct { box-shadow: 0 14px 40px rgba(34,197,94,0.08); transition: box-shadow .3s ease; outline: 1px solid rgba(34,197,94,0.06); }
 
+/* responsive tweaks */
 @media (max-width: 640px) {
-  .code-blank-slot { min-width:72px; }
-  .blank-slot { min-width:120px; margin: 4px; }
+  .blank-slot { min-width: 120px; margin: 4px; }
   .pool-item { padding: 8px 10px; min-width: 56px; font-size: 14px; }
 }
 </style>

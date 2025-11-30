@@ -160,9 +160,9 @@ const baseLang = computed(() => {
 const nodesPositions = computed(() => {
   const baseUnitStart = Number(selectedStageInternal.value) * 10 + 1
   const arr = []
-  const count = 10
+  const count = 12
   const gap = verticalSpacing
-  const topOffset = 40
+  const topOffset = 80
   for (let i = 0; i < count; i++) {
     const localNumber = baseUnitStart + i
     // unitKey uses full course ID so different courses don't collide
