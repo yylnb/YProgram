@@ -34,10 +34,11 @@
               { 'is-pressed': pressedNodeKey === node.unitKey }
             ]"
             @click="onNodeClick(node)"
-            @pointerdown="onPress(node)"
-            @pointerup="onRelease"
-            @pointerleave="onRelease"
-            @pointercancel="onRelease"
+            @mousedown="onPress(node)"
+            @mouseup="onRelease"
+            @mouseleave="onRelease"
+            @touchstart.prevent="onPress(node)"
+            @touchend="onRelease"
             :disabled="!isUnitUnlocked(node.localNumber)"
             :aria-label="`单元 ${node.localIndex}（${baseLang}）`"
           >
@@ -606,10 +607,6 @@ onBeforeUnmount(() => {
   text-align:center;
   color: #e6eef8;
   will-change: transform, box-shadow, background;
-
-  /* allow touch / pointer interactions reliably on mobile */
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: rgba(255,255,255,0.04);
 }
 
 /* hover 向上位移（只在非禁用时有效） */
@@ -618,7 +615,11 @@ onBeforeUnmount(() => {
 }
 
 /* disabled 状态 */
-.unit-node:disabled { cursor:not-allowed; opacity:0.7; transform:none;}
+.unit-node:disabled { 
+  cursor:not-allowed; 
+  opacity:0.7; 
+  transform:none; 
+}
 
 /* 内部文本 */
 .node-inner { display:flex; flex-direction:column; gap:6px; align-items:center; }

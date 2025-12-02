@@ -14,67 +14,8 @@
       <!-- 题目：直接作为普通文本渲染（你的新 DB text = TEXT） -->
       <div class="q-text-plain" v-if="plainText" v-html="plainText"></div>
 
-      <!-- 代码区域（若存在），渲染 segments 并在 inline slots 中放置 blank-slot（支持拖放） -->
-      <div class="code-area" v-if="codeSegments && codeSegments.length" role="region" aria-label="代码片段">
-        <template v-for="(seg, sidx) in codeSegments" :key="`seg-${sidx}`">
-          <!-- code_block: 每行使用 escapeHtml(line) 并手动换行 -->
-          <div v-if="seg.type === 'code_block'" class="code-block" aria-hidden="false">
-            <template v-for="(line, li) in seg.lines" :key="`line-${sidx}-${li}`">
-              <span class="code-line-text" v-html="escapeHtml(line)"></span><br />
-            </template>
-          </div>
-
-          <!-- code_inline: parts 渲染 -->
-          <div v-else-if="seg.type === 'code_inline'" class="code-inline" :data-seg-index="sidx">
-            <template v-for="(part, pi) in seg.parts" :key="`part-${sidx}-${pi}`">
-              <!-- code part -->
-              <span
-                v-if="part.type === 'code'"
-                class="code-part code-inline-code"
-                v-html="escapeHtml(part.text)"
-                aria-hidden="true"
-              ></span>
-
-              <!-- slot part -->
-              <span
-                v-else-if="part.type === 'slot'"
-                class="blank-slot code-blank-slot"
-                :class="{ 'blank-filled': !!placedAnswers[part.slotIndex], 'disabled': inputDisabled }"
-                :data-blank-index="part.slotIndex"
-                role="region"
-                :aria-label="`空 ${part.slotIndex + 1}`"
-                @dragover.prevent
-                @drop.prevent="onDropToBlankNative($event, part.slotIndex)"
-              >
-                <template v-if="placedAnswers[part.slotIndex]">
-                  <div
-                    class="placed-item"
-                    @pointerdown.stop.prevent="beginPointerDragFromPlaced($event, part.slotIndex)"
-                    @dragstart.prevent="onDragStartPlaced($event, part.slotIndex)"
-                    @click.stop.prevent="onClickPlaced(part.slotIndex)"
-                    draggable="true"
-                    :aria-label="`已填入: ${placedAnswers[part.slotIndex].text}`"
-                  >
-                    {{ placedAnswers[part.slotIndex].text }}
-                  </div>
-                </template>
-                <template v-else>
-                  <span class="blank-placeholder">拖入选项</span>
-                </template>
-              </span>
-
-              <!-- fallback -->
-              <span v-else class="code-part" v-html="escapeHtml(part.text ?? '')"></span>
-            </template>
-          </div>
-
-          <!-- unknown segment -->
-          <div v-else class="code-unknown-seg" v-html="escapeHtml(seg.content || '')"></div>
-        </template>
-      </div>
-
       <!-- 如果没有 codeSegments，则保留原先的 q-text segments + blank-slot 行为（兼容旧题） -->
-      <div class="q-text" v-else-if="textSegments && textSegments.length">
+      <div class="q-text" v-if="(!codeSegments || codeSegments.length === 0) && textSegments && textSegments.length">
         <template v-for="(seg, idx) in textSegments" :key="idx">
           <span class="seg-text" v-if="seg" v-html="seg"></span>
 
@@ -108,15 +49,88 @@
         </template>
       </div>
 
-      <!-- Input / Output 区域：后端提供，可能为空。已改为只读，且数组每项单行显示 -->
-      <div class="io-area">
-        <div class="io-row">
+      <!-- Input / Output 区域：后端提供，可能为空。只在后端提供时显示 -->
+      <div class="io-area" v-if="showInputSection || showOutputSection">
+        <div class="io-row" v-if="showInputSection">
           <label class="io-label">输入（input）</label>
-          <textarea class="io-textarea" :value="inputText" readonly aria-readonly="true" :placeholder="'后端未提供输入示例'"></textarea>
+          <textarea
+            class="io-textarea"
+            :value="inputText"
+            readonly
+            aria-readonly="true"
+            placeholder="后端未提供输入示例"
+            ref="inputArea"
+          ></textarea>
         </div>
-        <div class="io-row">
+        <div class="io-row" v-if="showOutputSection">
           <label class="io-label">预期输出（output）</label>
-          <textarea class="io-textarea" :value="outputText" readonly aria-readonly="true" :placeholder="'后端未提供输出示例'"></textarea>
+          <textarea
+            class="io-textarea"
+            :value="outputText"
+            readonly
+            aria-readonly="true"
+            placeholder="后端未提供输出示例"
+            ref="outputArea"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- 代码区域放在页面最下面，并带标题 -->
+      <div class="code-section" v-if="codeSegments && codeSegments.length">
+        <div class="section-title">代码</div>
+        <div class="code-area" role="region" aria-label="代码片段">
+          <template v-for="(seg, sidx) in codeSegments" :key="`seg-${sidx}`">
+            <!-- code_block -->
+            <div v-if="seg.type === 'code_block'" class="code-block" aria-hidden="false">
+              <template v-for="(line, li) in seg.lines" :key="`line-${sidx}-${li}`">
+                <span class="code-line-text" v-html="escapeHtml(line)"></span><br />
+              </template>
+            </div>
+
+            <!-- code_inline -->
+            <div v-else-if="seg.type === 'code_inline'" class="code-inline" :data-seg-index="sidx">
+              <template v-for="(part, pi) in seg.parts" :key="`part-${sidx}-${pi}`">
+                <span
+                  v-if="part.type === 'code'"
+                  class="code-part code-inline-code"
+                  v-html="escapeHtml(part.text)"
+                  aria-hidden="true"
+                ></span>
+
+                <span
+                  v-else-if="part.type === 'slot'"
+                  class="blank-slot code-blank-slot"
+                  :class="{ 'blank-filled': !!placedAnswers[part.slotIndex], 'disabled': inputDisabled }"
+                  :data-blank-index="part.slotIndex"
+                  role="region"
+                  :aria-label="`空 ${part.slotIndex + 1}`"
+                  @dragover.prevent
+                  @drop.prevent="onDropToBlankNative($event, part.slotIndex)"
+                >
+                  <template v-if="placedAnswers[part.slotIndex]">
+                    <div
+                      class="placed-item"
+                      @pointerdown.stop.prevent="beginPointerDragFromPlaced($event, part.slotIndex)"
+                      @dragstart.prevent="onDragStartPlaced($event, part.slotIndex)"
+                      @click.stop.prevent="onClickPlaced(part.slotIndex)"
+                      draggable="true"
+                      :aria-label="`已填入: ${placedAnswers[part.slotIndex].text}`"
+                    >
+                      {{ placedAnswers[part.slotIndex].text }}
+                    </div>
+                  </template>
+                  <template v-else>
+                    <span class="blank-placeholder">拖入选项</span>
+                  </template>
+                </span>
+
+                <span v-else class="code-part" v-html="escapeHtml(part.text ?? '')"></span>
+              </template>
+            </div>
+
+            <!-- unknown segment -->
+            <div v-else class="code-unknown-seg" v-html="escapeHtml(seg.content || '')"></div>
+          </template>
         </div>
       </div>
 
@@ -177,20 +191,21 @@
           {{ internalError }}
         </div>
       </div>
+
     </div>
   </div>
 </template>
 
 <script setup>
 /*
-  完整实现说明（重点）：
-  - 修复 code_block 显示 [object Object] 的问题：新增 `lineToString` 与 `extractTextFromObject`，能从嵌套对象里取出 value/text/code/line 字段，或将对象 stringify 为可读字符串。
-  - code_inline 保持并使用之前可靠的解析（partToNormalized）。
-  - input / output: parse JSON; 若为数组则每项一行；只读 textarea 显示。
-  - 其余拖拽 / 提交 / 校验 逻辑保持不变。
+  修改说明摘要：
+  - code 区放最底部并加标题
+  - input/output 仅在后端字段非 null/undefined 时显示（showInputSection / showOutputSection）
+  - input/output 为只读 textarea，resize 禁用，并在初始化或内容变化时自动调整高度
+  - 其余拖拽和判题逻辑保持不变
 */
 
-import { ref, computed, watch, onBeforeUnmount } from 'vue';
+import { ref, computed, watch, onBeforeUnmount, nextTick } from 'vue';
 
 const props = defineProps({
   question: { type: Object, required: true },
@@ -222,6 +237,12 @@ const originalOptions = ref([]);
 // IO areas (只读显示)
 const inputText = ref('');
 const outputText = ref('');
+const showInputSection = ref(false);
+const showOutputSection = ref(false);
+
+// textarea refs for auto resize
+const inputArea = ref(null);
+const outputArea = ref(null);
 
 // drag state (保留原变量名)
 const draggingId = ref(null);
@@ -299,19 +320,16 @@ function extractTextFromObject(obj) {
   if (typeof obj === 'string') return obj;
   if (typeof obj === 'number' || typeof obj === 'boolean') return String(obj);
   if (Array.isArray(obj)) {
-    // join array items with single space fallback (caller may map lines separately)
     return obj.map(it => extractTextFromObject(it)).join(' ');
   }
   if (typeof obj === 'object') {
     const candidates = ['value','text','code','line','content','v','val'];
     for (const key of candidates) {
       if (key in obj && obj[key] != null) {
-        // if nested object, recurse
         if (typeof obj[key] === 'object') return extractTextFromObject(obj[key]);
         return String(obj[key]);
       }
     }
-    // if object has a single key whose value is string-like, use it
     const keys = Object.keys(obj);
     for (const k of keys) {
       if (typeof obj[k] === 'string' || typeof obj[k] === 'number' || typeof obj[k] === 'boolean') return String(obj[k]);
@@ -320,7 +338,6 @@ function extractTextFromObject(obj) {
         if (v) return v;
       }
     }
-    // fallback to JSON string (shorten if huge)
     try {
       const s = JSON.stringify(obj);
       return s.length > 500 ? s.slice(0,500) + '...' : s;
@@ -346,36 +363,45 @@ function partToNormalized(p, slotCounterRef) {
   if (typeof p === 'string') return { type: 'code', text: p };
 
   if (typeof p === 'object') {
-    // explicit slot markers
     if (p.type === 'slot' || p.slot === true || p.isSlot === true) {
       const idx = slotCounterRef && typeof slotCounterRef.v === 'number' ? slotCounterRef.v++ : 0;
       return { type: 'slot', slotIndex: idx };
     }
 
-    // explicit code/text fields
     if (p.type === 'code' || p.type === 'text' || p.type === 'part') {
       const t = p.text ?? p.code ?? p.value ?? p.content ?? p.line ?? null;
       return { type: 'code', text: t == null ? '' : String(t) };
     }
 
-    // If object contains text/value/code fields, use them
     if ('text' in p || 'value' in p || 'code' in p || 'content' in p) {
       const t = p.text ?? p.value ?? p.code ?? p.content;
       return { type: 'code', text: t == null ? '' : String(t) };
     }
 
-    // If object contains a marker that likely indicates slot index already
     if ('slotIndex' in p && (p.slotIndex !== undefined && p.slotIndex !== null)) {
       return { type: 'slot', slotIndex: Number(p.slotIndex) };
     }
 
-    // fallback: stringify / extract
     const tFallback = extractTextFromObject(p);
     return { type: 'code', text: tFallback };
   }
 
-  // fallback
   return { type: 'code', text: String(p) };
+}
+
+/* ---------- 自动调整 textarea 高度 ---------- */
+function resizeTextarea(el) {
+  if (!el) return;
+  // reset then set to scrollHeight to fit content
+  el.style.height = 'auto';
+  const newHeight = el.scrollHeight;
+  el.style.height = `${newHeight}px`;
+}
+function scheduleResizeIO() {
+  nextTick(() => {
+    resizeTextarea(inputArea.value);
+    resizeTextarea(outputArea.value);
+  });
 }
 
 /* ---------- 初始化题目数据（解析 text / options / code / input / output） -------------- */
@@ -402,46 +428,56 @@ function initFromQuestion(q) {
     textSegments.value = [''];
   }
 
-  // 2) input / output 解析：如果是 JSON 数组 -> 每项一行；对象 -> pretty JSON
-  const parsedInput = safeParseJSON(localQuestion.value?.input);
-  if (parsedInput != null) {
-    if (Array.isArray(parsedInput)) {
-      // each item one line; items that are objects -> JSON.stringify
-      inputText.value = parsedInput.map(it => (typeof it === 'object' ? JSON.stringify(it) : String(it))).join('\n');
-    } else if (typeof parsedInput === 'object') {
-      inputText.value = JSON.stringify(parsedInput, null, 2);
-    } else {
-      inputText.value = String(parsedInput);
-    }
+  // 2) input / output 解析：如果原始字段为 null/undefined -> 对应区块不显示
+  const rawInputRaw = (localQuestion.value && Object.prototype.hasOwnProperty.call(localQuestion.value, 'input')) ? localQuestion.value.input : undefined;
+  if (rawInputRaw === null || rawInputRaw === undefined) {
+    showInputSection.value = false;
+    inputText.value = '';
   } else {
-    // if backend gave string (non-JSON) or null
-    if (localQuestion.value?.input != null) inputText.value = String(localQuestion.value.input);
-    else inputText.value = '';
+    showInputSection.value = true;
+    const parsedInput = safeParseJSON(localQuestion.value?.input);
+    if (parsedInput != null) {
+      if (Array.isArray(parsedInput)) {
+        inputText.value = parsedInput.map(it => (typeof it === 'object' ? JSON.stringify(it) : String(it))).join('\n');
+      } else if (typeof parsedInput === 'object') {
+        inputText.value = JSON.stringify(parsedInput, null, 2);
+      } else {
+        inputText.value = String(parsedInput);
+      }
+    } else {
+      inputText.value = localQuestion.value?.input != null ? String(localQuestion.value.input) : '';
+    }
   }
 
-  const parsedOutput = safeParseJSON(localQuestion.value?.output);
-  if (parsedOutput != null) {
-    if (Array.isArray(parsedOutput)) {
-      outputText.value = parsedOutput.map(it => (typeof it === 'object' ? JSON.stringify(it) : String(it))).join('\n');
-    } else if (typeof parsedOutput === 'object') {
-      outputText.value = JSON.stringify(parsedOutput, null, 2);
-    } else {
-      outputText.value = String(parsedOutput);
-    }
+  const rawOutputRaw = (localQuestion.value && Object.prototype.hasOwnProperty.call(localQuestion.value, 'output')) ? localQuestion.value.output : undefined;
+  if (rawOutputRaw === null || rawOutputRaw === undefined) {
+    showOutputSection.value = false;
+    outputText.value = '';
   } else {
-    if (localQuestion.value?.output != null) outputText.value = String(localQuestion.value.output);
-    else outputText.value = '';
+    showOutputSection.value = true;
+    const parsedOutput = safeParseJSON(localQuestion.value?.output);
+    if (parsedOutput != null) {
+      if (Array.isArray(parsedOutput)) {
+        outputText.value = parsedOutput.map(it => (typeof it === 'object' ? JSON.stringify(it) : String(it))).join('\n');
+      } else if (typeof parsedOutput === 'object') {
+        outputText.value = JSON.stringify(parsedOutput, null, 2);
+      } else {
+        outputText.value = String(parsedOutput);
+      }
+    } else {
+      outputText.value = localQuestion.value?.output != null ? String(localQuestion.value.output) : '';
+    }
   }
 
   // 3) code 字段解析并构建 codeSegments（支持嵌套 line 对象）
   codeSegments.value = [];
   const rawCode = safeParseJSON(localQuestion.value?.code) ?? localQuestion.value?.code;
   if (rawCode && Array.isArray(rawCode.segments)) {
-    let slotCounter = 0;
+    // build segments with normalized parts and lines
+    let slotGlobalCounter = 0;
     for (const seg of rawCode.segments) {
       if (!seg || !seg.type) {
         if (Array.isArray(seg)) {
-          // assume array of lines
           const lines = seg.map(l => lineToString(l));
           codeSegments.value.push({ type: 'code_block', lines });
         } else {
@@ -451,48 +487,31 @@ function initFromQuestion(q) {
       }
 
       if (seg.type === 'code_block') {
-        // seg.lines might be array of objects like {type:'code_line', value: '...'}
         const linesRaw = Array.isArray(seg.lines) ? seg.lines : (Array.isArray(seg.content) ? seg.content : []);
         const lines = linesRaw.map(l => lineToString(l));
         codeSegments.value.push({ type: 'code_block', lines });
       } else if (seg.type === 'code_inline') {
         const rawParts = Array.isArray(seg.parts) ? seg.parts : (Array.isArray(seg.content) ? seg.content : []);
-        const parts = rawParts.map(p => partToNormalized(p, { v: slotCounter++ }));
-        // Note: partToNormalized above expects slotCounterRef to be an object to keep incrementing;
-        // since we used {v: slotCounter++}, the slotIndex may not be continuous across segments.
-        // To ensure continuous slotIndex across all inline parts, we reassign sequentially below:
-        // (We will normalize again to ensure ascending slotIndex)
-        let realCounter = 0;
-        const normalizedParts = parts.map(pt => {
-          if (pt.type === 'slot') {
-            const out = { type: 'slot', slotIndex: realCounter++ };
-            return out;
+        // normalize parts and assign global slot indices sequentially
+        const parts = rawParts.map(p => {
+          const normalized = partToNormalized(p, { v: slotGlobalCounter });
+          if (normalized.type === 'slot') {
+            normalized.slotIndex = slotGlobalCounter++;
+            return normalized;
           }
-          return { type: 'code', text: pt.text ?? '' };
+          return { type: 'code', text: normalized.text ?? '' };
         });
-        codeSegments.value.push({ type: 'code_inline', parts: normalizedParts });
+        codeSegments.value.push({ type: 'code_inline', parts });
       } else {
         codeSegments.value.push({ type: seg.type, content: seg.content ?? (seg.lines ? seg.lines : '') });
       }
     }
-    // Re-index slots globally to ensure unique sequential indexes (walk parts)
-    let globalIdx = 0;
-    for (const seg of codeSegments.value) {
-      if (seg.type === 'code_inline' && Array.isArray(seg.parts)) {
-        seg.parts = seg.parts.map(p => {
-          if (p.type === 'slot') {
-            const old = { ...p, slotIndex: globalIdx++ };
-            return old;
-          }
-          return p;
-        });
-      }
-    }
+    // ensure slots are globally sequential (should already be)
   } else {
     codeSegments.value = [];
   }
 
-  // 4) pool items / options
+  // 4) pool / options
   let opts = safeParseJSON(localQuestion.value?.options);
   if (!opts || !Array.isArray(opts)) {
     if (typeof localQuestion.value?.options === 'string') {
@@ -513,6 +532,9 @@ function initFromQuestion(q) {
   attempts.value = 0; state.value = 'idle'; internalError.value = ''; nextDisabled.value = false;
 
   destroyGhost();
+
+  // after DOM updated, resize IO textareas to fit content
+  scheduleResizeIO();
 }
 
 /* ---------- Ghost helpers ---------- */
@@ -897,6 +919,11 @@ function placeIntoBlank(blankIdx, itemObj) {
 /* ---------- watchers & lifecycle ---------- */
 watch(() => props.question, (q) => initFromQuestion(q || {}), { immediate: true });
 watch(() => props.questionIndex, () => initFromQuestion(localQuestion.value));
+
+// when inputText/outputText change, resize corresponding textarea
+watch(inputText, () => scheduleResizeIO());
+watch(outputText, () => scheduleResizeIO());
+
 onBeforeUnmount(() => {
   destroyGhost();
   detachPointerHandlers();
@@ -967,23 +994,36 @@ onBeforeUnmount(() => {
   width:100%;
   white-space:pre-wrap;
   padding:8px 12px;
+  margin-bottom: 12px;
   border-radius:8px;
-  background: rgba(255,255,255,0.02);
+  background: #1c1c1c;
   border:1px solid rgba(255,255,255,0.02);
 }
 
-/* 代码区域 */
-.code-area {
+/* 代码与 IO 的 section 标题 */
+.section-title {
+  color:#cfe8ff;
+  font-weight:800;
+  margin:8px 0;
+  font-size:14px;
   max-width:900px;
+  text-align:left;
   width:100%;
-  padding:10px;
-  border-radius:10px;
+}
+
+/* 代码区域 */
+.code-section { width:100%; max-width:900px; }
+.code-area {
+  width:100%;
+  padding:15px 10px 15px 20px;
+  border-radius:20px;
   background: rgba(10,10,10,0.45);
   border:1px solid rgba(255,255,255,0.03);
   color:#e6eef8;
   text-align:left;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Helvetica Neue", monospace;
-  font-size:13px;
+  font-size:16px;
+  /* auto height by content (div naturally grows) */
 }
 
 /* code_block */
@@ -1026,6 +1066,7 @@ onBeforeUnmount(() => {
   justify-content:center;
   max-width: 900px;
   text-align:center;
+  background-color: #1c1c1c;
 }
 .seg-text { white-space:pre-wrap; color:#e6eef8; }
 
@@ -1099,19 +1140,23 @@ onBeforeUnmount(() => {
 }
 
 /* IO area */
-.io-area { width:100%; max-width:900px; display:flex; flex-direction:column; gap:8px; align-items:stretch; margin-top:8px; }
+.io-area { width:100%; max-width:900px; display:flex; flex-direction:column; gap:8px; align-items:stretch; margin:10px 0 10px 0; }
 .io-row { display:flex; flex-direction:column; gap:6px; }
 .io-label { color:#cfe8ff; font-weight:700; font-size:13px; }
 .io-textarea {
-  min-height:84px;
-  resize:vertical;
-  padding:10px;
-  border-radius:8px;
+  min-height:80px;
+  resize:none; /* 禁止用户手动调整 */
+  padding:15px 10px 15px 20px;
+  border-radius:20px;
   background: rgba(0,0,0,0.35);
   border:1px solid rgba(255,255,255,0.03);
   color:#e6eef8;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Helvetica Neue", monospace;
+  font-size: 16px;
   white-space:pre-wrap;
+  overflow: hidden;
+  width:100%;
+  box-sizing:border-box;
 }
 
 /* form / controls: 提交按钮居中 */
@@ -1175,7 +1220,7 @@ onBeforeUnmount(() => {
   justify-content: center !important;
   padding:8px 12px !important;
   border-radius:10px !important;
-  background:#2e2e2e !important;
+  background:#1c1c1c !important;
   border:2px solid #ffffff !important;
   color:#ffffff !important;
   box-shadow: 0 14px 36px rgba(0,0,0,0.6) !important;
