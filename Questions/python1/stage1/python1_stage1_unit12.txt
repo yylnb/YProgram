@@ -1,0 +1,274 @@
+[
+  {
+    'id': 1,
+    'type': 'choice',
+    'title': '字符串拼接的基本规则',
+    'content': '在 Python 中，下列哪一项能正确把 "Hi" 和 "There" 连接成 "HiThere"？',
+    'options': {
+      'A': '"Hi" + "There"',
+      'B': '"Hi" , "There"',
+      'C': '"Hi" - "There"',
+      'D': 'concat("Hi","There")'
+    },
+    'answer': 'A',
+    'hints': [
+      '字符串之间用什么符号直接连接？',
+      '逗号在 print 中是分隔符，不是拼接符。',
+      'Python 没有内置 concat 函数用于字面串拼接。'
+    ],
+    'explanation': '"+" 用于连接两个字符串字面量，例如 "Hi" + "There" → "HiThere"。',
+    'example': '例如："Hello" + "World" → "HelloWorld"'
+  },
+
+  {
+    'id': 2,
+    'type': 'choice',
+    'title': '拼接时的类型敏感',
+    'content': '以下哪种写法会抛出类型错误？',
+    'options': {
+      'A': '"Age: " + str(20)',
+      'B': '"Score: " + 99',
+      'C': '"Value: " + "99"',
+      'D': 'str(99) + " points"'
+    },
+    'answer': 'B',
+    'hints': [
+      '字符串不能和整数直接使用 +。',
+      '可用 str() 把整数转换成字符串。',
+      '检查哪些选项没有做类型转换。'
+    ],
+    'explanation': '"Score: " + 99 会报 TypeError，应改为 "Score: " + str(99)。',
+    'example': '正确写法："Score: " + str(99)'
+  },
+
+  {
+    'id': 3,
+    'type': 'choice',
+    'title': '重复字符串',
+    'content': '下列哪个表达式会得到 "ha ha ha "（含空格）？',
+    'options': {
+      'A': '"ha " * 3',
+      'B': '"ha" * 3',
+      'C': '"ha " + 3',
+      'D': 'repeat("ha ",3)'
+    },
+    'answer': 'A',
+    'hints': [
+      '字符串与整数相乘会重复字符串。',
+      '注意是否包含空格。',
+      '"ha" * 3 会得到 "hahaha"（无空格）。'
+    ],
+    'explanation': '"ha " * 3 会把字符串重复 3 次，得到 "ha ha ha "。',
+    'example': '"A " * 2 → "A A "'
+  },
+
+  {
+    'id': 4,
+    'type': 'fill',
+    'title': '变量拼接输出',
+    'content': '使用变量 name 拼接欢迎语并输出 "Welcome, Alice"（Alice 为 name 的值）。',
+    'input': 'name = "Alice"',
+    'output': 'Welcome, Alice',
+    'code': 'name = "Alice"\nprint(___ + ___)',
+    'options': '"Welcome, ", "Welcome, " + name, name, " , ", str(name), print',
+    'answer': '1,3',
+    'explanation': '需用字符串 "Welcome, " 与变量 name 拼接：print("Welcome, " + name)。',
+    'example': 'user = "Bob"\nprint("Hello, " + user)'
+  },
+
+  {
+    'id': 5,
+    'type': 'fill',
+    'title': '重复与拼接组合',
+    'content': '输出 "LA LA LA"（每个 LA 之间有空格，最后无额外空格）。',
+    'input': '',
+    'output': 'LA LA LA',
+    'code': 's = "LA"\nprint((___ + ___) * 3)',
+    'options': 's, " ", s + " ", " " + s, "LA", *',
+    'answer': '1,2',
+    'explanation': '用 s + " " 得到 "LA "，重复 3 次会得到 "LA LA LA "，若想去掉末尾空格可用 strip()，但题目允许末尾空格或可改写成 " ".join([s]*3)。这里按最直接填写 s, " "。',
+    'example': 's = "Hi"\nprint((s + " ") * 2)  # "Hi Hi "'
+  },
+
+  {
+    'id': 6,
+    'type': 'choice',
+    'title': '复习：字符串字面量',
+    'content': '下列哪个是合法的字符串字面量？',
+    'options': {
+      'A': '"abc"',
+      'B': 'abc',
+      'C': '"abc',
+      'D': '"""abc'
+    },
+    'answer': 'A',
+    'hints': [
+      '字符串需要成对引号。',
+      '单独写 abc 会被当作变量名。',
+      '检查引号是否成对。'
+    ],
+    'explanation': '"abc" 是合法的字符串字面量，abc 会被解析为变量。',
+    'example': 'print("hello")'
+  },
+
+  {
+    'id': 7,
+    'type': 'choice',
+    'title': '复习：单/双引号选择',
+    'content': '当字符串内部包含双引号时，下列哪种方式更便捷避免转义？',
+    'options': {
+      'A': '使用双引号并转义内部双引号',
+      'B': '使用单引号作为外层引号',
+      'C': '删掉内部双引号',
+      'D': '把字符串拆成两个变量再拼接'
+    },
+    'answer': 'B',
+    'hints': [
+      '单引号外层包裹内部双引号最省事。',
+      '也可以转义，但更繁琐。',
+      '选择更可读的写法。'
+    ],
+    'explanation': "使用单引号包裹会让内部的双引号无需转义，例如 'He said \"Hi\"' 可以写成 'He said \"Hi\"' 或外层单引号 'He said \"Hi\"'；更直接的是 print('He said \"Hi\"')。",
+    'example': "print('He said \"Hello\"')"
+  },
+
+  {
+    'id': 8,
+    'type': 'choice',
+    'title': '复习：多行字符串',
+    'content': '要在代码中书写多行长文本，哪种写法最直接？',
+    'options': {
+      'A': '使用三引号字符串',
+      'B': '在每行后使用 \\n 并拼接',
+      'C': '写很多 print 语句',
+      'D': '写在同一行里用空格分隔'
+    },
+    'answer': 'A',
+    'hints': [
+      '三引号支持原样多行。',
+      '\\n 也可以，但不方便编辑长文。',
+      '三引号读写最直接。'
+    ],
+    'explanation': '三引号（""" ... """ 或 \'\'\' ... \'\'\'）可直接表示多行字符串。',
+    'example': 'text = """line1\nline2\nline3"""'
+  },
+
+  {
+    'id': 9,
+    'type': 'fill',
+    'title': '复习：转义与换行',
+    'content': '使用转义序列在一条 print 中输出两行："First" 和 "Second"。',
+    'input': '',
+    'output': 'First\nSecond',
+    'code': 'print("First___Second")',
+    'options': '\\n, \\t, \\r, \\b, "\\n", "\\t", "\\r"',
+    'answer': '1',
+    'explanation': '换行转义序列为 \\n，放在字符串中会产生换行效果。',
+    'example': 'print("Hello\\nWorld")'
+  },
+
+  {
+    'id': 10,
+    'type': 'fill',
+    'title': '复习：f-string 简单使用',
+    'content': '使用 f-string 输出：Name: Bob（Bob 来自变量 name）。',
+    'input': 'name = "Bob"',
+    'output': 'Name: Bob',
+    'code': 'name = "Bob"\nprint(f"___: {___}")',
+    'options': 'Name, name, "Name", "name", {name}, f',
+    'answer': '1,2',
+    'explanation': 'f-string 中花括号内放变量名，前面是字符串部分 "Name: "。',
+    'example': 'age=20\nprint(f"Age: {age}")'
+  },
+
+  {
+    'id': 11,
+    'type': 'choice',
+    'title': '拼接性能小提示',
+    'content': '在循环中频繁拼接字符串，哪种方法通常更高效？',
+    'options': {
+      'A': '使用 + 直接累加字符串',
+      'B': '把字符串收集进列表，最后用 join 拼接',
+      'C': '每次都创建新的字符串变量',
+      'D': '使用 print 每次输出一段，再合并'
+    },
+    'answer': 'B',
+    'hints': [
+      '字符串是不可变对象，频繁 + 会产生大量中间对象。',
+      '收集后 join 可一次性拼接，性能更好。',
+      '这个是常见的最佳实践。'
+    ],
+    'explanation': '将片段放进列表，最后用 "".join(list) 一次拼接，效率高且内存友好。',
+    'example': "parts = ['a','b','c']\nprint(''.join(parts))"
+  },
+
+  {
+    'id': 12,
+    'type': 'choice',
+    'title': '重复与乘法顺序',
+    'content': '表达式 "ha" * 2 + "!" 的计算顺序如何？',
+    'options': {
+      'A': '先重复再拼接 → "haha!"',
+      'B': '先拼接再重复 → "hahah a"?',
+      'C': '语法错误',
+      'D': '先重复再删除'
+    },
+    'answer': 'A',
+    'hints': [
+      '* 的优先级高于 +。',
+      '先执行重复操作，再执行字符串拼接。',
+      '所以有效结果是 "haha!"。'
+    ],
+    'explanation': '"ha" * 2 先得到 "haha"，然后加上 "!" 得到 "haha!"。',
+    'example': 'print("yo"*3 + "!")  # "yoyoyo!"'
+  },
+
+  {
+    'id': 13,
+    'type': 'choice',
+    'title': '避免类型错误的做法',
+    'content': '想把数字 5 与字符串 " apples" 拼接输出，哪种写法正确？',
+    'options': {
+      'A': 'print(5 + " apples")',
+      'B': 'print(str(5) + " apples")',
+      'C': 'print(5 + str(" apples"))',
+      'D': 'print(" apples" + 5)'
+    },
+    'answer': 'B',
+    'hints': [
+      '需要把数字转换为字符串。',
+      'str(5) 会把 5 转换为 "5"。',
+      '再用 + 拼接字符串就可以。'
+    ],
+    'explanation': 'str(5) + " apples" 得到 "5 apples"。',
+    'example': 'print(str(10) + " kg")'
+  },
+
+  {
+    'id': 14,
+    'type': 'fill',
+    'title': '格式化与拼接替代',
+    'content': '使用 join 将列表 ["I","love","Python"] 合并为 "I love Python" 并打印。',
+    'input': '',
+    'output': 'I love Python',
+    'code': 'words = ["I","love","Python"]\nprint(___(___))',
+    'options': "' '.join, ''.join, words, ' '.join(words), join(' ', words), ' '.join(words)",
+    'answer': '1,3',
+    'explanation': "正确写法为 ' '.join(words)。此处按选项序号填写函数与参数位置。",
+    'example': "print(' '.join(['a','b']))  # 'a b'"
+  },
+
+  {
+    'id': 15,
+    'type': 'fill',
+    'title': '去除重复末尾空格',
+    'content': '将字符串 "Hi " 重复 3 次后去掉末尾空格，得到 "Hi Hi Hi"。',
+    'input': '',
+    'output': 'Hi Hi Hi',
+    'code': 's = "Hi "\nres = (s * 3)____\nprint(res)',
+    'options': '.strip(), .rstrip(), .lstrip(), .replace(" ",""), strip, rstrip, lstrip',
+    'answer': '2',
+    'explanation': '重复后会有尾部空格，使用 rstrip() 去掉右侧空格能得到 "Hi Hi Hi"。',
+    'example': '("A "*2).rstrip()  # "A A"'
+  }
+]

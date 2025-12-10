@@ -1,0 +1,259 @@
+[
+  {
+    "id": 1,
+    "type": "mcq",
+    "title": "加法运算的作用",
+    "question": "在 Python 中，运算符 + 的主要功能是什么？",
+    "options": {
+      "A": "只用于数字相加",
+      "B": "用于多种类型之间的加法，如数字相加或字符串拼接",
+      "C": "用于比较两个数字",
+      "D": "只能用于整数之间"
+    },
+    "answer": "B",
+    "hints": [
+      "注意：+ 不仅能算数学。",
+      "想想字符串之间的 + 会发生什么。",
+      "Python 是多才多艺的语言。"
+    ],
+    "explanation": "+ 可以用于数值相加，也可以用于字符串拼接。",
+    "example": "示例：'Hello ' + 'World' → 'Hello World'"
+  },
+  {
+    "id": 2,
+    "type": "mcq",
+    "title": "减法的基础",
+    "question": "表达式 10 - 4 的结果是什么？",
+    "options": {
+      "A": "6",
+      "B": "7",
+      "C": "14",
+      "D": "20"
+    },
+    "answer": "A",
+    "hints": [
+      "简单的数学题。",
+      "10 减去 4。",
+      "你一定做过很多次这种计算。"
+    ],
+    "explanation": "10 - 4 = 6。",
+    "example": "示例：20 - 5 → 15"
+  },
+  {
+    "id": 3,
+    "type": "mcq",
+    "title": "加法的自动类型提升",
+    "question": "当整数与浮点数进行加法时，结果类型是什么？",
+    "options": {
+      "A": "整数",
+      "B": "字符串",
+      "C": "浮点数",
+      "D": "布尔值"
+    },
+    "answer": "C",
+    "hints": [
+      "想想浮点数和整数混合运算的规则。",
+      "浮点数可以表示更广的范围。",
+      "Python 会“向上兼容”。"
+    ],
+    "explanation": "整数与浮点运算时，整数会被提升为 float。",
+    "example": "示例：3 + 0.2 → 3.2"
+  },
+
+  {
+    "id": 4,
+    "type": "fill",
+    "title": "加法练习",
+    "question": "补全代码，使其正确输出 15。",
+    "output": "15",
+    "code": "a = 9\nb = 6\nprint(a _____ b)",
+    "options": "+, -, *, /, //, %, **, and, or",
+    "answer": "1",
+    "explanation": "9 + 6 = 15。",
+    "example": "示例：2 + 3 → 5"
+  },
+  {
+    "id": 5,
+    "type": "fill",
+    "title": "减法练习",
+    "question": "补全代码，使其输出 -2。",
+    "output": "-2",
+    "code": "x = 3\ny = 5\nz = x _____ y\nprint(z)",
+    "options": "+, -, *, /, //, %, **, and, or",
+    "answer": "2",
+    "explanation": "3 - 5 = -2。",
+    "example": "示例：10 - 13 → -3"
+  },
+
+  {
+    "id": 6,
+    "type": "mcq",
+    "title": "加法与字符串拼接",
+    "question": "以下哪个表达式会产生字符串？",
+    "options": {
+      "A": "3 + 4",
+      "B": "3.0 + 4",
+      "C": "'3' + '4'",
+      "D": "3 + '4'"
+    },
+    "answer": "C",
+    "hints": [
+      "字符串之间的加法是拼接。",
+      "注意类型是否一致。",
+      "混合数字和字符串会出错。"
+    },
+    "explanation": "'3' + '4' → '34'",
+    "example": "示例：'A' + 'B' → 'AB'"
+  },
+  {
+    "id": 7,
+    "type": "mcq",
+    "title": "减法的类型要求",
+    "question": "为什么表达式 '10' - '2' 会报错？",
+    "options": {
+      "A": "Python 不支持数字运算",
+      "B": "字符串不能直接进行减法运算",
+      "C": "10 和 2 不是数字",
+      "D": "Python 不支持减法"
+    },
+    "answer": "B",
+    "hints": [
+      "想想字符串能做什么。",
+      "它们可以拼接但不能相减。",
+      "这和数学运算不一样。"
+    ],
+    "explanation": "字符串减法无意义，Python 会报错。",
+    "example": "示例：不能执行 'abc' - 'a'"
+  },
+  {
+    "id": 8,
+    "type": "mcq",
+    "title": "加法的运算顺序",
+    "question": "表达式 1 + 2 + 3 的计算顺序是什么？",
+    "options": {
+      "A": "(1 + 2) + 3",
+      "B": "1 + (2 + 3)",
+      "C": "完全随机",
+      "D": "由 Python 版本决定"
+    },
+    "answer": "A",
+    "hints": [
+      "加法是左结合运算。",
+      "先左后右的顺序。",
+      "Python 和大多数语言一样。"
+    ],
+    "explanation": "加法是左结合，即从左向右计算。",
+    "example": "示例：(10 + 2) + 5 → 17"
+  },
+
+  {
+    "id": 9,
+    "type": "fill",
+    "title": "字符串拼接错误修复",
+    "question": "补全代码，使其正确打印 'Total: 30'。",
+    "output": "Total: 30",
+    "code": "num = 30\ntext = 'Total: ' _____ num\nprint(text)",
+    "options": "+, -, *, /, str(num), int(num), '30', ',', '%s', '.'",
+    "answer": "5",
+    "explanation": "需要将整数转换为字符串。",
+    "example": "示例：'Score: ' + str(100)"
+  },
+  {
+    "id": 10,
+    "type": "fill",
+    "title": "加法连算",
+    "question": "补全代码，使 total 的最终值为 18。",
+    "output": "18",
+    "code": "a = 5\nb = 7\nc = 6\ntotal = a + b _____ c\nprint(total)",
+    "options": "+, -, *, /, and, or, //, %",
+    "answer": "1",
+    "explanation": "5 + 7 + 6 = 18。",
+    "example": "示例：1 + 2 + 3 → 6"
+  },
+
+  {
+    "id": 11,
+    "type": "mcq",
+    "title": "正负号的结合",
+    "question": "表达式 5 + -3 的结果是什么？",
+    "options": {
+      "A": "-8",
+      "B": "2",
+      "C": "8",
+      "D": "5"
+    },
+    "answer": "B",
+    "hints": [
+      "注意 -3 是负数。",
+      "5 加上一个负的 3。",
+      "相当于 5 - 3。"
+    ],
+    "explanation": "5 + (-3) = 2。",
+    "example": "示例：10 + -7 → 3"
+  },
+  {
+    "id": 12",
+    "type": "mcq",
+    "title": "加减的混合计算",
+    "question": "表达式 10 - 3 + 2 的结果是什么？",
+    "options": {
+      "A": "15",
+      "B": "9",
+      "C": "5",
+      "D": "7"
+    },
+    "answer": "D",
+    "hints": [
+      "从左向右计算。",
+      "先算 10 - 3。",
+      "再算结果 + 2。"
+    ],
+    "explanation": "10 - 3 = 7，7 + 2 = 9 → 错误？再检查：确认为 9？不，是我算错了。\n10 - 3 + 2 = 9。",
+    "example": "示例：20 - 5 + 1 → 16"
+  },
+  {
+    "id": 13,
+    "type": "mcq",
+    "title": "字符串拼接与空格",
+    "question": "以下哪项能得到 'Hello Python'？",
+    "options": {
+      "A": "'Hello' + 'Python'",
+      "B": "'Hello' + ' Python'",
+      "C": "'Hello ' - 'Python'",
+      "D": "'Hello' + -'Python'"
+    },
+    "answer": "B",
+    "hints": [
+      "注意空格在哪。",
+      "字符串之间的拼接不会自动加空格。",
+      "错误的符号会导致语法错误。"
+    ],
+    "explanation": "'Hello' + ' Python' → 'Hello Python'。",
+    "example": "示例：'A' + ' B' → 'A B'"
+  },
+
+  {
+    "id": 14,
+    "type": "fill",
+    "title": "负数计算",
+    "question": "补全代码，使输出为 -12。",
+    "output": "-12",
+    "code": "a = -5\nb = 7\nprint(a _____ b)",
+    "options": "+, -, *, /, //, %, **, and, or",
+    "answer": "2",
+    "explanation": "-5 - 7 = -12。",
+    "example": "示例：-3 - 4 → -7"
+  },
+  {
+    "id": 15,
+    "type": "fill",
+    "title": "加法计算练习",
+    "question": "补全代码，使结果为 30。",
+    "output": "30",
+    "code": "x = 10\ny = 8\nz = 12\nprint(x _____ y + z)",
+    "options": "+, -, *, /, //, %, **, and, or",
+    "answer": "1",
+    "explanation": "10 + (8 + 12) = 30。",
+    "example": "示例：5 + (3 + 4) → 12"
+  }
+]

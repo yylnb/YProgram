@@ -1,0 +1,278 @@
+[
+  {
+    'id': 1,
+    'type': 'choice',
+    'title': '判断关键词是否存在',
+    'content': '你正在做一个搜索框功能，需要判断用户输入的关键词是否在商品标题中，应该使用哪种写法？',
+    'options': {
+      'A': 'title has keyword',
+      'B': 'keyword in title',
+      'C': 'keyword inside title',
+      'D': 'title.contains(keyword)'
+    },
+    'answer': 'B',
+    'hints': [
+      'Python 判断“是否包含”有固定语法。',
+      '想想之前学过的字符串判断方式。',
+      'in 是 Python 判断包含关系的标准关键字。'
+    ],
+    'explanation': '"keyword in title" 用于判断 keyword 是否出现在 title 中，是 Python 标准语法。',
+    'example': '例如：if "apple" in product_name: print("找到苹果相关商品")'
+  },
+
+  {
+    'id': 2,
+    'type': 'choice',
+    'title': 'not in 的基本用途',
+    'content': '小王想检查一个用户名里不能含有空格，应使用哪条判断语句？',
+    'options': {
+      'A': '" " out username',
+      'B': '" " not_in username',
+      'C': '" " not in username',
+      'D': 'username.exclude(" ")'
+    },
+    'answer': 'C',
+    'hints': [
+      'Python 中只有一个关键字表示“不是包含”。',
+      '注意关键字之间是否有空格。',
+      'not in 是标准用法。'
+    ],
+    'explanation': '" " not in username 用来判断字符串中不包含空格。',
+    'example': '例如：if "@" not in email: print("邮箱格式错误")'
+  },
+
+  {
+    'id': 3,
+    'type': 'choice',
+    'title': 'in 判断返回结果类型',
+    'content': '执行表达式 "py" in "python" 会返回什么类型？',
+    'options': {
+      'A': '字符串',
+      'B': '整数',
+      'C': '布尔值',
+      'D': 'None'
+    },
+    'answer': 'C',
+    'hints': [
+      '判断语句的结果一般用于条件判断。',
+      '想想 in 最终是告诉你“是否包含”。',
+      '是 True 或 False。'
+    ],
+    'explanation': '"py" in "python" 会返回布尔值 True。',
+    'example': '例如："cat" in "dogcat" → True'
+  },
+
+  {
+    'id': 4,
+    'type': 'fill',
+    'title': '判断文本是否包含标记',
+    'content': '小张想判断消息中是否包含警告标记。',
+    'input': 'msg = "[Warning] Low Battery"',
+    'output': 'True',
+    'code': 'print("Warning" ___ msg)',
+    'options': 'in, not in, ==, +, -, and',
+    'answer': '1',
+    'explanation': '判断某内容是否在字符串中，使用 in。',
+    'example': '例如：print("Hi" in "Hi Python")'
+  },
+
+  {
+    'id': 5,
+    'type': 'fill',
+    'title': '判断禁用词',
+    'content': '以下代码用于判断评论中是否没有出现禁用词。',
+    'input': 'text = "I love programming"',
+    'output': 'True',
+    'code': 'print("badword" ___ text)',
+    'options': 'in, not in, ==, !=, or, and',
+    'answer': '2',
+    'explanation': '不包含使用 not in。',
+    'example': '例如：print("error" not in "success message")'
+  },
+
+  /* --- 6~10 为复习第18单元 split / join --- */
+
+  {
+    'id': 6,
+    'type': 'choice',
+    'title': 'split 的分割结果',
+    'content': '执行 "a,b,c".split(",") 会得到什么？',
+    'options': {
+      'A': '("a","b","c")',
+      'B': '["a","b","c"]',
+      'C': '"abc"',
+      'D': '{"a","b","c"}'
+    },
+    'answer': 'B',
+    'hints': [
+      'split 返回的不是字符串。',
+      '也不是元组。',
+      'split 返回列表。'
+    ],
+    'explanation': 'split 会返回一个列表。',
+    'example': '"1 2 3".split() → ["1","2","3"]'
+  },
+
+  {
+    'id': 7,
+    'type': 'choice',
+    'title': 'join 的核心作用',
+    'content': '"-".join(["a","b","c"]) 的作用是什么？',
+    'options': {
+      'A': '删除所有 "-"',
+      'B': '把列表转成字符串并用 "-" 连接',
+      'C': '把字符串切成三部分',
+      'D': '生成列表'
+    },
+    'answer': 'B',
+    'hints': [
+      'join 的作用与 split 相反。',
+      '它用某字符串作为“连接符”。',
+      '连接后的结果是一个完整字符串。'
+    ],
+    'explanation': 'join 用连接符将列表元素合并成新的字符串。',
+    'example': '" ".join(["Hello","World"]) → "Hello World"'
+  },
+
+  {
+    'id': 8,
+    'type': 'choice',
+    'title': 'split 默认分隔符',
+    'content': '执行 "hello world python".split() 默认按什么分割？',
+    'options': {
+      'A': '空格和制表符等空白字符',
+      'B': '逗号',
+      'C': '不分割',
+      'D': '下划线'
+    },
+    'answer': 'A',
+    'hints': [
+      '默认不是逗号。',
+      '想想 split() 的常用默认行为。',
+      '默认按“空白字符”分割。'
+    ],
+    'explanation': '不传入参数时 split 会按照空白字符切割。',
+    'example': '"a\tb c".split() → ["a","b","c"]'
+  },
+
+  {
+    'id': 9,
+    'type': 'fill',
+    'title': '使用 split 提取单词',
+    'content': '补全代码，让程序将句子切分成单词列表。',
+    'input': 's = "I love Python"',
+    'output': "['I','love','Python']",
+    'code': 'words = s.___()\nprint(words)',
+    'options': 'split, join, replace, find, upper, lower',
+    'answer': '1',
+    'explanation': '无参数版 split 自动按空白分割。',
+    'example': '"good day".split()'
+  },
+
+  {
+    'id': 10,
+    'type': 'fill',
+    'title': '使用 join 拼接路径',
+    'content': '补全代码，使列表中的路径段拼接成有效路径。',
+    'input': "parts = ['usr', 'local', 'bin']",
+    'output': 'usr/local/bin',
+    'code': 'path = "/".___(parts)\nprint(path)',
+    'options': 'join, split, replace, +, upper, lower',
+    'answer': '1',
+    'explanation': '使用 "/" 作为连接符并调用 join。',
+    'example': '":".join(["a","b","c"])'
+  },
+
+  /* --- 11~15 再次回到本单元主题：in / not in --- */
+
+  {
+    'id': 11,
+    'type': 'choice',
+    'title': '判断子串前后大小写差异',
+    'content': '执行 "Py" in "python" 会得到什么？',
+    'options': {
+      'A': 'True',
+      'B': 'False',
+      'C': '报错',
+      'D': '"py"'
+    },
+    'answer': 'B',
+    'hints': [
+      'in 是区分大小写的。',
+      '"Py" 和 "py" 有区别。',
+      '大小写不同则不会匹配。'
+    ],
+    'explanation': '字符串比较严格区分大小写。',
+    'example': '"AB" in "abc" → False'
+  },
+
+  {
+    'id': 12,
+    'type': 'choice',
+    'title': '检测用户黑名单',
+    'content': '下列哪种写法能正确判断用户 "Tim" 是否在黑名单列表 black？',
+    'options': {
+      'A': '"Tim" in black',
+      'B': 'Tim in black',
+      'C': 'black in "Tim"',
+      'D': '"Tim" contains black'
+    },
+    'answer': 'A',
+    'hints': [
+      '判断某元素是否在某集合或列表中。',
+      '注意字符串是否需要引号。',
+      'in 能用于列表判断。'
+    ],
+    'explanation': '判断是否属于列表成员，使用元素 in 列表。',
+    'example': '"Lucy" in ["Amy","Lucy","Tom"]'
+  },
+
+  {
+    'id': 13,
+    'type': 'choice',
+    'title': 'not in 的典型使用场景',
+    'content': '如果你想检查密码中不能包含空格，应该用哪种写法？',
+    'options': {
+      'A': 'password not_in " "',
+      'B': '" " not in password',
+      'C': 'password not include " "',
+      'D': '" " out password'
+    },
+    'answer': 'B',
+    'hints': [
+      '注意 not in 的写法是否连写。',
+      '字符串必须放在前或后。',
+      'not in 是唯一正确语法。'
+    ],
+    'explanation': 'not in 用于判断某元素不在对象中。',
+    'example': '" " not in "HelloWorld"'
+  },
+
+  {
+    'id': 14,
+    'type': 'fill',
+    'title': '邮箱格式简单判断',
+    'content': '补全代码，判断邮箱中是否包含 "@".',
+    'input': 'email = "user@example.com"',
+    'output': 'True',
+    'code': 'print("@" ___ email)',
+    'options': 'in, not in, ==, !=, +, or, find',
+    'answer': '1',
+    'explanation': 'in 用于检查是否存在某字符。',
+    'example': '"@" in "abc@xyz"'
+  },
+
+  {
+    'id': 15,
+    'type': 'fill',
+    'title': '判断文本不含敏感词',
+    'content': '补全代码，使程序输出 True。',
+    'input': 'txt = "This is a normal message"',
+    'output': 'True',
+    'code': 'print("spam" ___ txt)',
+    'options': 'in, not in, ==, !=, -, join',
+    'answer': '2',
+    'explanation': 'not in 用于检查“不包含”。',
+    'example': '"dog" not in "cat tree"'
+  }
+]

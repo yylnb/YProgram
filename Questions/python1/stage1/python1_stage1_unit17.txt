@@ -1,0 +1,274 @@
+[
+  {
+    'id': 1,
+    'type': 'choice',
+    'title': '找位置的基本用法',
+    'content': '小王正在检查用户输入中有没有"@"符号，他使用 s.find("@")。如果找不到，会返回什么？',
+    'options': {
+      'A': '-1',
+      'B': '0',
+      'C': 'None',
+      'D': '报错'
+    },
+    'answer': 'A',
+    'hints': [
+      'find 的返回值是一个整数。',
+      '当找不到时，它不会报错。',
+      '找不到时的返回值是一个特殊数字，而不是 None。'
+    ],
+    'explanation': 'find() 找不到时返回 -1，这能让程序知道搜索失败但不中断。',
+    'example': '例如 "hello".find("x") 会返回 -1。'
+  },
+
+  {
+    'id': 2,
+    'type': 'choice',
+    'title': 'replace 的基础替换逻辑',
+    'content': '字符串 s = "hello world"，执行 s.replace("o","O") 会发生什么？',
+    'options': {
+      'A': '只替换第一个 o',
+      'B': '替换全部 o',
+      'C': '报错，因为大小写不同',
+      'D': '只替换最后一个 o'
+    },
+    'answer': 'B',
+    'hints': [
+      'replace 的默认行为不会只替换一个。',
+      '它会替换所有匹配的部分。',
+      '注意 replace 不会修改原字符串，而是生成新字符串。'
+    ],
+    'explanation': 'replace("o","O") 会把所有的 o 全部替换成 O。',
+    'example': '例如 "banana".replace("a","A") → "bAnAnA"。'
+  },
+
+  {
+    'id': 3,
+    'type': 'choice',
+    'title': 'find 的起始搜索位置',
+    'content': '执行 "pythonpython".find("py", 3) 会从哪里开始找？',
+    'options': {
+      'A': '从头开始',
+      'B': '从下标 3 开始',
+      'C': '从下标 2 开始',
+      'D': '从下标 1 开始'
+    },
+    'answer': 'B',
+    'hints': [
+      'find 可以指定起始位置。',
+      '指定起始后会忽略之前的内容。',
+      '下标从 0 开始计算。'
+    ],
+    'explanation': 'find("py", 3) 会从下标 3 开始搜索匹配。',
+    'example': '例如 "abcabc".find("a",2) 会返回 3。'
+  },
+
+  {
+    'id': 4,
+    'type': 'fill',
+    'title': '使用 find 找到关键字位置',
+    'content': '补全代码，找到子字符串第一次出现的位置。',
+    'input': 'text = "welcome to python world"',
+    'output': '11',
+    'code': 'pos = text.___("to")\nprint(pos)',
+    'options': 'len, lower, upper, find, replace, 11, to',
+    'answer': '4',
+    'explanation': 'find("to") 会返回子串在字符串中的位置。',
+    'example': '例如 "abcde".find("cd") 返回 2。'
+  },
+
+  {
+    'id': 5,
+    'type': 'fill',
+    'title': 'replace 用于清理文本',
+    'content': '补全代码，把文本中的 "-" 替换成 空格。',
+    'input': 's = "hello-python-world"',
+    'output': 'hello python world',
+    'code': 'new_s = s.___(" - ", " ")'.replace(" - ","___")',
+    'options': 'find, replace, "-", " ", "_", lower, upper',
+    'answer': '2,3,4',
+    'explanation': 'replace("-", " ") 就能把短横线替换为空格。',
+    'example': '例如 "a-b-c".replace("-", "_") → "a_b_c"。'
+  },
+
+  {
+    'id': 6,
+    'type': 'choice',
+    'title': '复习：len 的用途',
+    'content': 'len("Python!") 的结果是什么？',
+    'options': {
+      'A': '5',
+      'B': '6',
+      'C': '7',
+      'D': '8'
+    },
+    'answer': 'C',
+    'hints': [
+      '注意每个字符都计数。',
+      '这里包含字母和一个感叹号。',
+      '总共是 7 个字符。'
+    ],
+    'explanation': 'len("Python!") → 7。',
+    'example': 'len("Hi!") → 3。'
+  },
+
+  {
+    'id': 7,
+    'type': 'choice',
+    'title': '复习：lower 的作用',
+    'content': '执行 "HeLLo".lower() 会得到什么？',
+    'options': {
+      'A': 'HELLO',
+      'B': 'hello',
+      'C': 'HeLLo',
+      'D': 'hELLo'
+    },
+    'answer': 'B',
+    'hints': [
+      'lower 会把所有字符转成小写。',
+      '不会影响非字母字符。',
+      '注意结果的字母必须全是小写。'
+    ],
+    'explanation': 'lower 会把 HeLLo 转成 hello。',
+    'example': '"Python3".lower() → "python3"。'
+  },
+
+  {
+    'id': 8,
+    'type': 'choice',
+    'title': '复习：upper 的作用',
+    'content': '"good morning".upper() 的结果是什么？',
+    'options': {
+      'A': 'GOOD MORNING',
+      'B': 'Good Morning',
+      'C': 'GOOD morning',
+      'D': 'good MORNING'
+    },
+    'answer': 'A',
+    'hints': [
+      'upper 会把所有字母变成大写。',
+      '它不做智能标题化（不是 capital）。',
+      '空格不影响大小写。'
+    ],
+    'explanation': 'upper → 全部大写。',
+    'example': '"hi".upper() → "HI"。'
+  },
+
+  {
+    'id': 9,
+    'type': 'fill',
+    'title': '复习：大小写统一处理输入',
+    'content': '把用户输入统一转成小写再比较。',
+    'input': 'user = "Yes"',
+    'output': 'yes',
+    'code': 'normalized = user.___()\nprint(normalized)',
+    'options': 'lower, upper, len, find, replace',
+    'answer': '1',
+    'explanation': '统一转小写通常使用 lower()。',
+    'example': '"NO".lower() → "no"。'
+  },
+
+  {
+    'id': 10,
+    'type': 'fill',
+    'title': '复习：len 计算长度',
+    'content': '补全代码以输出字符串长度。',
+    'input': 'msg = "Python"',
+    'output': '6',
+    'code': 'print(___(msg))',
+    'options': 'len, lower, upper, find, replace',
+    'answer': '1',
+    'explanation': 'len(msg) 返回字符串长度。',
+    'example': 'len("abc") → 3。'
+  },
+
+  {
+    'id': 11,
+    'type': 'choice',
+    'title': 'replace 的替换次数',
+    'content': '执行 "aaaa".replace("a","b",2) 会发生什么？',
+    'options': {
+      'A': '替换全部 a',
+      'B': '替换前两个 a',
+      'C': '报错，因为多了第三个参数',
+      'D': '只替换最后两个 a'
+    },
+    'answer': 'B',
+    'hints': [
+      'replace 可以控制替换次数。',
+      '第三个参数控制最多替换几次。',
+      '从左向右替换。'
+    ],
+    'explanation': 'replace("a","b",2) → "bbaa"。',
+    'example': '"xyxy".replace("x","z",1) → "zyxy"。'
+  },
+
+  {
+    'id': 12,
+    'type': 'choice',
+    'title': 'find 的搜索方向',
+    'content': 'find 是从左往右找还是从右往左找？',
+    'options': {
+      'A': '从右往左',
+      'B': '随机',
+      'C': '从左往右',
+      'D': '倒序查找'
+    },
+    'answer': 'C',
+    'hints': [
+      'find 的基本行为和人类阅读方向一致。',
+      '若要从右找，应使用 rfind。',
+      '这是初学者常犯的概念性错误。'
+    ],
+    'explanation': 'find 默认从左向右查找子串。',
+    'example': '"abcabc".find("a") → 0。'
+  },
+
+  {
+    'id': 13,
+    'type': 'choice',
+    'title': 'replace 不会修改原字符串',
+    'content': '执行 s.replace("a","b") 后，s 会怎样？',
+    'options': {
+      'A': 's 会被直接修改',
+      'B': 's 会变成 bbb...',
+      'C': 's 不变，返回新字符串',
+      'D': '会报错'
+    },
+    'answer': 'C',
+    'hints': [
+      '字符串是不可变（immutable）的。',
+      'replace 返回一个新字符串。',
+      '若要保存结果，需要把 replace 的返回值赋给变量。'
+    ],
+    'explanation': '字符串不可变，因此 s 本身不会被修改。',
+    'example': 's = "a"; s.replace("a","b") → "b" 但 s 仍是 "a"。'
+  },
+
+  {
+    'id': 14,
+    'type': 'fill',
+    'title': 'find 与判断逻辑结合',
+    'content': '如果字符串中包含关键字则输出 FOUND。',
+    'input': 'msg = "system running normal"',
+    'output': 'FOUND',
+    'code': 'if msg.___("run") != -1:\n    print("FOUND")',
+    'options': 'find, replace, lower, upper, len, run',
+    'answer': '1',
+    'explanation': 'find 找到则返回索引，不等于 -1 表示存在。',
+    'example': 'if "hello".find("he") != -1: print("YES")'
+  },
+
+  {
+    'id': 15,
+    'type': 'fill',
+    'title': 'replace 支持替换短语',
+    'content': '补全代码，将文本中的 "not good" 替换成 "good"。',
+    'input': 'msg = "This is not good at all"',
+    'output': 'This is good at all',
+    'code': 'new_msg = msg.___("not good", "good")\nprint(new_msg)',
+    'options': 'find, lower, upper, replace, "not good", "good"',
+    'answer': '4,5,6',
+    'explanation': 'replace("not good","good") 即可进行短语替换。',
+    'example': '"I am not happy".replace("not ","") → "I am happy"。'
+  }
+]

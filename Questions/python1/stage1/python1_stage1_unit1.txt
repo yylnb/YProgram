@@ -1,0 +1,279 @@
+{
+  'unit': '第一单元：print 与基础语句结构',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': 'print 的最基本用途',
+      'content': '小明第一次学习 Python，他想在屏幕上输出“Hello”。他应该使用哪一条语句？',
+      'options': {
+        'A': 'print(Hello)',
+        'B': 'print("Hello")',
+        'C': 'echo "Hello"',
+        'D': 'output("Hello")'
+      },
+      'answer': 'B',
+      'hints': [
+        'Python 输出通常使用一个固定的函数。',
+        '字符串必须被某种方式包裹。',
+        '检查一下哪个选项既是 Python 语法又有正确的字符串写法。'
+      ],
+      'explanation': 'print("Hello") 是标准的 Python 输出语句，字符串必须用引号括起。',
+      'example': '例如你也可以输出你的名字：print("Leon")'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': 'print 与括号',
+      'content': '学习中，小红忘记写括号，直接写 print "Hi"。这在 Python 中会怎样？',
+      'options': {
+        'A': '可以正常输出',
+        'B': '输出但会警告',
+        'C': '会报错，因为缺少括号',
+        'D': '自动补上括号'
+      },
+      'answer': 'C',
+      'hints': [
+        'Python3 是强制使用函数调用格式的。',
+        'print 在 Python3 中不是关键字，而是函数。',
+        '函数必须写括号。'
+      ],
+      'explanation': '在 Python3 中 print 是函数，必须写 print("Hi") 才能运行。',
+      'example': '正确写法示例：print("学习 Python 真开心！")'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': 'print 输出多个内容',
+      'content': '如果你想一次输出多个内容，例如名字和年龄，下列哪个写法是正确的？',
+      'options': {
+        'A': 'print("Tom" "18")',
+        'B': 'print("Tom", 18)',
+        'C': 'print("Tom" + 18)',
+        'D': 'print(Tom, 18)'
+      },
+      'answer': 'B',
+      'hints': [
+        'print 可以接受多个参数。',
+        '多个参数之间用逗号分隔。',
+        '注意字符串与数字不能直接相加。'
+      ],
+      'explanation': 'print("Tom", 18) 会输出两个内容，中间默认以空格分隔。',
+      'example': '例如：print("结果是", 3 + 5)'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '基础输出结构',
+      'content': '补全代码，使其正确输出一句完整的话。',
+      'input': '',
+      'output': 'I love Python',
+      'code': '___("I love Python")',
+      'options': 'print, echo, output, println',
+      'answer': '1',
+      'explanation': '只有 print 是 Python 的输出函数。',
+      'example': 'print("今天写代码真顺利")'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '输出变量内容',
+      'content': '根据给定变量，补全输出句子。',
+      'input': 'name = "Lucy"',
+      'output': 'Hello Lucy',
+      'code': '___("Hello", ___)',
+      'options': 'print, name, output, echo',
+      'answer': '1,2',
+      'explanation': 'print 是输出函数，name 是变量，组合后输出 Hello Lucy。',
+      'example': '例如你也可以输出 print("Hello", username)'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': 'print 与空格行为',
+      'content': 'print("A", "B") 输出时，两者之间默认是什么？',
+      'options': {
+        'A': '没有间隔',
+        'B': '一个空格',
+        'C': '一个逗号',
+        'D': '两个空格'
+      },
+      'answer': 'B',
+      'hints': [
+        'print 会自动帮你处理分隔符。',
+        '默认分隔符由一个参数控制：sep。',
+        'sep 默认是空格。'
+      ],
+      'explanation': 'print 默认使用空格作为分隔符。',
+      'example': 'print("Python", "Rocks") 会输出 Python Rocks'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '换行行为',
+      'content': 'print 默认在输出末尾添加什么？',
+      'options': {
+        'A': '一个空格',
+        'B': '一个换行',
+        'C': '一个 tab',
+        'D': '什么都不加'
+      },
+      'answer': 'B',
+      'hints': [
+        'print 的“end”参数控制末尾行为。',
+        '默认不会是空的。',
+        '通常输出后自动换到下一行。'
+      },
+      'explanation': 'print 默认以换行结尾，如果想去掉可以写 end="".',
+      'example': 'print("A", end=""); print("B") 输出 AB'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': 'print 输出数字',
+      'content': '想输出 3 + 4 的结果，正确写法是哪种？',
+      'options': {
+        'A': 'print("3 + 4")',
+        'B': 'print(3 + 4)',
+        'C': 'print("3" + 4)',
+        'D': 'print(3, +, 4)'
+      },
+      'answer': 'B',
+      'hints': [
+        '字符串不会自动计算表达式。',
+        'print 可以输出表达式的结果。',
+        '数字之间运算无需加引号。'
+      ],
+      'explanation': '3 + 4 是表达式，会被计算为 7。',
+      'example': 'print(10 * 5) 会输出 50'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '输出表达式结果',
+      'content': '补全代码，使其输出计算结果。',
+      'input': '',
+      'output': '12',
+      'code': '___(3 * ___)',
+      'options': 'print, 4, "4", echo',
+      'answer': '1,2',
+      'explanation': 'print 输出内容；3 * 4 等于 12。',
+      'example': '你也可以 print(6 * 7)'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '控制换行',
+      'content': '用 end 参数让两个输出写在同一行。',
+      'input': '',
+      'output': 'HelloWorld',
+      'code': 'print("Hello", ___="")\nprint("World")',
+      'options': 'end, sep, finish, stop',
+      'answer': '1',
+      'explanation': 'end 控制输出末尾行为；end="" 表示不换行。',
+      'example': 'print("A", end=""); print("B")'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': 'sep 的作用',
+      'content': 'print("A", "B", sep="-") 会输出什么？',
+      'options': {
+        'A': 'A-B',
+        'B': 'A B',
+        'C': 'A--B',
+        'D': 'AB'
+      },
+      'answer': 'A',
+      'hints': [
+        'sep 是分隔符。',
+        '默认是空格，这里被改成了 “-”。',
+        '看起来像 A 和 B 之间加了一个连字符。'
+      ],
+      'explanation': 'sep="-" 会在多个参数之间使用短横线。',
+      'example': 'print("year", "2025", sep=":") → year:2025'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': 'print 输出中文',
+      'content': '想输出中文“你好”，应该怎么写？',
+      'options': {
+        'A': 'print(你好)',
+        'B': 'print("你好")',
+        'C': 'print(\'你好")',
+        'D': 'print(hello)'
+      },
+      'answer': 'B',
+      'hints': [
+        '中文也是字符串。',
+        '字符串必须加引号。',
+        'Python 完全支持中文字符。'
+      ],
+      'explanation': 'print("你好") 是正确写法。',
+      'example': 'print("我正在学习 Python")'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '打印转义字符',
+      'content': 'print("A\\nB") 会输出什么？',
+      'options': {
+        'A': 'A n B',
+        'B': 'A\\nB',
+        'C': 'A 换行 B',
+        'D': 'AB'
+      },
+      'answer': 'C',
+      'hints': [
+        '\\n 在字符串中表示换行。',
+        '不是两个字符，而是一个“换行符号”。',
+        '注意题目是打印效果，而不是字面内容。'
+      ],
+      'explanation': '字符串中的 \\n 会产生换行。',
+      'example': 'print("Hello\\nWorld")'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '组合文本与表达式',
+      'content': '补全代码，使其输出：Result: 9',
+      'input': '',
+      'output': 'Result: 9',
+      'code': 'print("Result:", ___ + ___)',
+      'options': '4, 5, "4", print, "5"',
+      'answer': '1,2',
+      'explanation': '4 + 5 等于 9；不能用字符串 "4" 和 "5" 做加法。',
+      'example': 'print("Sum:", 10 + 2)'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': 'print 的多参数与 sep',
+      'content': '补全代码，使其输出 A|B|C',
+      'input': '',
+      'output': 'A|B|C',
+      'code': 'print("A", "B", "C", ___="|")',
+      'options': 'sep, end, join, cut',
+      'answer': '1',
+      'explanation': 'sep 指定多个参数之间的分隔符。',
+      'example': 'print("x", "y", "z", sep=":")'
+    }
+
+  ]
+}

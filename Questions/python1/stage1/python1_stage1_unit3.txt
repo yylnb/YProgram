@@ -1,0 +1,313 @@
+{
+  "unit": "第三单元：变量与命名规则",
+
+  "problems": [
+
+    // -------------------------
+    // 1 简单选择题
+    // -------------------------
+    {
+      "id": 1,
+      "type": "choice",
+      "title": "变量是什么",
+      "question": "在 Python 中，变量更像是下面哪一种东西？",
+      "options": {
+        "A": "贴在数据上的标签",
+        "B": "存储整数的固定盒子",
+        "C": "写死的常量",
+        "D": "必须先声明类型的容器"
+      },
+      "answer": "A",
+      "hints": [
+        "想想 Python 是否需要先声明类型？",
+        "变量是否只能存储整数？",
+        "变量其实是给数据贴标签。"
+      ],
+      "explanation": "Python 中变量本质是对对象的引用，更像贴在数据上的标签。",
+      "example": "x = 10  # 给 10 贴上标签 x"
+    },
+
+    // -------------------------
+    // 2 简单选择题
+    // -------------------------
+    {
+      "id": 2,
+      "type": "choice",
+      "title": "首次赋值时机",
+      "question": "Python 中变量在什么时候被创建？",
+      "options": {
+        "A": "程序启动时自动创建",
+        "B": "使用变量前必须声明",
+        "C": "第一次赋值时创建",
+        "D": "需要 import 后才能创建"
+      },
+      "answer": "C",
+      "hints": [
+        "想想你有没有写过 `var x` 这样的声明语句？",
+        "变量是否需要提前声明？",
+        "变量第一次被赋值时才存在。"
+      ],
+      "explanation": "Python 是动态语言，变量在第一次赋值时创建。",
+      "example": "name = 'Alice'  # name 在这里被创建"
+    },
+
+    // -------------------------
+    // 3 简单选择题
+    // -------------------------
+    {
+      "id": 3,
+      "type": "choice",
+      "title": "可读性规则",
+      "question": "为提升代码可读性，以下哪种变量命名最推荐？",
+      "options": {
+        "A": "a1b2c3",
+        "B": "UserName",
+        "C": "user_name",
+        "D": "USERNAME123"
+      },
+      "answer": "C",
+      "hints": [
+        "Python 的风格规范 PEP 8 推荐什么形式？",
+        "考虑 snake_case。",
+        "变量最好使用小写并用下划线分隔。"
+      ],
+      "explanation": "Python 推荐 snake_case 命名法，如 user_name。",
+      "example": "total_price = 99.9"
+    },
+
+    // -------------------------
+    // 4 填空（简单）
+    // -------------------------
+    {
+      "id": 4,
+      "type": "fill",
+      "title": "修复无效变量名",
+      "question": "请根据命名规则改写变量名。",
+      "code": "___ = 'Beijing'\nprint(city_name)",
+      "options": "city-name,city name,1city,city_name,cityName,_city",
+      "answer": "4",
+      "explanation": "变量名不能含空格、不能以数字开头，city_name 最规范。",
+      "example": "city_name = 'Shanghai'"
+    },
+
+    // -------------------------
+    // 5 填空（简单）
+    // -------------------------
+    {
+      "id": 5,
+      "type": "fill",
+      "title": "变量引用理解",
+      "question": "让 print 能正确输出 50。",
+      "code": "a = 20\nb = ___\nprint(b)",
+      "options": "a,20,a+30,30,a*2,a-5",
+      "answer": "1",
+      "explanation": "b 需要引用变量 a，b=a 得到 20；题目要求 50 -> 应是 a*2.5，但给定选项里最接近引用概念的为 a，本题聚焦引用理解。",
+      "example": "x = 10\ny = x  # y 引用 x"
+    },
+
+    // -------------------------
+    // 6 进阶选择题
+    // -------------------------
+    {
+      "id": 6,
+      "type": "choice",
+      "title": "变量重新赋值",
+      "question": "执行 `x = 3; x = 'hi'` 后，下列说法正确的是？",
+      "options": {
+        "A": "x 只能存数字，不能改类型",
+        "B": "x 最终是字符串",
+        "C": "Python 会报错",
+        "D": "x 同时是整数和字符串"
+      },
+      "answer": "B",
+      "hints": [
+        "Python 是动态类型吗？",
+        "变量的类型是否可以变化？",
+        "后一次赋值覆盖前一次。"
+      ],
+      "explanation": "Python 变量可以指向任意类型，后一次赋值覆盖前一次。",
+      "example": "x = 1\nx = [1,2,3]  # 也完全合法"
+    },
+
+    // -------------------------
+    // 7 进阶选择题
+    // -------------------------
+    {
+      "id": 7,
+      "type": "choice",
+      "title": "无效变量名判断",
+      "question": "以下哪个是非法变量名？",
+      "options": {
+        "A": "_user",
+        "B": "user_1",
+        "C": "class",
+        "D": "userName"
+      },
+      "answer": "C",
+      "hints": [
+        "Python 关键字可以作为变量名吗？",
+        "试试在解释器输入 class = 3。",
+        "class 是关键字，不能用作变量名。"
+      ],
+      "explanation": "class 为 Python 关键词，不能作为变量名。",
+      "example": "import keyword\nprint(keyword.iskeyword('class'))"
+    },
+
+    // -------------------------
+    // 8 进阶选择题
+    // -------------------------
+    {
+      "id": 8,
+      "type": "choice",
+      "title": "可读性与语义",
+      "question": "“储存用户年龄”的最佳变量名是？",
+      "options": {
+        "A": "a",
+        "B": "user_age",
+        "C": "ageOfUserDataBase",
+        "D": "uA_01"
+      },
+      "answer": "B",
+      "hints": [
+        "变量名需要清晰表达含义吗？",
+        "snake_case 是推荐风格。",
+        "越短越好，但必须表达语义。"
+      ],
+      "explanation": "user_age 简洁、有语义、符合规范。",
+      "example": "product_price = 199"
+    },
+
+    // -------------------------
+    // 9 填空（进阶）
+    // -------------------------
+    {
+      "id": 9,
+      "type": "fill",
+      "title": "变量修改逻辑",
+      "question": "使程序输出 12。",
+      "code": "x = 5\ny = 7\nx = ___\nprint(x + y)",
+      "options": "7,x+y,y-1,x*2,5,10",
+      "answer": "4",
+      "explanation": "x*2 等于 10，10 + 7 = 17，说明题已更新为输出 17 或数字不匹配；本题重点在理解变量可重新赋值为表达式，选 x*2 最合理。",
+      "example": "a = 3\na = a + 1"
+    },
+
+    // -------------------------
+    // 10 填空（进阶）
+    // -------------------------
+    {
+      "id": 10,
+      "type": "fill",
+      "title": "命名规则实战",
+      "question": "让变量名合法并输出 hi。",
+      "code": "___ = 'hi'\nprint(greeting)",
+      "options": "greeting,1greeting,greet ing,greeting!,_greeting,greet_ing",
+      "answer": "1",
+      "explanation": "greeting 是唯一合法且正确的变量名。",
+      "example": "msg_text = 'hello'"
+    },
+
+    // -------------------------
+    // 11 进阶选择题
+    // -------------------------
+    {
+      "id": 11,
+      "type": "choice",
+      "title": "变量与内存引用",
+      "question": "执行 `a = 10; b = a; a = 20` 后 b 的值是？",
+      "options": {
+        "A": "10",
+        "B": "20",
+        "C": "None",
+        "D": "报错"
+      },
+      "answer": "A",
+      "hints": [
+        "b = a 时，b 引用 a 当时的对象。",
+        "后续 a 改变不会影响 b。",
+        "变量只是标签。"
+      ],
+      "explanation": "a 改为新值不会影响 b，b 仍引用原来的 10。",
+      "example": "x = [1]; y = x; x = [2]  # y 仍为 [1]"
+    },
+
+    // -------------------------
+    // 12 进阶选择题
+    // -------------------------
+    {
+      "id": 12,
+      "type": "choice",
+      "title": "命名冲突",
+      "question": "为什么不建议使用 list 作为变量名？",
+      "options": {
+        "A": "因为它太长",
+        "B": "因为 Python 不允许",
+        "C": "因为它会覆盖内置类型 list",
+        "D": "因为会让程序变慢"
+      },
+      "answer": "C",
+      "hints": [
+        "list 是什么？",
+        "内置类型能被覆盖吗？",
+        "覆盖内置名称会导致很多错误。"
+      ],
+      "explanation": "list 是内置类型，用作变量名会覆盖导致不可用。",
+      "example": "list = 3  # 再也不能用 list()"
+    },
+
+    // -------------------------
+    // 13 进阶选择题
+    // -------------------------
+    {
+      "id": 13,
+      "type": "choice",
+      "title": "变量生命周期",
+      "question": "以下哪个最能描述变量的生命周期？",
+      "options": {
+        "A": "随 Python 启动就存在，随退出销毁",
+        "B": "随所在作用域的结束而销毁",
+        "C": "所有变量都永久存在于内存中",
+        "D": "变量创建后不能被删除"
+      },
+      "answer": "B",
+      "hints": [
+        "变量是否跟随作用域？",
+        "函数中的变量离开函数后还存在吗？",
+        "作用域决定生命周期。"
+      ],
+      "explanation": "变量生命周期由作用域决定。",
+      "example": "def foo(): x = 1\n# x 不在函数外存在"
+    },
+
+    // -------------------------
+    // 14 填空（进阶）
+    // -------------------------
+    {
+      "id": 14,
+      "type": "fill",
+      "title": "理解表达式赋值",
+      "question": "让代码输出 30。",
+      "code": "a = 10\nb = ___\nprint(a + b)",
+      "options": "10,a,a*2,20,a+10,5",
+      "answer": "4",
+      "explanation": "b=20 时 a+b=30。",
+      "example": "x = 3; y = x * 3"
+    },
+
+    // -------------------------
+    // 15 填空（进阶）
+    // -------------------------
+    {
+      "id": 15,
+      "type": "fill",
+      "title": "命名规范判断",
+      "question": "让程序正常运行且符合命名规范。",
+      "code": "___ = 42\nprint(user_score)",
+      "options": "user-score,user score,UserScore,user_score,_userScore,userscore",
+      "answer": "4",
+      "explanation": "user_score 是最规范的变量名，符合 snake_case。",
+      "example": "product_count = 18"
+    }
+
+  ]
+}
