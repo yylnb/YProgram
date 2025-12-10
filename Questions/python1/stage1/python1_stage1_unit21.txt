@@ -1,0 +1,274 @@
+[
+  {
+    'id': 1,
+    'type': 'choice',
+    'title': 'input 的基本作用',
+    'content': '小明写了一个小程序，需要让用户输入名字。应该使用什么？',
+    'options': {
+      'A': 'read()',
+      'B': 'input()',
+      'C': 'scan()',
+      'D': 'get()'
+    },
+    'answer': 'B',
+    'hints': [
+      'Python 中获取用户输入有特定函数。',
+      '该函数会等待用户输入一行文本。',
+      '没错，就是你最常看到的那个。'
+    ],
+    'explanation': 'input() 用于从用户接收一行字符串输入。',
+    'example': '例如：name = input("请输入你的名字：")'
+  },
+
+  {
+    'id': 2,
+    'type': 'choice',
+    'title': 'input 的返回类型',
+    'content': '用户输入 123 后，input() 得到的值是什么类型？',
+    'options': {
+      'A': 'int',
+      'B': 'float',
+      'C': 'str',
+      'D': 'bool'
+    },
+    'answer': 'C',
+    'hints': [
+      'input 返回的不是数字。',
+      '无论输入什么，返回结果都是同一种类型。',
+      '对，就是“文本”。'
+    ],
+    'explanation': 'input() 永远返回字符串，需要时需自行转换。',
+    'example': '例如 num = int(input("请输入数字："))'
+  },
+
+  {
+    'id': 3,
+    'type': 'choice',
+    'title': '提示文本的作用',
+    'content': '下列哪一个 input 写法可以在输入前显示提示？',
+    'options': {
+      'A': 'input name:',
+      'B': 'input("请输入名字：")',
+      'C': 'input{"请输入名字："}',
+      'D': '提示("请输入名字")'
+    },
+    'answer': 'B',
+    'hints': [
+      'input 可以接受一个字符串作为提示。',
+      '提示要写在括号里。',
+      '格式必须符合 Python 的函数调用方式。'
+    ],
+    'explanation': 'input("提示") 是标准写法，会在读取前输出提示。',
+    'example': '例如 age = input("请输入你的年龄：")'
+  },
+
+  {
+    'id': 4,
+    'type': 'fill',
+    'title': '接收用户输入并打印',
+    'content': '补全代码，让程序接收用户输入并输出“Hello X”。',
+    'input': '（用户输入：Tom）',
+    'output': 'Hello Tom',
+    'code': 'name = ___("请输入名字：")\nprint("Hello", ___)',
+    'options': 'input, name, str, user, print, output',
+    'answer': '1,2',
+    'explanation': 'input 用于接收输入，第二处应填变量 name。',
+    'example': '例如你可以写：nickname = input("昵称："); print("Hello", nickname)'
+  },
+
+  {
+    'id': 5,
+    'type': 'fill',
+    'title': '数字输入转换',
+    'content': '补全代码，将用户输入转换为整数并加 10。',
+    'input': '（用户输入：5）',
+    'output': '15',
+    'code': 'n = ___(___("请输入数字："))\nprint(n + 10)',
+    'options': 'str, int, input, number, value, float',
+    'answer': '2,3',
+    'explanation': 'input 接收字符串，再用 int 转换成整数。',
+    'example': '例如：score = int(input("分数："))'
+  },
+
+  {
+    'id': 6,
+    'type': 'choice',
+    'title': 'input 的等待行为',
+    'content': '当程序运行到 input() 时，会发生什么？',
+    'options': {
+      'A': '程序自动跳过输入',
+      'B': '程序暂停并等待用户输入',
+      'C': '程序报错并退出',
+      'D': '程序随机生成一个输入'
+    },
+    'answer': 'B',
+    'hints': [
+      'input 用于和用户互动。',
+      '没有输入就不会继续执行。',
+      '它会“卡住”等用户。'
+    ],
+    'explanation': 'input 会阻塞程序，直到用户输入并按下回车。',
+    'example': '例如：msg = input("按回车继续：")'
+  },
+
+  {
+    'id': 7,
+    'type': 'choice',
+    'title': '多次 input',
+    'content': '如果有两个 input，会怎样？',
+    'options': {
+      'A': '只执行第一个 input',
+      'B': '两个都会执行并分别接收输入',
+      'C': '程序报错',
+      'D': '两个 input 会合并为一次输入'
+    },
+    'answer': 'B',
+    'hints': [
+      '每个 input 都需要用户输入。',
+      '它们不会自动合并。',
+      '也不会跳过。'
+    ],
+    'explanation': '每个 input 会独立执行并等待用户输入。',
+    'example': '例如：a = input(); b = input()'
+  },
+
+  {
+    'id': 8,
+    'type': 'choice',
+    'title': 'input 与字符串拼接',
+    'content': '若 name = input("名字？")，想输出“Hi, 小明”，该怎么写？',
+    'options': {
+      'A': 'print("Hi," + name)',
+      'B': 'print("Hi,", name)',
+      'C': '以上都可以',
+      'D': '只能用格式化字符串'
+    },
+    'answer': 'C',
+    'hints': [
+      '字符串可以拼接。',
+      'print 可以接受多个参数。',
+      '选项里有不止一种正确方式。'
+    ],
+    'explanation': 'A 和 B 都能正确输出字符串，只是格式略有不同。',
+    'example': '例如 print("Hello " + name)'
+  },
+
+  {
+    'id': 9,
+    'type': 'fill',
+    'title': '读取两次输入',
+    'content': '补全代码，让程序分别读取名字和城市。',
+    'input': '（用户输入：Alice / Beijing）',
+    'output': 'Alice 来自 Beijing',
+    'code': 'name = ___("名字：")\ncity = ___("城市：")\nprint(name, "来自", ___)',
+    'options': 'input, city, name, output, str',
+    'answer': '1,1,2',
+    'explanation': '两次都用 input，最后填入 city。',
+    'example': '例如：print(user, "在", place)'
+  },
+
+  {
+    'id': 10,
+    'type': 'fill',
+    'title': '将输入重复输出',
+    'content': '补全代码，让用户输入一句话并重复输出三次。',
+    'input': '（用户输入：Hi）',
+    'output': 'HiHiHi',
+    'code': 'text = ___("说点什么：")\nprint(___ * 3)',
+    'options': 'text, input, str, repeat, print',
+    'answer': '2,1',
+    'explanation': 'input 获取输入，text * 3 实现重复。',
+    'example': '例如：word = input(); print(word * 5)'
+  },
+
+  {
+    'id': 11,
+    'type': 'choice',
+    'title': '输入数字但未转换',
+    'content': 'num = input("数字：")；print(num * 3)，用户输入 2，会输出什么？',
+    'options': {
+      'A': '6',
+      'B': '222',
+      'C': '报错',
+      'D': '无法确定'
+    },
+    'answer': 'B',
+    'hints': [
+      'input 返回字符串。',
+      '字符串 * 3 会重复三次。',
+      '不是数学上的乘法。'
+    ],
+    'explanation': 'num 是 "2"，"2" * 3 得到 "222"。',
+    'example': '例如："Hi" * 2 → "HiHi"'
+  },
+
+  {
+    'id': 12,
+    'type': 'choice',
+    'title': 'input 与类型转换顺序',
+    'content': '想把输入转换为浮点数，正确写法是？',
+    'options': {
+      'A': 'float = input(float)',
+      'B': 'float(input())',
+      'C': 'input(float())',
+      'D': 'int(float(input()))'
+    },
+    'answer': 'B',
+    'hints': [
+      'input 在最内层。',
+      '转换函数在外层包裹。',
+      '只需一次转换。'
+    ],
+    'explanation': 'float(input()) 是正确结构。',
+    'example': '例如：price = float(input("价格："))'
+  },
+
+  {
+    'id': 13,
+    'type': 'choice',
+    'title': 'input 的括号内容',
+    'content': '以下哪项可以作为 input 的参数？',
+    'options': {
+      'A': '整数',
+      'B': '字符串',
+      'C': '变量（包含字符串）',
+      'D': '以上都可以'
+    },
+    'answer': 'D',
+    'hints': [
+      '提示信息只需要能转换成字符串。',
+      '数字或变量都会被转换。',
+      '所以全部都可以。'
+    ],
+    'explanation': 'input 的提示会被转为字符串输出。',
+    'example': '例如：msg = input(123)'
+  },
+
+  {
+    'id': 14,
+    'type': 'fill',
+    'title': '处理年龄输入',
+    'content': '补全代码，实现年龄 +5 的功能。',
+    'input': '（输入：10）',
+    'output': '15',
+    'code': 'age = ___(___("请输入年龄："))\nprint(age + ___)',
+    'options': 'int, input, 5, str, age',
+    'answer': '1,2,3',
+    'explanation': 'input→int→加 5。',
+    'example': '例如：n = int(input()); print(n + 2)'
+  },
+
+  {
+    'id': 15,
+    'type': 'fill',
+    'title': '读取并拼接两段输入',
+    'content': '补全代码，让用户输入姓和名并拼接。',
+    'input': '（输入：Li / Hua）',
+    'output': 'LiHua',
+    'code': 'first = ___("姓：")\nlast = ___("名：")\nprint(___ + ___)',
+    'options': 'first, last, input, +, str',
+    'answer': '3,3,1,2',
+    'explanation': '两次 input，最后拼接 first + last。',
+    'example': '例如：print(a + b)'
+  }
+]
