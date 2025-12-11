@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第75单元：循环与字符串格式化',
+  'questions': [
+    {'id':1,'type':'choice','title':'格式化插入','content':'遍历数据并格式化输出推荐使用？','options':{'A':'f-string','B':'% 格式化','C':'字符串拼接','D':'仅 print 多次'},'answer':'A','hints':['f-string 可读且高效','Python 3.6+ 推荐'], 'explanation':'f-string 简洁且效率高，适合在循环中格式化输出。','example':'for i in range(3):\n  print(f"i={i}")'},
+    {'id':2,'type':'choice','title':'性能注意','content':'在循环中每次格式化很慢时应？','options':{'A':'预先格式化或批量拼接','B':'无法优化','C':'使用递归','D':'换语言'},'answer':'A','hints':['尽量减少每次昂贵操作','批量处理可降低开销'], 'explanation':'将一些可重用格式准备好或使用 join 批量输出可提升性能。','example':'buffer.append(f"{x}")'},
+    {'id':3,'type':'choice','title':'对齐显示','content':'在循环中打印表格对齐常用？','options':{'A':'format 或 f-string 指定宽度','B':'手动空格数','C':'仅使用 tab','D':'不推荐'},'answer':'A','hints':['格式化有宽度和对齐选项','更易维护'], 'explanation':'使用格式化语法可以控制列宽和对齐，便于输出表格。','example':'print(f"{x:>5}")'},
+    {'id':4,'type':'fill','title':'编号输出','content':'补全：将输入每个单词编号并输出。','input':'a b c','output':'1 a\n2 b\n3 c','code':'words=input().split()\nfor i,w in enumerate(words,1):\n    print(i,w)','options':'示例已给出','answer':'1','explanation':'使用 enumerate 提供序号，便于编号输出。','example':'enumerate start=1'},
+    {'id':5,'type':'fill','title':'格式化两位小数','content':'补全：遍历数列表并打印两位小数。','input':'3.14159 2.5','output':'3.14\n2.50','code':'nums=list(map(float,input().split()))\nfor x in nums:\n    print(f"{x:.2f}")','options':'示例已给出','answer':'1','explanation':'使用格式说明符控制小数位数。','example':'{x:.2f}'},
+    {'id':6,'type':'choice','title':'换行控制','content':'在循环中想在末尾不换行用？','options':{'A':'print(..., end="")','B':'print no end','C':'sys.stdout.write 不可用','D':'使用 ;'},'answer':'A','hints':['end 参数控制结尾字符串','常用空字符串阻止换行'], 'explanation':'print 的 end 参数用于控制行尾，默认是换行。','example':'print(x, end=" ")'},
+    {'id':7,'type':'choice','title':'连接大量字符串','content':'在循环中多次拼接字符串应优先？','options':{'A':'先 append 到列表再 join','B':'直接用 + 累加','C':'写到文件再读','D':'使用 float 转换'},'answer':'A','hints':['+ 在循环频繁拼接性能差','join 在最后一次性拼接高效'], 'explanation':'将片段收集在列表中，最后用 join 拼接更高效。','example':'"".join(parts)'},
+    {'id':8,'type':'choice','title':'国际化','content':'在循环中格式化涉及货币和本地化时应？','options':{'A':'使用 locale 或 babel 库','B':'手动拼接字符串','C':'仅使用 f-string','D':'不可本地化'},'answer':'A','hints':['本地化处理涉及千分位和货币符号','使用专业库更安全'], 'explanation':'使用专门库处理区域化格式更可靠。','example':'import locale'},
+    {'id':9,'type':'fill','title':'制表输出','content':'补全：输出两列对齐的表格。','input':'a 1\nb 20','output':'a   1\nb  20','code':'lines=[input().split() for _ in range(2)]\nfor k,v in lines:\n    print(f"{k:<3}{v:>3}")','options':'示例已给出','answer':'1','explanation':'利用格式说明符控制列宽和对齐。','example':'{k:<3}{v:>3}'},
+    {'id':10,'type':'fill','title':'批量构建字符串','content':'补全：将多行结果合并为单一字符串返回。','input':'a\nb','output':'a\nb','code':'res=[]\nfor _ in range(2):\n    res.append(input())\nprint("\n".join(res))','options':'示例已给出','answer':'1','explanation':'使用 join 拼接多行字符串更高效。','example':'"\n".join(lines)'},
+    {'id':11,'type':'choice','title':'转义字符','content':'在循环中打印带引号的字符串可用？','options':{'A':'使用转义或不同引号','B':'无法打印','C':'使用 raw string 不行','D':'必须用 ascii'},'answer':'A','hints':['选择合适的引号或转义内部引号'], 'explanation':'通过不同类型的引号或 \" 转义可包含引号字符。','example':'print("He said \"hi\"")'},
+    {'id':12,'type':'choice','title':'效率权衡','content':'在循环中频繁格式化与字符串拼接，怎样取舍？','options':{'A':'优先可读性，性能成问题再优化','B':'永远追求最优性能','C':'总是用 +','D':'总是用 format'},'answer':'A','hints':['先正确，再优化','避免早期复杂优化'], 'explanation':'先写清晰正确的代码，只有性能出现问题再进行优化处理。','example':'profile before optimize'},
+    {'id':13,'type':'choice','title':'f-string 表达式','content':'f-string 中可以直接嵌入表达式吗？','options':{'A':'可以','B':'不可以','C':'只限字面量','D':'仅 format 支持'},'answer':'A','hints':['f-string 支持表达式求值','注意性能开销'], 'explanation':'f-string 可以直接包含表达式，如 f"{x+1}"。','example':'f"{sum(nums)}"'},
+    {'id':14,'type':'fill','title':'日志格式输出','content':'补全：循环中按固定格式打印日志。','input':'ok error','output':'INFO: ok\nERROR: error','code':'a,b=input().split()\nprint(f"INFO: {a}")\nprint(f"ERROR: {b}")','options':'示例已给出','answer':'1','explanation':'使用 f-string 按固定模式格式化日志。','example':'print(f"LEVEL: {msg}")'},
+    {'id':15,'type':'fill','title':'拼接 CSV 行','content':'补全：根据输入生成 CSV 一行。','input':'a b c','output':'a,b,c','code':'print(",".join(input().split()))','options':'示例已给出','answer':'1','explanation':'使用 join 将字段合并为逗号分隔的行。','example':'",".join(fields)'}
+  ]
+}
+
+```
+
+*** End Patch

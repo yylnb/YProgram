@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第62单元：循环变量与计数器',
+  'questions': [
+    {'id':1,'type':'choice','title':'计数器作用','content':'循环计数器通常用于？','options':{'A':'控制迭代次数','B':'存储字符串','C':'定义函数','D':'格式化输出'},'answer':'A','hints':['记录迭代次数','用于停止循环','常用 i 或 j 名称'],'explanation':'计数器用于控制和记录当前迭代次数。','example':'i=0; while i<5: i+=1'},
+    {'id':2,'type':'choice','title':'计数器初始值','content':'若要打印 1..n，计数器应如何初始化？','options':{'A':'1','B':'0','C':'n','D':'-1'},'answer':'A','hints':['从 1 开始保证第一个值为 1','选择与需求一致'],'explanation':'打印 1..n 时从 1 初始化最为直观。','example':'i=1'},
+    {'id':3,'type':'choice','title':'步长调整','content':'改变计数器步长可以做什么？','options':{'A':'按固定间隔跳过值','B':'影响函数定义','C':'无意义','D':'使循环结束'},'answer':'A','hints':['步长为 2 可跳过奇偶','控制迭代粒度'],'explanation':'通过改变步长可以控制循环迭代的增量。','example':'i+=2'},
+    {'id':4,'type':'fill','title':'计数器示例','content':'补全：使用计数器累加和。','input':'','output':'6','code':'i=1\ns=0\nwhile i<=3:\n    s += i\n    i +=1\nprint(s)','options':'示例已给出','answer':'1','explanation':'累加 1+2+3 的结果为 6。','example':'sum loop'},
+    {'id':5,'type':'fill','title':'避免混淆','content':'补全：不要在循环体内重置计数器。','input':'','output':'','code':'i=0\nwhile i<3:\n    print(i)\n    # 不要写 i = 0','options':'示例已给出','answer':'1','explanation':'重置计数器会导致无限循环或逻辑错误。','example':'update counter properly'},
+    {'id':6,'type':'choice','title':'计数器命名','content':'常见计数器命名风格是？','options':{'A':'用简短变量如 i, j','B':'使用长句子','C':'使用中文变量','D':'使用常量'},'answer':'A','hints':['短名常用于局部迭代','避免与重要变量混淆'],'explanation':'i, j 是常见计数器名，但在复杂场景应用更具描述性的名。','example':'for i in range(5): ...'},
+    {'id':7,'type':'choice','title':'计数器边界','content':'要包括最后一个值应如何写条件？','options':{'A':'<= b','B':'< b','C':'> b','D':'== b only'},'answer':'A','hints':['闭区间需要 +1','注意 off-by-one 错误'],'explanation':'使用 <= 可以包含边界值。','example':'while i<=n: ...'},
+    {'id':8,'type':'choice','title':'计数器类型','content':'计数器可以是什么类型？','options':{'A':'整数最常用','B':'列表','C':'字典','D':'函数'},'answer':'A','hints':['整数便于 +1 增加','步长应为数值类型'],'explanation':'计数器通常为整数以便进行算术递增。','example':'i=0; i+=1'},
+    {'id':9,'type':'fill','title':'用计数器打印偶数','content':'补全：打印 2,4,6。','input':'','output':'2\n4\n6','code':'i=2\nwhile i<=6:\n    print(i)\n    i += 2','options':'示例已给出','answer':'1','explanation':'以步长 2 遍历偶数。','example':'i+=2'},
+    {'id':10,'type':'fill','title':'计数器与条件','content':'补全：循环直到计数器达到 10。','input':'','output':'','code':'i=0\nwhile i<10:\n    i+=1','options':'示例已给出','answer':'1','explanation':'简单计数器条件控制循环。','example':'while i<10: i+=1'},
+    {'id':11,'type':'choice','title':'计数器错误示例','content':'下列哪种做法会常导致无限循环？','options':{'A':'在循环中忘记增加计数器','B':'初始化计数器在外部','C':'使用正确的条件','D':'使用 break 退出'},'answer':'A','hints':['忘记更新变量','循环条件永远为真','检查循环体'], 'explanation':'忘记在循环体改变计数器会导致循环条件永远成立。','example':'missing i += 1'},
+    {'id':12,'type':'choice','title':'计数器与浮点','content':'计数器使用浮点时应注意？','options':{'A':'精度问题导致条件判断不精确','B':'没有区别','C':'更快','D':'自动转换为 int'},'answer':'A','hints':['浮点精度可能引发比较问题','尽量用整数作为计数器'],'explanation':'浮点计数器在比较时可能出现精度误差，建议用整数。','example':'i += 0.1 可能不精确'},
+    {'id':13,'type':'choice','title':'计数器复位','content':'有时需要在循环中复位计数器，这时应？','options':{'A':'小心并确保逻辑正确','B':'随意复位','C':'总是复位为 0','D':'删除计数器'},'answer':'A','hints':['复位会影响后续判断','应明确意图并注释'],'explanation':'复位计数器需要谨慎，明确意图以避免错误。','example':'reset when needed'},
+    {'id':14,'type':'fill','title':'计数器打印索引','content':'补全：打印列表每个元素索引和值。','input':'','output':'0 a\n1 b','code':'lst=["a","b"]\ni=0\nwhile i<len(lst):\n    print(i, lst[i])\n    i+=1','options':'示例已给出','answer':'1','explanation':'使用计数器访问序列索引。','example':'while with index'},
+    {'id':15,'type':'fill','title':'倒序计数器','content':'补全：从 3 倒数到 1。','input':'','output':'3\n2\n1','code':'i=3\nwhile i>0:\n    print(i)\n    i-=1','options':'示例已给出','answer':'1','explanation':'通过递减计数器实现倒序。','example':'i-=1 loop'}
+  ]
+}
+
+```
+
+*** End Patch

@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第86单元：循环与字符串匹配（KMP 简介）',
+  'questions': [
+    {'id':1,'type':'choice','title':'直接子串查找','content':'Python 中查找子串最简单的方法是？','options':{'A':'s.find(sub)','B':'手写循环比较','C':'用正则必须','D':'不可查找'},'answer':'A','hints':['find 返回索引或 -1','简单直接'], 'explanation':'使用内建的 find 或 in 是查找子串的快捷方法。','example':'s.find("ab")'},
+    {'id':2,'type':'choice','title':'in 操作','content':'使用 in 判断子串是否存在会返回？','options':{'A':'布尔值','B':'索引','C':'子串','D':'长度'},'answer':'A','hints':['in 只判断存在性'], 'explanation':'in 表达式返回 True/False，用于判断子串是否出现。','example':'"a" in s'},
+    {'id':3,'type':'choice','title':'KMP 作用','content':'KMP 算法相比朴素搜索的优势是？','options':{'A':'更少重复比较（线性时间）','B':'更难实现但慢','C':'空间更大','D':'只用于二进制'},'answer':'A','hints':['KMP 利用前缀函数避免回退'], 'explanation':'KMP 利用前缀函数在匹配失败时跳过不必要的比较，达到线性时间复杂度。','example':'prefix function'},
+    {'id':4,'type':'fill','title':'简单查找示例','content':'补全：判断子串存在并打印位置（首次）。','input':'abc\nb','output':'1','code':'s=input().strip()\nsub=input().strip()\nprint(s.find(sub))','options':'示例已给出','answer':'1','explanation':'find 返回首次出现的索引或 -1。','example':'s.find(sub)'},
+    {'id':5,'type':'fill','title':'使用 in','content':'补全：只判断是否存在并打印 Yes/No。','input':'hello\nll','output':'Yes','code':'s=input().strip()\nsub=input().strip()\nprint("Yes" if sub in s else "No")','options':'示例已给出','answer':'1','explanation':'in 用于判断子串存在性并返回布尔值。','example':'if sub in s:'},
+    {'id':6,'type':'choice','title':'多次出现','content':'要找出所有出现位置通常用？','options':{'A':'循环 find 并指定起始位置','B':'一次 find 返回所有位置','C':'用 replace','D':'in 即可'},'answer':'A','hints':['可在上次索引基础上继续查找'], 'explanation':'通过循环调用 find 并更新起始位置可找到所有出现位置。','example':'pos = s.find(sub, pos+1)'},
+    {'id':7,'type':'choice','title':'正则优势','content':'复杂模式匹配推荐使用？','options':{'A':'re 模块','B':'手写循环','C':'split','D':'find'},'answer':'A','hints':['正则支持复杂模式与分组'], 'explanation':'对于复杂的模式匹配任务正则提供强大灵活的表达能力。','example':'import re; re.findall()'},
+    {'id':8,'type':'choice','title':'边界条件','content':'查找空子串的行为通常是？','options':{'A':'认为存在并返回 0','B':'报错','C':'-1','D':'None'},'answer':'A','hints':['空串被认为在任何字符串中出现于索引 0'], 'explanation':'空子串通常被认为在任何字符串中出现，find 返回 0。','example':'"" in s -> True'},
+    {'id':9,'type':'fill','title':'找全部位置','content':'补全：列出子串在主串中所有起始索引（空格分隔）。','input':'ababab\nab','output':'0 2 4','code':'s=input().strip(); sub=input().strip();\npos= s.find(sub)\nres=[]\nwhile pos!=-1:\n    res.append(str(pos))\n    pos = s.find(sub, pos+1)\nprint(" ".join(res))','options':'示例已给出','answer':'1','explanation':'循环查找并更新起始索引能获取所有出现位置。','example':'while find != -1'},
+    {'id':10,'type':'fill','title':'重叠匹配','content':'补全：处理重叠匹配（如 "aaa" 中 "aa"）示例。','input':'aaa\naa','output':'0 1','code':'s=input().strip(); sub=input().strip();\nres=[]\nfor i in range(len(s)-len(sub)+1):\n    if s[i:i+len(sub)]==sub:\n        res.append(str(i))\nprint(" ".join(res))','options':'示例已给出','answer':'1','explanation':'使用滑动窗口可处理重叠匹配情形。','example':'s[i:i+len(sub)]'},
+    {'id':11,'type':'choice','title':'复杂度对比','content':'朴素查找在最坏情况下时间复杂度为？','options':{'A':'O(n*m)','B':'O(n)','C':'O(log n)','D':'O(1)'},'answer':'A','hints':['n 为主串长度，m 为模式长度'], 'explanation':'朴素的子串匹配在最坏情况会退回多次比较，复杂度为 O(n*m)。','example':'nested loops'},
+    {'id':12,'type':'choice','title':'KMP 前缀函数','content':'前缀函数（next/π）用于？','options':{'A':'跳过已匹配的前缀','B':'统计频率','C':'排序数组','D':'哈希'},'answer':'A','hints':['前缀函数记录最长相等前后缀长度'], 'explanation':'前缀函数用于在失配时决定模式应向右移动多少以继续匹配而不回溯主串。','example':'compute lps array'},
+    {'id':13,'type':'choice','title':'实现难度','content':'相较于 find，KMP 的实现如何？','options':{'A':'更复杂但更稳健','B':'更简单','C':'不能实现','D':'和 find 一样'},'answer':'A','hints':['需要构造 lps 数组和状态机'], 'explanation':'KMP 需构建前缀函数并实现状态迁移，代码复杂度高于内建 find。','example':'compute lps'}
+    ,{'id':14,'type':'fill','title':'使用 re','content':'补全：用正则查找所有匹配并打印位置。','input':'abab\nab','output':'0 2','code':'import re\ns=input().strip()\nsub=input().strip()\nprint(" ".join([str(m.start()) for m in re.finditer("(?={})".format(re.escape(sub)), s)]))','options':'示例已给出','answer':'1','explanation':'使用 lookahead 能发现重叠匹配的索引。','example':'re.finditer'},
+    {'id':15,'type':'fill','title':'简单 KMP 思路','content':'补全：构建前缀表（简略示例，伪代码）。','input':'(none)','output':'(none)','code':'# 伪代码示例\ndef prefix(s):\n    n=len(s)\n    lps=[0]*n\n    # fill lps ...\n    return lps','options':'示例已给出','answer':'1','explanation':'前缀表用于 KMP 的失配跳转，理解原理比记忆代码更重要。','example':'lps computation'}
+  ]
+}
+
+```
+
+*** End Patch

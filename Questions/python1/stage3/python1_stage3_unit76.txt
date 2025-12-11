@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第76单元：循环中的文件处理',
+  'questions': [
+    {'id':1,'type':'choice','title':'逐行读取','content':'按行读取大文件推荐？','options':{'A':'for line in f','B':'f.read() 一次性','C':'f.readlines() 然后遍历','D':'用 eval'},'answer':'A','hints':['按行迭代内存友好','避免一次性载入全文件'],'explanation':'使用文件对象按行迭代可节省内存并便捷处理每行数据。','example':'with open(path) as f:\n  for line in f:'},
+    {'id':2,'type':'choice','title':'写入模式','content':'写入新文件覆盖原文件模式是？','options':{'A':'w','B':'r','C':'a','D':'x'},'answer':'A','hints':['w 会覆盖','a 是追加'], 'explanation':'以 "w" 模式打开会覆盖原文件。','example':'open("out.txt","w")'},
+    {'id':3,'type':'choice','title':'逐行处理','content':'在循环中处理文件行时应注意？','options':{'A':'使用 strip 清理换行','B':'保留 \n 不做任何处理','C':'用 eval 转换每行','D':'用 input 读取'},'answer':'A','hints':['strip 可去除换行与两端空白','便于后续解析'], 'explanation':'常对读取行使用 strip() 去除尾部换行及空白。','example':'line=line.strip()'},
+    {'id':4,'type':'fill','title':'统计行数','content':'补全：统计文件行数。','input':'a\nb\nc','output':'3','code':'import sys\nlines=sys.stdin.read().splitlines()\nprint(len(lines))','options':'示例已给出','answer':'1','explanation':'读取所有行并统计长度可得到行数。','example':'sum(1 for _ in open(file))'},
+    {'id':5,'type':'fill','title':'过滤空行','content':'补全：打印非空行。','input':'a\n\n b','output':'a\nb','code':'import sys\nfor line in sys.stdin:\n    s=line.strip()\n    if s:\n        print(s)','options':'示例已给出','answer':'1','explanation':'strip 后判断是否为空字符串用于过滤空行。','example':'if line.strip():'},
+    {'id':6,'type':'choice','title':'文件编码','content':'打开包含非 ASCII 文本文件时推荐指定？','options':{'A':'encoding="utf-8"','B':'binary 模式','C':'rb 模式 必要','D':'不需关注'},'answer':'A','hints':['指定编码避免乱码','utf-8 是常用编码'], 'explanation':'指定 encoding 参数能确保正确解码文本。','example':'open(path,encoding="utf-8")'},
+    {'id':7,'type':'choice','title':'追加写入','content':'向文件追加内容应使用哪个模式？','options':{'A':'a','B':'w','C':'r','D':'x'},'answer':'A','hints':['a 模式追加写入','w 会覆盖'], 'explanation':'使用 "a" 模式在文件末尾追加内容。','example':'open(file,"a")'},
+    {'id':8,'type':'choice','title':'上下文管理','content':'推荐使用 with 打开文件的理由是？','options':{'A':'自动关闭文件','B':'更快','C':'不要关闭也行','D':'只能读不可写'},'answer':'A','hints':['确保文件在异常时也被关闭','管理资源更安全'], 'explanation':'with 语句在块结束时自动关闭文件，避免资源泄漏。','example':'with open(f) as fp:'},
+    {'id':9,'type':'fill','title':'写入多行','content':'补全：把多行写入文件。','input':'a\nb','output':'(file contains lines)','code':'lines=[input() for _ in range(2)]\nwith open("out.txt","w",encoding="utf-8") as f:\n    f.write("\n".join(lines))','options':'示例已给出','answer':'1','explanation':'join 后一次写入多行数据。','example':'f.write("\n".join(lines))'},
+    {'id':10,'type':'fill','title':'读取前 N 行','content':'补全：读取前 n 行并打印。','input':'3\na\nb\nc\nd','output':'a\nb\nc','code':'n=int(input())\nfor i,line in enumerate(__import__("sys").stdin):\n    if i>=n: break\n    print(line.strip())','options':'示例已给出','answer':'1','explanation':'枚举并在达到 n 时退出。','example':'for i,line in enumerate(f): if i==n: break'},
+    {'id':11,'type':'choice','title':'二进制读写','content':'处理非文本文件如图片时应使用？','options':{'A':'rb/wb 模式','B':'r/w 文本模式','C':'只用 text mode','D':'使用 json'},'answer':'A','hints':['二进制模式避免解码错误','适用于图片音频'], 'explanation':'非文本数据需用二进制模式读写以保持数据完整。','example':'open(img,"rb")'},
+    {'id':12,'type':'choice','title':'文件指针','content':'读取后想重读文件从头应使用？','options':{'A':'f.seek(0)','B':'重新 open','C':'f.reset()','D':'不可重读'},'answer':'A','hints':['seek 可调整文件指针位置','比重新打开更高效'], 'explanation':'使用 seek(0) 可以把文件指针移到开头以便重读。','example':'f.seek(0)'},
+    {'id':13,'type':'choice','title':'安全写入','content':'写入重要文件时建议先写入临时文件再替换的原因是？','options':{'A':'避免写入中断导致数据损坏','B':'更快','C':'简化代码','D':'不推荐'},'answer':'A','hints':['原子替换降低出错风险','写入失败不影响原文件'], 'explanation':'先写临时文件然后原子替换可以减少文件损坏风险。','example':'os.replace(tmp, dest)'},
+    {'id':14,'type':'fill','title':'统计单词','content':'补全：统计文件中某个单词出现次数。','input':'hello world hello\nhello','output':'3','code':'import sys\ntext=sys.stdin.read()\nprint(text.split().count("hello"))','options':'示例已给出','answer':'1','explanation':'读取全文并按空白拆分后统计单词出现次数。','example':'text.split().count(w)'},
+    {'id':15,'type':'fill','title':'按条件写入','content':'补全：将包含关键字的行写入新文件。','input':'a\nb key\nc key','output':'(file with lines containing key)','code':'import sys\nwith open("out.txt","w",encoding="utf-8") as f:\n    for line in sys.stdin:\n        if "key" in line:\n            f.write(line)','options':'示例已给出','answer':'1','explanation':'遍历并筛选写入新文件。','example':'if "key" in line: f.write(line)'}
+  ]
+}
+
+```
+
+*** End Patch

@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第79单元：循环中的数据验证与清洗',
+  'questions': [
+    {'id':1,'type':'choice','title':'输入验证','content':'在循环中处理用户输入前应先做？','options':{'A':'验证与清洗','B':'直接使用','C':'只在出错时处理','D':'用 assert'},'answer':'A','hints':['验证可以防止异常','清洗保证数据格式一致'], 'explanation':'对输入数据进行验证和预处理可以降低后续处理错误概率。','example':'s = s.strip(); if not s: continue'},
+    {'id':2,'type':'choice','title':'正则使用','content':'复杂字符串清洗适合使用？','options':{'A':'正则表达式','B':'纯字符串方法总是优','C':'eval','D':'手动字符拆分'},'answer':'A','hints':['正则灵活适合复杂模式匹配','注意可读性'], 'explanation':'正则表达式适合复杂模式匹配和清洗任务，但注意性能与可读性。','example':'import re'},
+    {'id':3,'type':'choice','title':'空白处理','content':'想删除每行首尾空白应使用？','options':{'A':'strip','B':'split','C':'replace','D':'rstrip only'},'answer':'A','hints':['strip 去除两端空白','便于统一判断'], 'explanation':'strip 是清理首尾空白的常用方法。','example':'line = line.strip()'},
+    {'id':4,'type':'fill','title':'合法数字','content':'补全：判断字符串是否为整数并打印。','input':'1 a 2','output':'1\n2','code':'for s in input().split():\n    try:\n        print(int(s))\n    except ValueError:\n        continue','options':'示例已给出','answer':'1','explanation':'用 try/except 检测能否转换为整数表示合法数字。','example':'except ValueError:'},
+    {'id':5,'type':'fill','title':'去除重复','content':'补全：循环中去除重复行并保持原顺序。','input':'a b a','output':'a b','code':'seen=set()\nres=[]\nfor s in input().split():\n    if s not in seen:\n        seen.add(s)\n        res.append(s)\nprint(*res)','options':'示例已给出','answer':'1','explanation':'用集合记录已见元素以去除重复并用列表保持顺序。','example':'seen.add(x)'},
+    {'id':6,'type':'choice','title':'默认值','content':'缺失字段用默认值应在何处处理？','options':{'A':'在循环读取处补默认值','B':'在最后报告时补','C':'不补','D':'打印错误'},'answer':'A','hints':['尽早处理能减少后续判断复杂性'], 'explanation':'在读取或解析处立即补齐默认值可以让后续逻辑更简单。','example':'value = data.get("k", default)'},
+    {'id':7,'type':'choice','title':'批量校验','content':'大量数据需要校验时应首选？','options':{'A':'流式校验并分批处理','B':'一次性校验所有数据','C':'手动人工检查','D':'只校验前 N 条'},'answer':'A','hints':['分批处理更节省内存和时间','方便分段回滚'], 'explanation':'流式或分批校验可以降低内存占用并便于逐步处理错误数据。','example':'process in chunks'},
+    {'id':8,'type':'choice','title':'数据标准化','content':'在循环中对字段进行标准化（如小写、去空格）应在什么时候做？','options':{'A':'尽早标准化','B':'延迟到最后','C':'不需要标准化','D':'只在输出时标准化'},'answer':'A','hints':['统一格式便于后续比较和处理'], 'explanation':'标准化通常在数据读取阶段进行以便后续一致处理。','example':'s = s.strip().lower()'},
+    {'id':9,'type':'fill','title':'过滤非法字符','content':'补全：移除字符串中的非字母字符并打印。','input':'a1b!','output':'ab','code':'s=input()\nprint("".join(ch for ch in s if ch.isalpha()))','options':'示例已给出','answer':'1','explanation':'使用 isalpha 筛选仅保留字母字符。','example':'ch.isalpha()'},
+    {'id':10,'type':'fill','title':'字段拆分','content':'补全：把逗号分隔行拆分并打印第二列。','input':'a,1\nb,2','output':'1\n2','code':'for line in input().splitlines():\n    parts=line.split(",")\n    if len(parts)>1:\n        print(parts[1])','options':'示例已给出','answer':'1','explanation':'用 split 分割并检查列数避免越界。','example':'line.split(",")'},
+    {'id':11,'type':'choice','title':'缺失值标识','content':'常用的缺失值标识是？','options':{'A':'空字符串或 None','B':'-99999','C':'0','D':'任意字符'},'answer':'A','hints':['统一标识便于检测和替换'], 'explanation':'使用空字符串或 None 更语义化，便于判断与替换。','example':'if val == "" or val is None:'},
+    {'id':12,'type':'choice','title':'多字段校验','content':'校验多字段关联规则时应注意？','options':{'A':'顺序和依赖关系','B':'只校验单字段','C':'不需要校验','D':'总是用正则'},'answer':'A','hints':['某些字段值依赖于其他字段','按依赖顺序校验更稳健'], 'explanation':'当字段间存在依赖时需按正确顺序校验并处理。','example':'if a and not b: error'},
+    {'id':13,'type':'choice','title':'缺陷跟踪','content':'遇到可复现的脏数据应？','options':{'A':'记录样本并上报','B':'忽略','C':'直接删除所有数据','D':'重启服务'},'answer':'A','hints':['保留样本便于分析根因并修复'], 'explanation':'记录样本和上下文便于开发和运维定位并修复数据源问题。','example':'write sample to log'},
+    {'id':14,'type':'fill','title':'移除空字段','content':'补全：读取二列数据，若第二列为空则输出默认值。','input':'a,\nb,c','output':'a,default\nb,c','code':'for line in input().splitlines():\n    k,v=(line.split(",") + [""])[:2]\n    if not v:\n        v="default"\n    print(k+","+v)','options':'示例已给出','answer':'1','explanation':'通过补齐列表长度并判空实现默认值替换。','example':'parts = line.split(",") + [""]'},
+    {'id':15,'type':'fill','title':'字段类型转换','content':'补全：把第二列转换为整数，失败时设为 0。','input':'a,1\nb,x','output':'1\n0','code':'for line in input().splitlines():\n    parts=line.split(",")\n    try:\n        print(int(parts[1]))\n    except Exception:\n        print(0)','options':'示例已给出','answer':'1','explanation':'用 try/except 处理转换失败并给出默认值。','example':'except ValueError: print(0)'}
+  ]
+}
+
+```
+
+*** End Patch

@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第77单元：循环中的错误处理与异常',
+  'questions': [
+    {'id':1,'type':'choice','title':'捕获异常位置','content':'在循环中处理可能抛出异常的操作时应如何做？','options':{'A':'在循环内部 try/except 捕获','B':'不捕获让程序退出','C':'外层 try 捕获所有','D':'使用 assert'},'answer':'A','hints':['局部捕获更细粒度','可跳过有问题的项'], 'explanation':'在循环内对可能出错的操作局部捕获异常可以保证循环继续处理其他项。','example':'for x in lst:\n  try:\n    do(x)\n  except: pass'},
+    {'id':2,'type':'choice','title':'异常信息','content':'要记录异常信息便于调试应使用？','options':{'A':'logging.exception','B':'print 不记录','C':'pass 忽略','D':'assert'},'answer':'A','hints':['logging.exception 会记录堆栈信息','便于排查'], 'explanation':'使用 logging.exception 可以记录异常的堆栈信息，方便后续调试。','example':'except Exception as e:\n  logging.exception(e)'},
+    {'id':3,'type':'choice','title':'细粒度捕获','content':'应避免捕获哪种异常范围？','options':{'A':'过于宽泛的 Exception','B':'具体的 ValueError','C':'IOError','D':'KeyError'},'answer':'A','hints':['过宽的 except 难以发现真实错误','捕获具体异常更安全'], 'explanation':'捕获具体异常类型可以避免吞掉不相关的错误，使问题更易定位。','example':'except ValueError:'},
+    {'id':4,'type':'fill','title':'忽略错误继续','content':'补全：循环中遇到异常打印并继续处理。','input':'1 0 2','output':'1\nError\n2','code':'nums=list(map(int,input().split()))\nfor x in nums:\n    try:\n        print(10//x)\n    except Exception as e:\n        print("Error")','options':'示例已给出','answer':'1','explanation':'对可能失败的运算进行 try/except 并在异常时处理后继续循环。','example':'except ZeroDivisionError:'},
+    {'id':5,'type':'fill','title':'记录并跳过','content':'补全：遇到错误时记录并跳过当前项。','input':'a b 1','output':'(logs)\n1','code':'items=input().split()\nimport logging\nfor it in items:\n    try:\n        v=int(it)\n        print(v)\n    except Exception as e:\n        logging.error(f"bad {it}")','options':'示例已给出','answer':'1','explanation':'使用 logging 记录问题项，保证循环不中断。','example':'logging.error(msg)'},
+    {'id':6,'type':'choice','title':'清理操作','content':'循环内如果使用资源需要在异常后做清理，应使用？','options':{'A':'with 或 finally','B':'不需要清理','C':'仅用 return','D':'重新启动程序'},'answer':'A','hints':['with 管理资源自动清理','finally 可在异常后执行'], 'explanation':'使用 with 或 finally 确保资源在异常后也能被释放。','example':'try:\n  ...\nfinally:\n  cleanup()'},
+    {'id':7,'type':'choice','title':'跳出循环','content':'遇到不可恢复的异常想停止循环应使用？','options':{'A':'raise 再抛出','B':'pass','C':'continue','D':'忽略'},'answer':'A','hints':['通过 re-raise 让上层处理或终止程序','便于集中处理'], 'explanation':'遇到严重错误可重新抛出异常以终止循环并由外层处理。','example':'except Exception:\n  raise'},
+    {'id':8,'type':'choice','title':'异常类型判断','content':'当只想处理特定错误应？','options':{'A':'except SpecificError as e','B':'except:','C':'if error in e','D':'使用 type(e) 比较字符串'},'answer':'A','hints':['捕获具体异常更安全','可获得异常对象'], 'explanation':'使用 except 指定异常类型并绑定变量可以更精确地处理错误。','example':'except ValueError as e:'},
+    {'id':9,'type':'fill','title':'安全转换','content':'补全：将字符串列表安全转换为整数列表，忽略无法转换项。','input':'1 a 2','output':'1 2','code':'res=[]\nfor s in input().split():\n    try:\n        res.append(int(s))\n    except ValueError:\n        continue\nprint(*res)','options':'示例已给出','answer':'1','explanation':'使用 try/except 处理单个转换失败以继续其他项。','example':'except ValueError:'},
+    {'id':10,'type':'fill','title':'打印异常信息','content':'补全：打印异常的类型和信息。','input':'a 0','output':'(error info)','code':'try:\n    x=int(input())\n    print(10//x)\nexcept Exception as e:\n    print(type(e).__name__, e)','options':'示例已给出','answer':'1','explanation':'通过 type(e).__name__ 能得到异常类型名，e 为异常实例信息。','example':'print(type(e), e)'},
+    {'id':11,'type':'choice','title':'调试 vs 处理','content':'在循环中临时调试时可用？','options':{'A':'print 并继续','B':'永久用 print 替代 logging','C':'移除异常处理','D':'用 assert 作为生产代码'},'answer':'A','hints':['print 便于临时查看','生产环境用 logging'], 'explanation':'开发时可用 print 快速排查，生产环境应使用 logging 并删除临时输出。','example':'print("debug", x)'},
+    {'id':12,'type':'choice','title':'异常频率','content':'若循环中大量项都抛异常，说明？','options':{'A':'输入数据可能有问题','B':'只个别项有问题','C':'逻辑正确无需关注','D':'Python 有 bug'},'answer':'A','hints':['检查输入数据或处理逻辑','不要忽略大量异常'], 'explanation':'频繁异常常提示数据或前置处理存在问题，应定位根因。','example':'validate inputs first'},
+    {'id':13,'type':'choice','title':'日志级别','content':'用于记录错误堆栈信息的 logging 函数是？','options':{'A':'logging.exception','B':'logging.info','C':'logging.debug','D':'logging.warning'},'answer':'A','hints':['exception 会记录堆栈信息','便于调试'], 'explanation':'logging.exception 在处理异常的 except 块中记录堆栈信息并会自动包含异常信息。','example':'except Exception: logging.exception("err")'},
+    {'id':14,'type':'fill','title':'安全索引访问','content':'补全：安全访问列表索引，索引越界时返回 None。','input':'1 2\n3','output':'3','code':'lst=list(map(int,input().split()))\ni=int(input())\nprint(lst[i] if 0<=i<len(lst) else None)','options':'示例已给出','answer':'1','explanation':'通过范围判断防止越界异常。','example':'if i<len(lst): print(lst[i]) else: print(None)'},
+    {'id':15,'type':'fill','title':'收集错误项','content':'补全：将出错的项保存到列表以便后续分析。','input':'1 a 2','output':'(print valid)\n[a]','code':'items=input().split()\nerrs=[]\nfor it in items:\n    try:\n        print(int(it))\n    except Exception:\n        errs.append(it)\nprint(errs)','options':'示例已给出','answer':'1','explanation':'收集错误项便于后续人工或自动分析。','example':'errs.append(bad)'}
+  ]
+}
+
+```
+
+*** End Patch

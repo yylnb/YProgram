@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第70单元：小复习（61–69 单元）',
+  'questions': [
+    {'id':1,'type':'choice','title':'复习：while 用途','content':'while 最适合用于？','options':{'A':'未知次数、条件驱动的循环','B':'固定次数迭代','C':'仅遍历列表','D':'定义函数'},'answer':'A','hints':['条件控制循环','如等待事件发生'], 'explanation':'while 用于条件驱动的循环而非已知次数的简单遍历。','example':'while cond: ...'},
+    {'id':2,'type':'choice','title':'复习：break','content':'break 的作用是？','options':{'A':'立即退出当前循环','B':'跳过本次迭代','C':'继续函数','D':'重置循环'},'answer':'A','hints':['强制退出','影响最内层循环'], 'explanation':'break 会立即退出包含它的最内层循环。','example':'if found: break'},
+    {'id':3,'type':'choice','title':'复习：continue','content':'continue 会导致？','options':{'A':'跳到下一次迭代','B':'退出循环','C':'结束程序','D':'无作用'},'answer':'A','hints':['跳过本次余下语句','继续判断条件'], 'explanation':'continue 跳过当前迭代剩余语句并进入下一次迭代。','example':'if cond: continue'},
+    {'id':4,'type':'fill','title':'复习：计数器','content':'补全：计数器初始为 0，不断加 1，循环结束条件为 i>=3。','input':'','output':'','code':'i=0\nwhile i<3:\n    i+=1','options':'示例已给出','answer':'1','explanation':'通过 i 的递增和条件判断控制循环次数。','example':'i increment'},
+    {'id':5,'type':'fill','title':'复习：安全退出','content':'补全：在循环中加入最大迭代限制以防死循环。','input':'','output':'','code':'i=0\nwhile cond:\n    i+=1\n    if i>1000:\n        break','options':'示例已给出','answer':'1','explanation':'超时或迭代上限可以作为安全退出措施。','example':'max_iters guard'},
+    {'id':6,'type':'choice','title':'复习：轮询等待','content':'轮询等待外部状态时应加入？','options':{'A':'适当的 sleep','B':'不断 busy-wait','C':'更多计算','D':'跳过休眠'},'answer':'A','hints':['sleep 降低 CPU 占用','控制检查频率'], 'explanation':'轮询应适当 sleep 避免 CPU 资源浪费。','example':'time.sleep(0.5)'},
+    {'id':7,'type':'choice','title':'复习：用户交互','content':'交互式循环接收输入时要注意？','options':{'A':'校验和清洗输入','B':'直接 eval','C':'忽略空格','D':'不记录历史'},'answer':'A','hints':['strip 和验证','避免安全风险'], 'explanation':'处理用户输入应先清洗并校验安全性。','example':'s = input().strip()'},
+    {'id':8,'type':'choice','title':'复习：日志','content':'为什么在循环中记录日志需要谨慎？','options':{'A':'过多日志会影响性能并泄露信息','B':'永远记录越多越好','C':'减少调试效率','D':'不必要'},'answer':'A','hints':['注意性能与隐私','只记录必要摘要'], 'explanation':'在循环中频繁记录日志可能影响性能且需注意敏感数据保护。','example':'log.debug limited'},
+    {'id':9,'type':'fill','title':'复习：示例 break','content':'补全：找到 0 时退出。','input':'1 0 2','output':'','code':'while True:\n    v=int(input())\n    if v==0:\n        break','options':'示例已给出','answer':'1','explanation':'遇 sentinel 值退出循环。','example':'sentinel'},
+    {'id':10,'type':'fill','title':'复习：示例 continue','content':'补全：遇到负数跳过处理。','input':'1 -1 2','output':'1\n2','code':'for v in [1,-1,2]:\n    if v<0:\n        continue\n    print(v)','options':'示例已给出','answer':'1','explanation':'continue 可跳过不想处理的项。','example':'skip negatives'},
+    {'id':11,'type':'choice','title':'复习：资源释放','content':'循环中若打开文件，推荐使用？','options':{'A':'with 语句自动释放','B':'不关闭','C':'留到程序结束','D':'写到全局'},'answer':'A','hints':['上下文管理自动释放','避免资源泄漏'], 'explanation':'使用 with 可以确保文件在离开上下文时被自动关闭。','example':'with open() as f: ...'},
+    {'id':12,'type':'choice','title':'复习：检测死循环','content':'哪个手段有助于发现死循环？','options':{'A':'使用日志和 profiling','B':'删掉循环','C':'增加随机数','D':'不调试'},'answer':'A','hints':['记录循环次数','定位热点函数'], 'explanation':'日志和 profiling 可以帮助定位导致死循环或高 CPU 的代码段。','example':'cProfile'},
+    {'id':13,'type':'choice','title':'复习：交互退出','content':'交互循环中用户退出时应如何处理？','options':{'A':'清理并退出循环','B':'直接崩溃','C':'忽略退出','D':'退出但不释放资源'},'answer':'A','hints':['释放资源','保存状态'], 'explanation':'用户退出应做必要的清理和状态保存再退出。','example':'save history then break'},
+    {'id':14,'type':'fill','title':'复习：打印计数','content':'补全：打印 0 到 2。','input':'','output':'0\n1\n2','code':'i=0\nwhile i<3:\n    print(i)\n    i+=1','options':'示例已给出','answer':'1','explanation':'基本计数循环示例。','example':'i increment loop'},
+    {'id':15,'type':'fill','title':'复习：安全 guard','content':'补全：加入最大迭代以防万一。','input':'','output':'','code':'i=0\nwhile cond:\n    i+=1\n    if i>10000:\n        break','options':'示例已给出','answer':'1','explanation':'添加上限保护是稳健做法。','example':'max_iters guard'}
+  ]
+}
+
+```
+
+*** End Patch

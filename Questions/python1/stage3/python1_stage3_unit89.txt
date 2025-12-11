@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第89单元：循环与模拟（状态机）',
+  'questions': [
+    {'id':1,'type':'choice','title':'模拟思想','content':'模拟题的核心通常是？','options':{'A':'按规则逐步更新状态','B':'找公式直接计算','C':'随机猜测','D':'使用数据库'},'answer':'A','hints':['按规则迭代状态是模拟问题的本质'], 'explanation':'模拟问题通过逐步按规则更新状态来得到最终结果，适合规则明确的问题。','example':'for step in range(t): update(state)'},
+    {'id':2,'type':'choice','title':'状态表示','content':'表示状态时应优先选择？','options':{'A':'清晰且尽量紧凑的数据结构','B':'越复杂越好','C':'使用字符串总是最优','D':'不需要表示'},'answer':'A','hints':['易于更新和检查的结构更利于模拟'], 'explanation':'选取合适的数据结构用于高效表示状态并方便更新与判断。','example':'使用元组/字典/list 表示状态'},
+    {'id':3,'type':'choice','title':'步数限制','content':'若模拟步数非常大应考虑？','options':{'A':'找周期或数学简化','B':'直接模拟直到结束','C':'放弃求解','D':'增加内存'},'answer':'A','hints':['周期性可用于跳跃式计算最终状态'], 'explanation':'当步数很大时寻找周期或模式以避免逐步模拟可显著提高效率。','example':'find cycle length'},
+    {'id':4,'type':'fill','title':'简单自动机','content':'补全：基于规则的状态转移示例（轮流切换 A/B）。','input':'3','output':'A B A','code':'n=int(input())\nstate="A"\nfor i in range(n):\n    print(state, end=" ")\n    state = "B" if state=="A" else "A"','options':'示例已给出','answer':'1','explanation':'通过简单的状态切换逐步输出状态序列。','example':'state toggle'},
+    {'id':5,'type':'fill','title':'边界处理','content':'补全：模拟时注意边界条件示例（环形）。','input':'5 2','output':'3','code':'n,k=map(int,input().split())\nprint((k)%n)','options':'示例已给出','answer':'1','explanation':'环形索引使用模运算处理越界。','example':'(i+1)%n'},
+    {'id':6,'type':'choice','title':'状态压缩','content':'当状态空间过大时可用的技巧？','options':{'A':'状态压缩或哈希表示','B':'存全部历史','C':'展开为矩阵','D':'必须并行计算'},'answer':'A','hints':['压缩能降低内存消耗并便于比较'], 'explanation':'通过压缩或哈希表示状态可节省内存并便于快速比较。','example':'bitmask representation'},
+    {'id':7,'type':'choice','title':'循环内打印','content':'大规模模拟中频繁打印会导致？','options':{'A':'显著降低性能','B':'提高性能','C':'无影响','D':'只影响内存'},'answer':'A','hints':['IO 是慢操作，尽量批量输出或记录'], 'explanation':'频繁 IO 会成为瓶颈，应尽可能减少打印或批量输出以提高效率。','example':'collect outputs and join'},
+    {'id':8,'type':'choice','title':'调试模拟','content':'调试复杂模拟常用方法？','options':{'A':'缩小规模并打印中间状态','B':'直接交付','C':'不打印','D':'只运行完整样例'},'answer':'A','hints':['逐步验证小规模能快速定位问题'], 'explanation':'通过缩小规模和打印中间状态能快速定位逻辑错误。','example':'debug small n'},
+    {'id':9,'type':'fill','title':'周期检测','content':'补全：用字典记录状态第一次出现的步数以检测周期。','input':'(none)','output':'(none)','code':'seen={}\nstep=0\nstate=init\nwhile True:\n    if state in seen:\n        print("cycle", step - seen[state]); break\n    seen[state]=step\n    # update state\n    step+=1','options':'示例已给出','answer':'1','explanation':'记录状态首次出现的步数可计算周期长度并快速跳跃到目标步数。','example':'seen[state]=step'},
+    {'id':10,'type':'fill','title':'模拟与数学结合','content':'补全：若发现每 T 步状态重复，可用数学跳跃到目标步。','input':'(none)','output':'(none)','code':'# pseudo\nif target>first_occurrence:\n    remain = (target-first_occurrence) % cycle_len\n    simulate remain steps','options':'示例已给出','answer':'1','explanation':'利用周期性质可把大步数问题降为小步数模拟。','example':'fast-forward using cycle'},
+    {'id':11,'type':'choice','title':'状态存储','content':'存储历史状态以便回退常用的数据结构是？','options':{'A':'list 或栈','B':'set','C':'dict 不能','D':'tuple'},'answer':'A','hints':['栈便于回退最近的状态'], 'explanation':'使用列表或栈可以按顺序存储历史状态并实现回退操作。','example':'history.append(state)\nstate = history.pop()'},
+    {'id':12,'type':'choice','title':'模拟复杂度','content':'模拟步数较多但每步开销小，时间复杂度常为？','options':{'A':'O(steps)','B':'O(1)','C':'取决于状态大小','D':'不可估计'},'answer':'A','hints':['每步常量开销时整体线性增长'], 'explanation':'当每步开销为常量时，模拟总时间复杂度与步数线性相关。','example':'for _ in range(steps): update()'},
+    {'id':13,'type':'choice','title':'并行模拟','content':'若模拟的不同初始条件互不依赖，可否并行？','options':{'A':'可以并行以加速','B':'不能并行','C':'只可串行','D':'需要数据库'},'answer':'A','hints':['独立任务可并行化以提升吞吐'], 'explanation':'相互独立的模拟任务可放到进程池并行执行以加速整体计算。','example':'Pool.map(simulate, params)'},
+    {'id':14,'type':'fill','title':'保存检查点','content':'补全：长时间模拟中定期保存检查点以便恢复。','input':'(none)','output':'(none)','code':'if step % 1000 == 0:\n    save(state)','options':'示例已给出','answer':'1','explanation':'定期保存检查点可以在程序崩溃时从中恢复，避免重头运行。','example':'pickle.dump(state, f)'},
+    {'id':15,'type':'fill','title':'效率与准确性','content':'补全：在近似模拟中说明何时接受近似结果并停止细粒度模拟。','input':'(none)','output':'(none)','code':'# pseudo: 如果误差 < eps 则停止并返回近似结果','options':'示例已给出','answer':'1','explanation':'在能容忍误差的场景下可使用近似并在误差满足条件时提前终止模拟以节省资源。','example':'if abs(cur - target) < eps: break'}
+  ]
+}
+
+```
+
+*** End Patch

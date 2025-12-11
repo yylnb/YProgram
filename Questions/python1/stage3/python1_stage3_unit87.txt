@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第87单元：循环与正则表达式',
+  'questions': [
+    {'id':1,'type':'choice','title':'re.search vs match','content':'re.match 与 re.search 区别是？','options':{'A':'match 从开头匹配，search 在任意位置匹配','B':'两者相同','C':'search 更快','D':'match 支持多行'},'answer':'A','hints':['match 只匹配字符串开头'], 'explanation':'re.match 只在字符串开头尝试匹配，re.search 会在任意位置查找匹配。','example':'re.search("a", "ba")'},
+    {'id':2,'type':'choice','title':'转义字符','content':'正则中要匹配特殊字符如 . 应如何处理？','options':{'A':'使用 \\ 转义或 re.escape','B':'直接写 .','C':'不可能匹配','D':'只用 find'},'answer':'A','hints':['特殊字符需转义或用 re.escape'], 'explanation':'使用 \\ 转义或 re.escape 对用户输入的特殊字符进行转义以安全构造正则。','example':'re.escape(".")'},
+    {'id':3,'type':'choice','title':'分组捕获','content':'正则中的捕获组用 () 表示，其作用是？','options':{'A':'提取子串','B':'替换字符','C':'删除空白','D':'排序'},'answer':'A','hints':['捕获组提取并可在替换中引用'], 'explanation':'捕获组用于提取匹配的子串并可用于替换或后续处理。','example':'m.group(1)'},
+    {'id':4,'type':'fill','title':'基本匹配','content':'补全：用 re 判断邮箱格式（简化示例）。','input':'a@b.com','output':'Yes','code':'import re\ns=input().strip()\nprint("Yes" if re.match(r"^\S+@\S+\.\S+$", s) else "No")','options':'示例已给出','answer':'1','explanation':'用简单正则判断 Email 格式示例，实际生产需更严格校验。','example':'re.match(regex, s)'},
+    {'id':5,'type':'fill','title':'查找所有','content':'补全：用 re.findall 查找所有数字子串并打印。','input':'a1b22','output':'1 22','code':'import re\nprint(*re.findall(r"\d+", input().strip()))','options':'示例已给出','answer':'1','explanation':'findall 返回所有匹配的子串列表。','example':'re.findall(pattern, s)'},
+    {'id':6,'type':'choice','title':'忽略大小写','content':'正则忽略大小写匹配应使用哪个标志？','options':{'A':'re.I 或 re.IGNORECASE','B':'re.M','C':'re.S','D':'re.X'},'answer':'A','hints':['IGNORECASE 忽略字母大小写'], 'explanation':'使用 re.I 可以使匹配忽略大小写差异。','example':'re.search(p, s, re.I)'},
+    {'id':7,'type':'choice','title':'贪婪与非贪婪','content':'正则量词默认是贪婪的，如何使其非贪婪？','options':{'A':'后接 ?','B':'加 *','C':'加 +','D':'无解'},'answer':'A','hints':['使用 *? 或 +? 实现非贪婪'], 'explanation':'量词后加 ? 能使其变为非贪婪匹配，匹配最短可能的长度。','example':'<.*?> 匹配最短标签'},
+    {'id':8,'type':'choice','title':'多行模式','content':'re.M 的作用是？','options':{'A':'^ 和 $ 匹配每行的开头结尾','B':'忽略空白','C':'使 . 匹配换行','D':'注释模式'},'answer':'A','hints':['多行模式影响 ^ $ 的行为'], 'explanation':'re.M (MULTILINE) 使 ^ 和 $ 匹配每行的开始和结束位置。','example':'re.M usage'},
+    {'id':9,'type':'fill','title':'替换示例','content':'补全：把字符串中连续空白替换为单个空格。','input':'a   b','output':'a b','code':'import re\nprint(re.sub(r"\s+", " ", input().strip()))','options':'示例已给出','answer':'1','explanation':'re.sub 可用于全局替换复杂模式。','example':'re.sub(pattern,repl,s)'},
+    {'id':10,'type':'fill','title':'捕获组引用','content':'补全：把日期从 YYYY-MM-DD 改为 DD/MM/YYYY。','input':'2020-01-02','output':'02/01/2020','code':'import re\ns=input().strip()\nprint(re.sub(r"(\d{4})-(\d{2})-(\d{2})", r"\\3/\\2/\\1", s))','options':'示例已给出','answer':'1','explanation':'使用捕获组并在替换字符串中反向引用组号。','example':'re.sub(pattern, r"\3/\2/\1", s)'},
+    {'id':11,'type':'choice','title':'预编译模式','content':'当在循环中多次使用同一正则时应？','options':{'A':'预编译 re.compile','B':'每次用 re.search 直接传字符串','C':'用 split 代替','D':'写成 C 扩展'},'answer':'A','hints':['compile 能减少重复解析开销'], 'explanation':'预编译正则对象在循环中重用可以提升性能。','example':'p = re.compile(pattern)\nfor s in it: p.search(s)'},
+    {'id':12,'type':'choice','title':'安全构造正则','content':'用户输入需作为正则的一部分时应如何处理？','options':{'A':'用 re.escape 转义','B':'直接插入','C':'用 eval','D':'不支持'},'answer':'A','hints':['escape 能对特殊字符转义'], 'explanation':'为避免用户输入破坏正则语法，应先用 re.escape 转义。','example':'re.compile(re.escape(user))'},
+    {'id':13,'type':'choice','title':'性能陷阱','content':'复杂正则可能导致的安全问题是？','options':{'A':'正则灾难（Catastrophic backtracking）','B':'更安全','C':'不可执行','D':'无影响'},'answer':'A','hints':['某些贪婪量词组合会引发指数级回溯'], 'explanation':'不当的正则写法可能导致回溯爆炸，造成高 CPU 占用甚至拒绝服务。','example':'avoid catastrophic patterns'},
+    {'id':14,'type':'fill','title':'找到首个匹配','content':'补全：用 re.search 找到并打印第一个匹配。','input':'abc123','output':'123','code':'import re\nm=re.search(r"\d+", input().strip())\nif m:\n    print(m.group())','options':'示例已给出','answer':'1','explanation':'re.search 返回第一个匹配的 Match 对象，可用 group() 提取匹配文本。','example':'m.group()'},
+    {'id':15,'type':'fill','title':'用 finditer','content':'补全：用 re.finditer 遍历所有匹配并打印其起始位置。','input':'aba\na','output':'0 2','code':'import re\ns=input().strip()\nfor m in re.finditer("a", s):\n    print(m.start(), end=" ")','options':'示例已给出','answer':'1','explanation':'re.finditer 返回匹配迭代器，可逐个处理 Match 对象并获取位置信息。','example':'for m in re.finditer(p, s):'}
+  ]
+}
+
+```
+
+*** End Patch
