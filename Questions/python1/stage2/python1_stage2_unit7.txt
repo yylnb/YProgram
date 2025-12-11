@@ -1,0 +1,200 @@
+```plaintext
+{
+  'unit': '第7单元：条件判断与字符串',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '字符串比较',
+      'content': '"a" < "b" 在 Python 中的结果是？',
+      'options': {'A':'True','B':'False','C':'报错','D':'取决于编码'},
+      'answer': 'A',
+      'hints': ['字符串按字典序比较','基于 Unicode 编码','a 在 b 之前'],
+      'explanation': '字符串按字典序比较，"a" 在 "b" 之前因此为 True。',
+      'example': '"apple" < "banana" → True'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '大小写比较',
+      'content': '"A" 和 "a" 的比较结果通常如何？',
+      'options': {'A':'不相等且先后由编码决定','B':'总是相等','C':'会报错','D':'Python 忽略大小写比较'},
+      'answer': 'A',
+      'hints': ['大小写字母编码不同','通常大写在小写之前','可统一大小写后比较'],
+      'explanation': '大小写字母的 Unicode 码点不同，比较结果由编码决定。',
+      'example': 's.lower() 可用于忽略大小写比较'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': 'in 运算符',
+      'content': '表达式 "py" in "python" 的结果是？',
+      'options': {'A':'True','B':'False','C':'报错','D':'None'},
+      'answer': 'A',
+      'hints': ['in 用于子串检查','所给子串存在于字符串中','返回布尔值'],
+      'explanation': '"py" 是 "python" 的子串，因此 in 返回 True。',
+      'example': '"a" in "abc" → True'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '检查前后空白',
+      'content': '补全以判断输入是否为空或仅空白。',
+      'input': 's=" \t\n"',
+      'output': 'Empty',
+      'code': 's = input()\nif s.___():\n    print("Empty")',
+      'options': 'strip, lower, upper, split',
+      'answer': 'strip',
+      'explanation': 'strip() 去掉字符串两端空白，可判断是否为空或仅空白。',
+      'example': 'if not s.strip(): print("empty")'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '子串查找',
+      'content': '补全：判断子串是否存在并打印 Found/Not Found。',
+      'input': 'hay="hello"; needle="ll"',
+      'output': 'Found',
+      'code': 'hay = "hello"\nneedle = "ll"\nif needle ___ hay:\n    print("Found")\nelse:\n    print("Not Found")',
+      'options': 'in, not in, find, index',
+      'answer': 'in',
+      'explanation': 'in 用于检查子串存在性。',
+      'example': 'if "py" in "python": ...'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '大小写统一比较',
+      'content': '要不区分大小写地比较字符串，应该怎么做？',
+      'options': {'A':'同时 lower() 或 upper() 后比较','B':'直接比较','C':'用 is 比较','D':'用 == 且加 encoding 参数'},
+      'answer': 'A',
+      'hints': ['统一大小写是常用方法','lower() 或 upper() 效果相同','避免直接用 is 做相等判断'],
+      'explanation': '先把字符串转换为统一大小写再比较可以忽略大小写差异。',
+      'example': 'if s1.lower() == s2.lower(): ...'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': 'startswith/endswith',
+      'content': '下面哪个方法用于判断字符串是否以某子串开头？',
+      'options': {'A':'startswith','B':'contains','C':'index','D':'find'},
+      'answer': 'A',
+      'hints': ['方法名语义明确','返回布尔值','常用于路径或前缀判断'],
+      'explanation': 'startswith 用于判断前缀，endswith 判断后缀。',
+      'example': 'if filename.endswith(".py"): ...'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '字符串比较的语义',
+      'content': '字符串比较是按什么进行的？',
+      'options': {'A':'字典序（字符编码）','B':'长度先比较','C':'出现频率','D':'随机'},
+      'answer': 'A',
+      'hints': ['基于字符的编码值进行比较','不是长度优先','可用 locale 影响显示但内部比较仍编码'],
+      'explanation': 'Python 按字符的 Unicode 编码进行逐字符比较，类似字典序。',
+      'example': '"cat" > "car" → True'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '检查空串并提示',
+      'content': '补全判断使空串时提示。',
+      'input': 's=""',
+      'output': 'Empty',
+      'code': 's = ""\nif not ___:\n    print("Empty")',
+      'options': 's, s.strip(), s == "", len(s)',
+      'answer': 's',
+      'explanation': '直接使用 if not s 可以判断空字符串。',
+      'example': 'if not name: print("no name")'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '去除换行与空格',
+      'content': '补全：读取并去除末尾换行再比较。',
+      'input': '用户输入后按回车',
+      'output': '',
+      'code': 's = input().___()\nif s == "ok":\n    print("Good")',
+      'options': 'strip, rstrip, lstrip, replace',
+      'answer': 'strip',
+      'explanation': 'strip() 去除两端空白（包括换行）。',
+      'example': 's = input().strip()'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '子串定位',
+      'content': '若想获得子串位置，使用哪个方法？',
+      'options': {'A':'find','B':'in','C':'startswith','D':'lower'},
+      'answer': 'A',
+      'hints': ['find 返回索引或 -1','in 只返回布尔值','index 在找不到时抛异常'],
+      'explanation': 'find 返回首次出现的索引，找不到返回 -1；index 会抛出异常。',
+      'example': 's.find("needle")'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': 'split 的用途',
+      'content': 'split 方法一般用于？',
+      'options': {'A':'把字符串按分隔符切成列表','B':'替换子串','C':'统计字符','D':'反转字符串'},
+      'answer': 'A',
+      'hints': ['split 返回列表', '常用于解析输入', '参数可指定分隔符'],
+      'explanation': 'split 将字符串按分隔符切割成子串列表，常用于解析 CSV 或行输入。',
+      'example': 's.split(",")'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': 'strip 与rstrip',
+      'content': 'rstrip 与 strip 的区别是什么？',
+      'options': {'A':'rstrip 只去右侧空白','B':'rstrip 去左右两侧','C':'strip 只去右侧','D':'没有区别'},
+      'answer': 'A',
+      'hints': ['lstrip 去左侧', 'rstrip 去右侧', 'strip 去两侧'],
+      'explanation': 'rstrip 只移除右侧空白，strip 移除两端空白，lstrip 移除左侧空白。',
+      'example': 's.rstrip("\n") 去掉右侧换行'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '格式化判断',
+      'content': '补全：判断输入是否以 http 开头。',
+      'input': 'url = "http://example"',
+      'output': 'Yes',
+      'code': 'url = "http://example"\nif url.___("http"):\n    print("Yes")',
+      'options': 'startswith, find, in, index',
+      'answer': 'startswith',
+      'explanation': 'startswith 判断前缀更高效且语义明确。',
+      'example': 'if filename.endswith(".py"): ...'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '实践：用户名检查',
+      'content': '补全：用户名非空且不包含空格才通过。',
+      'input': 'name="Tom"',
+      'output': 'OK',
+      'code': 'name = "Tom"\nif name and (" " not in name):\n    print("OK")',
+      'options': '示例已给出, 改为 strip 判断, 使用 is None, 使用 == ""',
+      'answer': '示例已给出',
+      'explanation': '组合判断用户名非空且不含空格可确保合法性。',
+      'example': 'if username and " " not in username: ...'
+    }
+
+  ]
+}
+```

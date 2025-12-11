@@ -1,0 +1,200 @@
+```plaintext
+{
+  'unit': '第3单元：if + elif',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': 'elif 的基本用途',
+      'content': 'elif 用于什么场景？',
+      'options': {'A':'替代 if','B':'在 if 不满足时提供额外条件','C':'结束函数','D':'定义变量'},
+      'answer': 'B',
+      'hints': ['elif 是 else if', '用于链式互斥分支', '多个 elif 可以存在'],
+      'explanation': 'elif 在前面的 if/elif 条件都为假时作为后续条件判断。',
+      'example': 'if x<0: ...\nelif x==0: ...\nelse: ...'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '多个 elif 顺序',
+      'content': '为什么顺序重要？',
+      'options': {'A':'顺序不影响结果','B':'先匹配的分支会截断后续判断','C':'Python 会并行判断所有分支','D':'只能有一个 elif'},
+      'answer': 'B',
+      'hints': ['第一个为真的分支会执行', '后面的不会再判断', '谨慎排列条件'],
+      'explanation': '一旦某个分支为真，后续 elif 不会被执行，因此条件顺序会影响结果。',
+      'example': 'if x>0: ...\nelif x>5: ...  # 第二个将永远不被触发'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': 'elif 与 else 的关系',
+      'content': '下面哪项是正确搭配？',
+      'options': {'A':'if 之后必须有 elif','B':'elif 可以没有 if','C':'elif 要在 if 之后，else 可选','D':'else 必须在最前面'},
+      'answer': 'C',
+      'hints': ['elif 必须在 if 之后', 'else 放最后', 'if 可以单独存在'],
+      'explanation': 'elif 必须跟在 if 之后，else 可选且位于链的末尾。',
+      'example': 'if ...\nelif ...\nelse: ...'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '补全多分支',
+      'content': '用 elif 补全下列评分输出。',
+      'input': 'score = 85',
+      'output': 'B',
+      'code': 'score = 85\nif score >= 90:\n    print("A")\nelif score >= 80:\n    print(___)\nelse:\n    print("C")',
+      'options': '"A", "B", "C", "D"',
+      'answer': '"B"',
+      'explanation': '85 属于 80–89，应输出 B。',
+      'example': 'elif 有助于分段判断。'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '避免覆盖',
+      'content': '补全顺序以保证正确匹配区间。',
+      'input': '',
+      'output': '',
+      'code': 'x = 7\nif x > 0:\n    print(">0")\nelif x > 5:\n    print(">5")',
+      'options': '调整顺序, 保持不变, 删除 if, 改为 while',
+      'answer': '调整顺序',
+      'explanation': '应先判断更具体的条件（x>5），否则 x>0 会先匹配遮盖后续。',
+      'example': 'if x>5:\n    ...\nelif x>0:\n    ...'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': 'elif 可否多个',
+      'content': '可以在一个 if 链中使用多个 elif 吗？',
+      'options': {'A':'不可以','B':'可以任意多个','C':'最多两个','D':'只在函数内可用'},
+      'answer': 'B',
+      'hints': ['多个 elif 用于细分条件', '没有数量限制', '顺序仍然重要'],
+      'explanation': '可以使用多个 elif 来实现多个互斥条件的判别。',
+      'example': 'if ...\nelif ...\nelif ...\nelse: ...'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': 'elif 与嵌套',
+      'content': 'elif 是否可以出现在嵌套 if 内？',
+      'options': {'A':'不能', 'B':'可以', 'C':'只能在函数内', 'D':'只在循环内'},
+      'answer': 'B',
+      'hints': ['嵌套结构中也能使用 elif', '注意缩进层级', '逻辑需清晰'],
+      'explanation': 'elif 可以在任意 if 语句后使用，包括嵌套的情形。',
+      'example': 'if a:\n    if b:\n        ...\n    elif c:\n        ...'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': 'elif 的可读性建议',
+      'content': '为了可读性，应该如何组织 elif？',
+      'options': {'A':'尽量合并为一个复杂条件','B':'把互斥条件按优先级排序','C':'随意顺序','D':'全部写成单行'},
+      'answer': 'B',
+      'hints': ['优先级高的先判断', '避免重复计算', '保持逻辑清晰'],
+      'explanation': '按优先级排列条件更容易理解并避免错误覆盖。',
+      'example': 'if x>100: ...\nelif x>50: ...\nelse: ...'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '多重分类实例',
+      'content': '补全代码：根据分数输出等级。',
+      'input': 'score = 72',
+      'output': 'C',
+      'code': 'score = 72\nif score >= 90:\n    print("A")\nelif score >= 80:\n    print("B")\nelif score >= 70:\n    print(___)\nelse:\n    print("D")',
+      'options': '"A","B","C","D"',
+      'answer': '"C"',
+      'explanation': '72 属于 70–79，应输出 C。',
+      'example': 'elif 可用于分段评分。'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '链式逻辑的错误示例',
+      'content': '修正顺序错误使条件按预期工作。',
+      'input': '',
+      'output': '',
+      'code': 'x = 8\nif x > 0:\n    print(">0")\nelif x > 5:\n    print(">5")',
+      'options': '先判断 x>5, 再判断 x>0, 不变, 删除第二条',
+      'answer': '先判断 x>5, 再判断 x>0',
+      'explanation': '先判断更具体的条件（x>5）以避免被更宽泛的条件捕获。',
+      'example': 'if x>5:\n    ...\nelif x>0:\n    ...'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '使用 elif 的优势',
+      'content': '使用 elif 与多个独立 if 相比的优势是什么？',
+      'options': {'A':'提高执行速度','B':'保证互斥性','C':'减少代码行数','D':'可以避免缩进'},
+      'answer': 'B',
+      'hints': ['elif 可以保证一旦有分支成立其余不再判断', '适用于互斥情况', '有助于逻辑清晰'],
+      'explanation': 'elif 可以保证互斥分支，只会执行第一个匹配的分支。',
+      'example': 'if a:\n    ...\nelif b:\n    ...'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '常见误区',
+      'content': '下面哪个是常见的 elif 误用？',
+      'options': {'A':'使用 elif 组织互斥条件','B':'把互斥条件写成多个独立 if','C':'按优先级排列条件','D':'在 elif 中写复杂表达式'},
+      'answer': 'B',
+      'hints': ['独立 if 无法保证互斥', '可能同时满足多个条件', '导致多次执行'],
+      'explanation': '把互斥条件写成多个独立 if 会导致多个分支被触发，不能保证互斥。',
+      'example': '使用 elif 代替多个 if 来实现互斥。'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': 'elif 的替代',
+      'content': '在某些情况下，elif 可被什么替代以提高可读性？',
+      'options': {'A':'嵌套 if', 'B':'字典映射函数', 'C':'while 循环', 'D':'try/except'},
+      'answer': 'B',
+      'hints': ['映射表可简化大量平行分支', '适用于离散值的情况', '提高可维护性'],
+      'explanation': '当分支基于有限离散值时，用字典映射到处理函数更简洁清晰。',
+      'example': 'actions = {"a":f1, "b":f2}; actions.get(key, default)()'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '练习：温度分级',
+      'content': '补全：>=30 Hot, >=20 Warm, else Cold。',
+      'input': 't=22',
+      'output': 'Warm',
+      'code': 't=22\nif t >= 30:\n    print("Hot")\nelif t >= 20:\n    print(___)\nelse:\n    print("Cold")',
+      'options': '"Hot","Warm","Cold","OK"',
+      'answer': '"Warm"',
+      'explanation': '22 属于 20–29，应输出 Warm。',
+      'example': 'elif 用于分档判断。'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '练习：状态码',
+      'content': '补全：200 OK, 404 Not Found, 其他 Error。',
+      'input': 'code=404',
+      'output': 'Not Found',
+      'code': 'code=404\nif code == 200:\n    print("OK")\nelif code == 404:\n    print(___)\nelse:\n    print("Error")',
+      'options': '"OK","Not Found","Error","Unknown"',
+      'answer': '"Not Found"',
+      'explanation': '404 对应 Not Found。',
+      'example': 'elif 便于处理不同状态码。'
+    }
+
+  ]
+}
+```

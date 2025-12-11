@@ -1,0 +1,200 @@
+```plaintext
+{
+  'unit': '第20单元：小复习（41–49 单元）',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '复习：执行顺序',
+      'content': '在 if/elif/else 链中，什么时候会执行 elif 分支？',
+      'options': {'A':'当前面条件都为 False 且该条件为 True','B':'只要该条件为 True 就执行，无视前面','C':'只执行第一个条件','D':'只在 else 后执行'},
+      'answer': 'A',
+      'hints': ['elif 只有在前面条件不成立时才被考虑','按顺序依次判断'],
+      'explanation': 'elif 在前面的 if/elif 条件都不成立时才会被评估和执行。',
+      'example': 'if a: ...\nelif b: ...\nelse: ...'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '复习：and/or 的短路',
+      'content': '表达式 A and B 在 A 为 False 时是否会计算 B？',
+      'options': {'A':'不会（短路）','B':'会计算','C':'视情况而定','D':'会抛出异常'},
+      'answer': 'A',
+      'hints': ['and 为短路运算符','左为 False 时整体为 False'],
+      'explanation': 'and 遇到左操作为 False 时不会求右操作。',
+      'example': 'x and func() 当 x 为 False 时 func 不被调用'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '复习：not 的返回类型',
+      'content': 'not x 返回的类型通常为？',
+      'options': {'A':'bool','B':'与 x 相同','C':'str','D':'int'},
+      'answer': 'A',
+      'hints': ['not 会把表达式转换为布尔值并取反'],
+      'explanation': 'not 运算符将表达式转换为布尔并返回布尔值。',
+      'example': 'not [] -> True'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '复习：链式比较',
+      'content': '补全：判断 x 在 0 到 5 之间。',
+      'input': 'x=3',
+      'output': 'OK',
+      'code': 'if 0 ___ x ___ 5:\n    print("OK")',
+      'options': '<, <=, >, >=',
+      'answer': '1,3',
+      'explanation': '链式比较写作 0 < x < 5。',
+      'example': 'if 1 <= n <= 10: ...'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '复习：in 的用法',
+      'content': '补全：检查子串是否存在。',
+      'input': 's="python"; sub="py"',
+      'output': 'True',
+      'code': 'print(sub ___ s)',
+      'options': 'in, not in, ==, is',
+      'answer': '1',
+      'explanation': '使用 in 检查子串存在。',
+      'example': '"a" in "abc"'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '复习：字符串比较',
+      'content': '"a" < "b" 在 Python 中结果为？',
+      'options': {'A':'True','B':'False','C':'报错','D':'取决于编码'},
+      'answer': 'A',
+      'hints': ['按字典序比较','基于 Unicode 编码'],
+      'explanation': '字符串按字典序比较，"a" 在 "b" 之前。',
+      'example': '"apple" < "banana"'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '复习：strip 用途',
+      'content': 'strip 的主要用途是？',
+      'options': {'A':'去除两端空白','B':'拆分字符串','C':'替换字符','D':'统计频率'},
+      'answer': 'A',
+      'hints': ['用于清洗输入','不影响中间空白'],
+      'explanation': 'strip 去除两端空白，常用于处理用户输入。',
+      'example': 's.strip()'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '复习：默认值技巧',
+      'content': '用 or 提供默认值的效果是？',
+      'options': {'A':'在左假值时返回右侧','B':'在左真值时返回右侧','C':'总是返回布尔值','D':'抛出异常'},
+      'answer': 'A',
+      'hints': ['or 返回第一个真值或最后一项'],
+      'explanation': 'a or b 会返回 a（若真）否则返回 b，常用于默认值表达式。',
+      'example': 'username = input() or "guest"'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '复习：isdigit 的用途',
+      'content': '补全：判断 s 是否为纯数字字符串。',
+      'input': 's="123"',
+      'output': 'True',
+      'code': 'print(s.___())',
+      'options': 'isdigit, isalpha, isalnum, isnumeric',
+      'answer': '1',
+      'explanation': 'isdigit 用于检测数字字符（注意 Unicode 的差异）。',
+      'example': 'if s.isdigit(): n=int(s)'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '复习：find 与 index 的区别',
+      'content': '补全：find 找不到时返回 -1 而 index 会抛出异常。',
+      'input': '',
+      'output': '',
+      'code': 'pos = s.find("x")\nif pos == -1:\n    print("not found")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': 'find 返回索引或 -1，index 找不到会抛 ValueError。',
+      'example': 's.find("a")'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '复习：any 的含义',
+      'content': 'any([False, True, False]) 的结果是？',
+      'options': {'A':'True','B':'False','C':'抛出异常','D':'None'},
+      'answer': 'A',
+      'hints': ['any 有任一真值则为 True'],
+      'explanation': 'any 返回 True 因为列表中有 True 项。',
+      'example': 'any([]) -> False'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '复习：all 的含义',
+      'content': 'all([True, True]) 的结果是？',
+      'options': {'A':'True','B':'False','C':'抛出异常','D':'None'},
+      'answer': 'A',
+      'hints': ['all 只有全为真才 True'],
+      'explanation': 'all 返回 True，因为所有元素为真。',
+      'example': 'all([1,2]) -> True'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '复习：短路与副作用',
+      'content': '若右侧是函数调用且左侧短路，是否会调用右侧？',
+      'options': {'A':'不会调用','B':'会调用','C':'有时会','D':'取决于函数返回值'},
+      'answer': 'A',
+      'hints': ['短路会阻止右侧求值','注意副作用函数的位置'],
+      'explanation': '短路会避免对右侧表达式求值，因此副作用不会发生。',
+      'example': 'False and print("hi") 不会打印'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '复习：strip 与 rstrip 区别',
+      'content': '补全：rstrip 只去除字符串的哪一侧空白？',
+      'input': '',
+      'output': '',
+      'code': 's = " a \n"\nprint(s.rstrip())',
+      'options': '右侧, 左侧, 两侧, 中间',
+      'answer': '1',
+      'explanation': 'rstrip 只去除右侧空白。',
+      'example': 's.rstrip("\n")'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '复习：默认值写法',
+      'content': '补全：用 or 提供默认值的表达式。',
+      'input': 's=""',
+      'output': 'guest',
+      'code': 'print(s or "guest")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': 's or "guest" 在 s 为空时返回 "guest"。',
+      'example': 'name = input() or "guest"'
+    }
+
+  ]
+}
+```

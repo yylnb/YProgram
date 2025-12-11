@@ -1,0 +1,200 @@
+```plaintext
+{
+  'unit': '第15单元：多条件判断的写法优化',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': 'any 与 all 的用途',
+      'content': '下列说法正确的是？',
+      'options': {'A':'any 用于检测是否至少有一真，all 用于全为真','B':'any 检测全为真，all 检测至少一真','C':'两者功能相同','D':'两者返回原始值'},
+      'answer': 'A',
+      'hints': ['any/all 是内置聚合函数','常用于组合多个条件','返回布尔值'],
+      'explanation': 'any 在可迭代中只要有真值就返回 True，all 只有全部为真才返回 True。',
+      'example': 'if any([a>b, c>d]): ...'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '重复计算的优化',
+      'content': '当一个表达式在多处被重复计算时最好怎么做？',
+      'options': {'A':'将表达式赋值给临时变量','B':'每次重复计算以确保最新','C':'复制表达式到注释','D':'用全局变量存储'},
+      'answer': 'A',
+      'hints': ['避免昂贵的重复计算','临时变量提高可读性和性能','注意变量命名'],
+      'explanation': '把重复计算的结果存到变量既提高性能也便于阅读。',
+      'example': 'val = expensive(); if val>0 and val<10:'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '使用集合或元组简化多个 or',
+      'content': '判断变量是否为某些值时，下列更简洁的写法是？',
+      'options': {'A':'if x in (1,2,3):','B':'if x==1 or x==2 or x==3:','C':'if x in "123":','D':'if x in [1,2] and x==3:'},
+      'answer': 'A',
+      'hints': ['in 能简洁表达多重比较','使用元组或集合表示候选值','避免长链 or'],
+      'explanation': '使用 in 配合元组或集合更简洁、语义明确。',
+      'example': 'if status in ("ok","pass"): ...'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '用 any 简化判断',
+      'content': '补全：检测列表中是否存在正数。',
+      'input': 'lst=[-1,0,3]',
+      'output': 'Has positive',
+      'code': 'if any(x > 0 for x in ___):\n    print("Has positive")',
+      'options': 'lst, set, list, tuple',
+      'answer': '1',
+      'explanation': 'any 可配合生成器表达式检测任一元素满足条件。',
+      'example': 'any(c.isdigit() for c in s)'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '把复杂条件抽变量',
+      'content': '补全：将复杂判断提取为布尔变量后使用。',
+      'input': '',
+      'output': '',
+      'code': 'valid = x > 0 and y > 0\nif ___:\n    print("OK")',
+      'options': 'valid, x, y, x and y',
+      'answer': '1',
+      'explanation': '提前计算复杂布尔表达式可提高可读性并避免重复计算。',
+      'example': 'is_ready = cond1 and cond2\nif is_ready: ...'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '短路与性能',
+      'content': '使用短路逻辑能否用于性能优化？',
+      'options': {'A':'可以，若右侧计算代价高且左侧常为假','B':'不可以，短路无性能意义','C':'通常会降低性能','D':'只在循环中有意义'},
+      'answer': 'A',
+      'hints': ['短路避免不必要的计算','适用于昂贵函数在右侧的场景','注意可读性影响'],
+      'explanation': '短路可避免昂贵操作被求值，从而提升性能，但需保证语义一致。',
+      'example': 'if cond and expensive(): ...'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '使用元组作为字面量',
+      'content': '在 in 判断中用 (a,b) 与 {a,b} 有何差别？',
+      'options': {'A':'元组有序不可变，集合无序且去重','B':'元组更快速查找','C':'集合必须转为列表才能用 in','D':'语义等价'},
+      'answer': 'A',
+      'hints': ['集合用于大量元素成员测试更快','元组适合小量候选常量','两者语义不同'],
+      'explanation': '元组是不可变序列，集合是无序且支持哈希查找，视场景选择。',
+      'example': 'if x in {1,2,3}: ...'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '避免重复表达式',
+      'content': '下列重构能减少重复计算？',
+      'options': {'A':'把重复子表达式赋值给变量','B':'把表达式重复写两次','C':'用注释替代计算','D':'在每处都调用函数'},
+      'answer': 'A',
+      'hints': ['提取公共子表达式','减少错误且利于测试','变量名要清晰'],
+      'explanation': '为重复计算提取变量可提升性能并使代码更易读。',
+      'example': 'val = complex(); if val>0 and val<10:'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '使用 all 简化多条件',
+      'content': '补全：同时满足多个条件时使用 all。',
+      'input': '',
+      'output': '',
+      'code': 'conds = [a > 0, b > 0, c > 0]\nif all(conds):\n    print("All positive")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '把条件放入列表并用 all 可以简洁地表达多个条件同时成立。',
+      'example': 'if all(x>0 for x in arr): ...'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '避免重复索引',
+      'content': '补全：避免多次计算相同索引。',
+      'input': 'lst=[1,2,3]; i=1',
+      'output': 'OK',
+      'code': 'val = lst[i]\nif val > 0 and val < 10:\n    print("OK")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '先把 lst[i] 存到变量再复用可避免重复索引和潜在副作用。',
+      'example': 'x = data[idx]\nif x: ...'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '条件分支过长的处理',
+      'content': '若单个条件表达式过于复杂，最佳做法？',
+      'options': {'A':'拆成多个具名布尔变量或函数','B':'保持原样以节省函数','C':'用注释替代重构','D':'合并成单行表达式'},
+      'answer': 'A',
+      'hints': ['具名变量提高可读性','把复杂逻辑抽成函数便于测试','避免过长单行表达式'],
+      'explanation': '把复杂表达式拆成具名变量或函数能提升可读性与可维护性。',
+      'example': 'is_valid = check(x)\nif is_valid and other: ...'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '用早返回简化复杂判断',
+      'content': '早返回如何帮助简化多条件分支？',
+      'options': {'A':'先处理异常或边界，减少后续条件','B':'增加函数长度','C':'使逻辑更难阅读','D':'无影响'},
+      'answer': 'A',
+      'hints': ['早返回减少嵌套','把异常提前处理掉','使主体更清晰'],
+      'explanation': '先处理异常和边界可让主逻辑更平坦并减少复杂判断。',
+      'example': 'if not ok: return\n# main flow'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '可读性优先的重构',
+      'content': '在优化条件表达式时应优先考虑哪项？',
+      'options': {'A':'可读性而非过早优化','B':'始终以性能为先','C':'尽量缩短代码字符数','D':'避免任何重构'},
+      'answer': 'A',
+      'hints': ['可读性有助于长期维护','性能优化需有证据','写注释解释重构'],
+      'explanation': '可读性更有价值，优化应基于实际性能瓶颈。',
+      'example': '清晰变量名优先于神奇技巧'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '实践：任何满足一个条件',
+      'content': '补全：若任一条件满足则通过。',
+      'input': '',
+      'output': '',
+      'code': 'if any([cond1, cond2, cond3]):\n    print("Pass")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': 'any 可直接接受列表或生成器表达式。',
+      'example': 'if any(x>0 for x in arr): ...'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '练习：提取子表达式',
+      'content': '补全：提取复杂子表达式后判断。',
+      'input': '',
+      'output': '',
+      'code': 'valid_range = 0 < x < 100\nif valid_range and flag:\n    print("OK")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '提前计算子表达式使主判断更清晰。',
+      'example': 'is_even = n%2==0\nif is_even and n>0: ...'
+    }
+
+  ]
+}
+```

@@ -1,0 +1,200 @@
+```plaintext
+{
+  'unit': '第8单元：复合条件与逻辑组合',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': 'and 的短路特性',
+      'content': '表达式中 if a() and b(): 当 a() 返回 False 时会怎样？',
+      'options': {'A':'不会调用 b()','B':'仍然调用 b()','C':'语法错误','D':'取决于 a() 的类型'},
+      'answer': 'A',
+      'hints': ['and 是短路运算','左侧为 False 时整体为 False','右侧不会被求值'],
+      'explanation': 'and 在左侧为 False 时不会求右侧，称为短路求值。',
+      'example': 'if x and func(): ... 当 x 为 False 时 func() 不被调用'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': 'or 与布尔返回',
+      'content': '表达式 a or b 返回什么？',
+      'options': {'A':'第一个真值表达式','B':'总是布尔值','C':'总是 a 的值','D':'总是 b 的值'},
+      'answer': 'A',
+      'hints': ['or 返回第一个真值或最后一项','不是强制转换为 bool','常用于默认值'],
+      'explanation': 'or 返回第一个真值表达式的原始值，若无则返回最后一项。',
+      'example': 'name or "guest" 在 name 为空时返回 "guest"'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': 'not 的作用',
+      'content': 'not x 的返回值类型通常是？',
+      'options': {'A':'bool','B':'与 x 相同类型','C':'str','D':'int'},
+      'answer': 'A',
+      'hints': ['not 会把表达式转换为布尔并取反','返回 True/False','用于条件判断'],
+      'explanation': 'not 运算符将表达式转换为布尔值并取反，返回 bool。',
+      'example': 'not [] → True，因为 [] 为假值'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '复合条件的写法',
+      'content': '补全：要求变量 x 在 1 到 10 之间（含）。',
+      'input': 'x=5',
+      'output': 'In range',
+      'code': 'x = int(input())\nif 1 ___ x ___ 10:\n    print("In range")',
+      'options': '>, <, >=, <=, ==, and, or',
+      'answer': '3,4',
+      'explanation': '使用 1 <= x <= 10 的链式比较来判断范围。',
+      'example': 'if 0 <= a <= 100: ...'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '使用 or 提供默认值',
+      'content': '补全：当 user_input 为空时用 "n/a" 作为默认。',
+      'input': 'user_input=""',
+      'output': 'n/a',
+      'code': 's = user_input ___ "n/a"\nprint(s)',
+      'options': 'and, or, if, ?:, ??',
+      'answer': '2',
+      'explanation': 'or 可用于短路返回第一个真值，用于默认值表达式。',
+      'example': 'name = input() or "guest"'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '优先级问题',
+      'content': '下列运算符优先级最高？',
+      'options': {'A':'not','B':'and','C':'or','D':'== '},
+      'answer': 'A',
+      'hints': ['not 优先于 and/or','比较运算优先级靠前','可以用括号改变顺序'],
+      'explanation': 'not 的优先级高于 and、or，通常先计算 not。',
+      'example': 'not a and b 相当于 (not a) and b'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '短路与函数副作用',
+      'content': '若 b() 有副作用，下面哪个能避免调用 b()？',
+      'options': {'A':'if a: b()','B':'if a and b(): pass','C':'b() if a else None','D':'a or b()'},
+      'answer': 'A',
+      'hints': ['直接用条件语句控制调用','and 在左为 False 时不调用右侧','or 在左为真时不调用右侧'],
+      'explanation': '使用 if a: b() 仅在 a 为真时才调用 b()，逻辑表达式可能因短路而产生不同调用时机。',
+      'example': 'if ready: start()'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '链式比较',
+      'content': '表达式 1 < x < 5 等价于？',
+      'options': {'A':'1 < x and x < 5','B':'(1 < x) < 5','C':'x > 1 or x < 5','D':'语法错误'},
+      'answer': 'A',
+      'hints': ['链式比较在 Python 中有效','等价于两次比较并用 and 连接','不会重复计算中间值'],
+      'explanation': '1 < x < 5 等价于 1 < x and x < 5，且只会计算 x 一次。',
+      'example': '0 <= n <= 10'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '组合条件的简写',
+      'content': '补全：判断 ch 是否为元音字母（忽略大小写）。',
+      'input': 'ch="A"',
+      'output': 'vowel',
+      'code': 'ch = input().lower()\nif ch ___ "aeiou":\n    print("vowel")',
+      'options': 'in, not in, ==, is',
+      'answer': '1',
+      'explanation': '使用 in 检查字符是否在字符串集合中。',
+      'example': 'if c in "0123456789": ...'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '多条件验证',
+      'content': '补全：要求 a 为正且为偶数。',
+      'input': 'a=4',
+      'output': 'OK',
+      'code': 'a = int(input())\nif a > 0 and a ___ 2 == 0:\n    print("OK")',
+      'options': '%, //, /, *',
+      'answer': '1',
+      'explanation': '用 a % 2 == 0 判断偶数。',
+      'example': 'if n > 0 and n % 2 == 0: ...'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '布尔值与整数',
+      'content': '在 Python 中 True 与 1 比较时结果如何？',
+      'options': {'A':'True == 1 为 True','B':'True == 1 为 False','C':'抛出类型错误','D':'取决于 Python 版本'},
+      'answer': 'A',
+      'hints': ['bool 是 int 的子类','True 等于 1','False 等于 0'],
+      'explanation': '在 Python 中 bool 是 int 的子类，True == 1 为 True。',
+      'example': 'True + True == 2'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '优雅的默认逻辑',
+      'content': '下列哪个写法常用于设置默认值？',
+      'options': {'A':'x = a or default','B':'x = a and default','C':'if a: x = default else x = a','D':'x = default if a else a'},
+      'answer': 'A',
+      'hints': ['or 返回第一个真值','常用于简洁地提供默认','注意当 a 为 False 值时会被替代'],
+      'explanation': 'x = a or default 在 a 为假值时返回 default，常作简洁默认值写法。',
+      'example': 'timeout = user_timeout or 30'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '优先使用括号',
+      'content': '为提高可读性，当混合 and/or 时建议如何做？',
+      'options': {'A':'使用括号明确分组','B':'省略括号以简洁','C':'用逗号分隔','D':'把条件写成单行注释'},
+      'answer': 'A',
+      'hints': ['逻辑表达式可读性重要','括号能防止优先级误解','团队风格需一致'],
+      'explanation': '混合 and/or 时加括号能提高可读性并防止优先级错误。',
+      'example': 'if (a and b) or c: ...'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '分支短路练习',
+      'content': '补全：只在 s 不为空时调用 process(s)。',
+      'input': 's="text"',
+      'output': '',
+      'code': 's = input()\ns and ___(s)',
+      'options': 'process, print, len, strip',
+      'answer': '1',
+      'explanation': '利用 and 的短路特性，s 为真时才会调用 process(s)。',
+      'example': 's and print(s)'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '复杂条件拆分',
+      'content': '补全：将复杂条件拆成两步以提高可读性。',
+      'input': 'a=5;b=10',
+      'output': 'OK',
+      'code': 'a = int(input())\nb = int(input())\ncond = a > 0 and b > 0 and a + b > 10\nif ___:\n    print("OK")',
+      'options': 'cond, a + b > 10, a and b, True',
+      'answer': '1',
+      'explanation': '先计算 cond 再在 if 中使用可以提高可读性和调试性。',
+      'example': 'valid = x and y\nif valid: ...'
+    }
+
+  ]
+}
+```

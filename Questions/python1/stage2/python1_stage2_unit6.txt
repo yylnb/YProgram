@@ -1,0 +1,200 @@
+```plaintext
+{
+  'unit': '第6单元：嵌套 if（进阶）',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '多层嵌套的风险',
+      'content': '多层嵌套常带来的问题是什么？',
+      'options': {'A':'更易维护','B':'更难阅读与测试','C':'更安全','D':'自动并行'},
+      'answer': 'B',
+      'hints': ['嵌套增加逻辑路径', '建议拆分为函数', '可读性下降'],
+      'explanation': '深嵌套会增加理解难度与测试复杂度，建议重构。',
+      'example': '把复杂逻辑拆为多个函数并命名清晰'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '早期返回技巧',
+      'content': '在函数中减少嵌套的一种常见技巧是？',
+      'options': {'A':'使用早期返回 (early return)','B':'增加更多嵌套','C':'使用全局变量','D':'删除判断'},
+      'answer': 'A',
+      'hints': ['early return 可以减少缩进', '提高可读性', '常见于输入校验'],
+      'explanation': '通过在不满足条件时立即返回，可以减少嵌套层数，代码更平坦。',
+      'example': 'if not valid: return\n# 之后不需再缩进'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '复杂逻辑重构',
+      'content': '以下哪项常用于重构嵌套逻辑？',
+      'options': {'A':'提炼函数','B':'增加嵌套层','C':'使用魔法数字','D':'删除注释'},
+      'answer': 'A',
+      'hints': ['提炼函数抽离职责', '便于测试', '提高可读性'],
+      'explanation': '提炼函数可以把复杂嵌套拆成多个小函数，更易于理解与测试。',
+      'example': 'def is_valid(x):\n    return x>0 and x<10\nif is_valid(a): ...'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '错误处理的嵌套',
+      'content': '补全使得当输入为负数时提示错误。',
+      'input': 'n=-1',
+      'output': 'Invalid',
+      'code': 'n = int(input())\nif n >= 0:\n    if n == 0:\n        print("Zero")\n    else:\n        print("Positive")\nelse:\n    print(___)',
+      'options': '"Invalid","Zero","Positive","None"',
+      'answer': '"Invalid"',
+      'explanation': '外层 else 用于处理负数并输出 Invalid。',
+      'example': '嵌套常用于进一步细分分支内部逻辑。'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '复合判断替代',
+      'content': '将嵌套 if 改写为逻辑表达式（示例）。',
+      'input': 'a=True; b=True',
+      'output': 'OK',
+      'code': 'a = True\nb = True\nif a and b:\n    print("OK")',
+      'options': 'a and b, a:\n    if b, not a, a or b',
+      'answer': 'a and b',
+      'explanation': 'a and b 可以替代 if a:\n    if b: ... 并更简洁。',
+      'example': 'if a and b: do()'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '如何降低复杂度',
+      'content': '哪个做法可以降低嵌套复杂度？',
+      'options': {'A':'拆分函数','B':'增加全局变量','C':'在每层嵌套都打印','D':'减少注释'},
+      'answer': 'A',
+      'hints': ['封装可以降低嵌套层', '函数命名提高语义', '方便单元测试'],
+      'explanation': '拆分为小函数可减少嵌套并提高可维护性。',
+      'example': 'def check_user(u): ... if check_user(u): ...'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '逻辑短路 vs 嵌套',
+      'content': '下列哪种情形更适合使用逻辑短路？',
+      'options': {'A':'需要按步骤处理副作用', 'B':'简单的布尔连接无需额外动作', 'C':'需要多层复杂判断', 'D':'需要创建新作用域'},
+      'answer': 'B',
+      'hints': ['逻辑短路适合连接布尔值', '嵌套可处理副作用和其他动作', '短路不创建新块'],
+      'explanation': '当仅需判断布尔值组合时，逻辑短路写法更简洁。',
+      'example': 'if user and user.active: ...'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '避免重复计算',
+      'content': '嵌套中若重复计算表达式应如何处理？',
+      'options': {'A':'缓存结果到变量','B':'重复计算以确保新鲜','C':'放弃优化','D':'用全局存储'},
+      'answer': 'A',
+      'hints': ['将结果赋给变量可避免重复计算', '有利可读性与性能', '尤其当计算耗时时更重要'],
+      'explanation': '把计算结果保存到变量并复用可以减少重复计算并提高可读性。',
+      'example': 'valid = expensive_check(); if valid: if other: ...'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '早期返回示例',
+      'content': '用早期返回重写以减少嵌套。',
+      'input': '',
+      'output': '',
+      'code': 'def process(x):\n    if not x:\n        return\n    if x > 0:\n        print("OK")',
+      'options': '示例已给出, 需要改动, 抛异常, 删除函数',
+      'answer': '示例已给出',
+      'explanation': '示例展示早期返回无需额外缩进，降低嵌套。',
+      'example': 'if not valid: return\n# 之后逻辑不缩进'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '嵌套替换练习',
+      'content': '把嵌套 if 替换为逻辑连接。',
+      'input': 'a=True;b=True',
+      'output': 'OK',
+      'code': 'a=True\nb=True\nif a and b:\n    print("OK")',
+      'options': 'a and b, if a:\n    if b, not a, a or b',
+      'answer': 'a and b',
+      'explanation': '逻辑连接更简洁且等价于嵌套。',
+      'example': 'if x>0 and y>0: ...'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '可读性优先',
+      'content': '当简洁写法难以理解时应如何处理？',
+      'options': {'A':'保留复杂简洁写法','B':'改为更可读的多行写法','C':'删掉注释','D':'压缩为一行'},
+      'answer': 'B',
+      'hints': ['可读性优先于过度简洁', '团队协作时尤其重要', '注释可补充意图'],
+      'explanation': '当简洁写法导致可读性下降时，应选择更直观的实现。',
+      'example': '把长条件分拆并用变量命名'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '高耦合风险',
+      'content': '嵌套逻辑若耦合过高会导致什么？',
+      'options': {'A':'更易复用','B':'难以修改某一行为','C':'自动生成文档','D':'提高性能'},
+      'answer': 'B',
+      'hints': ['耦合导致修改一处影响多处', '建议解耦和模块化', '小函数可降低耦合度'],
+      'explanation': '耦合高使得修改或测试单一逻辑变得困难，应解耦以便维护。',
+      'example': '把权限检查拆到独立函数中'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '嵌套的替代设计',
+      'content': '以下哪种设计能替代复杂嵌套？',
+      'options': {'A':'状态机/表驱动','B':'增加嵌套层数','C':'使用全局变量','D':'删除条件'},
+      'answer': 'A',
+      'hints': ['状态机或表驱动可将复杂条件转为数据', '提高扩展性', '适合复杂流程'],
+      'explanation': '状态机或表驱动可把条件逻辑转为可配置的数据结构，减少嵌套并提高可维护性。',
+      'example': 'state_handlers = {"START": start_handler, ... }'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '实践：权限与日志',
+      'content': '补全：登录并且有权限才记录操作。',
+      'input': 'logged=True; has_perm=True',
+      'output': 'Recorded',
+      'code': 'logged=True\nhas_perm=True\nif logged:\n    if has_perm:\n        print("Recorded")',
+      'options': '示例已给出, 改为 else, 删除 if, 异常处理',
+      'answer': '示例已给出',
+      'explanation': '仅在两层条件都满足时才记录。',
+      'example': '权限检查常见于审计场景。'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '练习：复合校验',
+      'content': '补全：只有当所有检查都通过才允许提交。',
+      'input': 'check1=True; check2=True',
+      'output': 'Submit',
+      'code': 'check1=True\ncheck2=True\nif check1:\n    if check2:\n        print(___)',
+      'options': '"Submit","Fail","OK","None"',
+      'answer': '"Submit"',
+      'explanation': '当两个检查均为 True 时应提交。',
+      'example': '多项校验通过后才执行关键操作。'
+    }
+
+  ]
+}
+```

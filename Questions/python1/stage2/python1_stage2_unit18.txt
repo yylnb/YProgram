@@ -1,0 +1,200 @@
+```plaintext
+{
+  'unit': '第18单元：条件判断 + 格式化输出',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': 'f-string 的基本用法',
+      'content': '下面哪项是正确的 f-string 写法？',
+      'options': {'A':'f"Name: {name}"','B':'f"Name: name"','C':'"Name: {name}"','D':'{f"name"}'},
+      'answer': 'A',
+      'hints': ['f-string 需要在字符串前加 f','使用花括号包含表达式','直接写变量名不会被格式化'],
+      'explanation': 'f"Name: {name}" 会把变量 name 的值插入字符串中。',
+      'example': 'print(f"{user} has {n} items")'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '格式化数字',
+      'content': '要把浮点数格式化为 2 位小数应使用？',
+      'options': {'A':'f"{x:.2f}"','B':'f"{x:2f}"','C':'format(x, "2")','D':'str(x)[:2]'},
+      'answer': 'A',
+      'hints': ['格式说明符放在冒号后','.2f 表示 2 位小数','使用 f-string 或 format 都可'],
+      'explanation': 'f"{x:.2f}" 会把 x 格式化为保留 2 位小数的字符串。',
+      'example': 'print(f"{pi:.3f}")'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '避免不安全格式化',
+      'content': '把不可信的用户输入直接放入 f-string 有何风险？',
+      'options': {'A':'可能执行不期望的表达式','B':'性能变慢','C':'会报语法错误','D':'没有风险'},
+      'answer': 'A',
+      'hints': ['f-string 会求值花括号内的表达式','不要把未经清洗的复杂表达式放进去'],
+      'explanation': '把复杂或不可信的表达式放入 f-string 可能带来安全问题，应先清洗或限制内容。',
+      'example': 'print(f"{user}") 前对 user 做转义'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '条件下的差异化输出',
+      'content': '补全：根据 flag 输出不同的消息。',
+      'input': 'flag=True; name="Tom"',
+      'output': 'Hello Tom',
+      'code': 'print(f"{name if flag else "Guest"}")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '三元表达式与 f-string 结合可根据条件输出不同字符串。',
+      'example': 'print(f"{val if ok else 0}")'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '对齐输出',
+      'content': '补全：使字符串左对齐占 10 列。',
+      'input': 's="hi"',
+      'output': 'hi        ',
+      'code': 'print(f"{s:___}")',
+      'options': ':10, :<10, :>10, :.10',
+      'answer': '2',
+      'explanation': ':<10 表示左对齐宽度为 10。',
+      'example': 'f"{name:<8}"'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '日期/时间格式',
+      'content': 'f-string 是否可以直接格式化 datetime 对象？',
+      'options': {'A':'可以，通过表达式或 strftime','B':'不可以','C':'只能在 Python 2 中','D':'需要第三方库'},
+      'answer': 'A',
+      'hints': ['可以调用方法或使用 format','常用 dt.strftime 格式化日期'],
+      'explanation': '可以在 f-string 中调用方法如 {dt.strftime("%Y-%m-%d") } 来格式化。',
+      'example': 'print(f"{dt:%Y-%m-%d}")'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '避免重复格式化',
+      'content': '若同一值被多次格式化，应如何处理？',
+      'options': {'A':'先格式化存变量再复用','B':'每处重复写 f-string','C':'只在注释中写格式','D':'把字符串拼接成一个大表达式'},
+      'answer': 'A',
+      'hints': ['减少重复计算','变量名要有意义','提高可读性'],
+      'explanation': '先保存格式化结果到变量能减少重复计算并增强可读性。',
+      'example': 's = f"{x:.2f}"\nprint(s, s)'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '多语言支持提示',
+      'content': '在格式化输出中支持不同语言时应注意？',
+      'options': {'A':'把格式化与翻译分离','B':'直接把翻译字符串拼接','C':'使用浮点位数控制语言','D':'让用户自己格式化'},
+      'answer': 'A',
+      'hints': ['国际化应把字符串与格式逻辑分离','使用占位符与翻译库更好'],
+      'explanation': '分离翻译与格式化有助于国际化与维护。',
+      'example': 'gettext("Hello %s") % name'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '逃逸花括号',
+      'content': '补全：在 f-string 中输出字面花括号需写成。',
+      'input': '',
+      'output': '{',
+      'code': 'print(f"{{}}")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '用双花括号 {{ 或 }} 可以在 f-string 中输出字面花括号。',
+      'example': 'f"{{value}}"'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '格式化整数宽度',
+      'content': '补全：以 5 列右对齐显示整数。',
+      'input': 'n=42',
+      'output': '   42',
+      'code': 'print(f"{n:___}")',
+      'options': ':5, :>5, :05, :<5',
+      'answer': '2',
+      'explanation': ':>5 表示右对齐宽度为 5。',
+      'example': 'f"{x:>8}"'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '格式化与国际化',
+      'content': '数字千位分隔符在 f-string 中可用什么？',
+      'options': {'A':':,','B':':k','C':':_','D':'不支持'},
+      'answer': 'A',
+      'hints': ['使用 :, 可以插入千位分隔符','Python 支持 '_' 作为数字字面量的分隔符但不是格式化选项'],
+      'explanation': '格式说明符 : , 会在格式化数字时插入千位分隔符。',
+      'example': 'f"{1234567:,}" -> 1,234,567'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '避免在 f-string 中进行重计算',
+      'content': '若格式化表达式很复杂，建议做什么？',
+      'options': {'A':'先计算并赋值给变量','B':'直接在 f-string 中写复杂表达式','C':'重复求值提高准确性','D':'用注释说明计算过程'},
+      'answer': 'A',
+      'hints': ['提高可读性和性能','避免长且难以理解的 f-string'],
+      'explanation': '先计算复杂表达式再在 f-string 中使用变量，可提高可读性和性能。',
+      'example': 'val = expensive()\nprint(f"{val}")'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '格式化时的错误来源',
+      'content': '格式化字符串出现 KeyError 通常是因为？',
+      'options': {'A':'使用 format_map 或 format 时占位符缺失','B':'f-string 语法错误','C':'变量名重复','D':'文件编码问题'},
+      'answer': 'A',
+      'hints': ['format/map 会根据键查找值','缺少键会引发 KeyError'],
+      'explanation': '使用 format 或 format_map 时占位符对应的键不存在会引发 KeyError。',
+      'example': '"{x}".format(x=1)'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '实践：格式化日志信息',
+      'content': '补全：使用 f-string 生成日志行。',
+      'input': 'user="Tom"; action="login"',
+      'output': 'Tom login',
+      'code': 'print(f"{user} {action}")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '使用 f-string 可快速生成清晰日志信息。',
+      'example': 'print(f"[{time}] {user} done")'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '综合练习：条件格式化',
+      'content': '补全：根据分数显示等级的 f-string。',
+      'input': 's=75',
+      'output': 'Pass',
+      'code': 'print(f"{"Pass" if s>=60 else "Fail"}")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '三元表达式与 f-string 结合用于条件格式化。',
+      'example': 'print(f"{"OK" if ok else "NO"}")'
+    }
+
+  ]
+}
+```

@@ -1,0 +1,201 @@
+```plaintext
+{
+  'unit': '第23单元：范围计算与区间判断',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '闭区间与开区间',
+      'content': '表达 a<=x<=b 属于哪种区间表示？',
+      'options': {'A':'闭区间','B':'开区间','C':'左开右闭','D':'左闭右开'},
+      'answer': 'A',
+      'hints': ['两端都包含','使用 <= 表示包含'],
+      'explanation': 'a<=x<=b 两端包含，称为闭区间。',
+      'example': 'if a<=x<=b: ...'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '链式比较',
+      'content': 'Python 中链式比较 a < x < b 等价于？',
+      'options': {'A':'a < x and x < b','B':'(a<x) or (x<b)','C':'a < b < x','D':'无法等价转换'},
+      'answer': 'A',
+      'hints': ['链式比较是语法糖','等价与 and 组合'],
+      'explanation': 'a < x < b 在内部相当于 (a < x) and (x < b)。',
+      'example': 'if 0 < n < 10: ...'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '浮点比较注意',
+      'content': '比较浮点数相等时应避免使用？',
+      'options': {'A':'直接用 == 判断','B':'使用绝对误差阈值','C':'使用 math.isclose','D':'格式化再比较'},
+      'answer': 'A',
+      'hints': ['浮点有精度误差','使用容差判断'],
+      'explanation': '浮点直接用 == 容易出错，应使用容差或 math.isclose。',
+      'example': 'abs(a-b) < 1e-9'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '判断是否在区间内',
+      'content': '补全：判断 x 是否在 [a,b]。',
+      'input': 'a=1 b=5 x=3',
+      'output': 'yes',
+      'code': 'a = int(input())\nb = int(input())\nx = int(input())\nif a <= x <= b:\n    print("yes")\nelse:\n    print("no")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '使用链式比较直接检查区间包含关系。',
+      'example': 'if 1<=x<=10: ...'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '端点特殊处理',
+      'content': '补全：若只包含左端 a<=x< b。',
+      'input': 'a=0 b=3 x=3',
+      'output': 'no',
+      'code': 'a = int(input())\nb = int(input())\nx = int(input())\nif a <= x < b:\n    print("in")\nelse:\n    print("out")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '用 <= 与 < 组合表示左闭右开区间。',
+      'example': 'for i in range(a,b): ...'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '整数范围校验',
+      'content': '若要校验 0 到 100 的整数，推荐写法是？',
+      'options': {'A':'0 <= x <= 100','B':'x>=0 or x<=100','C':'x in range(0,100)','D':'x>0 and x<100'},
+      'answer': 'A',
+      'hints': ['包含边界时用 <=','链式比较简洁'],
+      'explanation': '0 <= x <= 100 表达包括两端的范围。',
+      'example': 'if 0<=score<=100: ...'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '使用 range',
+      'content': 'range(1,4) 包含哪些整数？',
+      'options': {'A':'1,2,3','B':'1,2,3,4','C':'0,1,2,3','D':'仅 4'},
+      'answer': 'A',
+      'hints': ['range 的结束不包含在内','常见 off-by-one 问题'],
+      'explanation': 'range(1,4) 生成 1,2,3。',
+      'example': 'for i in range(1,4): print(i)'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '边界判断顺序',
+      'content': '若同时判断多段区间，应注意？',
+      'options': {'A':'先判断更窄或更特殊的区间','B':'任意顺序都行','C':'总是从右到左','D':'只判断一个区间就够'},
+      'answer': 'A',
+      'hints': ['避免被宽泛区间先匹配','优先处理例外情况'],
+      'explanation': '先判断更狭窄或特殊的区间能避免被宽泛规则提前匹配。',
+      'example': 'if x==0: ...\nelif x>0 and x<10: ...'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '判断是否为成年人',
+      'content': '补全：年龄>=18 判为成年人。',
+      'input': 'age=17',
+      'output': 'minor',
+      'code': 'age = int(input())\nif age >= 18:\n    print("adult")\nelse:\n    print("minor")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '使用 >= 判定包含边界的成年条件。',
+      'example': 'if age>=18: print("adult")'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '判断评分等级',
+      'content': '补全：score 90+ 为 A，80-89 为 B，其他为 C。',
+      'input': 'score=85',
+      'output': 'B',
+      'code': 'score = int(input())\nif score >= 90:\n    print("A")\nelif score >= 80:\n    print("B")\nelse:\n    print("C")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '按从高到低顺序判断区间以免覆盖更高分段。',
+      'example': 'if s>=90: ... elif s>=80: ...'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '区间交集',
+      'content': '两个区间有交集的条件是什么？',
+      'options': {'A':'左端小于对方右端且右端大于对方左端','B':'任意一端相等即可','C':'必须完全包含','D':'无交集时判断为真'},
+      'answer': 'A',
+      'hints': ['检查边界重叠','常用逻辑表达式判断'],
+      'explanation': '判断交集可用 a1<=b2 and a2<=b1 之类的逻辑。',
+      'example': 'if a1<=b2 and a2<=b1: overlap=True'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '闭区间包含点',
+      'content': '判断点 x 是否属于 (a,b] 应使用？',
+      'options': {'A':'a < x <= b','B':'a <= x <= b','C':'a < x < b','D':'a <= x < b'},
+      'answer': 'A',
+      'hints': ['左开右闭','注意比较运算符方向'],
+      'explanation': '右端包含、左端不包含应使用 a < x <= b。',
+      'example': 'if 0 < x <= 1: ...'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '避免 off-by-one',
+      'content': '循环遍历区间 [0,n] 时 range 的正确写法是？',
+      'options': {'A':'range(0, n+1)','B':'range(0,n)','C':'range(1,n)','D':'range(n)'},
+      'answer': 'A',
+      'hints': ['range 右端不包含','注意 +1'],
+      'explanation': '要包含 n，需要在 range 的结束值 +1。',
+      'example': 'for i in range(0,n+1): ...'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '范围长度计算',
+      'content': '补全：计算闭区间 [a,b] 的整数个数。',
+      'input': 'a=3 b=7',
+      'output': '5',
+      'code': 'a = int(input())\nb = int(input())\nprint(b - a + 1)',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '闭区间整数个数为 b-a+1。',
+      'example': '若 a==b，则为 1'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '判断是否是周末',
+      'content': '补全：给定 weekday (0-6)，判断是否周末（5/6）。',
+      'input': 'weekday=6',
+      'output': 'weekend',
+      'code': 'w = int(input())\nif w == 5 or w == 6:\n    print("weekend")\nelse:\n    print("weekday")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '直接判断是否等于周末编号即可。',
+      'example': 'if day in (5,6): ...'
+    }
+
+  ]
+}
+
+```

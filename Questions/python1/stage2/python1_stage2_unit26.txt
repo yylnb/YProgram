@@ -1,0 +1,201 @@
+```plaintext
+{
+  'unit': '第26单元：多分支优化与重构',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '重构目的一般包括',
+      'content': '对复杂多分支逻辑进行重构的主要目的是什么？',
+      'options': {'A':'提高可读性与可维护性','B':'增加代码行数','C':'隐藏逻辑','D':'使其更慢'},
+      'answer': 'A',
+      'hints': ['代码更清晰易理解','便于添加新分支'],
+      'explanation': '通过重构降低复杂度，提高可读性与后期维护效率。',
+      'example': '提取函数、使用映射表'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '替代长 if 链',
+      'content': '将长 if/elif 链替换成更好结构的常见方法是？',
+      'options': {'A':'使用映射字典或策略模式','B':'保持不变','C':'嵌套更多 if','D':'抛弃功能'},
+      'answer': 'A',
+      'hints': ['字典映射便于扩展','策略模式对复杂逻辑有帮助'],
+      'explanation': '映射或策略模式可以把分支逻辑分离到独立可管理的单元。',
+      'example': 'actions = {"a": fn_a, "b": fn_b}\nactions[k]()'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '小函数提取',
+      'content': '把一段分支逻辑提取为函数能带来？',
+      'options': {'A':'改善测试性和可复用性','B':'让代码更混乱','C':'减少可读性','D':'阻止重构'},
+      'answer': 'A',
+      'hints': ['小函数便于单元测试','逻辑更清晰'],
+      'explanation': '提取函数可以降低每个函数的复杂度并便于单独测试。',
+      'example': 'def is_vowel(c): ...'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '用映射替代分支',
+      'content': '补全：将选项映射到函数调用。',
+      'input': 'opt="b"',
+      'output': 'B',
+      'code': 'def a():\n    print("A")\ndef b():\n    print("B")\nmap = {"a": a, "b": b}\nmap.get(opt, lambda: print("invalid"))()',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '使用字典映射可以替代多个 if 分支。',
+      'example': 'actions.get(cmd, noop)()'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '简化条件表达式',
+      'content': '补全：使用任何内建函数判断是否匹配集合。',
+      'input': 'ch="x"',
+      'output': 'no',
+      'code': 'if ch in ("a","b","c"):\n    print("yes")\nelse:\n    print("no")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '使用 in 运算符可简洁表达多值判断。',
+      'example': 'if x in values: ...'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '提前返回',
+      'content': '在函数中使用提前返回的优点是？',
+      'options': {'A':'减少嵌套层级并提高可读性','B':'增加嵌套','C':'隐藏错误','D':'让函数更长'},
+      'answer': 'A',
+      'hints': ['减少 elif 嵌套','使逻辑更扁平化'],
+      'explanation': '提前返回可以避免深层嵌套，代码更清晰。',
+      'example': 'if invalid: return None\n# 后续正常逻辑'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '策略模式',
+      'content': '策略模式在分支重构中提供了？',
+      'options': {'A':'把算法封装成可替换对象','B':'使代码不可测试','C':'强制使用面向对象','D':'无法复用'},
+      'answer': 'A',
+      'hints': ['封装变化点','便于扩展与替换'],
+      'explanation': '策略模式将可变的部分封装，便于在运行时选择并替换行为。',
+      'example': 'strategy = strategies[key]\nstrategy.execute()'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '测试驱动重构',
+      'content': '重构前应先做什么以降低风险？',
+      'options': {'A':'编写或确认存在单元测试','B':'直接改代码不做测试','C':'删除旧功能','D':'重命名变量'},
+      'answer': 'A',
+      'hints': ['测试保证行为不变','写测试再重构是好习惯'],
+      'explanation': '有覆盖的测试可以在重构时确保行为保持一致。',
+      'example': 'assert func(x)==y'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '提取判断函数',
+      'content': '补全：把复杂判断提取为函数 is_valid。',
+      'input': '',
+      'output': '',
+      'code': 'def is_valid(x):\n    return x>0 and x<10\nif is_valid(n):\n    print("ok")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '提取判断逻辑有助于重用与单元测试。',
+      'example': 'def check(x): return x.isdigit()'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '使用枚举或常量',
+      'content': '补全：用常量提高可读性而非魔法数字。',
+      'input': '',
+      'output': '',
+      'code': 'STATUS_OK = 1\nif status == STATUS_OK:\n    print("ok")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '常量或枚举比魔法数字更具可读性和可维护性。',
+      'example': 'from enum import Enum'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '避免重复代码',
+      'content': '重构时减少重复代码的常见方法是？',
+      'options': {'A':'抽取公共函数或模块','B':'复制粘贴多份','C':'增加更多 if 分支','D':'不做任何改变'},
+      'answer': 'A',
+      'hints': ['抽取公共部分','封装为单元测试函数'],
+      'explanation': '将重复逻辑抽取成函数或模块可以降低维护成本。',
+      'example': 'def helper(): ...\nhelper()'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '可配置化',
+      'content': '将规则从代码提取到配置的优点是？',
+      'options': {'A':'无需改代码即可调整行为','B':'增加编译时间','C':'让程序更慢','D':'破坏兼容性'},
+      'answer': 'A',
+      'hints': ['配置驱动更灵活','便于非开发人员调整'],
+      'explanation': '配置化使得修改行为无需改动源码并重新部署。',
+      'example': 'load_rules("rules.json")'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '文档与注释',
+      'content': '重构后应补充什么以便他人理解？',
+      'options': {'A':'函数说明与使用示例','B':'删掉所有注释','C':'只写代码不写说明','D':'隐藏接口'},
+      'answer': 'A',
+      'hints': ['写明输入输出','提供示例使用场景'],
+      'explanation': '文档与示例能帮助他人快速理解重构后的接口。',
+      'example': 'def f(x): """说明"""'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '将条件表驱动化',
+      'content': '补全：用列表保存规则并循环匹配。',
+      'input': '',
+      'output': '',
+      'code': 'rules = [(lambda x: x%2==0, "even"), (lambda x: True, "other")]\nfor cond, val in rules:\n    if cond(n):\n        print(val)\n        break',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '用规则表可以把判定逻辑数据化，便于管理。',
+      'example': 'for r in rules: if r.match(x): ...'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '重构后测试示例',
+      'content': '补全：确保提取函数行为不变的断言。',
+      'input': '',
+      'output': '',
+      'code': 'assert is_valid(5) == True',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '通过断言或单元测试验证重构前后行为一致性。',
+      'example': 'assert func(x)==expected'
+    }
+
+  ]
+}
+
+```

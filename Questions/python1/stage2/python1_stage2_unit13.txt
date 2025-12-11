@@ -1,0 +1,200 @@
+```plaintext
+{
+  'unit': '第13单元：条件与集合操作',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '集合成员检查',
+      'content': '检查元素是否在集合中通常使用哪个运算符？',
+      'options': {'A':'in','B':'contains','C':'has','D':'find'},
+      'answer': 'A',
+      'hints': ['in 用于序列/集合成员测试','集合的成员测试效率高','语义直观'],
+      'explanation': '使用 in 来测试元素是否存在于集合或序列中。',
+      'example': 'if x in myset: ...'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '列表与集合的区别',
+      'content': '集合和列表主要区别是什么？',
+      'options': {'A':'集合元素唯一且无序','B':'列表元素唯一','C':'集合有索引','D':'列表无序'},
+      'answer': 'A',
+      'hints': ['集合不保存顺序','集合里不能有重复元素','列表保留顺序并允许重复'],
+      'explanation': '集合保证唯一性且无序，列表保留顺序且允许重复。',
+      'example': 'set([1,1,2]) -> {1,2}'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '集合运算',
+      'content': '下面哪个操作可以得到两个集合的交集？',
+      'options': {'A':'a & b 或 a.intersection(b)','B':'a + b','C':'a * b','D':'a | b'},
+      'answer': 'A',
+      'hints': ['& 表示交集','| 表示并集','- 表示差集'],
+      'explanation': '使用 & 或 intersection 得到交集。',
+      'example': '{1,2} & {2,3} -> {2}'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '集合去重练习',
+      'content': '补全：用集合快速去重并打印长度。',
+      'input': 'lst=[1,1,2]',
+      'output': '2',
+      'code': 'lst = [1,1,2]\nprint(len(set(___)))',
+      'options': 'lst, set, list, tuple',
+      'answer': '1',
+      'explanation': '将列表转为集合可去重，然后用 len 计数。',
+      'example': 'len(set([1,2,2]))'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '用集合判断重复',
+      'content': '补全：检测列表中是否有重复元素。',
+      'input': 'lst=[1,2,2]',
+      'output': 'Has duplicate',
+      'code': 'lst = [1,2,2]\nif len(set(lst)) ___ len(lst):\n    print("Has duplicate")',
+      'options': '<, >, ==, !=',
+      'answer': '4',
+      'explanation': '去重后长度小于原始长度表示存在重复。',
+      'example': 'if len(set(a)) != len(a): ...'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '集合不可变类型',
+      'content': '下列哪种元素不能直接放入集合？',
+      'options': {'A':'list','B':'int','C':'tuple (只含不可变)','D':'str'},
+      'answer': 'A',
+      'hints': ['集合元素必须可哈希','list 是可变类型不可哈希','tuple 若其元素可哈希则可作为集合元素'],
+      'explanation': 'list 是可变且不可哈希，不能作为集合元素。',
+      'example': 's = set()\ns.add((1,2))'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '集合常见用途',
+      'content': '集合常用于？',
+      'options': {'A':'去重、成员检测、集合运算','B':'保持元素顺序','C':'索引访问','D':'存储键值对'},
+      'answer': 'A',
+      'hints': ['集合提供高效成员检测','不保证顺序','适合去重和集合运算'],
+      'explanation': '集合最常用于去重和高效的成员检测与集合运算。',
+      'example': 'a_set = set(lst)'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '使用 in 的性能',
+      'content': '在集合中使用 in 的时间复杂度通常是？',
+      'options': {'A':'平均 O(1)','B':'O(n)','C':'O(log n)','D':'O(n^2)'},
+      'answer': 'A',
+      'hints': ['集合基于哈希表','平均常数时间查找','最坏情况可能退化'],
+      'explanation': '集合的成员检测在平均情况下为 O(1)。',
+      'example': 'if x in large_set: ...'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '集合交并练习',
+      'content': '补全：计算 a 与 b 的并集并打印大小。',
+      'input': 'a=[1,2]; b=[2,3]',
+      'output': '3',
+      'code': 'a = [1,2]\nb = [2,3]\nprint(len(set(a) ___ set(b)))',
+      'options': '&, |, -, ^',
+      'answer': '2',
+      'explanation': '并集用 | 或 union 表示。',
+      'example': 'set(a) | set(b)'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '集合差集练习',
+      'content': '补全：求 a 中有但 b 中没有的元素。',
+      'input': 'a=[1,2,3]; b=[2]',
+      'output': '{1,3}',
+      'code': 'a = [1,2,3]\nb = [2]\nprint(set(a) ___ set(b))',
+      'options': '|, &, -, ^',
+      'answer': '3',
+      'explanation': '差集用 - 表示。',
+      'example': 'set(a) - set(b)'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': 'frozenset 的用途',
+      'content': '何时使用 frozenset？',
+      'options': {'A':'需要不可变集合作为字典键时','B':'需要可变集合','C':'用于列表拼接','D':'用于字符串拼接'},
+      'answer': 'A',
+      'hints': ['frozenset 是不可变的','可作为字典的键或其他集合元素','用于需要哈希的场景'],
+      'explanation': 'frozenset 不可变且可哈希，适合作为字典键或集合元素。',
+      'example': 'd[frozenset([1,2])] = 3'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '列表转集合的副作用',
+      'content': '把列表转为集合会发生什么？',
+      'options': {'A':'去重且丢弃顺序','B':'保留原列表顺序并去重','C':'变成列表的拷贝','D':'转换失败'},
+      'answer': 'A',
+      'hints': ['集合不保序','会去掉重复元素','适合去重使用'],
+      'explanation': '转换会去重并且结果集合没有原始的顺序保证。',
+      'example': 'set([3,1,2,1]) -> {1,2,3}'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '集合推导',
+      'content': '下面哪个是集合推导的正确语法？',
+      'options': {'A':'{x for x in seq if cond}','B':'[x for x in seq]','C':'(x for x in seq)','D':'{x: x for x in seq}'},
+      'answer': 'A',
+      'hints': ['{} 包含集合推导或 dict 推导','带冒号时是 dict 推导','圆括号是生成器表达式'],
+      'explanation': '集合推导写作 {x for x in seq if cond}。',
+      'example': '{n for n in nums if n%2==0}'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '练习：从列表中选偶数并去重',
+      'content': '补全：用集合推导保存偶数。',
+      'input': 'lst=[1,2,2,3,4]',
+      'output': '{2,4}',
+      'code': 'lst = [1,2,2,3,4]\nevens = {x for x in lst if x % 2 == 0}\nprint(evens)',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '集合推导可同时筛选并去重。',
+      'example': '见代码'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '实践：集合在判断中的应用',
+      'content': '补全：判断输入字符是否是元音（用集合）。',
+      'input': 'ch="e"',
+      'output': 'vowel',
+      'code': 'vowels = {"a","e","i","o","u"}\nch = input().lower()\nif ch in vowels:\n    print("vowel")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '使用集合进行成员检测简洁且高效。',
+      'example': 'if c in {"0","1"}: ...'
+    }
+
+  ]
+}
+```

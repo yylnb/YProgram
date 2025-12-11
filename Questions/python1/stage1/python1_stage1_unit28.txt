@@ -1,0 +1,281 @@
+```plaintext
+{
+  'unit': '第28单元：Python 的真值规则',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '哪些值被视为 False？',
+      'content': '下列哪个值在布尔上下文中被视为 False？',
+      'options': {
+        'A': '0, "", None, []',
+        'B': '非空字符串',
+        'C': '非零数字',
+        'D': '包含元素的列表'
+      },
+      'answer': 'A',
+      'hints': [
+        '空集合和 0 通常为假。',
+        'None 也为假。',
+        '非空容器为真。'
+      ],
+      'explanation': '0、空字符串、None、空列表等在布尔上下文中为 False。',
+      'example': 'if []: print("有元素") 不会执行。'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '空字符串的真值',
+      'content': '表达式 bool("") 的结果是？',
+      'options': {
+        'A': 'True',
+        'B': 'False',
+        'C': 'None',
+        'D': '抛出异常'
+      },
+      'answer': 'B',
+      'hints': [
+        '空字符串没有内容。',
+        '空容器通常为 False。',
+        '可以用 bool() 检查。'
+      ],
+      'explanation': '空字符串被视为 False。',
+      'example': 'bool("") → False, bool("a") → True。'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': 'None 的真值',
+      'content': '在布尔上下文中，None 的值是？',
+      'options': {
+        'A': 'True',
+        'B': 'False',
+        'C': '取决于 Python 版本',
+        'D': 'Undefined'
+      },
+      'answer': 'B',
+      'hints': [
+        'None 表示缺失或空。',
+        '通常被当作假值处理。',
+        '适合用 is None 判断。'
+      ],
+      'explanation': 'None 在布尔上下文中为 False。',
+      'example': 'if value is None: ... 与 if not value: ... 行为不同。'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '空列表判断',
+      'content': '补全代码，只有当列表非空时打印内容。',
+      'input': 'lst = [1,2]',
+      'output': '有元素',
+      'code': 'lst = [1,2]\nif ___:\n    print("有元素")',
+      'options': 'lst, len(lst) > 0, lst != [], not lst',
+      'answer': '1',
+      'explanation': '直接在 if 中使用 lst 会在非空时为 True。',
+      'example': 'if items: print("有元素")'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '零的真值',
+      'content': '补全输出 False。',
+      'input': '',
+      'output': 'False',
+      'code': 'print(bool(___))',
+      'options': '0, 1, -1, 0.1',
+      'answer': '1',
+      'explanation': '整数 0 在布尔上下文中为 False。',
+      'example': 'bool(0) → False, bool(5) → True'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '容器的真值',
+      'content': '哪个集合在布尔上下文中为 False？',
+      'options': {
+        'A': '{1,2}',
+        'B': 'set()',
+        'C': '[0]',
+        'D': '(1,)' 
+      },
+      'answer': 'B',
+      'hints': [
+        '空集合为假。',
+        '非空容器通常为真。',
+        '注意 [0] 虽包含 0，但非空。'
+      ],
+      'explanation': '空集合 set() 在布尔上下文中为 False。',
+      'example': 'if not set(): print("空集合")'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '自定义对象的真值',
+      'content': '如果类没有定义 __bool__ 或 __len__，其实例在布尔上下文中为？',
+      'options': {
+        'A': 'True',
+        'B': 'False',
+        'C': '取决于内部字段',
+        'D': '报错'
+      },
+      'answer': 'A',
+      'hints': [
+        '默认情况下对象为真。',
+        '可通过实现 __bool__ 改变行为。',
+        '只有特殊实现会让实例为假。'
+      ],
+      'explanation': '没有定义 __bool__ 或 __len__ 的对象实例在布尔上下文中被视为 True。',
+      'example': 'class A: pass; bool(A()) → True'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': 'None 与空串的区别',
+      'content': '哪种说法正确？',
+      'options': {
+        'A': 'None 与 "" 在布尔上下文中都为假，但语义不同',
+        'B': 'None 与 "" 完全等价',
+        'C': 'None 总是 True',
+        'D': '空串会抛出异常'
+      },
+      'answer': 'A',
+      'hints': [
+        'None 表示缺失',
+        '"" 是有效但为空的字符串',
+        '两者语义不同，应分别处理'
+      ],
+      'explanation': 'None 表示没有值；空字符串表示有值但为空，二者布尔值都为 False，但应根据语义选择判断方式。',
+      'example': 'if s is None: ... 与 if not s: ... 含义不同。'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '使用 truthiness 简化判断',
+      'content': '用最简洁的方式判断字典是否有键。',
+      'input': 'd = {"a":1}',
+      'output': '包含',
+      'code': 'd = {"a":1}\nif ___:\n    print("包含")',
+      'options': 'd, len(d) > 0, d != {}, not d',
+      'answer': '1',
+      'explanation': '直接使用字典对象在布尔上下文中判断是否非空。',
+      'example': 'if config: print("配置存在")'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': 'False 值判定',
+      'content': '补全使输出 False。',
+      'input': '',
+      'output': 'False',
+      'code': 'print(bool(___))',
+      'options': '[], 0, None, "text"',
+      'answer': '1,2,3',
+      'explanation': '[], 0, None 都会被 bool() 判为 False；题目可任选其一，示例中我们列出三个可选项。',
+      'example': 'bool([]) → False'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': 'empty 与 None 的比较',
+      'content': '如果 s = ""，下面哪种判断能明确区分 None 与 空字符串？',
+      'options': {
+        'A': 'if not s:',
+        'B': 'if s is None:',
+        'C': 'if s == None:',
+        'D': '以上都可以'
+      },
+      'answer': 'B',
+      'hints': [
+        'is None 用于判断 None。',
+        's == None 也可，但不推荐。',
+        'not s 无法区分空串与 None。'
+      ],
+      'explanation': '使用 is None 可以明确判断是否为 None，not s 无法区分空值与 None。',
+      'example': 'if value is None: ...'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '布尔转换函数',
+      'content': '哪个函数可将任意值转换为布尔值？',
+      'options': {
+        'A': 'int()',
+        'B': 'bool()',
+        'C': 'str()',
+        'D': 'len()'
+      },
+      'answer': 'B',
+      'hints': [
+        'bool() 用于布尔转换。',
+        'int() 转为整数。',
+        'len() 返回长度。'
+      ],
+      'explanation': '使用 bool(x) 可以得到 x 在布尔上下文中的真值。',
+      'example': 'bool("") → False，bool([1]) → True。'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '空白的判断习惯',
+      'content': '检查字符串是否非空的习惯写法是什么？',
+      'options': {
+        'A': 'if len(s) > 0:',
+        'B': 'if s:',
+        'C': 'if s != "":',
+        'D': '以上都行，但最 Pythonic 是 if s:'
+      },
+      'answer': 'D',
+      'hints': [
+        'Pythonic 风格更简洁。',
+        'len(s) > 0 也可以。',
+        '但 if s 更常见。'
+      ],
+      'explanation': '三种写法都能判断非空，但 Pythonic 推荐直接使用 if s。',
+      'example': 'if items: print("有元素")'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '组合判断示例',
+      'content': '补全，使只有当列表非空且第一个元素为真时打印。',
+      'input': 'lst = [0,1]',
+      'output': '通过',
+      'code': 'lst = [0,1]\nif ___ and ___:\n    print("通过")',
+      'options': 'lst, lst[0], not lst, len(lst) == 0',
+      'answer': '1,2',
+      'explanation': '先判断列表非空，再判断第一个元素的真值。',
+      'example': 'if items and items[0]: ...'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '使用 truthiness 简化代码',
+      'content': '将以下两行用一行 if 简化。',
+      'input': 's = "text"',
+      'output': '存在',
+      'code': 's = "text"\nif len(s) > 0:\n    print("存在")',
+      'options': 'if s:, if not s:, if s is None:, if len(s):',
+      'answer': '1',
+      'explanation': '直接使用 if s 更简洁，等价于 len(s) > 0 的判断。',
+      'example': 'if username: print(username)'
+    }
+
+  ]
+}
+```

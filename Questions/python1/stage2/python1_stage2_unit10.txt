@@ -1,0 +1,200 @@
+```plaintext
+{
+  'unit': '第10单元：输入验证与错误处理（基础）',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '输入类型检查',
+      'content': '下列哪种方式可以安全把输入转换为整数？',
+      'options': {'A':'使用 try/except 捕获 ValueError','B':'直接 int(input()) 不捕获','C':'用 float 转换再 int','D':'用 eval 解析'},
+      'answer': 'A',
+      'hints': ['用户输入可能无效','异常处理是常见方法','ValueError 会被抛出'],
+      'explanation': '用 try/except 捕获 ValueError 可以避免程序崩溃并做友好提示。',
+      'example': 'try:\n    n = int(input())\nexcept ValueError:\n    print("invalid")'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': 'isnumeric 与 isnumeric',
+      'content': '哪个方法可用于判断字符串是否只包含数字字符？',
+      'options': {'A':'str.isdigit() 或 str.isnumeric()','B':'str.isalpha()','C':'len(s)>0','D':'s == int(s)'},
+      'answer': 'A',
+      'hints': ['有专用方法检测数字','注意 Unicode 数字字符','不是万能转换方法'],
+      'explanation': 'str.isdigit() 与 str.isnumeric() 可用于检测字符串是否为数字形式。',
+      'example': 'if s.isdigit(): n=int(s)'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '避免 crash 的策略',
+      'content': '当用户输入错误时最佳策略是？',
+      'options': {'A':'提示并要求重新输入','B':'直接退出程序','C':'忽略并继续使用默认值','D':'抛出未捕获异常'},
+      'answer': 'A',
+      'hints': ['用户体验优先','保持程序健壮','给予友好提示'],
+      'explanation': '提示用户并要求重新输入通常更友好且可靠。',
+      'example': 'while True:\n    try: ...\n    except: ...'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '基本输入验证',
+      'content': '补全：检查输入是否非空再转换为整数。',
+      'input': 's="42"',
+      'output': '42',
+      'code': 's = input()\nif s.___():\n    n = int(s)\n    print(n)',
+      'options': 'strip, isdigit, lower, split',
+      'answer': '2',
+      'explanation': '使用 isdigit 检查是否为数字字符串再转换。',
+      'example': 'if s.isdigit(): n=int(s)'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '异常处理写法',
+      'content': '补全：捕获 int 转换的异常并提示。',
+      'input': 's="abc"',
+      'output': 'invalid',
+      'code': 'try:\n    n = int(s)\nexcept ___:\n    print("invalid")',
+      'options': 'ValueError, TypeError, Exception, KeyError',
+      'answer': '1',
+      'explanation': 'int() 转换失败会抛出 ValueError。',
+      'example': 'except ValueError:\n    ...'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '防御式编程思想',
+      'content': '以下哪项最符合防御式编程？',
+      'options': {'A':'对外部输入进行验证','B':'假设输入总是正确','C':'不做任何检查以提高速度','D':'在崩溃后重启程序'},
+      'answer': 'A',
+      'hints': ['对输入验证是防御式编程常见做法','可以提高健壮性','避免未定义行为'],
+      'explanation': '防御式编程强调对不可信输入进行验证和容错处理。',
+      'example': 'validate(user_input)'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '用户提示友好性',
+      'content': '提示用户输入错误时应如何做？',
+      'options': {'A':'告诉错误并给出示例格式','B':'只显示技术异常信息','C':'静默忽略错误','D':'终止程序'},
+      'answer': 'A',
+      'hints': ['友好提示提升体验','给出示例格式帮助用户纠错','避免泄露内部堆栈信息'],
+      'explanation': '对用户显示可理解的错误和示例输入通常更好。',
+      'example': '请输入整数，例如 42'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '异常捕获范围',
+      'content': '应尽量捕获哪种范围的异常？',
+      'options': {'A':'尽可能具体的异常类型','B':'使用 broad except 捕获所有','C':'只捕获 BaseException','D':'不捕获任何异常'},
+      'answer': 'A',
+      'hints': ['具体异常更易调试','避免吞掉程序错误','保持错误可追踪'],
+      'explanation': '捕获具体异常更安全，避免掩盖真问题。',
+      'example': 'except ValueError: ...'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '循环重试输入',
+      'content': '补全：在输入无效时要求继续输入。',
+      'input': '',
+      'output': '',
+      'code': 'while True:\n    s = input()\n    try:\n        n = int(s)\n        break\n    except ValueError:\n        print("Please input an integer")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '用循环和异常处理实现重试输入。',
+      'example': '见上方代码'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '去除空白再判断',
+      'content': '补全：剔除两端空白后判断是否为空。',
+      'input': 's="  "',
+      'output': 'Empty',
+      'code': 's = input()\nif not s.___():\n    print("Empty")',
+      'options': 'strip, isdigit, lower, split',
+      'answer': '1',
+      'explanation': 'strip() 去除两端空白后可判断是否为空字符串。',
+      'example': 'if not s.strip(): ...'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '用断言检查',
+      'content': '断言（assert）常用于？',
+      'options': {'A':'开发时检查假设','B':'替代运行时输入验证','C':'在生产中处理用户错误','D':'捕获异常'},
+      'answer': 'A',
+      'hints': ['assert 在开发或测试有用','它可能被优化掉','不建议用作用户输入验证'],
+      'explanation': 'assert 用于开发时断言条件，生产环境中不应依赖它做输入校验。',
+      'example': 'assert x >= 0'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '异常信息的显示',
+      'content': '向用户显示异常堆栈信息好吗？',
+      'options': {'A':'通常不显示，给友好提示','B':'总是显示完整堆栈','C':'只显示文件名','D':'显示仅第一行'},
+      'answer': 'A',
+      'hints': ['避免泄露内部实现','显示易懂的错误说明','日志中可记录堆栈供开发者查看'],
+      'explanation': '对用户显示友好错误信息，堆栈写入日志以便排查。',
+      'example': 'print("输入无效，请输入数字")'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '防止输入阻塞',
+      'content': '在命令行程序中处理输入超时常用？',
+      'options': {'A':'使用线程或 select 处理','B':'input() 本身支持超时','C':'用 int() 设置超时','D':'用 try/except 捕获 TimeoutError'},
+      'answer': 'A',
+      'hints': ['标准 input() 无超时参数','需借助系统调用或线程','跨平台实现有差异'],
+      'explanation': 'input() 无内建超时，可通过线程或 select 等机制处理。',
+      'example': '使用 signal.alarm 在 Unix 下实现超时'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '记录错误日志',
+      'content': '补全：在 except 中记录异常信息到日志。',
+      'input': '',
+      'output': '',
+      'code': 'import logging\ntry:\n    n = int(s)\nexcept ValueError as e:\n    logging.___("invalid input %s", e)',
+      'options': 'error, warn, info, debug',
+      'answer': '1',
+      'explanation': '在 except 中调用 logging.error 将错误记录下来便于排查。',
+      'example': 'logging.error("failed: %s", e)'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '实践：稳定的转换',
+      'content': '补全：写一个安全转换函数，失败返回 None。',
+      'input': 's="abc"',
+      'output': 'None',
+      'code': 'def safe_int(s):\n    try:\n        return int(s)\n    except ___:\n        return None',
+      'options': 'ValueError, TypeError, Exception, KeyError',
+      'answer': '1',
+      'explanation': '捕获 ValueError 并返回 None 表示转换失败。',
+      'example': 'if safe_int(s) is None: ...'
+    }
+
+  ]
+}
+```

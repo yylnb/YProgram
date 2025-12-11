@@ -1,0 +1,200 @@
+```plaintext
+{
+  'unit': '第19单元：条件判断 + 字符串处理综合应用',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '字符串与条件结合',
+      'content': '判定字符串非空通常使用哪个条件？',
+      'options': {'A':'if s:','B':'if s != "":','C':'if len(s) > 0:','D':'以上都可以'},
+      'answer': 'D',
+      'hints': ['Python 中空字符串为 False','多种写法均可','首选简洁写法'],
+      'explanation': '三种写法都能判定非空，其中 if s 更简洁直观。',
+      'example': 'if name: print(name)'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': 'strip 与空白判断',
+      'content': '要判断用户输入是否只包含空白，应先用？',
+      'options': {'A':'strip','B':'lower','C':'split','D':'replace'},
+      'answer': 'A',
+      'hints': ['strip 去除两端空白','之后可判断空字符串','避免只用输入直接判断'],
+      'explanation': '先用 strip 去除空白后判断是否为空可以识别只有空白的输入。',
+      'example': 'if not s.strip(): print("empty")'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': 'contains 检查',
+      'content': '检查子串存在应使用哪个操作？',
+      'options': {'A':'in','B':'find==-1','C':'index','D':'count'},
+      'answer': 'A',
+      'hints': ['in 返回布尔最直观','find 或 index 可返回位置或异常','count 可用于计数'],
+      'explanation': '使用 in 可直接判断子串存在性，表达清晰。',
+      'example': 'if "py" in s: ...'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '常见输入格式判断',
+      'content': '补全：判断是否为简单邮箱格式（包含 @）。',
+      'input': 's="a@b"',
+      'output': 'Valid',
+      'code': 's = input()\nif "@" ___ s:\n    print("Valid")',
+      'options': 'in, not in, ==, is',
+      'answer': '1',
+      'explanation': '可以简单用 in 检查是否含有 @，尽管不是严格邮箱验证。',
+      'example': 'if "@" in email: ...'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '分割并取首段',
+      'content': '补全：按空格取第一单词。',
+      'input': 's="hello world"',
+      'output': 'hello',
+      'code': 's = input()\nprint(s.___()[0])',
+      'options': 'split, strip, lower, replace',
+      'answer': '1',
+      'explanation': 'split() 将字符串拆分为单词列表，再取第一个元素。',
+      'example': 's.split()[0]'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '判断是否为数字串',
+      'content': '判断字符串是否为数字串（不含小数点）可用？',
+      'options': {'A':'s.isdigit()','B':'int(s)','C':'float(s)','D':'eval(s)'},
+      'answer': 'A',
+      'hints': ['isdigit 适合纯数字字符','转换方法需要异常处理'],
+      'explanation': 's.isdigit() 是检测纯数字串的直接方法。',
+      'example': 'if s.isdigit(): n=int(s)'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '拼接与 join',
+      'content': '将单词列表拼接为字符串推荐使用？',
+      'options': {'A':'" ".join(words)','B':'" "+" ".join(words)','C':'for 循环拼接','D':'sum(words)'},
+      'answer': 'A',
+      'hints': ['join 高效且语义明确','避免在循环内多次拼接字符串'],
+      'explanation': 'join 是拼接字符串列表的推荐方法，性能较好且易读。',
+      'example': '"-".join(parts)'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '大小写统一',
+      'content': '忽略大小写比较两字符串应先调用？',
+      'options': {'A':'lower或upper','B':'strip','C':'replace','D':'split'},
+      'answer': 'A',
+      'hints': ['统一大小写后比较更稳健','lower 常用且直观'],
+      'explanation': '先把两个字符串都 lower() 或 upper() 再比较可忽略大小写。',
+      'example': 'if a.lower() == b.lower():'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '统计子串出现次数',
+      'content': '补全：统计子串出现次数并打印。',
+      'input': 's="aba"; sub="a"',
+      'output': '2',
+      'code': 's = input()\nsub = input()\nprint(s.___(sub))',
+      'options': 'count, find, index, replace',
+      'answer': '1',
+      'explanation': 'count 方法统计子串在字符串中出现的次数。',
+      'example': 's.count("a")'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '去除换行并比较',
+      'content': '补全：读取输入并去除末尾换行后比较。',
+      'input': 's="ok\n"',
+      'output': 'Good',
+      'code': 's = input().___()\nif s == "ok":\n    print("Good")',
+      'options': 'strip, rstrip, lstrip, replace',
+      'answer': '2',
+      'explanation': 'rstrip() 可以去除右侧换行符，strip 也可但更通用。',
+      'example': 's = input().rstrip()'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '正则 vs 简单方法',
+      'content': '简单字符串判断应优先使用？',
+      'options': {'A':'内建方法如 in、split、find','B':'正则表达式','C':'使用 eval','D':'用数据库查询'},
+      'answer': 'A',
+      'hints': ['简单任务用简单方法更快更易维护','正则适合复杂匹配'],
+      'explanation': '优先使用内建字符串方法，复杂匹配再考虑正则。',
+      'example': 'if "," in s: parts = s.split(',')'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '避免链式 replace',
+      'content': '连续多次 replace 可能会怎样？',
+      'options': {'A':'效率低且可能相互影响','B':'总是更优','C':'会改变原对象','D':'只能用于数字'},
+      'answer': 'A',
+      'hints': ['字符串不可变每次替换都会造新对象','替换顺序可能影响结果'],
+      'explanation': '多次 replace 在性能和语义上都可能带来问题，必要时应谨慎或用正则一次完成。',
+      'example': 's.replace("a","b").replace("b","c")'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '用户输入清洗',
+      'content': '在处理用户名输入时，应至少做什么？',
+      'options': {'A':'strip 去掉首尾空白','B':'lower 并保存原始大小写','C':'直接存储不处理','D':'用 eval 检查'},
+      'answer': 'A',
+      'hints': ['先去首尾空白','再根据需要统一大小写或校验长度'],
+      'explanation': '至少去除首尾空白避免误判空输入或多余空白。',
+      'example': 'username = input().strip()'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '练习：提取域名',
+      'content': '补全：从 URL 中提取主机名（简单示例）。',
+      'input': 'url="http://example.com/path"',
+      'output': 'example.com',
+      'code': 'url = input()\nhost = url.split("//")[1].split("/")[0]\nprint(host)',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '用 split 的链式调用可简单提取主机名（不保证完备）。',
+      'example': 's.split("@")[-1].split(":")[0]'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '综合练习：检查并格式化输入',
+      'content': '补全：如果输入为空则输出 "n/a"，否则输出大写文本。',
+      'input': 's="hello"',
+      'output': 'HELLO',
+      'code': 's = input()\nprint((s or "n/a").___())',
+      'options': 'upper, lower, strip, title',
+      'answer': '1',
+      'explanation': '先使用 or 提供默认，再调用 upper() 将文本转为大写。',
+      'example': 'print((name or "guest").title())'
+    }
+
+  ]
+}
+```

@@ -1,0 +1,281 @@
+```plaintext
+{
+  'unit': '第1单元：if 基本结构',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': 'if 的最基本用途',
+      'content': '下面哪段代码表示“如果 x 大于 0 则打印 OK”？',
+      'options': {
+        'A': 'if x > 0:\n    print("OK")',
+        'B': 'if(x > 0) print("OK")',
+        'C': 'if x > 0 then print("OK")',
+        'D': 'x > 0 ? print("OK")'
+      },
+      'answer': 'A',
+      'hints': [
+        'Python 使用冒号和缩进表示代码块。',
+        '没有 then 关键字。',
+        '条件需要写在冒号前面。'
+      ],
+      'explanation': 'Python if 语句形式为 if condition:\n    body。',
+      'example': 'if score >= 60:\n    print("及格")'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '缩进的重要性',
+      'content': '为什么在 Python 中 if 语句后的代码需要缩进？',
+      'options': {
+        'A': '为了美观',
+        'B': '表示代码块的范围并影响程序逻辑',
+        'C': '可选的，写不写都行',
+        'D': '仅在函数内需要缩进'
+      },
+      'answer': 'B',
+      'hints': [
+        '缩进决定代码的所属块。',
+        '不正确缩进会导致语法错误。',
+        'Python 使用缩进而非花括号。'
+      ],
+      'explanation': '缩进在 Python 中用来划分代码块，错误缩进会报错或改变逻辑。',
+      'example': 'if x > 0:\n    print(x)\nprint("done") // outside block'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '条件的真假',
+      'content': '下面哪个表达式在 if 语句中被认为为真？',
+      'options': {
+        'A': '0',
+        'B': '""',
+        'C': '[]',
+        'D': '1'
+      },
+      'answer': 'D',
+      'hints': [
+        '0、空字符串、空容器在布尔上下文中为 False。',
+        '非零数字通常为 True。',
+        '可以使用 bool() 观察。'
+      ],
+      'explanation': '整数 1 在布尔上下文中为 True，因此 if 1: 会进入分支。',
+      'example': 'if -1: print("真")'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '补全 if 结构',
+      'content': '补全代码，使其在 x 小于 10 时打印 Tiny。',
+      'input': 'x = 5',
+      'output': 'Tiny',
+      'code': 'x = 5\nif ___:\n    print("Tiny")',
+      'options': 'x < 10, x > 10, x == 10, x != 10',
+      'answer': '1',
+      'explanation': '条件 x < 10 在 x 为 5 时为真。',
+      'example': 'if score < 60: print("不及格")'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '避免语法错误',
+      'content': '在下面语句中补全缺失的符号使其有效。',
+      'input': '',
+      'output': '',
+      'code': 'if x > 0 ___\n    print("positive")',
+      'options': ':, then, {, end',
+      'answer': '1',
+      'explanation': 'Python 使用冒号 : 来开始代码块。',
+      'example': 'if x == 0:\n    print("zero")'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': 'if 与条件顺序',
+      'content': '当写多个 if 语句时，下面描述正确的是？',
+      'options': {
+        'A': '每个 if 都会独立判断',
+        'B': '后面的 if 会替换前面的 if',
+        'C': '只有第一个为真的 if 会被执行',
+        'D': '多个 if 会合并为一个'
+      },
+      'answer': 'A',
+      'hints': [
+        '独立的 if 会逐一判断。',
+        '若需要互斥使用 if/elif/else。',
+        '注意逻辑控制的差异。'
+      ],
+      'explanation': '独立的 if 语句都会被检查并根据条件独立执行。',
+      'example': 'if a:\n    ...\nif b:\n    ...'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': 'if/elif/else 的区别',
+      'content': 'if/elif/else 结构中，elif 的作用是什么？',
+      'options': {
+        'A': '总是执行',
+        'B': '在前面的 if/elif 条件都为假时才判断',
+        'C': '与 else 等价',
+        'D': '跳出函数'
+      },
+      'answer': 'B',
+      'hints': [
+        'elif 是 else if 的缩写。',
+        '它是互斥分支的一部分。',
+        '只有前面的都为假时才会被考虑。'
+      ],
+      'explanation': 'elif 在前面的 if/elif 条件都为假时作为后续分支被判断。',
+      'example': 'if x<0:\n    ...\nelif x==0:\n    ...\nelse:\n    ...'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': 'if 中的复合条件',
+      'content': '以下哪个写法可以判断 x 在 1 到 10 之间？',
+      'options': {
+        'A': 'if 1 < x and x < 10:',
+        'B': 'if 1 < x < 10:',
+        'C': 'if x > 1 and x < 10:',
+        'D': '以上都可以'
+      },
+      'answer': 'D',
+      'hints': [
+        'Python 支持链式比较。',
+        'and 也可组合条件。',
+        '选择最可读的写法即可。'
+      ],
+      'explanation': '三种写法都能判断 x 在 (1,10) 范围内，其中链式比较最简洁。',
+      'example': '1 <= x <= 10 用于闭区间判断。'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '条件与输入',
+      'content': '补全代码：读取用户输入的数字并判断是否为正数。',
+      'input': '输入: 3',
+      'output': 'Positive',
+      'code': 'n = int(input())\nif n ___ 0:\n    print("Positive")',
+      'options': '> , < , == , !=',
+      'answer': '1',
+      'explanation': '若 n 大于 0 就是正数。',
+      'example': 'n = int(input())\nif n < 0: print("Negative")'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '避免缩进错误',
+      'content': '补全下面代码中的缩进，使其为合法的 if 结构。',
+      'input': '',
+      'output': 'OK',
+      'code': 'x = 1\nif x == 1:\nprint("OK")',
+      'options': '缩进四个空格, 不缩进, 制表符, 写在同一行',
+      'answer': '缩进四个空格',
+      'explanation': '需要对 print 行进行缩进（通常 4 个空格或一个制表符）。',
+      'example': 'if True:\n    print("Yes")'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '条件表达式的简洁写法',
+      'content': '下面哪个是条件表达式（ternary）？',
+      'options': {
+        'A': 'x = a if cond else b',
+        'B': 'if cond: x = a else: x = b',
+        'C': 'cond ? a : b',
+        'D': 'x = cond and a or b'
+      },
+      'answer': 'A',
+      'hints': [
+        'Python 使用 if-else 放在中间的形式实现三元表达式。',
+        'cond ? a : b 是其他语言的写法。',
+        '注意括号与空格的使用。'
+      ],
+      'explanation': 'Python 的条件表达式为 a if condition else b。',
+      'example': 'sign = "+" if x>=0 else "-"'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': 'if 中的逻辑短路',
+      'content': '在 if 条件中包含 and/or 时会发生什么？',
+      'options': {
+        'A': '会总是评估所有子表达式',
+        'B': '可能短路以避免评估右侧表达式',
+        'C': '会报错',
+        'D': '会把表达式转成字符串再比较'
+      },
+      'answer': 'B',
+      'hints': [
+        'and/or 有短路求值特性。',
+        '这会影响副作用（如函数调用）。',
+        '可用括号明确求值顺序。'
+      ],
+      'explanation': 'and/or 会短路求值，根据左侧值可决定是否计算右侧。',
+      'example': 'if user and user.is_active: ...'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': 'if 的常见错误',
+      'content': '下面哪种写法会导致语法错误？',
+      'options': {
+        'A': 'if x = 1:',
+        'B': 'if x == 1:',
+        'C': 'if (x == 1):',
+        'D': 'if x in [1]:'
+      },
+      'answer': 'A',
+      'hints': [
+        '单个 = 是赋值，不可在 if 条件中使用。',
+        '比较要用 ==。',
+        '圆括号在 Python 中是可选的。'
+      ],
+      'explanation': 'if 中使用 = 会导致语法错误，应使用 == 比较相等。',
+      'example': 'if name == "Tom": print("Hi")'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '分支输出练习',
+      'content': '补全代码使其根据温度输出 Cold/Hot。',
+      'input': 't = 25',
+      'output': 'Hot',
+      'code': 't = 25\nif t < 20:\n    print("Cold")\nelse:\n    print(___)',
+      'options': '"Hot", "Cool", "Warm", "OK"',
+      'answer': '"Hot"',
+      'explanation': '温度 25 >= 20，应输出 Hot。',
+      'example': 'if score >= 60: print("Pass") else: print("Fail")'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '互斥分支练习',
+      'content': '补全代码，确保只会输出一个等级。',
+      'input': 'score = 85',
+      'output': 'B',
+      'code': 'score = 85\nif score >= 90:\n    print("A")\nelif score >= 80:\n    print(___)\nelse:\n    print("C")',
+      'options': '"A", "B", "C", "D"',
+      'answer': '"B"',
+      'explanation': '85 在 80–89 间，应输出 B。',
+      'example': 'elif 链可以实现互斥分支判断。'
+    }
+
+  ]
+}
+```

@@ -1,0 +1,205 @@
+```plaintext
+{
+  'unit': '第2单元：if + else',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': 'else 的用途',
+      'content': 'when 会走 else 分支？',
+      'options': {
+        'A': '当 if 条件为真时',
+        'B': '当 if 条件为假时',
+        'C': 'else 总是执行',
+        'D': 'else 只能跟在循环后'
+      },
+      'answer': 'B',
+      'hints': ['else 在 if 条件为假时执行', 'else 与 if 配套使用', 'else 不带条件'],
+      'explanation': 'else 分支在 if 条件为 False 时执行。',
+      'example': 'if x>0:\n    ...\nelse:\n    ...'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': 'else 可以省略吗？',
+      'content': '下面哪个说法正确？',
+      'options': {'A': '不能省略', 'B': '可以省略，视情况而定', 'C': '只有在函数内可省略', 'D': '语法不允许省略 else'},
+      'answer': 'B',
+      'hints': ['else 是可选的', '很多情况下只需 if', 'else 用于提供替代路径'],
+      'explanation': 'else 是可选的，只有需要在条件不满足时执行代码才使用。',
+      'example': 'if x>0:\n    print(x)'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': 'else 与缩进',
+      'content': '下面哪个写法是合法的 if/else 结构？',
+      'options': {'A':'if a:\nprint(1)\nelse:\nprint(2)','B':'if a:\n    print(1)\nelse:\n    print(2)','C':'if a: print(1) else: print(2)','D':'if a then print(1) else print(2)'},
+      'answer': 'B',
+      'hints': ['Python 用缩进表示代码块', '单行可以写成 if a: print(1)', '不能用 then'],
+      'explanation': '正确的多行写法需要在 if/else 下面缩进代码块。',
+      'example': 'if x>0:\n    print("pos")\nelse:\n    print("non-pos")'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '补全 else',
+      'content': '补全以输出对应结果。',
+      'input': 'x = -1',
+      'output': 'negative',
+      'code': 'x = -1\nif x >= 0:\n    print("non-negative")\n___:\n    print("negative")',
+      'options': 'else, elif, then, end',
+      'answer': '1',
+      'explanation': 'else 用于 if 条件不满足时的分支。',
+      'example': 'if ok:\n    ...\nelse:\n    ...'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '单行 if/else',
+      'content': '将下面两行改成单行条件式并打印结果。',
+      'input': 'a=5',
+      'output': 'Big',
+      'code': 'a = 5\nprint("Big") if a > 10 else print("Small")',
+      'options': '保持不变, 改为多行, 用三元表达式, 抛异常',
+      'answer': '1',
+      'explanation': 'Python 支持将 if/else 写为单行条件表达式的打印形式。',
+      'example': 'print("yes") if cond else print("no")'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': 'else 与 elif 的区别',
+      'content': '哪个选项描述是对的？',
+      'options': {'A':'elif 是带条件的 else','B':'elif 必须放在 else 之前','C':'else 可以带条件','D':'elif 无法跟随 if'},
+      'answer': 'A',
+      'hints': ['elif 是 else if 的缩写', 'elif 带条件', 'else 无条件执行'],
+      'explanation': 'elif 提供带条件的后续分支，else 无条件执行。',
+      'example': 'if a: ...\nelif b: ...\nelse: ...'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': 'if/else 的常见用途',
+      'content': '下面哪个是 if/else 的合理用途？',
+      'options': {'A':'控制流程分支','B':'定义函数','C':'导入模块','D':'创建类'},
+      'answer': 'A',
+      'hints': ['if/else 用于逻辑分支', '函数/类 定义不是其目的', '常用于输入校验'],
+      'explanation': 'if/else 用来根据条件选择不同执行路径，是控制流程的基本手段。',
+      'example': 'if logged_in:\n    show_dashboard()\nelse:\n    show_login()'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': 'else 的执行时机',
+      'content': '下面哪个场景会触发 else？',
+      'options': {'A':'if 条件为真','B':'if 条件为假','C':'无论如何都触发','D':'只有异常发生时触发'},
+      'answer': 'B',
+      'hints': ['else 是在条件为假执行', '不是异常处理的 else', '与 finally 不同'],
+      'explanation': 'else 在 if 条件为 False 时执行。',
+      'example': 'if success:\n    ...\nelse:\n    retry()'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '判断奇偶并输出',
+      'content': '补全代码：根据输入输出 Odd/Even。',
+      'input': '输入: 4',
+      'output': 'Even',
+      'code': 'n = int(input())\nif n % 2 == 0:\n    print("Even")\nelse:\n    print(___)',
+      'options': '"Odd", "Even", "0", "None"',
+      'answer': '1',
+      'explanation': '否则为奇数应输出 Odd。',
+      'example': 'n=3 → 输出 Odd'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '错误分支提示',
+      'content': '补全使输入非正数时打印提示。',
+      'input': '输入: -2',
+      'output': '请输入正数',
+      'code': 'n = int(input())\nif n > 0:\n    print("OK")\nelse:\n    print(___)',
+      'options': '"请输入正数", "OK", "0", "正数"',
+      'answer': '"请输入正数"',
+      'explanation': 'else 分支用于提示错误或引导用户。',
+      'example': 'if valid:\n    proceed()\nelse:\n    print("错误")'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '多分支选择',
+      'content': 'if/else 与多个 elif 混用会怎样？',
+      'options': {'A':'语法错误','B':'可以实现多路分支','C':'只有两个分支','D':'只能用于循环内部'},
+      'answer': 'B',
+      'hints': ['elif 可用于多个分支', '顺序影响匹配', '适合互斥情形'],
+      'explanation': 'if/elif/else 组合用于实现多个互斥分支，按顺序判断。',
+      'example': 'if x>0: ...\nelif x==0: ...\nelse: ...'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '单行条件的限制',
+      'content': '单行写法 print(a) if cond else print(b) 有什么限制？',
+      'options': {'A':'不能有复杂语句','B':'不能调用函数','C':'只能用于数字','D':'没有限制'},
+      'answer': 'A',
+      'hints': ['单行适合简单表达式', '复杂逻辑建议多行实现', '单行可读性较差时不推荐'],
+      'explanation': '单行条件适合简单动作，复杂逻辑应使用多行以提高可读性。',
+      'example': 'x = 1 if cond else 0'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': 'else 的常见误用',
+      'content': '下面哪种写法是对 else 的误用？',
+      'options': {'A':'else: handle error','B':'else: pass','C':'else: if another','D':'else: retry'},
+      'answer': 'C',
+      'hints': ['else 不能带条件', '带条件应使用 elif', '检查关键字用法'],
+      'explanation': 'else 不能直接跟条件表达式，若需条件应使用 elif。',
+      'example': 'if a:\n    ...\nelif b:\n    ...\nelse:\n    ...'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '实例：登录示例',
+      'content': '补全代码：若已登录则显示 Welcome，否则显示 Login。',
+      'input': 'logged = False',
+      'output': 'Login',
+      'code': 'logged = False\nif logged:\n    print("Welcome")\nelse:\n    print(___)',
+      'options': '"Login", "Welcome", "Error", "None"',
+      'answer': '"Login"',
+      'explanation': '当未登录时应提示登录。',
+      'example': 'if is_admin:\n    show_admin()\nelse:\n    show_user()'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '练习：范围判断',
+      'content': '补全：若分数及格输出 Pass，否则 Fail。',
+      'input': 'score = 59',
+      'output': 'Fail',
+      'code': 'score = 59\nif score >= 60:\n    print("Pass")\nelse:\n    print(___)',
+      'options': '"Fail", "Pass", "Unknown", "0"',
+      'answer': '"Fail"',
+      'explanation': '59 < 60，应输出 Fail。',
+      'example': 'if score >= 90: ...\nelif ...'
+    }
+
+  ]
+}
+```

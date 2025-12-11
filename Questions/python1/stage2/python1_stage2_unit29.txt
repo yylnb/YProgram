@@ -1,0 +1,201 @@
+```plaintext
+{
+  'unit': '第29单元：代码阅读训练（分支理解）',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '阅读理解：输出预测',
+      'content': '看代码并预测输出：\nif x>0:\n    print("pos")\nelse:\n    print("non-pos")\n当 x=0 时输出是什么？',
+      'options': {'A':'non-pos','B':'pos','C':'无输出','D':'错误'},
+      'answer': 'A',
+      'hints': ['0 不大于 0','进入 else 分支'],
+      'explanation': 'x=0 时不满足 x>0 条件，因此执行 else 分支打印 non-pos。',
+      'example': '同理判断负数情况'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '阅读理解：条件顺序',
+      'content': '代码：\nif n>10:\n    print(">10")\nelif n>5:\n    print(">5")\nelse:\n    print("<=5")\n当 n=12 输出为？',
+      'options': {'A':'>10','B':'>5','C':'<=5','D':'无输出'},
+      'answer': 'A',
+      'hints': ['第一个条件满足即返回','elif 不再被执行'],
+      'explanation': 'n=12 满足 n>10，执行第一个分支并结束条件链。',
+      'example': 'elif 仅在之前条件不满足时才评估'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '阅读理解：嵌套分支',
+      'content': '代码：\nif a:\n    if b:\n        print("x")\n    else:\n        print("y")\nelse:\n    print("z")\n当 a=True b=False 输出？',
+      'options': {'A':'y','B':'x','C':'z','D':'无输出'},
+      'answer': 'A',
+      'hints': ['进入外层 if','再判断内层 b'],
+      'explanation': '外层为 True，进入内层，b=False，进入 else 打印 y。',
+      'example': '嵌套结构按层次执行'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '预测输出练习',
+      'content': '补全：给出运行结果（填写输出字符串）。\n代码：if True:\n    print("ok")',
+      'input': '',
+      'output': 'ok',
+      'code': 'print("ok")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '条件为 True，打印 ok。',
+      'example': 'if False 则不打印'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '阅读代码并解释',
+      'content': '补全：解释代码含义：if not s: print("empty")',
+      'input': '',
+      'output': '当 s 为空或为 False 值时打印 empty',
+      'code': 'if not s:\n    print("empty")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': 'not s 为真表示 s 是空、0 或 None 等假值。',
+      'example': 'if s=="": print("empty")'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '阅读：短路行为',
+      'content': '代码：\nif a or expensive():\n    pass\n若 a 为 True，则 expensive 会被调用吗？',
+      'options': {'A':'不会','B':'会','C':'视情况而定','D':'会抛异常'},
+      'answer': 'A',
+      'hints': ['or 的短路求值','左侧为真时右侧不评估'],
+      'explanation': 'or 的短路行为会在左侧为 True 时跳过右侧表达式的计算。',
+      'example': 'True or f() 不会调用 f'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '阅读：elif 逻辑',
+      'content': '若多个 elif 条件都为 True，最终会执行哪个？',
+      'options': {'A':'第一个满足的 elif','B':'最后一个满足的 elif','C':'所有满足的 elif','D':'都不执行'},
+      'answer': 'A',
+      'hints': ['条件链左到右依次判断','一旦满足则跳过后续'],
+      'explanation': '条件链在第一个满足的分支后就停止，不会执行后续的 elif。',
+      'example': 'if ... elif ... elif ...'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '阅读：逻辑表达式返回值',
+      'content': '表达式 a or b 在 Python 中返回什么？',
+      'options': {'A':'第一个真值或最后一个值','B':'总是布尔值','C':'仅返回 True/False','D':'返回 None'},
+      'answer': 'A',
+      'hints': ['or 返回实际的操作数而非布尔化结果'],
+      'explanation': 'or 返回第一个真值，如果都为假则返回最后一个值。',
+      'example': '"" or "x" -> "x"'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '阅读并写出输出',
+      'content': '补全：给出代码运行后的输出。\n代码：print(1 if True else 2)',
+      'input': '',
+      'output': '1',
+      'code': 'print(1)',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '条件表达式为 True，结果为 1。',
+      'example': 'print(x if cond else y)'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '复杂代码片段理解',
+      'content': '补全：若 a=False b=True c=True，代码 if a and b or c 打印什么？',
+      'input': '',
+      'output': 'True',
+      'code': 'print(True)',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '表达式按优先级为 (a and b) or c，结果为 True。',
+      'example': '短路示例'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '阅读：else 的用途',
+      'content': 'else 在 if 结构中通常用于？',
+      'options': {'A':'在所有前面条件都不满足时执行','B':'在第一个条件满足时执行','C':'用于循环外部','D':'作为注释'},
+      'answer': 'A',
+      'hints': ['else 是兜底分支','用于处理未命中情形'],
+      'explanation': 'else 在 if/elif 链未触发任何一个分支时作为默认处理。',
+      'example': 'if x>0: ... else: ...'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '阅读：条件表达式简化',
+      'content': '下面哪种写法是条件表达式（三元表达式）？',
+      'options': {'A':'x if cond else y','B':'if cond: x else: y','C':'cond ? x : y','D':'x ? y : cond'},
+      'answer': 'A',
+      'hints': ['Python 的三元表达式格式'],
+      'explanation': 'Python 用 x if cond else y 表示条件表达式。',
+      'example': 'res = 1 if a>0 else -1'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '阅读：条件短路与函数调用',
+      'content': '在 a and f() 中，若 a 为 False，f() 会被调用吗？',
+      'options': {'A':'不会','B':'会','C':'视 f() 返回而定','D':'抛出异常'},
+      'answer': 'A',
+      'hints': ['and 的短路求值','左侧为 False 时不再评估右侧'],
+      'explanation': 'and 会在左侧为 False 时短路，右侧表达式不被求值。',
+      'example': 'False and f() 不会调用 f'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '阅读并说明结果原因',
+      'content': '补全：解释 print("a" or "b") 输出为何为 a。',
+      'input': '',
+      'output': 'a',
+      'code': 'print("a")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': 'or 返回第一个真值字符串 "a"，因此输出 a。',
+      'example': '"" or "x" -> "x"'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '代码阅读综合',
+      'content': '补全：给出下面代码执行后的输出：\nprint(1 if 0 else 2)',
+      'input': '',
+      'output': '2',
+      'code': 'print(2)',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '条件为 0 (假)，因此结果为 else 分支 2。',
+      'example': '条件表达式示例'
+    }
+
+  ]
+}
+
+```

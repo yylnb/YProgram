@@ -1,0 +1,281 @@
+```plaintext
+{
+  'unit': '第30单元：阶段总复习（21–29 单元）',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': 'input 与类型转换',
+      'content': '从 input() 获取的内容默认是什么类型？',
+      'options': {
+        'A': 'int',
+        'B': 'str',
+        'C': 'float',
+        'D': 'bool'
+      },
+      'answer': 'B',
+      'hints': [
+        'input 返回用户输入的原始文本。',
+        '需要显式转换类型。',
+        '例如 int(input())。'
+      ],
+      'explanation': 'input() 返回字符串，需要用 int()/float() 等转换为数值类型。',
+      'example': 'age = int(input("年龄: "))'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': 'f-string 基本用法',
+      'content': '下面哪个写法是有效的 f-string？',
+      'options': {
+        'A': 'f"Name: {name}"',
+        'B': 'f"Name: " + name',
+        'C': '"fName: {name}"',
+        'D': 'f(Name: {name})'
+      },
+      'answer': 'A',
+      'hints': [
+        'f-string 以 f 开头的字符串字面量。',
+        '表达式放在花括号内。',
+        '确保引号配对正确。'
+      ],
+      'explanation': 'f"...{expr}..." 是插入变量或表达式到字符串的便捷方式。',
+      'example': 'f"{x} + {y} = {x+y}"'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '比较与逻辑综合',
+      'content': '下面表达式会在 x 为 0 时为真吗？ not x and x == 0',
+      'options': {
+        'A': '会为真',
+        'B': '会为假',
+        'C': '报错',
+        'D': '取决于 Python 版本'
+      },
+      'answer': 'A',
+      'hints': [
+        '0 在布尔上下文中为 False，not x 为 True。',
+        'x == 0 在 x 为 0 时为 True。',
+        'True and True 为 True。'
+      ],
+      'explanation': '当 x 为 0 时 not x 为 True，且 x == 0 为 True，两个条件同时满足。',
+      'example': 'x = 0 时上述表达式为 True。'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '综合填空：读取并比较',
+      'content': '读取两个数并比较大小，输出较大值。',
+      'input': '输入: 3 5',
+      'output': '5',
+      'code': 'a = int(input())\nb = int(input())\nif a > b:\n    print(a)\nelse:\n    print(___)',
+      'options': 'a, b, None, a+b',
+      'answer': '2',
+      'explanation': '若 a > b 否则输出 b。',
+      'example': '输入 10 和 2 会输出 10。'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': 'f-string 与表达式',
+      'content': '使用 f-string 输出结果。',
+      'input': 'name = "Tom"\nage = 20',
+      'output': 'Tom is 20 years old',
+      'code': 'name = "Tom"\nage = 20\nprint(___)',
+      'options': 'f"{name} is {age} years old", "{name} is {age}", f(name, age), name + age',
+      'answer': 'f"{name} is {age} years old"',
+      'explanation': '使用 f-string 插入变量并输出完整句子。',
+      'example': 'print(f"Result: {x}")'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '真值与逻辑结合',
+      'content': '以下哪项为 True？',
+      'options': {
+        'A': '[] or 0',
+        'B': '"" and 5',
+        'C': 'None or "ok"',
+        'D': '0 and "ok"'
+      },
+      'answer': 'C',
+      'hints': [
+        'or 返回第一个真值或最后一个假值。',
+        'None 为假。',
+        '"ok" 为真字符串。'
+      ],
+      'explanation': 'None or "ok" 返回 "ok"，在布尔上下文中为 True。',
+      'example': '0 or 7 返回 7。'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '比较链的快捷写法',
+      'content': '下面哪个写法用于判断 x 在 1 到 5 之间？',
+      'options': {
+        'A': '1 < x and x < 5',
+        'B': '1 < x < 5',
+        'C': 'x > 1 and x < 5',
+        'D': '以上都可'
+      },
+      'answer': 'D',
+      'hints': [
+        '链式比较更简洁。',
+        '多种写法等价。',
+        '根据偏好选择。'
+      ],
+      'explanation': '三种写法都能判断 x 在 (1,5) 区间内，其中链式比较最简洁。',
+      'example': '1 <= x <= 5 用于闭区间判断。'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '复合题型阅读',
+      'content': '下面哪个表达式在 x = 0 时为真？ (x and 1) or (x == 0)',
+      'options': {
+        'A': 'True',
+        'B': 'False',
+        'C': '报错',
+        'D': '取决于版本'
+      },
+      'answer': 'A',
+      'hints': [
+        'x 为 0 时 x and 1 返回 0（假），但 x == 0 为 True。',
+        'or 会使整体为 True。',
+        '分步思考更稳妥。'
+      ],
+      'explanation': 'x and 1 为 0（False），但 x == 0 为 True，False or True → True。',
+      'example': '类似逻辑可用于兼容性判断。'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '复合判断练习',
+      'content': '补全代码：当 score >= 60 且未作弊 或者 有补考资格 时通过。',
+      'input': 'score=58; cheated=False; has_makeup=True',
+      'output': '通过',
+      'code': 'score=58\ncheated=False\nhas_makeup=True\nif (score >= 60 and not cheated) ___ has_makeup:\n    print("通过")\nelse:\n    print("不通过")',
+      'options': 'and, or, not, ==',
+      'answer': '2',
+      'explanation': '两种情况下可以通过，使用 or 连接。',
+      'example': 'if (pass_score) or has_exception: ...'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '优先级与格式化',
+      'content': '读取年龄并用 f-string 输出“Age: x”。',
+      'input': '输入: 21',
+      'output': 'Age: 21',
+      'code': 'age = int(input())\nprint(___)',
+      'options': 'f"Age: {age}", "Age: {age}", f(Age: {age}), "Age: " + age',
+      'answer': 'f"Age: {age}"',
+      'explanation': '使用 f-string 并在花括号内放变量即可。',
+      'example': 'print(f"Score: {score}")'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '习题涵盖点',
+      'content': '下列技能哪些是本阶段重点？',
+      'options': {
+        'A': '输入与类型转换',
+        'B': '比较与逻辑表达式',
+        'C': 'f-string 与输出格式化',
+        'D': '以上全部'
+      },
+      'answer': 'D',
+      'hints': [
+        '阶段复习通常覆盖多个核心点。',
+        '回顾之前单元内容。',
+        '练习综合应用很重要。'
+      ],
+      'explanation': '本阶段的复习侧重输入、比较、逻辑与格式化输出等核心基础。',
+      'example': '结合输入与条件判断完成小程序。'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '错误识别',
+      'content': '下面哪行在 Python3 中会抛错？',
+      'options': {
+        'A': 'print("Hi")',
+        'B': 'if 1 < 2: pass',
+        'C': 'x = input("> ")',
+        'D': 'print "Hello"'
+      },
+      'answer': 'D',
+      'hints': [
+        'Python3 的 print 是函数。',
+        '缺少括号会导致语法错误。',
+        '其他选项语法正确。'
+      ],
+      'explanation': 'Python3 要使用 print("...")，不带括号的写法是 Python2 风格，会抛出语法错误。',
+      'example': '正确写法：print("Hello")'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '综合判断示例',
+      'content': '若 a = ""，b = None，则表达式 a or b or "ok" 的结果是？',
+      'options': {
+        'A': '""',
+        'B': 'None',
+        'C': '"ok"',
+        'D': '报错'
+      },
+      'answer': 'C',
+      'hints': [
+        'or 返回第一个真值。',
+        '空字符串为假，None 为假。',
+        '最后返回默认值。'
+      ],
+      'explanation': 'a 和 b 都为假，or 会返回最后的 "ok"。',
+      'example': '"" or None or "x" → "x"'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '实战：输入判断',
+      'content': '读取用户名并输出欢迎或提示输入。',
+      'input': '输入: (回车)',
+      'output': '请输入用户名',
+      'code': 'name = input()\nif ___:\n    print(f"Welcome, {name}")\nelse:\n    print("请输入用户名")',
+      'options': 'name, not name, name != "", name is None',
+      'answer': '2',
+      'explanation': '当用户直接回车时 name 为空字符串，使用 not name 判断为空并给出提示。',
+      'example': 'if not username: print("请输入用户名")'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '综合小题：成绩与等级',
+      'content': '补全代码，根据分数输出等级：>=90 A，>=80 B，其余 C。',
+      'input': 'score = 85',
+      'output': 'B',
+      'code': 'score = int(input())\nif score >= 90:\n    print("A")\nelif score >= 80:\n    print(___)\nelse:\n    print("C")',
+      'options': '"A", "B", "C", "D"',
+      'answer': '"B"',
+      'explanation': '85 在 80–89 的区间，应输出 B。',
+      'example': 'score=95 输出 A'
+    }
+
+  ]
+}
+```
