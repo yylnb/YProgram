@@ -1,0 +1,282 @@
+```plaintext
+{
+  'unit': '第98单元：列表方法 append/insert/extend',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': 'append 的作用',
+      'content': 'lst.append(x) 会怎样？',
+      'options': {
+        'A': '在末尾添加单个元素 x',
+        'B': '在末尾添加序列的每个元素',
+        'C': '替换末尾元素',
+        'D': '报错'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：append 添加整个对象作为单个元素',
+        '提示2：若传入列表作为参数，会把该列表作为单个元素添加',
+        '提示3：想添加多个元素用 extend'
+      ],
+      'explanation': 'append 将传入对象作为单个元素追加到列表末尾。',
+      'example': 'a=[1]; a.append([2]); print(a)  # [1,[2]]'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': 'extend 的区别',
+      'content': 'lst.extend([1,2]) 与 append([1,2]) 的差别？',
+      'options': {
+        'A': 'extend 会展开序列并逐个添加',
+        'B': '两者等价',
+        'C': 'append 更快',
+        'D': 'extend 替换原列表'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：extend 把参数当作可迭代项序列展开',
+        '提示2：append 把整个参数当单个元素添加',
+        '提示3：选择哪种方法取决于你想添加的粒度'
+      ],
+      'explanation': 'extend 会将传入的可迭代对象逐个追加到列表中，而 append 是作为一个元素整体添加。',
+      'example': 'a=[1]; a.extend([2,3])  # [1,2,3]'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': 'insert 用法',
+      'content': 'lst.insert(i, x) 会怎么做？',
+      'options': {
+        'A': '在索引 i 前插入元素 x',
+        'B': '替换索引 i 的元素',
+        'C': '在末尾插入',
+        'D': '抛出异常'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：insert 在指定位置插入元素',
+        '提示2：原有元素向后移动',
+        '提示3：i 可为负值表示从末尾计算'
+      ],
+      'explanation': 'insert 在指定索引位置前插入元素，原元素右移。',
+      'example': 'a=[1,2]; a.insert(1,9)  # [1,9,2]'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': 'append 示例（填空）',
+      'content': '向列表末尾添加元素 5 并打印。',
+      'input': '1 2',
+      'output': '1 2 5',
+      'code': 'lst = list(map(int, input().split()))\nlst.__1__(5)\nprint(*lst)',
+      'options': 'append, extend, insert, add',
+      'answer': '1',
+      'explanation': '使用 lst.append(5) 将 5 作为单个元素加入末尾。',
+      'example': 'a.append(3)'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': 'extend 示例（填空）',
+      'content': '将 [9,9] 展开加入列表末尾并打印。',
+      'input': '1 2',
+      'output': '1 2 9 9',
+      'code': 'lst = list(map(int, input().split()))\nlst.__1__([9,9])\nprint(*lst)',
+      'options': 'append, extend, insert, push',
+      'answer': '2',
+      'explanation': '使用 extend 将序列的每个元素追加到列表末尾。',
+      'example': 'a.extend([4,5])'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': 'append 返回值',
+      'content': '调用 lst.append(x) 后返回值通常是？',
+      'options': {
+        'A': 'None',
+        'B': '新列表',
+        'C': 'x',
+        'D': '布尔值'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：append 就地修改列表',
+        '提示2：就地修改方法一般返回 None',
+        '提示3：不要把 lst.append(...) 赋值给变量期望得到新列表'
+      ],
+      'explanation': 'append 就地修改列表并返回 None。',
+      'example': 'res = lst.append(1); print(res)  # None'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': 'insert 索引范围',
+      'content': '当 i 大于列表长度时 insert(i,x) 会怎样？',
+      'options': {
+        'A': '在末尾插入',
+        'B': '抛出 IndexError',
+        'C': '在开始插入',
+        'D': '不做任何事'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：insert 会在指定位置插入元素',
+        '提示2：超出右边界会在末尾插入',
+        '提示3：负索引会从右向左计数'
+      ],
+      'explanation': 'insert 若给定索引超出右边界，会把元素插入列表末尾。',
+      'example': 'a.insert(100,9)  # 相当于 append(9)'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': 'extend 可迭代性',
+      'content': 'extend 的参数必须是？',
+      'options': {
+        'A': '可迭代对象',
+        'B': '整数',
+        'C': '布尔值',
+        'D': '关键字参数'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：extend 会迭代其参数并追加每个元素',
+        '提示2：传入整数会被当作不可迭代并报错',
+        '提示3：字符串是可迭代，会按字符添加'
+      ],
+      'explanation': 'extend 要求参数是可迭代对象，否则会报 TypeError。',
+      'example': 'a.extend("ab")  # 会把 "a" 和 "b" 分别加入'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': 'insert 示例（填空）',
+      'content': '在索引 1 处插入 99 并打印。',
+      'input': '1 2 3',
+      'output': '1 99 2 3',
+      'code': 'lst = list(map(int, input().split()))\nlst.__1__(1,99)\nprint(*lst)',
+      'options': 'append, extend, insert, add',
+      'answer': '3',
+      'explanation': '使用 lst.insert(1,99) 在位置 1 插入 99。',
+      'example': 'a.insert(0,0)'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': 'extend 字符串行为（填空）',
+      'content': '对空列表执行 extend("ab") 后打印。',
+      'input': '',
+      'output': 'a b',
+      'code': 'lst = []\nlst.__1__("ab")\nprint(*lst)',
+      'options': 'append, extend, insert, add',
+      'answer': '2',
+      'explanation': '字符串是可迭代的，extend("ab") 会把字符逐一加入列表。',
+      'example': '[] .extend("hi") -> ["h","i"]'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': 'append 与 extend 的选择',
+      'content': '如果希望把一个列表作为单个元素加入，应该使用？',
+      'options': {
+        'A': 'append',
+        'B': 'extend',
+        'C': 'insert',
+        'D': 'remove'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：append 将整体对象作为单元素加入',
+        '提示2：extend 会展开参数',
+        '提示3：insert 可指定位置但也作为单个元素'
+      ],
+      'explanation': '若要把列表作为单个元素加入，使用 append。',
+      'example': 'a.append([1,2])  # 结果 [ [...], ... ]'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '链式调用',
+      'content': '为什么不能像 lst.append(1).append(2) 链式调用？',
+      'options': {
+        'A': '因为 append 返回 None',
+        'B': '因为 append 返回新列表',
+        'C': '语法错误',
+        'D': '类型错误'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：append 返回 None',
+        '提示2：链式调用要求返回对象本身',
+        '提示3': '一些方法如 list.sort() 也返回 None'
+      ],
+      'explanation': 'append 返回 None，因此无法继续对返回值调用 append。',
+      'example': 'lst.append(1); lst.append(2)  # 分开写'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': 'extend 性能',
+      'content': '向大列表追加很多元素时，为什么 prefer extend 而不是多次 append？',
+      'options': {
+        'A': 'extend 只做一次扩容（更高效）',
+        'B': 'append 更快',
+        'C': '两者一样',
+        'D': 'append 会合并元素'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：extend 可以一次性加入多个元素',
+        '提示2：多次 append 可能导致多次重分配',
+        '提示3': '性能差距在大量元素时更明显'
+      ],
+      'explanation': 'extend 将整个可迭代对象一次性展开追加，通常比多次 append 更高效。',
+      'example': 'lst.extend(range(1000))'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': 'append 列表作为元素（填空）',
+      'content': '把 [9,9] 作为一个元素加入并打印。',
+      'input': '1 2',
+      'output': '1 2 [9,9]',
+      'code': 'lst = list(map(int, input().split()))\nlst.__1__([9,9])\nprint(lst)',
+      'options': 'append, extend, insert, add',
+      'answer': '1',
+      'explanation': 'append 会把整个 [9,9] 作为单一元素追加。',
+      'example': 'a.append([1,2])'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': 'extend 对字符串（填空）',
+      'content': '对空列表执行 extend("abc") 并打印。',
+      'input': '',
+      'output': 'a b c',
+      'code': 'lst = []\nlst.__1__("abc")\nprint(*lst)',
+      'options': 'append, extend, insert, add',
+      'answer': '2',
+      'explanation': 'extend 会把字符串按字符展开并添加到列表。',
+      'example': '[] .extend("hi") -> ["h","i"]'
+    }
+
+  ]
+}
+
+```

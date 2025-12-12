@@ -1,0 +1,282 @@
+```plaintext
+{
+  'unit': '第107单元：zip 与 enumerate',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': 'zip 用途',
+      'content': 'zip(a,b) 的行为是？',
+      'options': {
+        'A': '按位置将 a 和 b 的元素配对成元组',
+        'B': '把两个列表合并成单个元素',
+        'C': '计算 a 和 b 的和',
+        'D': '抛出异常'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：zip 会把对应位置元素打包成元组',
+        '提示2：短的可迭代决定长度',
+        '提示3：常用在并行遍历场景'
+      ],
+      'explanation': 'zip 将可迭代对象对应位置的元素配对，生成元组序列。',
+      'example': 'list(zip([1,2],[3,4])) -> [(1,3),(2,4)]'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': 'enumerate 作用',
+      'content': 'enumerate(seq, start=0) 会返回什么？',
+      'options': {
+        'A': '每个元素及其索引的元组序列',
+        'B': '只返回索引',
+        'C': '只返回元素',
+        'D': '返回 count 对象'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：enumerate 常用于需索引的遍历',
+        '提示2：可指定起始索引',
+        '提示3：返回可迭代的 (index, value) 对' 
+      ],
+      'explanation': 'enumerate 会为可迭代对象生成 (index,value) 对，便于遍历索引和值。',
+      'example': 'for i,v in enumerate(["a","b"],1): print(i,v)'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': 'zip 长度',
+      'content': 'zip 当输入长度不等时如何处理？',
+      'options': {
+        'A': '以最短可迭代的长度为准',
+        'B': '以最长为准并填充 None',
+        'C': '抛出异常',
+        'D': '阻塞直到所有可迭代都结束'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：zip 会在最短序列耗尽后停止',
+        '提示2：itertools.zip_longest 可用于最长对齐',
+        '提示3：避免误解长度时注意检查'
+      ],
+      'explanation': 'zip 的长度取决于最短输入，可使用 itertools.zip_longest 来以最长为准并填充。',
+      'example': 'list(zip([1,2,3],[4])) -> [(1,4)]'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '并行遍历（填空）',
+      'content': '并行遍历两行数字并打印对应和。',
+      'input': '1 2\n3 4',
+      'output': '4 6',
+      'code': 'a = list(map(int, input().split()))\nb = list(map(int, input().split()))\nfor x,y in __1__:\n    print(x+y, end=" ")',
+      'options': 'zip(a,b), enumerate(a,b), map(a,b), list(a,b)',
+      'answer': '1',
+      'explanation': '使用 zip(a,b) 可并行访问对应元素并相加。',
+      'example': 'for x,y in zip(a,b): ...'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '带索引遍历（填空）',
+      'content': '用 enumerate 打印索引和值。',
+      'input': 'a b',
+      'output': '0:a 1:b',
+      'code': 'for i, v in __1__:\n    print(f"{i}:{v}", end=" ")',
+      'options': 'enumerate(lst), zip(lst), list(enumerate(lst)), enumerate(lst,1)',
+      'answer': '1',
+      'explanation': '使用 enumerate(lst) 返回 (index, value) 对进行遍历。',
+      'example': 'for i,v in enumerate(["a","b"]): print(i,v)'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': 'zip 与 unpack',
+      'content': '如何把二维列表解包为列的列表？',
+      'options': {
+        'A': 'list(zip(*matrix))',
+        'B': 'zip(matrix)',
+        'C': 'matrix.zip()',
+        'D': 'matrix.unpack()'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：* 运算符用于解包参数',
+        '提示2：zip(*matrix) 会把列组合成行',
+        '提示3：配合 list 可得到列表形式'
+      ],
+      'explanation': '使用 list(zip(*matrix)) 可把行列表转置为列列表。',
+      'example': 'cols = list(zip(*rows))'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': 'enumerate start',
+      'content': 'enumerate(lst, start=1) 的用途是？',
+      'options': {
+        'A': '索引从 1 开始',
+        'B': '索引从 0 开始',
+        'C': '返回值从 1 开始',
+        'D': '无效参数'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：start 参数指定起始索引',
+        '提示2：常用于用户友好的编号',
+        '提示3：默认 start=0'
+      ],
+      'explanation': 'enumerate 的 start 参数可改变索引起始值，常设为 1 以便人类阅读。',
+      'example': 'for i,v in enumerate(lst,1): ...'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': 'zip_longest 使用',
+      'content': '若需以最长列表为准并用 None 填充缺失值，应使用哪个函数？',
+      'options': {
+        'A': 'itertools.zip_longest',
+        'B': 'zip',
+        'C': 'enumerate',
+        'D': 'map'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：itertools 有 zip_longest',
+        '提示2：zip 以最短为准',
+        '提示3': 'zip_longest 可指定填充值'
+      ],
+      'explanation': 'itertools.zip_longest 可以以最长可迭代为准并填充值来补齐短序列。',
+      'example': 'from itertools import zip_longest'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '解包示例（填空）',
+      'content': '把两列数分别解包并打印它们第一列。',
+      'input': '1 2\n3 4',
+      'output': '1 3',
+      'code': 'rows = [list(map(int, input().split())) for _ in range(2)]\ncols = list(zip(*rows))\nprint(*cols[__1__])',
+      'options': '0, 1, -1, 2',
+      'answer': '1',
+      'explanation': 'cols[0] 为第一列，打印其元素。',
+      'example': 'cols = list(zip(*rows))'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '枚举与索引（填空）',
+      'content': '打印带编号的元素（编号从 1 开始）。',
+      'input': 'a b',
+      'output': '1 a 2 b',
+      'code': 'for i,v in enumerate(input().split(), __1__):\n    print(i, v, end=" ")',
+      'options': '1, 0, 2, -1',
+      'answer': '1',
+      'explanation': '指定 start=1 可让枚举从 1 开始编号。',
+      'example': 'for i,v in enumerate(lst,1): print(i,v)'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': 'zip 与解包互逆',
+      'content': '下列哪个语句可把 zip 的结果恢复为原始多个序列？',
+      'options': {
+        'A': 'zip(*zip(a,b))',
+        'B': 'zip(zip(a,b))',
+        'C': 'list(zip(a,b))',
+        'D': 'unzip(a,b)'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：* 运算符可解包参数',
+        '提示2：zip(*zip(a,b)) 可类似恢复',
+        '提示3': 'list(zip(a,b)) 只是打包'
+      ],
+      'explanation': 'zip(*zip(a,b)) 可以在没有丢失信息的情况下近似恢复原序列（注意类型可能为元组）。',
+      'example': 'a2,b2 = zip(*zip(a,b))'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': 'enumerate 返回值',
+      'content': 'enumerate 返回的每一项是什么类型？',
+      'options': {
+        'A': '(index, value) 的元组',
+        'B': '仅索引整数',
+        'C': '仅值',
+        'D': '列表'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：每一项是包含索引与值的二元元组',
+        '提示2：常用于 for i,v in enumerate(...)',
+        '提示3': '可用在解包语句中'
+      ],
+      'explanation': 'enumerate 迭代时每一项为 (index, value) 的元组。',
+      'example': 'for i,v in enumerate(["a"]): print(i,v)'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': 'zip 与迭代器一次性',
+      'content': 'zip 返回的可迭代对象可否重复遍历？',
+      'options': {
+        'A': '通常不可重复遍历（视为迭代器）',
+        'B': '总是可重复遍历',
+        'C': '取决于元素数量',
+        'D': '视 Python 版本而定'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：zip 返回迭代器类型',
+        '提示2：需要转换为列表以重复遍历',
+        '提示3': '第一次遍历会耗尽'
+      ],
+      'explanation': 'zip 在 Python3 返回迭代器，遍历后会被耗尽，若需多次使用请先转换为列表。',
+      'example': 'z = zip(a,b); list(z)  # 第二次为空'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '并行字符串拼接（填空）',
+      'content': '并行拼接两行字符串对应项并打印。',
+      'input': 'a b\nc d',
+      'output': 'ac bd',
+      'code': 'a = input().split()\nb = input().split()\nfor x,y in zip(a,b):\n    print(x+__1__+y, end=" ")',
+      'options': '',
+      'answer': '',
+      'explanation': '示例将 x 与 y 直接拼接，若需中间无分隔，使用空字符串。',
+      'example': 'print(x+y)'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '枚举过滤（填空）',
+      'content': '打印索引为偶数的元素（索引从 0 开始）。',
+      'input': 'a b c d',
+      'output': 'a c',
+      'code': 'for i, v in enumerate(input().split()):\n    if __1__:\n        print(v, end=" ")',
+      'options': 'i%2==0, i%2==1, i>0, v',
+      'answer': '1',
+      'explanation': '判断索引 i%2==0 可选择偶数索引的元素。',
+      'example': 'for i,v in enumerate(lst): if i%2==0: ...'
+    }
+
+  ]
+}
+
+```

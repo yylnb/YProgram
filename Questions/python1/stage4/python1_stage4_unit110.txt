@@ -1,0 +1,282 @@
+```plaintext
+{
+  'unit': '第110单元：字符串操作的性能',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '字符串不可变性',
+      'content': 'Python 中字符串是可变还是不可变的？',
+      'options': {
+        'A': '不可变',
+        'B': '可变',
+        'C': '部分可变',
+        'D': '取决于实现'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：字符串操作返回新字符串',
+        '提示2：修改会产生新对象',
+        '提示3': '因此字符串是不可变的'
+      ],
+      'explanation': 'Python 字符串是不可变的，任何修改都会创建新对象。',
+      'example': "s = 'a' + 'b'"
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '连接复杂度',
+      'content': '使用 + 连续拼接大量短字符串的时间复杂度通常为？',
+      'options': {
+        'A': 'O(n^2)',
+        'B': 'O(n)',
+        'C': 'O(log n)',
+        'D': 'O(1)'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：每次拼接都会创建新字符串并复制',
+        '提示2：循环中使用 + 会导致二次复制成本',
+        '提示3': '推荐使用 join'
+      ],
+      'explanation': '重复使用 + 进行拼接会导致累积复制，常见为 O(n^2)。',
+      'example': "s = '';\nfor part in parts:\n  s += part"
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '推荐的拼接方法',
+      'content': '对于大量字符串拼接，推荐使用哪种方法？',
+      'options': {
+        'A': 'str.join',
+        'B': '+',
+        'C': 'replace',
+        'D': 'format'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：join 可一次性分配结果大小',
+        '提示2：避免多次复制',
+        '提示3': 适用于可迭代对象'
+      ],
+      'explanation': 'str.join 会一次性计算长度并分配内存，提高拼接效率。',
+      'example': "''.join(parts)"
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '查找子串复杂度（填空）',
+      'content': '使用 in 或 find 查找子串的平均复杂度通常为？',
+      'input': '',
+      'output': '',
+      'code': 'print("O(n*m)")',
+      'options': '',
+      'answer': '',
+      'explanation': '最朴素的查找为 O(n*m)，但 Python 的实现使用快速算法优化。',
+      'example': ''
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '切片复杂度（填空）',
+      'content': '对字符串做切片（如 s[a:b]）的时间复杂度为？',
+      'input': '',
+      'output': '',
+      'code': 'print("O(k)")',
+      'options': '',
+      'answer': '',
+      'explanation': '切片会创建新字符串并复制 k 个字符，复杂度为 O(k)。',
+      'example': ''
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': 'replace 操作',
+      'content': '对字符串执行 replace 的复杂度通常与什么相关？',
+      'options': {
+        'A': '目标与源串长度',
+        'B': '仅与目标串长度',
+        'C': '常数时间',
+        'D': '与内存大小无关'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：需要扫描并可能构造新字符串',
+        '提示2：受原字符串与替换次数影响',
+        '提示3': 成本随长度增长'
+      ],
+      'explanation': 'replace 需要扫描原串并构造新串，复杂度与原串与替换目标有关。',
+      'example': "s.replace('a','b')"
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '格式化代价',
+      'content': '使用 f-string、format 或 % 操作的性能差异通常如何？',
+      'options': {
+        'A': '差别较小，f-string 常最优',
+        'B': 'format 总是最快',
+        'C': '百分号格式最快',
+        'D': '均为 O(1) 且性能一致'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：f-string 在 Python3.6+ 中更直接',
+        '提示2': format 更灵活但稍慢',
+        '提示3': 性能差异通常为常数因子'
+      ],
+      'explanation': 'f-string 在多数情况下更快，format 和 % 有时略慢，但差异为常数级。',
+      'example': "f'{x}'"
+    },
+
+    {
+      'id': 8,
+      'type': 'fill',
+      'title': '重复操作（填空）',
+      'content': '执行 s * n（重复字符串）其复杂度与什么有关？',
+      'input': '',
+      'output': '',
+      'code': 'print("O(n*k)")',
+      'options': '',
+      'answer': '',
+      'explanation': '结果长度为 n*k，需分配并复制，复杂度与结果长度线性相关。',
+      'example': ''
+    },
+
+    {
+      'id': 9,
+      'type': 'choice',
+      'title': '编码解码成本',
+      'content': '对字符串进行 encode/decode 的时间复杂度通常为？',
+      'options': {
+        'A': 'O(n)',
+        'B': 'O(1)',
+        'C': 'O(log n)',
+        'D': 'O(n^2)'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：需处理每个字符',
+        '提示2': 与长度线性相关',
+        '提示3': 编码表查找为 O(1)'
+      ],
+      'explanation': '编码和解码通常对每个字符做处理，复杂度线性。',
+      'example': "b = s.encode('utf-8')"
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': 'strip 的复杂度（填空）',
+      'content': '调用 s.strip() 的复杂度通常为？',
+      'input': '',
+      'output': '',
+      'code': 'print("O(n)")',
+      'options': '',
+      'answer': '',
+      'explanation': 'strip 需要从两端扫描字符，最坏情况为 O(n)。',
+      'example': ''
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '正则匹配成本',
+      'content': '使用正则匹配复杂模式时应注意？',
+      'options': {
+        'A': '可能出现回溯导致高成本',
+        'B': '总是线性时间',
+        'C': '正则比手写循环快',
+        'D': '与输入无关'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：某些模式会触发指数级回溯',
+        '提示2': 使用非回溯或优化模式更安全',
+        '提示3': 注意输入长度'
+      ],
+      'explanation': '不当的正则可能导致大量回溯与高时间成本，应谨慎设计。',
+      'example': "re.match(pattern, s)"
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '拼接大文本',
+      'content': '拼接大量文本生成最终字符串时，以下哪种更高效？',
+      'options': {
+        'A': '把片段收集到列表再 join',
+        'B': '在循环中使用 +=',
+        'C': '使用 replace',
+        'D': '使用 eval'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：join 一次性分配内存',
+        '提示2': 循环中 += 代价高',
+        '提示3': collect into list then join'
+      ],
+      'explanation': '先将片段收集到列表再使用 join 最为高效。',
+      'example': "''.join(parts)"
+    },
+
+    {
+      'id': 13,
+      'type': 'fill',
+      'title': '格式化大量数据（填空）',
+      'content': '对大量数据执行格式化并拼接成字符串时应避免使用？',
+      'input': '',
+      'output': '',
+      'code': 'print("在循环中频繁使用 +=")',
+      'options': '',
+      'answer': '',
+      'explanation': '循环中频繁用 += 会产生多次复制，应收集再 join。',
+      'example': ''
+    },
+
+    {
+      'id': 14,
+      'type': 'choice',
+      'title': '内存占用',
+      'content': '字符串拼接中短时会出现额外内存占用的原因是？',
+      'options': {
+        'A': '旧字符串未立即释放且新字符串已分配',
+        'B': 'Python 不会分配新内存',
+        'C': '字符串是引用类型共享内存',
+        'D': '垃圾回收禁用'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：新旧字符串并存时占用双倍内存',
+        '提示2': 立即释放取决于引用计数和垃圾回收',
+        '提示3': 推荐避免频繁临时字符串'
+      ],
+      'explanation': '拼接期间旧对象与新对象同时存在，短时内占用额外内存。',
+      'example': "s += 'x'"
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '总结（填空）',
+      'content': '大量字符串拼接最佳实践是什么？',
+      'input': '',
+      'output': '',
+      'code': 'print("收集到列表后使用 join")',
+      'options': '',
+      'answer': '',
+      'explanation': '收集片段到列表再用 join 可以减少复制并提高效率。',
+      'example': ''
+    }
+
+  ]
+}
+
+```

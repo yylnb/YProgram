@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第95单元：删除元素',
+  'questions': [
+    {'id':1,'type':'choice','title':'del 用途','content':'del lst[i] 会怎样？','options':{'A':'删除索引 i 的元素并改变长度','B':'返回被删除元素','C':'替换元素为 None','D':'抛出异常'},'answer':'A','hints':['del 是语句非函数','会移除元素并缩短列表长度'], 'explanation':'del 会删除指定索引的元素并修改列表。','example':'del lst[0]'},
+    {'id':2,'type':'choice','title':'remove 用法','content':'lst.remove(x) 的作用是？','options':{'A':'删除首次出现的 x','B':'删除所有 x','C':'按索引删除','D':'弹出末尾元素'},'answer':'A','hints':['remove 按值删除首次匹配元素','不存在时抛出 ValueError'], 'explanation':'remove 会删除第一个匹配的元素并抛出异常若不存在。','example':'lst.remove(3)'},
+    {'id':3,'type':'choice','title':'pop 用途','content':'lst.pop(i) 是什么行为？','options':{'A':'移除并返回索引 i 的元素（默认最后一个）','B':'仅返回元素不删除','C':'删除所有元素','D':'只适用于栈'},'answer':'A','hints':['pop 返回被移除元素','不传 i 则弹出末尾'], 'explanation':'pop 在删除元素的同时返回其值。','example':'x = lst.pop()'},
+    {'id':4,'type':'fill','title':'删除指定值','content':'补全：删除列表中的 5（若存在）。','input':'1 5 3','output':'1 3','code':'lst=list(map(int,input().split()))\nif 5 in lst:\n    lst.remove(5)\nprint(*lst)','options':'in,remove,del,pop','answer':'1,2','explanation':'先判断存在再调用 remove 可避免异常。','example':'if x in lst: lst.remove(x)'},
+    {'id':5,'type':'fill','title':'pop 返回值','content':'补全：弹出并打印最后一个元素。','input':'1 2 3','output':'3','code':'lst=list(map(int,input().split()))\nprint(lst.pop())','options':'pop,remove,del,append','answer':'1','explanation':'pop 会返回被弹出的元素值。','example':'v = lst.pop()'},
+    {'id':6,'type':'choice','title':'clear 用途','content':'lst.clear() 会怎样？','options':{'A':'移除所有元素','B':'删除列表对象','C':'返回空列表副本','D':'将所有元素设为 None'},'answer':'A','hints':['clear 使列表变为空列表'], 'explanation':'clear 会就地清除列表中的所有元素。','example':'lst.clear()'},
+    {'id':7,'type':'choice','title':'del 效果','content':'del lst[i:j] 会怎样？','options':{'A':'删除区间内元素','B':'保留区间元素','C':'抛错','D':'仅标记删除'},'answer':'A','hints':['切片赋值和 del 切片都可批量删除'], 'explanation':'del 对切片范围会删除对应的所有元素。','example':'del lst[1:3]'},
+    {'id':8,'type':'choice','title':'remove 异常','content':'remove 在找不到值时会怎样？','options':{'A':'抛出 ValueError','B':'返回 False','C':'不做任何事','D':'添加该元素'},'answer':'A','hints':['需要预先检查是否存在或捕获异常'], 'explanation':'remove 找不到元素时会抛出 ValueError，需小心使用。','example':'try: lst.remove(x) except ValueError:'},
+    {'id':9,'type':'fill','title':'删除多个','content':'补全：删除列表中所有为 0 的元素并打印。','input':'0 1 0 2','output':'1 2','code':'lst=list(map(int,input().split()))\nprint(*[x for x in lst if x!=0])','options':'list compr,remove,pop,del','answer':'1','explanation':'生成新列表保留不等于 0 的元素是安全且直接的方法。','example':'res = [x for x in lst if cond]'},
+    {'id':10,'type':'fill','title':'按索引删除','content':'补全：删除索引 1 的元素并打印结果。','input':'a b c','output':'a c','code':'lst=input().split()\ndel lst[1]\nprint(*lst)','options':'del,pop,remove,clear','answer':'1','explanation':'del 可用于按索引删除元素。','example':'del lst[i]'},
+    {'id':11,'type':'choice','title':'删除效率','content':'大量删除列表元素时推荐？','options':{'A':'生成新列表并赋值','B':'循环 remove','C':'多次 pop(0)','D':'insert'},'answer':'A','hints':['循环 remove 或 pop(0) 可能效率低下'], 'explanation':'生成新列表通常更高效且避免迭代删除时索引跳变问题。','example':'res=[x for x in lst if cond]'},
+    {'id':12,'type':'choice','title':'pop 参数','content':'pop 不传参数时弹出哪个元素？','options':{'A':'最后一个','B':'第一个','C':'中间元素','D':'抛错'},'answer':'A','hints':['默认行为为弹出末尾元素'], 'explanation':'pop() 默认弹出并返回最后一个元素。','example':'lst.pop()'},
+    {'id':13,'type':'choice','title':'del vs remove','content':'del 与 remove 的主要区别是？','options':{'A':'del 按索引删除，remove 按值删除','B':'del 按值，remove 按索引','C':'两者相同','D':'remove 返回删除值'},'answer':'A','hints':['remove 需要值作为参数','del 使用索引或切片'], 'explanation':'del 用于索引和切片删除，remove 根据值删除首次匹配项。','example':'del lst[0]; lst.remove(0)'},
+    {'id':14,'type':'fill','title':'safe remove','content':'补全：尝试删除 x，若不存在则打印 NotFound。','input':'1 2 3\n4','output':'NotFound','code':'lst=list(map(int,input().split()))\nx=int(input())\nif x in lst:\n    lst.remove(x)\nelse:\n    print("NotFound")','options':'in,remove,print,del','answer':'1,2,3,4','explanation':'先检查再删除能避免异常并提供友好提示。','example':'if x in lst:'},
+    {'id':15,'type':'fill','title':'清空列表','content':'补全：就地清空列表并打印长度。','input':'1 2 3','output':'0','code':'lst=list(map(int,input().split()))\nlst.clear()\nprint(len(lst))','options':'clear,del,remove,pop','answer':'1','explanation':'clear 方法会清空所有元素，len 返回 0。','example':'lst.clear()'}
+  ]
+}
+
+```
+
+*** End Patch

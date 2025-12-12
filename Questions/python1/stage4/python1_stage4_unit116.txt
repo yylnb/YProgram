@@ -1,0 +1,282 @@
+```plaintext
+{
+  'unit': '第116单元：并发基础与 GIL',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': 'GIL 的作用',
+      'content': 'CPython 中的 GIL（全局解释器锁）主要用于？',
+      'options': {
+        'A': '保护对象模型免受并发访问破坏',
+        'B': '加速多线程并行计算',
+        'C': '管理内存分配给多个进程',
+        'D': '优化网络 I/O'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：GIL 防止同一时刻多个线程执行 Python 字节码',
+        '提示2：它简化了 CPython 的内部并发安全',
+        '提示3': '但限制了 CPU 密集型多线程并行'
+      ],
+      'explanation': 'GIL 通过序列化字节码执行来保证对象模型的线程安全，但会限制多线程 CPU 并行效率。',
+      'example': '多线程进行纯 Python 密集计算时受限于 GIL'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': 'I/O 密集型任务',
+      'content': '在 I/O 密集型场景（如网络请求）下，多线程的效果通常如何？',
+      'options': {
+        'A': '能提升并发吞吐，因为线程在 I/O 时释放 GIL',
+        'B': '完全无效',
+        'C': '导致内存泄露',
+        'D': '只能在多核上有效'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：I/O 操作会让出 CPU',
+        '提示2': 线程能在等待 I/O 时切换',
+        '提示3': 适合网络/文件 I/O 场景'
+      ],
+      'explanation': 'I/O 操作通常会阻塞并让出 GIL，因此多线程能提高 I/O 密集任务的并发性能。',
+      'example': '使用 ThreadPoolExecutor 进行并发下载'
+    },
+
+    {
+      'id': 3,
+      'type': 'fill',
+      'title': '多线程 CPU 密集（填空）',
+      'content': '在 CPU 密集型任务中，Python 多线程受限于 GIL，常用替代方案是？',
+      'input': '',
+      'output': '',
+      'code': 'print("使用多进程或 C 扩展")',
+      'options': '',
+      'answer': '',
+      'explanation': '多进程绕过 GIL（每个进程有独立解释器），或者将关键代码用 C/C++ 扩展实现以释放 GIL。',
+      'example': ''
+    },
+
+    {
+      'id': 4,
+      'type': 'choice',
+      'title': '线程切换开销',
+      'content': '频繁线程切换会带来什么后果？',
+      'options': {
+        'A': '上下文切换开销增加，吞吐下降',
+        'B': '自动并行加速',
+        'C': '释放更多内存',
+        'D': '增加 I/O 吞吐'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：切换涉及保存/恢复线程状态',
+        '提示2': 切换过于频繁会降低性能',
+        '提示3': 合理控制并发量'
+      ],
+      'explanation': '线程上下文切换有固定开销，频繁切换会降低整体吞吐率。',
+      'example': ''
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '线程安全（填空）',
+      'content': '在多线程环境中保护共享数据常用的机制是？',
+      'input': '',
+      'output': '',
+      'code': 'print("锁（Lock）、条件（Condition）、队列（Queue）")',
+      'options': '',
+      'answer': '',
+      'explanation': '常用同步原语包括 Lock、RLock、Condition、Semaphore 等，或使用线程安全的数据结构如 Queue。',
+      'example': ''
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': 'GIL 在其他实现',
+      'content': '以下哪个 Python 实现不受 CPython GIL 限制？',
+      'options': {
+        'A': 'Jython 或 IronPython',
+        'B': 'CPython',
+        'C': '所有实现都有 GIL',
+        'D': '只有 pypy 有'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：Jython、IronPython 针对 JVM/.NET 使用各自线程模型',
+        '提示2': CPython 有 GIL',
+        '提示3': pypy 仍有类似机制'
+      ],
+      'explanation': 'Jython 和 IronPython 使用宿主平台的线程模型，因此不受 CPython GIL 的影响。',
+      'example': ''
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '释放 GIL 的方式',
+      'content': '在扩展模块中如何避免 GIL 限制以加速 CPU 密集计算？',
+      'options': {
+        'A': '在 C 扩展中调用 Py_BEGIN_ALLOW_THREADS / Py_END_ALLOW_THREADS',
+        'B': '在 Python 中用 lock',
+        'C': '使用 global 关键字',
+        'D': '无法释放'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：扩展可在执行长时间 C 代码时释放 GIL',
+        '提示2': 需正确管理线程安全',
+        '提示3': 这能实现真正并行计算'
+      ],
+      'explanation': 'C 扩展可在非 Python 代码段释放 GIL，从而实现多线程并行计算。',
+      'example': ''
+    },
+
+    {
+      'id': 8,
+      'type': 'fill',
+      'title': '避免竞态（填空）',
+      'content': '在多线程中尽量避免共享可变状态，推荐改用？',
+      'input': '',
+      'output': '',
+      'code': 'print("消息传递或不可变数据")',
+      'options': '',
+      'answer': '',
+      'explanation': '使用消息队列、不可变对象或 copy-on-write 策略可以减少竞态条件。',
+      'example': ''
+    },
+
+    {
+      'id': 9,
+      'type': 'choice',
+      'title': '线程池 vs 进程池',
+      'content': '当任务是 CPU 密集型时，哪种并发方式更合适？',
+      'options': {
+        'A': '进程池（multiprocessing）',
+        'B': '线程池（threading）',
+        'C': '事件循环（asyncio）一定最好',
+        'D': '同步单线程'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：进程有独立 GIL',
+        '提示2': 适合 CPU 密集型',
+        '提示3': 线程受 GIL 限制'
+      ],
+      'explanation': '多进程能在多核上实现真正并行，适合 CPU 密集型任务。',
+      'example': ''
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '全局状态风险（填空）',
+      'content': '并发程序中全局可变状态的最大风险是？',
+      'input': '',
+      'output': '',
+      'code': 'print("竞态条件与不可预测的行为")',
+      'options': '',
+      'answer': '',
+      'explanation': '全局可变状态在多线程/进程中易导致竞态条件、数据损坏和难以复现的 bug。',
+      'example': ''
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '轻量级并发',
+      'content': '对于大量短时任务且需要大量并发，通常更倾向于使用？',
+      'options': {
+        'A': '异步（asyncio）或事件驱动模型',
+        'B': '每任务创建新进程',
+        'C': '大量线程',
+        'D': '阻塞 I/O'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：asyncio 使用单线程事件循环',
+        '提示2': 省内存且切换开销低',
+        '提示3': 适合大量并发 I/O 请求'
+      ],
+      'explanation': '事件驱动模型能在单线程中高效地管理大量并发任务，适合短时 I/O 密集场景。',
+      'example': ''
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '子进程与共享内存',
+      'content': '进程间共享大数据时，以下哪种方法可以减少复制开销？',
+      'options': {
+        'A': '使用共享内存或 mmap',
+        'B': '通过 pickle 在管道中传输',
+        'C': '频繁序列化并发送',
+        'D': '每进程各自加载副本'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：共享内存避免多次复制',
+        '提示2': mmap 可用于文件映射',
+        '提示3': 减少内存占用和传输开销'
+      ],
+      'explanation': '共享内存和内存映射可在进程间共享数据以避免昂贵的复制和序列化。',
+      'example': ''
+    },
+
+    {
+      'id': 13,
+      'type': 'fill',
+      'title': '并发调试（填空）',
+      'content': '调试并发程序常用的技巧包括？',
+      'input': '',
+      'output': '',
+      'code': 'print("日志、最小复现、锁覆盖、使用分析工具")',
+      'options': '',
+      'answer': '',
+      'explanation': '通过详尽日志、重现用例、减少共享状态和使用分析/检测工具可以定位并发问题。',
+      'example': ''
+    },
+
+    {
+      'id': 14,
+      'type': 'choice',
+      'title': '并发的正确性优先',
+      'content': '在并发设计中，哪项应优先？',
+      'options': {
+        'A': '正确性和可见性优先于微小性能提升',
+        'B': '先追求极限性能',
+        'C': '减少同步以牺牲一致性',
+        'D': '避免任何测试'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：并发错误难以重现和修复',
+        '提示2': 可读性和一致性重要',
+        '提示3': 再优化性能'
+      ],
+      'explanation': '并发错误代价高，先保证正确性和可维护性，然后通过基准测试再优化性能。',
+      'example': ''
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '总结（填空）',
+      'content': '并发编程的关键关注点包括哪些？',
+      'input': '',
+      'output': '',
+      'code': 'print("正确性、同步、资源分配与性能权衡")',
+      'options': '',
+      'answer': '',
+      'explanation': '关键点包括并发正确性、同步机制、GIL/进程选择与性能与复杂度的权衡。',
+      'example': ''
+    }
+
+  ]
+}
+
+```

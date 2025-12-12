@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第93单元：列表切片',
+  'questions': [
+    {'id':1,'type':'choice','title':'切片语法','content':'列表切片常用语法是？','options':{'A':'lst[start:stop:step]','B':'lst.range(start,stop)','C':'lst.slice(start,stop)','D':'lst[start;stop]'},'answer':'A','hints':['包含 step 参数可控制步长','stop 为上界不包含'], 'explanation':'Python 切片语法为 [start:stop:step]，其中 stop 不包含在结果中。','example':'a[1:5:2]'},
+    {'id':2,'type':'choice','title':'默认步长','content':'切片未指定 step 时默认步长为？','options':{'A':'1','B':'0','C':'-1','D':'None'},'answer':'A','hints':['默认按顺序前进'], 'explanation':'默认步长为 1。','example':'a[0:3] 等于 a[0:3:1]'},
+    {'id':3,'type':'choice','title':'省略边界','content':'切片写作 a[:3] 会包含哪些元素？','options':{'A':'从开头到索引 2','B':'从索引 3 到结尾','C':'仅索引 3 元素','D':'抛出异常'},'answer':'A','hints':['省略 start 表示从 0 开始'], 'explanation':'a[:3] 相当于 a[0:3]，包含索引 0,1,2。','example':'[0,1,2][:3] -> [0,1,2]'},
+    {'id':4,'type':'fill','title':'取步长','content':'补全：取每隔一个元素的子序列。','input':'1 2 3 4','output':'1 3','code':'lst=list(map(int,input().split()))\nprint(lst[::2])','options':'::2,1::,2::,:-2','answer':'1','explanation':'切片 [::2] 表示从头到尾步长为 2。','example':'s[::2]'},
+    {'id':5,'type':'fill','title':'倒序切片','content':'补全：用切片反转列表并打印。','input':'1 2 3','output':'3 2 1','code':'lst=list(map(int,input().split()))\nprint(lst[::-1])','options':'[::-1],[::1],[1::-1],[-1::-1]','answer':'1','explanation':'[::-1] 是常用的反转技巧。','example':'s[::-1]'},
+    {'id':6,'type':'choice','title':'切片返回类型','content':'切片返回的是新列表还是视图？','options':{'A':'新列表（拷贝）','B':'原列表视图','C':'引用同一对象','D':'迭代器'},'answer':'A','hints':['切片会生成列表副本'], 'explanation':'切片返回一个新的列表对象，原列表保持不变。','example':'a[1:3] is not a'},
+    {'id':7,'type':'choice','title':'切片与赋值','content':'切片赋值可否改变原列表长度？','options':{'A':'可以','B':'不可以','C':'仅在 Python2','D':'仅当 step 为 1'},'answer':'A','hints':['切片赋值能替换不同长度序列'], 'explanation':'通过切片赋值可插入或删除元素从而改变长度。','example':'a[1:2] = [x,y]'},
+    {'id':8,'type':'choice','title':'步长为负','content':'步长为负的切片会如何？','options':{'A':'从右向左遍历','B':'报错','C':'返回空','D':'忽略步长'},'answer':'A','hints':['负步长常用于倒序并跳跃取值'], 'explanation':'负步长使切片按逆序方向取值。','example':'a[::-2]'},
+    {'id':9,'type':'fill','title':'替换子段','content':'补全：把索引 1:3 替换为 [9,9]','input':'1 2 3 4','output':'1 9 9 4','code':'lst=list(map(int,input().split()))\nlst[1:3]=[9,9]\nprint(*lst)','options':'[1:3]=[9,9],append,insert,del','answer':'1','explanation':'切片赋值替换范围内元素。','example':'lst[1:3]=[a,b]'},
+    {'id':10,'type':'fill','title':'子串切片','content':'补全：对字符串使用切片获取前 3 字符。','input':'abcdef','output':'abc','code':'s=input().strip()\nprint(s[:3])','options':'[:3],[0:3],[1:4],[-3:]','answer':'1,2','explanation':'字符串也支持切片，语法与列表相同。','example':'s[:n]'},
+    {'id':11,'type':'choice','title':'切片复杂度','content':'切片创建副本，其时间复杂度通常为？','options':{'A':'O(k)（k 为切片长度）','B':'O(1)','C':'O(n^2)','D':'取决于实现'},'answer':'A','hints':['需要复制 k 个元素'], 'explanation':'切片需要创建新序列并拷贝相应元素，成本与长度线性相关。','example':'a[0:100] cost ~100'},
+    {'id':12,'type':'choice','title':'切片为空','content':'当 start>stop 时默认步长为正数会返回？','options':{'A':'空列表','B':'抛错','C':'倒序结果','D':'原序列'},'answer':'A','hints':['起点超过终点会返回空序列（除非步长为负）'], 'explanation':'当步长为正且 start>=stop 时切片结果为空。','example':'[1,2,3][2:1] -> []'},
+    {'id':13,'type':'choice','title':'切片与内存','content':'频繁对大列表切片可能导致？','options':{'A':'较高内存使用','B':'减少内存','C':'无影响','D':'垃圾回收失效'},'answer':'A','hints':['每次切片生成新列表会占用额外内存'], 'explanation':'大量或大范围切片会产生新的副本，消耗内存。','example':'avoid many large slices'},
+    {'id':14,'type':'fill','title':'步长应用','content':'补全：取索引 1 到末尾，每隔 2 个元素取一个。','input':'1 2 3 4 5','output':'2 4','code':'lst=list(map(int,input().split()))\nprint(lst[1::2])','options':'1::2,::2,1:2,1:4','answer':'1','explanation':'切片 [1::2] 从索引 1 开始步长为 2。','example':'lst[1::2]'},
+    {'id':15,'type':'fill','title':'切片复制','content':'补全：复制整个列表的一种简洁写法。','input':'1 2 3','output':'1 2 3','code':'lst=list(map(int,input().split()))\ncopy = lst[:]\nprint(*copy)','options':'lst[:],list(lst),copy(),deepcopy()','answer':'1,2','explanation':'lst[:] 可以快速复制列表，等价于 list(lst)。','example':'b = a[:]'}
+  ]
+}
+
+```
+
+*** End Patch

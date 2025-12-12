@@ -1,0 +1,282 @@
+```plaintext
+{
+  'unit': '第106单元：map/filter/reduce 与列表',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': 'map 返回类型',
+      'content': '在 Python 3 中 map 返回什么类型？',
+      'options': {
+        'A': 'map 对象（可迭代），需转换为列表以显示全部',
+        'B': '列表',
+        'C': '字符串',
+        'D': '生成器且不可重用'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：map 在 Python3 返回可迭代对象',
+        '提示2：可用 list(map(...)) 得到列表',
+        '提示3：与生成器类似但类型不同'
+      ],
+      'explanation': 'Python3 中 map 返回一个惰性可迭代的 map 对象，需 list() 才列出全部元素。',
+      'example': 'list(map(lambda x:x+1, [1,2]))'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': 'filter 用途',
+      'content': 'filter(fn, iterable) 的作用是？',
+      'options': {
+        'A': '返回满足 fn 条件的元素序列',
+        'B': '对每个元素应用 fn 并返回结果',
+        'C': '把 iterable 转为列表',
+        'D': '删除 iterable 中所有元素'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：filter 会筛选元素',
+        '提示2：结果是可迭代对象',
+        '提示3：结合 lambda 很常用'
+      ],
+      'explanation': 'filter 返回满足指定函数条件的元素（惰性迭代）。',
+      'example': 'list(filter(lambda x: x>0, lst))'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': 'reduce 位置',
+      'content': '从哪个模块导入 reduce？',
+      'options': {
+        'A': 'functools',
+        'B': 'itertools',
+        'C': 'collections',
+        'D': '内置函数直接可用'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：reduce 在 functools 中',
+        '提示2：Python 2 时 reduce 是内置的',
+        '提示3：要 import functools.reduce'
+      ],
+      'explanation': 'reduce 在 Python3 被移到 functools 模块中，需导入使用。',
+      'example': 'from functools import reduce'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': 'map 转列表（填空）',
+      'content': '把输入数字乘 2 并以列表形式打印。',
+      'input': '1 2',
+      'output': '2 4',
+      'code': 'lst = list(map(int, input().split()))\nres = map(lambda x: x*2, lst)\nprint(*list(__1__))',
+      'options': 'res, lst, map, iterable',
+      'answer': '1',
+      'explanation': 'map 返回可迭代对象，使用 list(res) 将其转换为列表后打印。',
+      'example': 'print(*list(map(lambda x: x*2, [1,2])))'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': 'filter 示例（填空）',
+      'content': '筛选出大于 0 的元素并打印。',
+      'input': '-1 2 -3 4',
+      'output': '2 4',
+      'code': 'lst = list(map(int, input().split()))\nprint(*list(filter(lambda x: __1__, lst)))',
+      'options': 'x>0, x<0, x==0, x!=0',
+      'answer': '1',
+      'explanation': 'filter 的 lambda 返回 True 时保留该元素。',
+      'example': 'list(filter(lambda x: x>0, lst))'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': 'map 与列表推导对比',
+      'content': 'map(lambda x: x*2, lst) 与 [x*2 for x in lst] 相比，通常怎样选择？',
+      'options': {
+        'A': '推导可读性更好，map 在简单函数时也可用',
+        'B': 'map 永远更快',
+        'C': '推导无法用在可迭代对象上',
+        'D': 'map 返回列表'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：列表推导语法更直观',
+        '提示2：map 在函数已存在时可复用',
+        '提示3：两者性能差异视情况'
+      ],
+      'explanation': '列表推导通常更具可读性，而 map 在复用函数或与其他迭代器组合时也很有用。',
+      'example': '[x*2 for x in lst]'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': 'reduce 用途',
+      'content': 'reduce 常用于什么操作？',
+      'options': {
+        'A': '将序列规约为单个值（如累加）',
+        'B': '过滤元素',
+        'C': '生成器创建',
+        'D': '列表复制'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：reduce 接受二元函数累积结果',
+        '提示2：用于求和、求乘积等',
+        '提示3': '与 sum 功能类似但更通用'
+      ],
+      'explanation': 'reduce 通过二元函数把序列规约为单个累计值。',
+      'example': 'reduce(lambda a,b: a+b, [1,2,3])'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '惰性评估',
+      'content': 'map/filter 在 Python3 中为何被称为惰性？',
+      'options': {
+        'A': '它们返回惰性可迭代对象，按需生成元素',
+        'B': '它们延迟导入',
+        'C': '它们不会执行任何操作',
+        'D': '只有在打印时才有效'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：只有消费时才会计算元素',
+        '提示2：可以节省内存',
+        '提示3：与生成器概念相似'
+      ],
+      'explanation': 'map/filter 返回惰性迭代器，只有在被遍历或转换为列表时才计算元素。',
+      'example': 'm = map(f, data)  # 未执行'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '链式使用（填空）',
+      'content': '先 map 再 filter 并打印结果。',
+      'input': '1 2 3',
+      'output': '4 8',
+      'code': 'lst = list(map(int, input().split()))\nres = map(lambda x: x*2, lst)\nres2 = filter(lambda x: x%4==0, res)\nprint(*list(res2))',
+      'options': '',
+      'answer': '',
+      'explanation': 'map 生成的可迭代对象可直接被 filter 使用，最终转换为列表打印。',
+      'example': 'list(filter(..., map(...)))'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': 'reduce 求积（填空）',
+      'content': '用 reduce 计算列表元素乘积并打印。',
+      'input': '2 3 4',
+      'output': '24',
+      'code': 'from functools import reduce\nfrom operator import mul\nlst = list(map(int, input().split()))\nprint(reduce(__1__, lst))',
+      'options': 'mul, add, lambda a,b: a*b, lambda a,b: a+b',
+      'answer': '1,3',
+      'explanation': 'reduce(mul, lst) 或 reduce(lambda a,b: a*b, lst) 可计算乘积。',
+      'example': 'reduce(lambda a,b: a*b, [2,3,4])'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': 'map 与多参数',
+      'content': 'map 可以接受多个可迭代对象吗？',
+      'options': {
+        'A': '可以，会并行取元素作为参数传入函数',
+        'B': '不可以，只能接受一个',
+        'C': '仅在 Python2 支持',
+        'D': '需要 itertools 才能实现'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：map(f, a, b) 会把 a 和 b 对应元素作为 f 的参数',
+        '提示2：短的可迭代导致提前终止',
+        '提示3：常用于并行处理两个序列'
+      ],
+      'explanation': 'map 可接受多个可迭代对象，函数会接收对应位置的多个参数。',
+      'example': 'list(map(lambda x,y: x+y, [1,2], [3,4]))'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': 'filter None 作用',
+      'content': 'filter(None, iterable) 的行为是？',
+      'options': {
+        'A': '过滤掉所有 False 值（如 0, "", None）',
+        'B': '抛出异常',
+        'C': '返回同样的 iterable',
+        'D': '仅保留 None'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：None 表示使用真值测试作为筛选条件',
+        '提示2：常用于去除空元素',
+        '提示3': '保留真值元素'
+      ],
+      'explanation': 'filter(None, iterable) 会保留真值元素，过滤掉 falsey 值。',
+      'example': 'list(filter(None, [0,1,False,2,"",3]))'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '可读性建议',
+      'content': '当 map/filter 的 lambda 很复杂时应如何？',
+      'options': {
+        'A': '把逻辑抽成命名函数再使用',
+        'B': '保持在 lambda 中写所有逻辑',
+        'C': '改用匿名类',
+        'D': '用 eval 处理'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：命名函数更易读与调试',
+        '提示2': lambda 应保持简单',
+        '提示3': 文档化有助于维护'
+      ],
+      'explanation': '复杂逻辑应封装为命名函数，提高可读性和可测试性。',
+      'example': 'def f(x): ...; map(f, lst)'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '组合示例（填空）',
+      'content': '用 map 和 filter 得到输入中偶数的两倍并打印。',
+      'input': '1 2 3 4',
+      'output': '4 8',
+      'code': 'lst = list(map(int, input().split()))\nres = map(lambda x: x*2, filter(lambda x: x%2==0, lst))\nprint(*list(res))',
+      'options': '',
+      'answer': '',
+      'explanation': '先 filter 出偶数，再 map 乘以 2，最后转换为列表打印。',
+      'example': 'list(map(lambda x: x*2, filter(lambda x: x%2==0, lst)))'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': 'map with multiple iterables（填空）',
+      'content': '并行相加两列表并打印结果。',
+      'input': '1 2\n3 4',
+      'output': '4 6',
+      'code': 'a = list(map(int, input().split()))\nb = list(map(int, input().split()))\nprint(*list(map(lambda x,y: x+y, a, b)))',
+      'options': '',
+      'answer': '',
+      'explanation': 'map 可以接受多个可迭代对象并并行传递元素给函数。',
+      'example': 'list(map(lambda x,y: x+y, [1,2],[3,4]))'
+    }
+
+  ]
+}
+
+```

@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第94单元：添加元素',
+  'questions': [
+    {'id':1,'type':'choice','title':'append 用途','content':'list.append(x) 做什么？','options':{'A':'在末尾添加元素','B':'在开头添加','C':'插入指定索引','D':'删除元素'},'answer':'A','hints':['append 在末尾追加','insert 可用于任意位置'], 'explanation':'append 方法将元素添加到列表末尾并改变原列表。','example':'lst.append(1)'},
+    {'id':2,'type':'choice','title':'insert 用法','content':'list.insert(i,x) 的作用是？','options':{'A':'在索引 i 前插入 x','B':'替换索引 i','C':'删除索引 i','D':'交换元素'},'answer':'A','hints':['insert 不会覆盖原有元素，会右移它们'], 'explanation':'insert 在指定位置插入元素，后续元素向右移动。','example':'lst.insert(0, x)'},
+    {'id':3,'type':'choice','title':'extend vs append','content':'lst.extend([1,2]) 与 lst.append([1,2]) 区别是？','options':{'A':'extend 展开序列并添加元素','B':'两者相同','C':'append 把元素逐个添加','D':'extend 添加为子列表'},'answer':'A','hints':['append 把整个对象当作单个元素追加'], 'explanation':'extend 会把可迭代拆开逐个添加，而 append 将整个对象作为单一元素追加。','example':'lst.extend([1,2])'},
+    {'id':4,'type':'fill','title':'append 示例','content':'补全：把输入数字逐个追加到列表并打印。','input':'1 2 3','output':'[1,2,3]','code':'lst=[]\nfor x in input().split():\n    lst.append(int(x))\nprint(lst)','options':'append,extend,insert,split','answer':'1,4','explanation':'使用 append 在循环中逐个添加元素。','example':'for x in data: lst.append(x)'},
+    {'id':5,'type':'fill','title':'extend 示例','content':'补全：将两个列表合并到第一个列表（就地）。','input':'1 2\n3 4','output':'[1,2,3,4]','code':'a=list(map(int,input().split()))\nb=list(map(int,input().split()))\na.extend(b)\nprint(a)','options':'extend,append,+,insert','answer':'1','explanation':'extend 会在原列表上就地添加另一个可迭代的元素。','example':'a.extend(b)'},
+    {'id':6,'type':'choice','title':'append 返回值','content':'list.append 的返回值是什么？','options':{'A':'None','B':'新列表','C':'被添加元素','D':'布尔值'},'answer':'A','hints':['就地操作通常返回 None'], 'explanation':'append 就地修改列表并返回 None，这是 Python 的常见设计。','example':'x = lst.append(1) # x 是 None'},
+    {'id':7,'type':'choice','title':'插入边界','content':'使用 insert 插入索引超出范围时发生？','options':{'A':'插入到末尾','B':'抛出异常','C':'插入到开头','D':'不插入'},'answer':'A','hints':['超出上界会追加到末尾'], 'explanation':'插入索引大于长度时，元素会被追加到列表末尾。','example':'lst.insert(100, x)'},
+    {'id':8,'type':'choice','title':'extend 性能','content':'大量拼接列表时推荐使用？','options':{'A':'extend 或 收集后 join','B':'在循环中多次 +','C':'不断创建新列表','D':'使用 insert'},'answer':'A','hints':['extend 就地扩展效率更高'], 'explanation':'extend 就地扩展更高效，频繁使用 + 会产生大量临时对象。','example':'a.extend(b)'},
+    {'id':9,'type':'fill','title':'插入示例','content':'补全：将 99 插入索引 1 并打印。','input':'1 2 3','output':'1 99 2 3','code':'lst=list(map(int,input().split()))\nlst.insert(1,99)\nprint(*lst)','options':'insert,append,extend,del','answer':'1','explanation':'insert 用于在指定位置插入元素并保持顺序。','example':'lst.insert(i,x)'},
+    {'id':10,'type':'fill','title':'concat vs extend','content':'补全：用 extend 就地合并并打印第一个列表。','input':'1 2\n3 4','output':'1 2 3 4','code':'a=list(map(int,input().split()))\nb=list(map(int,input().split()))\na.extend(b)\nprint(*a)','options':'extend,+,append,insert','answer':'1','explanation':'extend 就地扩展，不会返回新列表。','example':'a.extend(b)'},
+    {'id':11,'type':'choice','title':'插入耗时','content':'在列表开头插入大量元素通常会怎样？','options':{'A':'较慢，因为需移动大量元素','B':'很快','C':'和末尾相同','D':'total O(1)'},'answer':'A','hints':['列表为数组结构，开头插入需移动元素'], 'explanation':'在列表开头插入会触发后续元素整体移动，成本较高，适合使用 deque。','example':'from collections import deque'},
+    {'id':12,'type':'choice','title':'append 多次','content':'若需重复添加很多元素，推荐做法是？','options':{'A':'预分配或收集后 extend','B':'每次 append','C':'使用 insert 头部添加','D':'使用 tuple'},'answer':'A','hints':['减少重复扩容开销'], 'explanation':'收集元素后一次 extend 或预估并分配能减少多次扩容的成本。','example':'parts=[]; parts.extend(chunk)'},
+    {'id':13,'type':'choice','title':'append 与 +=','content':'lst += [1,2] 与 lst.extend([1,2]) 区别？','options':{'A':'等价（就地扩展）','B':'不同，前者返回新列表','C':'前者报错','D':'后者返回 None'},'answer':'A','hints':['+= 在列表上就地扩展'], 'explanation':'对于列表，+= 会就地扩展，等价于 extend。','example':'lst += other'},
+    {'id':14,'type':'fill','title':'append None','content':'补全：向列表追加 None 并打印。','input':'1 2','output':'1 2 None','code':'lst=list(map(int,input().split()))\nlst.append(None)\nprint(lst)','options':'append,None,extend,insert','answer':'1,2','explanation':'append 可以添加任意对象，包括 None。','example':'lst.append(obj)'},
+    {'id':15,'type':'fill','title':'extend 可迭代','content':'补全：extend 接受的参数类型是？','input':'1 2\n3 4','output':'(combined)','code':'a=list(map(int,input().split()))\nb=map(int,input().split())\na.extend(b)\nprint(*a)','options':'iterable,list,dict,int','answer':'1,2','explanation':'extend 接受任意可迭代对象。','example':'a.extend(range(3))'}
+  ]
+}
+
+```
+
+*** End Patch

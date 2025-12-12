@@ -1,0 +1,282 @@
+```plaintext
+{
+  'unit': '第99单元：pop/remove/sort/reverse',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': 'pop 的默认行为',
+      'content': 'lst.pop() 默认移除并返回哪个元素？',
+      'options': {
+        'A': '最后一个元素',
+        'B': '第一个元素',
+        'C': '指定索引元素',
+        'D': '整列'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：pop 无参时弹出末尾元素',
+        '提示2：可传入索引如 pop(0)',
+        '提示3：返回被移除的值'
+      ],
+      'explanation': 'pop() 在不传参时移除并返回最后一个元素；传参可移除指定索引。',
+      'example': 'a=[1,2]; x=a.pop(); print(x)  # 2'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': 'remove 行为',
+      'content': 'lst.remove(x) 做了什么？',
+      'options': {
+        'A': '移除第一个值等于 x 的元素',
+        'B': '移除所有等于 x 的元素',
+        'C': '按索引移除',
+        'D': '返回被移除的元素'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：remove 按值移除第一处匹配',
+        '提示2：若不存在会抛 ValueError',
+        '提示3：移除多个需要循环或列表推导'
+      ],
+      'explanation': 'remove 删去第一个匹配的值并返回 None，若无匹配则抛出异常。',
+      'example': 'a=[1,2,1]; a.remove(1); print(a)  # [2,1]'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': 'sort 就地排序',
+      'content': 'lst.sort() 与 sorted(lst) 的区别？',
+      'options': {
+        'A': 'sort 就地修改返回 None，sorted 返回新列表',
+        'B': '两者相同',
+        'C': 'sort 返回新列表',
+        'D': 'sorted 就地修改'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：sort 返回 None',
+        '提示2：sorted 不修改原列表',
+        '提示3：sorted 可用于生成新排序序列'
+      ],
+      'explanation': 'sort 就地修改且返回 None，而 sorted 返回新的已排序列表。',
+      'example': 'a=[2,1]; b=sorted(a); a.sort()'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': 'pop 示例（填空）',
+      'content': '读取一行列表并 pop 出最后一个元素打印。',
+      'input': '1 2 3',
+      'output': '3',
+      'code': 'lst = list(map(int, input().split()))\nprint(lst.__1__())',
+      'options': 'pop, remove, pop(0), pop_last',
+      'answer': '1',
+      'explanation': '使用 lst.pop() 可以弹出并打印最后一个元素。',
+      'example': 'a.pop()'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': 'remove 示例（填空）',
+      'content': '从列表中移除值 2 并打印列表。',
+      'input': '1 2 3 2',
+      'output': '1 3 2',
+      'code': 'lst = list(map(int, input().split()))\nlst.__1__(2)\nprint(*lst)',
+      'options': 'remove, pop, discard, delete',
+      'answer': '1',
+      'explanation': '使用 lst.remove(2) 会移除第一个出现的 2。',
+      'example': 'a.remove(5)'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': 'reverse 方法',
+      'content': 'lst.reverse() 与 lst[::-1] 的区别？',
+      'options': {
+        'A': 'reverse 就地修改，lst[::-1] 返回新列表',
+        'B': '两者等价并就地修改',
+        'C': 'lst[::-1] 就地修改',
+        'D': 'reverse 返回新列表'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：reverse 是就地操作',
+        '提示2：切片会生成副本',
+        '提示3：选择取决于是否要保留原列表'
+      ],
+      'explanation': 'reverse 会就地反转列表，切片 lst[::-1] 会生成反向副本。',
+      'example': 'a.reverse(); b = a[::-1]'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': 'pop 指定索引',
+      'content': 'lst.pop(i) 会怎样？',
+      'options': {
+        'A': '移除并返回索引 i 的元素',
+        'B': '移除第一个元素',
+        'C': '移除最后一个元素',
+        'D': '按值移除'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：pop 可带参数指定索引',
+        '提示2：pop 返回被移除的元素',
+        '提示3：若索引越界会抛 IndexError'
+      ],
+      'explanation': 'pop(i) 会删除指定索引位置的元素并返回该元素。',
+      'example': 'a.pop(0)  # 移除第一个元素并返回'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': 'remove 异常',
+      'content': '当调用 lst.remove(x) 且 x 不在列表中会怎样？',
+      'options': {
+        'A': '抛出 ValueError',
+        'B': '返回 None',
+        'C': '什么也不做',
+        'D': '返回 False'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：remove 在找不到时会抛异常',
+        '提示2：若不想异常可先判断 x in lst',
+        '提示3：或用 try/except 捕获'
+      ],
+      'explanation': 'remove 在找不到对应值时会抛 ValueError。',
+      'example': 'if x in a: a.remove(x)'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': 'sort 示例（填空）',
+      'content': '对列表进行升序就地排序并打印。',
+      'input': '3 1 2',
+      'output': '1 2 3',
+      'code': 'lst = list(map(int, input().split()))\nlst.__1__()\nprint(*lst)',
+      'options': 'sort, sorted, reverse, order',
+      'answer': '1',
+      'explanation': '使用 lst.sort() 就地升序排列列表。',
+      'example': 'a.sort()'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': 'reverse 示例（填空）',
+      'content': '就地反向列表并打印。',
+      'input': '1 2 3',
+      'output': '3 2 1',
+      'code': 'lst = list(map(int, input().split()))\nlst.__1__()\nprint(*lst)',
+      'options': 'reverse, reversed, sort, pop',
+      'answer': '1',
+      'explanation': '使用 lst.reverse() 可就地反转列表顺序。',
+      'example': 'a.reverse()'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': 'pop 返回类型',
+      'content': 'pop 返回的值是什么类型？',
+      'options': {
+        'A': '被移除元素的类型',
+        'B': '列表类型',
+        'C': 'None',
+        'D': '布尔值'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：pop 返回被移除的元素',
+        '提示2：类型依赖于列表元素本身',
+        '提示3：如果列表是整数列表，pop 返回整数'
+      ],
+      'explanation': 'pop 返回被移除的元素，其类型即该元素的类型。',
+      'example': 'x = a.pop()  # x 的类型与 a 的元素类型一致'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': 'sort 参数 key',
+      'content': '使用 sort(key=...) 可以做什么？',
+      'options': {
+        'A': '指定排序依据函数',
+        'B': '指定是否就地排序',
+        'C': '指定是否稳定排序',
+        'D': '无效参数'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：key 用于对每个元素取关键字以比较',
+        '提示2：常用 lambda 或 operator.itemgetter',
+        '提示3：stable 属性由算法保证'
+      ],
+      'explanation': 'sort(key=...) 允许提供函数以提取比较键，从而按自定义规则排序。',
+      'example': 'lst.sort(key=lambda x: x[1])'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': 'remove 与 del 区别',
+      'content': 'remove(x) 与 del lst[i] 最大区别是？',
+      'options': {
+        'A': 'remove 按值，del 按索引',
+        'B': 'remove 按索引，del 按值',
+        'C': '两者等价',
+        'D': 'remove 会返回值'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：remove 查找第一个匹配的值并删除',
+        '提示2': 'del 直接根据索引删除',
+        '提示3': 'del 语句不是方法'
+      ],
+      'explanation': 'remove 使用值删除第一个匹配项，del 通过索引删除并不返回值。',
+      'example': 'del lst[0]; lst.remove(3)'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': 'pop 指定索引（填空）',
+      'content': '从索引 1 弹出元素并打印该值。',
+      'input': '10 20 30',
+      'output': '20',
+      'code': 'lst = list(map(int, input().split()))\nprint(lst.__1__(1))',
+      'options': 'pop, remove, pop(1), pop_index',
+      'answer': '3,1',
+      'explanation': 'pop(1) 返回并移除索引 1 的元素。',
+      'example': 'x = lst.pop(2)'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': 'sort 返回值（填空）',
+      'content': '下列代码打印什么？\n\na=[3,1,2]\nprint(a.sort())\nprint(a)',
+      'input': '',
+      'output': 'None\n1 2 3',
+      'code': 'a=[3,1,2]\nprint(a.sort())\nprint(*a)',
+      'options': 'None and 1 2 3, [1,2,3] and [1,2,3], Error, None and original',
+      'answer': '1',
+      'explanation': 'a.sort() 返回 None（打印 None），但 a 被就地排序后为 [1,2,3]。',
+      'example': 'a.sort(); print(a)'
+    }
+
+  ]
+}
+
+```

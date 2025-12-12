@@ -1,0 +1,282 @@
+```plaintext
+{
+  'unit': '第100单元：列表方法综合复习',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '方法返回值复习',
+      'content': '下面哪个方法是就地修改并返回 None？',
+      'options': {
+        'A': 'append',
+        'B': 'sorted',
+        'C': 'reversed',
+        'D': 'sum'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：append 就地修改',
+        '提示2：sorted 返回新列表',
+        '提示3：sum 返回数值'
+      ],
+      'explanation': 'append 就地修改并返回 None，而 sorted 返回新列表。',
+      'example': 'res = lst.append(1)  # res 为 None'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '切片与方法区别',
+      'content': '下列哪种操作不会改变原列表对象引用（id）？',
+      'options': {
+        'A': 'lst[:] = [1]',
+        'B': 'lst = [1]',
+        'C': 'lst = lst + [1]',
+        'D': 'lst = [1] + lst'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：lst[:] 就地替换',
+        '提示2：赋值给 lst 会改变引用',
+        '提示3：+ 会生成新列表'
+      ],
+      'explanation': 'lst[:] = ... 会保留原对象并替换其内容，从而保持 id 不变。',
+      'example': 'a=[1]; b=a; a[:] = [2]; print(a,b)'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '方法选择题',
+      'content': '要把列表 [1,2] 变为 [1,9,2] 最合适的方法是？',
+      'options': {
+        'A': 'insert',
+        'B': 'extend',
+        'C': 'append',
+        'D': 'remove'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：需要在中间插入元素',
+        '提示2：insert 可在指定位置插入',
+        '提示3：append 只能添加到末尾'
+      ],
+      'explanation': 'insert 可在索引 1 处插入 9，使得列表变成 [1,9,2]。',
+      'example': 'a.insert(1,9)'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '综合操作（填空）',
+      'content': '先 append(9) 再 pop() 并打印列表。',
+      'input': '1 2',
+      'output': '1 2',
+      'code': 'lst = list(map(int, input().split()))\nlst.append(9)\nlst.__1__()\nprint(*lst)',
+      'options': 'pop, remove, sort, reverse',
+      'answer': '1',
+      'explanation': 'append 后 pop 会移除刚加入的 9，列表恢复原状。',
+      'example': 'a.append(3); a.pop()'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '组合操作（填空）',
+      'content': '在索引 1 插入 0，然后就地排序并打印。',
+      'input': '3 1 2',
+      'output': '0 1 2 3',
+      'code': 'lst = list(map(int, input().split()))\nlst.insert(1,0)\nlst.__1__()\nprint(*lst)',
+      'options': 'sort, reverse, extend, pop',
+      'answer': '1',
+      'explanation': '插入后使用 sort() 就地排序。',
+      'example': 'a.insert(1,0); a.sort()'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '常见错误',
+      'content': '下列哪种写法会导致链式 append 调用失败？',
+      'options': {
+        'A': 'lst.append(1).append(2)',
+        'B': 'lst.append(1); lst.append(2)',
+        'C': 'lst.extend([1,2])',
+        'D': 'lst += [1,2]'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：append 返回 None',
+        '提示2：Therefore 链式写法不可用',
+        '提示3：用分号或换行分两步调用'
+      ],
+      'explanation': 'append 返回 None，不能链式调用。',
+      'example': '正确写法：lst.append(1); lst.append(2)'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '切片插入复习',
+      'content': '用哪个操作可在索引 2 处插入多个元素？',
+      'options': {
+        'A': 'lst[2:2] = [a,b]',
+        'B': 'lst.insert(2, [a,b])',
+        'C': 'lst.append([a,b])',
+        'D': 'lst.extend([a,b]) at position 2'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：切片赋值可在中间位置插入序列',
+        '提示2：insert 会把序列作为单个元素插入',
+        '提示3：extend 不能指定位置'
+      ],
+      'explanation': 'lst[2:2] = [...] 会在索引 2 处插入多个元素。',
+      'example': 'a[1:1]=[9,9]'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': 'pop 与 del 对比',
+      'content': '要移除并使用被移除的值应使用？',
+      'options': {
+        'A': 'pop',
+        'B': 'del',
+        'C': 'remove',
+        'D': 'clear'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：pop 返回被移除值',
+        '提示2：del 不返回值',
+        '提示3：remove 按值删除'
+      ],
+      'explanation': 'pop 会返回被移除的元素，方便随后使用。',
+      'example': 'x = a.pop()'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '复合练习（填空）',
+      'content': '对列表执行 append(7) 然后 remove 第一个 1 并打印。',
+      'input': '1 2 1',
+      'output': '2 1 7',
+      'code': 'lst = list(map(int, input().split()))\nlst.append(7)\nlst.__1__(1)\nprint(*lst)',
+      'options': 'remove, pop, sort, reverse',
+      'answer': '1',
+      'explanation': 'append 加入 7，remove(1) 移除第一个出现的 1。',
+      'example': 'a.append(5); a.remove(5)'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '排序并弹出（填空）',
+      'content': '对列表升序排序后弹出最大值并打印该值。',
+      'input': '3 1 2',
+      'output': '3',
+      'code': 'lst = list(map(int, input().split()))\nlst.sort()\nprint(lst.__1__())',
+      'options': 'pop, remove, pop(0), pop_last',
+      'answer': '1',
+      'explanation': '排序后最大值位于末尾，用 pop() 弹出并返回该值。',
+      'example': 'a.sort(); print(a.pop())'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': 'in 操作与 remove',
+      'content': '在 remove 前检查元素是否存在通常应先做什么？',
+      'options': {
+        'A': '使用 if x in lst',
+        'B': '直接调用 remove',
+        'C': '使用 try/except 不用检查',
+        'D': '用 pop 替代'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：remove 在值不存在时会抛异常',
+        '提示2：in 操作是快速检查',
+        '提示3：也可用 try/except 捕获'
+      ],
+      'explanation': '先用 if x in lst 可避免调用 remove 时抛出 ValueError。',
+      'example': 'if x in a: a.remove(x)'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': 'reverse 与 sorted',
+      'content': '要得到降序的新列表应使用？',
+      'options': {
+        'A': 'sorted(lst, reverse=True)',
+        'B': 'lst.sort(reverse=True) 并赋值给新变量',
+        'C': 'lst.reverse()',
+        'D': 'lst[::-1]' 
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：sorted 返回新列表',
+        '提示2：lst.sort() 就地修改',
+        '提示3：lst[::-1] 生成反向副本但不是按值排序'
+      ],
+      'explanation': 'sorted(lst, reverse=True) 会返回按值降序的新列表，适合需要新对象的场景。',
+      'example': 'b = sorted(a, reverse=True)'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '清空列表',
+      'content': '哪种方法可清空列表但保留对象引用？',
+      'options': {
+        'A': 'lst.clear()',
+        'B': 'lst = []',
+        'C': 'del lst',
+        'D': 'lst.pop() 多次'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：clear 就地清空',
+        '提示2：lst = [] 会改变引用',
+        '提示3：del 会删除变量'
+      ],
+      'explanation': 'lst.clear() 会清空列表内容同时保持对象引用不变。',
+      'example': 'a.clear()'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '清空演示（填空）',
+      'content': '对列表调用 clear() 并打印与引用变量。',
+      'input': '1 2',
+      'output': '[] []',
+      'code': 'a = list(map(int, input().split()))\nb = a\na.clear()\nprint(a, b)',
+      'options': 'clear, del, =[], pop, remove',
+      'answer': '1',
+      'explanation': 'clear 就地清空，b 作为引用亦会看到空列表。',
+      'example': 'a.clear()'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '复合题（填空）',
+      'content': '对列表执行 extend([4,5]) 然后 pop() 并打印最终列表。',
+      'input': '1 2',
+      'output': '1 2 4',
+      'code': 'lst = list(map(int, input().split()))\nlst.extend([4,5])\nlst.__1__()\nprint(*lst)',
+      'options': 'pop, remove, pop(0), clear',
+      'answer': '1',
+      'explanation': 'extend 后 pop() 弹出末尾元素 5，剩下 ...4。',
+      'example': 'a.extend([4,5]); a.pop()'
+    }
+
+  ]
+}
+
+```

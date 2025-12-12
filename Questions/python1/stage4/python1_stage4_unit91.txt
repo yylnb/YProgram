@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第91单元：列表的创建',
+  'questions': [
+    {'id':1,'type':'choice','title':'列表定义','content':'下列哪个语句用于创建一个空列表？','options':{'A':'[]','B':'()','C':'{}','D':'set()'},'answer':'A','hints':['[] 是列表字面量','() 是元组'], 'explanation':'在 Python 中，[] 用于创建列表对象。','example':'lst = []'},
+    {'id':2,'type':'choice','title':'列表包含类型','content':'列表可以包含哪些类型？','options':{'A':'任意 Python 对象','B':'仅数字','C':'仅字符串','D':'仅同类型元素'},'answer':'A','hints':['列表是动态且可存不同类型元素','例如 int 和 str 同时存在'], 'explanation':'Python 列表可以包含任意对象，不要求同类型。','example':'[1, "a", 3.0]'},
+    {'id':3,'type':'choice','title':'列表构造','content':'使用 list() 可以从什么创建列表？','options':{'A':'可迭代对象','B':'仅字符串','C':'仅数字序列','D':'不可从别的创建'},'answer':'A','hints':['list 可以接收迭代器或生成器'], 'explanation':'list() 会把可迭代对象的元素收集为列表。','example':'list(range(3)) -> [0,1,2]'},
+    {'id':4,'type':'fill','title':'从输入创建列表','content':'补全：从空格分隔输入创建整数列表。','input':'1 2 3','output':'[1,2,3]','code':'lst = list(map(int, input().split()))\nprint(lst)','options':'map,int,split,list','answer':'1,2,3,4','explanation':'使用 split 切分并 map 转为 int，再用 list 收集。','example':'lst = list(map(int, s.split()))'},
+    {'id':5,'type':'fill','title':'快速构建','content':'补全：生成包含 0..4 的列表。','input':'(none)','output':'[0,1,2,3,4]','code':'lst = list(range(5))\nprint(lst)','options':'range,list,tuple,dict','answer':'1,2','explanation':'range(5) 生成可迭代，list(range(5)) 产生列表。','example':'list(range(n))'},
+    {'id':6,'type':'choice','title':'空列表判断','content':'判断列表是否为空推荐写法？','options':{'A':'if not lst:','B':'if len(lst)==0:','C':'if lst==[]:','D':'以上都可'},'answer':'D','hints':['多种写法可行','Pythonic 常用 if not lst'], 'explanation':'三种写法都有效，但 `if not lst` 更简洁常用。','example':'if not lst: print("empty")'},
+    {'id':7,'type':'choice','title':'列表重复','content':'通过乘法构造重复元素列表如 3 个 0 的正确写法是？','options':{'A':'[0]*3','B':'[0,0,0]','C':'repeat(0,3)','D':'range(0,3)'},'answer':'A','hints':['乘法可缩写重复创建','第二种写法等价但不简洁'], 'explanation':'使用 [0]*3 可以快速得到 [0,0,0]。','example':'[None]*n'},
+    {'id':8,'type':'choice','title':'列表与字符串转换','content':'把字符串 "abc" 转为列表结果是？','options':{'A':'["a","b","c"]','B':'["abc"]','C':'[a,b,c]','D':'不可转换'},'answer':'A','hints':['字符串是可迭代对象','list(s) 会把每个字符取出'], 'explanation':'list("abc") 会按字符生成列表。','example':'list("hello")'},
+    {'id':9,'type':'fill','title':'列表表达式','content':'补全：用列表推导生成 1..5 的平方。','input':'(none)','output':'[1,4,9,16,25]','code':'lst = [x*x for x in range(1,6)]\nprint(lst)','options':'[ ], for, x*x, range','answer':'1,2,3,4','explanation':'列表推导可以紧凑地生成基于规则的新列表。','example':'[f(x) for x in it]'},
+    {'id':10,'type':'fill','title':'字符串分割','content':'补全：把逗号分隔的字符串转为列表并去空','input':'a,b,','output':'["a","b"]','code':'s=input().strip()\nprint([x for x in s.split(",") if x])','options':'split,strip,join,replace','answer':'1,2','explanation':'split 得到所有片段，可用列表推导过滤空字符串。','example':'[p for p in s.split(",") if p]'},
+    {'id':11,'type':'choice','title':'列表是可变对象','content':'列表是否可变（mutable）？','options':{'A':'是','B':'否','C':'仅在函数内','D':'取决于实现'},'answer':'A','hints':['可用索引修改元素','append 等方法会改变列表'], 'explanation':'列表是可变对象，方法如 append 会修改原列表。','example':'lst[0]=1'},
+    {'id':12,'type':'choice','title':'浅拷贝','content':'下列哪种操作会创建列表的浅拷贝？','options':{'A':'lst.copy()','B':'lst','C':'for x in lst: new.append(x)','D':'list(lst)'},'answer':'A','hints':['list(lst) 也会创建新列表','C 也间接创建新列表'], 'explanation':'lst.copy() 和 list(lst) 都会创建浅拷贝。','example':'b = a.copy()'},
+    {'id':13,'type':'choice','title':'list 转 tuple','content':'把列表转换为元组用什么函数？','options':{'A':'tuple','B':'list','C':'set','D':'dict'},'answer':'A','hints':['tuple(lst) 将返回不可变的元组表示'], 'explanation':'使用 tuple(lst) 可以得到对应的元组。','example':'tuple([1,2])'},
+    {'id':14,'type':'fill','title':'延展列表','content':'补全：合并两个列表为一个','input':'1 2\n3 4','output':'[1,2,3,4]','code':'a=list(map(int,input().split()))\nb=list(map(int,input().split()))\nprint(a + b)','options':'+,extend,append,insert','answer':'1,2','explanation':'使用 + 或 extend 都可合并两个列表，+ 返回新列表，extend 就地扩展。','example':'a.extend(b)'},
+    {'id':15,'type':'fill','title':'列表长度','content':'补全：打印输入列表长度','input':'1 2 3','output':'3','code':'print(len(list(map(int,input().split()))))','options':'len,list,map,input,split','answer':'1,2,3,4,5','explanation':'len 可返回容器元素个数。','example':'len(lst)'}
+  ]
+}
+
+```
+
+*** End Patch

@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第92单元：列表索引',
+  'questions': [
+    {'id':1,'type':'choice','title':'索引从哪里开始','content':'Python 列表索引从哪个数字开始？','options':{'A':'0','B':'1','C':'-1','D':'任意'},'answer':'A','hints':['Python 使用 0-based 索引','第一个元素索引为 0'], 'explanation':'Python 列表和大多数序列类型均采用从 0 开始索引。','example':'lst[0]'},
+    {'id':2,'type':'choice','title':'负索引含义','content':'负索引如 lst[-1] 表示？','options':{'A':'最后一个元素','B':'第一个元素','C':'报错','D':'倒数第二个元素'},'answer':'A','hints':['-1 指向末尾元素','-2 指向倒数第二'], 'explanation':'负索引从末尾开始计数，-1 表示最后一个元素。','example':'lst[-1]'},
+    {'id':3,'type':'choice','title':'索引越界','content':'访问超出范围的索引会怎样？','options':{'A':'抛出 IndexError','B':'返回 None','C':'返回空字符串','D':'自动扩展列表'},'answer':'A','hints':['超出边界会抛出异常'], 'explanation':'越界读取会抛出 IndexError，需要检查索引或使用异常处理。','example':'try: x = lst[10] except IndexError:'},
+    {'id':4,'type':'fill','title':'获取最后元素','content':'补全：打印列表最后一个元素。','input':'1 2 3','output':'3','code':'lst=list(map(int,input().split()))\nprint(lst[-1])','options':'-1,last,0,1','answer':'1','explanation':'负索引 -1 可直接访问最后一个元素。','example':'lst[-1]'},
+    {'id':5,'type':'fill','title':'安全访问','content':'补全：安全访问索引若越界返回 -1。','input':'1 2\n5','output':'-1','code':'lst=list(map(int,input().split()))\ni=int(input())\nprint(lst[i] if 0<=i<len(lst) else -1)','options':'if,else,len,print','answer':'1,2,3,4','explanation':'先判断索引范围后再访问，避免异常。','example':'if 0<=i<len(lst): ...'},
+    {'id':6,'type':'choice','title':'多维索引','content':'二维列表访问元素通常写成？','options':{'A':'mat[i][j]','B':'mat[i,j]','C':'mat(i)(j)','D':'mat[j][i]'},'answer':'A','hints':['列表嵌套使用双重索引'], 'explanation':'二维列表是列表的列表，访问需两次索引。','example':'mat[0][1]'},
+    {'id':7,'type':'choice','title':'索引为负','content':'切片支持负步长，如 s[::-1] 的作用是？','options':{'A':'反转序列','B':'复制序列','C':'报错','D':'只适用于字符串'},'answer':'A','hints':['负步长可倒序切片'], 'explanation':'s[::-1] 是常用的倒序切片技巧。','example':'[1,2,3][::-1] -> [3,2,1]'},
+    {'id':8,'type':'choice','title':'切片安全','content':'切片超出范围会怎样？','options':{'A':'不会抛错，返回尽可能的子序列','B':'抛出异常','C':'返回 None','D':'返回空列表总是'},'answer':'A','hints':['切片比单索引更安全'], 'explanation':'切片会自动裁剪索引而不会抛异常。','example':'[1,2][0:10] -> [1,2]'},
+    {'id':9,'type':'fill','title':'取子列','content':'补全：取出列表中索引 1 到 3（含）元素。','input':'a b c d e','output':'b c d','code':'lst=input().split()\nprint(lst[1:4])','options':'1:4,1..4,1:3,1:5','answer':'1','explanation':'切片的结束索引为上界且不包含该位置元素。','example':'lst[1:4]'},
+    {'id':10,'type':'fill','title':'替换索引元素','content':'补全：将索引 0 元素替换为 9。','input':'1 2 3','output':'9 2 3','code':'lst=list(map(int,input().split()))\nlst[0]=9\nprint(*lst)','options':'lst[0]=9,append,insert,del lst[0]','answer':'1','explanation':'通过索引直接赋值可就地修改列表元素。','example':'lst[0]=x'},
+    {'id':11,'type':'choice','title':'索引为表达式','content':'索引可以使用表达式作为下标吗？','options':{'A':'可以，如 lst[i+1]','B':'不可以','C':'只限常数','D':'只限整数常量'},'answer':'A','hints':['下标表达式会先求值为整数'], 'explanation':'索引表达式会先计算为整数然后用于访问列表。','example':'i=0; lst[i+1]'},
+    {'id':12,'type':'choice','title':'list 的可变长度','content':'对列表使用索引赋值改变长度吗？','options':{'A':'不会改变长度','B':'会增加长度','C':'会减少长度','D':'取决于赋值值'},'answer':'A','hints':['单个索引赋值替换元素而非插入'], 'explanation':'索引赋值替换已有位置的元素，保持列表长度不变。','example':'lst[1]=5'},
+    {'id':13,'type':'choice','title':'切片赋值','content':'使用切片赋值可以替换多元素并改变列表长度吗？','options':{'A':'可以','B':'不可以','C':'只可缩短','D':'只可扩展'},'answer':'A','hints':['切片赋值可替换任意长度序列'], 'explanation':'切片赋值可以插入或删除元素，从而改变列表长度。','example':'lst[1:2]=[9,9]'},
+    {'id':14,'type':'fill','title':'pop 返回','content':'补全：pop 方法返回被删除的元素并打印。','input':'1 2 3','output':'3','code':'lst=list(map(int,input().split()))\nprint(lst.pop())','options':'pop,remove,del,append','answer':'1','explanation':'pop 默认弹出并返回最后一个元素。','example':'x = lst.pop()'},
+    {'id':15,'type':'fill','title':'索引查找','content':'补全：打印某元素在列表中首次出现的索引（不存在时报 -1）。','input':'1 2 3\n2','output':'1','code':'lst=list(map(int,input().split()))\nx=int(input())\nprint(lst.index(x) if x in lst else -1)','options':'index,in,find,count','answer':'1,2','explanation':'先判断是否存在再调用 index 避免 ValueError。','example':'if x in lst: i = lst.index(x)'}
+  ]
+}
+
+```
+
+*** End Patch
