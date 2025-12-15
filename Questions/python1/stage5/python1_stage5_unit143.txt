@@ -1,0 +1,203 @@
+```plaintext
+{
+  'unit': '第143单元：正则表达式基础',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': 're 模块',
+      'content': 'Python 中处理正则表达式常用哪个模块？',
+      'options': {'A': 're', 'B': 'regex', 'C': 're2', 'D': 'regexlib'},
+      'answer': 'A',
+      'hints': ['提示1：re 是标准库', '提示2：也有第三方 regex 提供扩展', '提示3：常用方法有 match/search/findall'],
+      'explanation': 're 是 Python 内置的正则表达式模块，提供常用匹配与替换方法。',
+      'example': ''
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': 'search 与 match',
+      'content': 're.search 与 re.match 的区别是？',
+      'options': {'A': 'match 从字符串开头匹配，search 在任意位置查找', 'B': '两者相同', 'C': 'search 仅在结尾匹配', 'D': 'match 更慢'},
+      'answer': 'A',
+      'hints': ['提示1：match 等价于 ^ 开头匹配', '提示2：search 更灵活', '提示3：常用 findall 获取所有匹配'],
+      'explanation': 'match 从开头开始尝试匹配；search 会在字符串任意位置查找第一个匹配。',
+      'example': ''
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '常用元字符',
+      'content': '下列哪组是正则表达式常用元字符？',
+      'options': {'A': '. * + ? ^ $ [ ] ( ) |', 'B': '&& || ==', 'C': '< > =', 'D': '# ! %'},
+      'answer': 'A',
+      'hints': ['提示1：. 匹配任意字符', '提示2：* 表示前项重复', '提示3：方括号表示字符集合'],
+      'explanation': '正则常用元字符包括 . * + ? ^ $ [] () | 等，用于构造模式。',
+      'example': ''
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '转义字符（填空）',
+      'content': '若要匹配字符 "." 本身，应使用正则模式中写为 __1__。',
+      'input': '',
+      'output': '',
+      'code': 'import re\nre.search("__1__", "a.b")',
+      'options': '\\., \\d, ., \\w',
+      'answer': '1',
+      'explanation': '用 \\. 可以匹配句点字符本身，因为 . 是元字符。',
+      'example': ''
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '字符类（填空）',
+      'content': '表示数字字符的简写元字符是 __1__。',
+      'input': '',
+      'output': '',
+      'code': 're.findall("__1__+", "a123b")',
+      'options': '\\d, \\w, \\s, .',
+      'answer': '1',
+      'explanation': '\\d 表示数字字符，\\w 表示字母数字下划线，\\s 表示空白。',
+      'example': ''
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '贪婪与懒惰',
+      'content': '默认量词（如 *）是贪婪的，意思是？',
+      'options': {'A': '尽可能多地匹配', 'B': '尽可能少地匹配', 'C': '匹配失败抛异常', 'D': '仅匹配空字符串'},
+      'answer': 'A',
+      'hints': ['提示1：可用 *? 让其懒惰', '提示2：贪婪会匹配最长字符串', '提示3：谨慎使用以避免过度匹配'],
+      'explanation': '贪婪量词会匹配尽可能多的字符；使用 ? 可使其变为非贪婪（懒惰）。',
+      'example': ''
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '捕获组',
+      'content': '在正则中使用圆括号 () 的一个常见用途是？',
+      'options': {'A': '创建捕获组以便提取子串', 'B': '表示注释', 'C': '表示字符集合', 'D': '表示量词'},
+      'answer': 'A',
+      'hints': ['提示1：match.group(1) 获取第一个捕获组', '提示2：(?: ) 用于非捕获组', '提示3：分组可用于提取或引用'],
+      'explanation': '圆括号用于捕获子匹配或改变运算顺序，便于提取子串。',
+      'example': ''
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '替换文本',
+      'content': '使用 re.sub 可以完成什么？',
+      'options': {'A': '基于正则模式替换文本', 'B': '查找文件', 'C': '分割二进制流', 'D': '编译模式'},
+      'answer': 'A',
+      'hints': ['提示1：re.sub(pattern, repl, text)', '提示2：支持回调函数作为 repl', '提示3：常用于清洗文本'],
+      'explanation': 're.sub 用于将匹配模式替换为指定文本或回调返回值。',
+      'example': ''
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '编译模式（填空）',
+      'content': '为了在多次匹配中提高效率，可先用 re.__1__(pattern) 编译正则对象。',
+      'input': '',
+      'output': '',
+      'code': 'pat = re.__1__("\\d+")\npat.findall("a123b")',
+      'options': 'compile, match, search, fullmatch',
+      'answer': '1',
+      'explanation': 're.compile 可创建可复用的正则对象以提高性能。',
+      'example': ''
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '多行模式（填空）',
+      'content': '使用 re.M 或 re.MULTILINE 可以让 ^ 和 $ 匹配 __1__。',
+      'input': '',
+      'output': '',
+      'code': 're.search(pattern, text, flags=re.__1__)',
+      'options': 'MULTILINE, IGNORECASE, DOTALL, VERBOSE',
+      'answer': '1',
+      'explanation': 'MULTILINE 使 ^/$ 匹配每行的开头结尾，而不是整个字符串的开始/结束。',
+      'example': ''
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': 'DOTALL 标志',
+      'content': 're.DOTALL 的作用是？',
+      'options': {'A': '让 . 匹配换行符', 'B': '忽略大小写', 'C': '开启多行模式', 'D': '禁用贪婪模式'},
+      'answer': 'A',
+      'hints': ['提示1：默认 . 不匹配换行', '提示2：DOTALL 改变 . 的行为', '提示3：常用于跨行匹配'],
+      'explanation': 'DOTALL 标志使点号 . 也能匹配换行符，从而匹配跨行文本。',
+      'example': ''
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '捕获组引用',
+      'content': '在替换字符串中引用第一个捕获组，可以使用哪个语法？',
+      'options': {'A': '\\1', 'B': '$1', 'C': '{1}', 'D': '%1'},
+      'answer': 'A',
+      'hints': ['提示1：在替换字符串中常用 \\1 表示第一个组', '提示2：回调方式更灵活', '提示3：注意转义'],
+      'explanation': '在 re.sub 的替换字符串中可使用 \1 这样的反向引用来代表捕获组。',
+      'example': ''
+    },
+
+    {
+      'id': 13,
+      'type': 'fill',
+      'title': '非捕获组（填空）',
+      'content': '若仅需分组但不捕获，可使用语法 (?:pattern) 写为 __1__.',
+      'input': '',
+      'output': '',
+      'code': 'pat = re.compile("(?:ab)+")',
+      'options': '(?: ), (?= ), (?<= ), (?! )',
+      'answer': '1',
+      'explanation': '(?: ) 表示非捕获分组，用于结构化但不产生捕获编号。',
+      'example': ''
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '性能建议（填空）',
+      'content': '复杂正则可能影响性能，建议逐步测试并尽量 __1__ 模式以提高可读性和效率。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': '简化, 复杂化, 嵌套, 压缩',
+      'answer': '1',
+      'explanation': '简化和分解复杂模式有助于提高性能与可维护性。',
+      'example': ''
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '总结（填空）',
+      'content': '正则用于 __1__ 文本匹配与提取，但应注意可读性和性能。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': '复杂, 简单, 二分, 统计',
+      'answer': '1',
+      'explanation': '正则擅长复杂文本模式匹配，但应合理使用以免造成难以维护的代码。',
+      'example': ''
+    }
+
+  ]
+}
+
+```

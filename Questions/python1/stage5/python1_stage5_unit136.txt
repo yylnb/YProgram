@@ -1,0 +1,40 @@
+```plaintext
+{
+  'unit': '第136单元：并发基础（线程与进程）',
+  'questions': [
+    {'id':1,'type':'choice','title':'线程与进程区别','content':'下列关于线程与进程的描述，哪项正确？','options':{'A':'进程拥有独立内存空间，线程共享进程内存','B':'线程更重量级于进程','C':'线程无法并发','D':'进程共享栈'},'answer':'A','hints':['提示1: 进程隔离内存','提示2: 线程共享堆内存','提示3: 线程切换开销较小'],'explanation':'进程有独立内存，线程在同一进程内共享内存，适合轻量并发。','example':''},
+
+    {'id':2,'type':'choice','title':'GIL 的影响','content':'Python 中 GIL（全局解释器锁）会导致什么？','options':{'A':'限制 CPU 密集型线程的并行执行','B':'禁止任何多线程','C':'提高多线程 CPU 利用率','D':'与多进程无关'},'answer':'A','hints':['提示1: GIL 影响多线程的 CPU 并行','提示2: I/O 密集型受益于线程','提示3: 可用多进程绕过 GIL'],'explanation':'GIL 限制了同一时刻只有一个线程执行 Python 字节码，影响 CPU 密集型任务。','example':''},
+
+    {'id':3,'type':'choice','title':'multiprocessing 何时用','content':'在何种场景下推荐使用 multiprocessing？','options':{'A':'CPU 密集型任务以利用多核','B':'仅用于 I/O 密集型','C':'禁止在 Windows 上使用','D':'替代所有线程使用'},'answer':'A','hints':['提示1: 多进程可绕过 GIL','提示2: 进程间通信成本较高','提示3: 适合并行计算'],'explanation':'multiprocessing 可启动多个进程并利用多核 CPU，适合 CPU 密集型任务。','example':''},
+
+    {'id':4,'type':'fill','title':'线程同步（填空）','content':'在多线程中保护共享资源常用 __1__（互斥锁）。','input':'','output':'','code':'from threading import Lock\nlock = Lock()\nwith lock:\n    __1__','options':'lock.acquire(), lock.release(), lock, lock.wait()',
+      'answer':'1','explanation':'使用 Lock 的 acquire/release 或上下文管理确保互斥访问，共享资源不会被并发破坏。','example':''},
+
+    {'id':5,'type':'fill','title':'进程间通信（填空）','content':'multiprocessing 提供 Pipe 和 __1__ 用于进程间通信。','input':'','output':'','code':'from multiprocessing import Queue\nq = __1__()','options':'Queue, Lock, Event, Thread','answer':'1','explanation':'multiprocessing.Queue 用于在进程间安全传递数据。','example':''},
+
+    {'id':6,'type':'choice','title':'线程守护（daemon）','content':'将线程设为守护线程的效果是？','options':{'A':'主线程退出时守护线程会被强制结束','B':'守护线程运行优先于主线程','C':'守护线程不可被创建','D':'守护线程不使用 CPU'},'answer':'A','hints':['提示1: daemon 线程随主线程结束','提示2: 适合后台任务','提示3: 注意资源清理'],'explanation':'守护线程会在主线程退出时被终止，不适合需要优雅停止的任务。','example':''},
+
+    {'id':7,'type':'choice','title':'concurrent.futures 用途','content':'concurrent.futures 提供的 ThreadPoolExecutor 与 ProcessPoolExecutor 用于？','options':{'A':'简化线程/进程池的提交与管理','B':'替换 asyncio','C':'只能在 Linux 使用','D':'用于图形界面'},'answer':'A','hints':['提示1: 提供 submit 和 map 接口','提示2: 方便管理并发任务','提示3: 自动处理结果获取'],'explanation':'concurrent.futures 封装线程/进程池，简化并发任务提交与结果处理。','example':''},
+
+    {'id':8,'type':'choice','title':'死锁','content':'哪种情形可能导致死锁？','options':{'A':'两个线程互相等待对方持有的锁','B':'单线程执行 I/O','C':'仅使用局部变量','D':'使用 with 语句'},'answer':'A','hints':['提示1: 避免锁的交叉获取','提示2: 按固定顺序获取多个锁可降低风险','提示3: 使用超时或尝试锁机制'],'explanation':'死锁通常因不同线程按不同顺序持有并等待对方的锁导致。','example':''},
+
+    {'id':9,'type':'fill','title':'线程安全集合（填空）','content':'队列模块提供线程安全的 __1__ 能用于线程间通讯。','input':'','output':'','code':'from queue import Queue\nq = Queue()\nq.put(1)','options':'Queue, dict, list, set','answer':'1','explanation':'queue.Queue 是线程安全的队列，常用于线程间传递任务或数据。','example':''},
+
+    {'id':10,'type':'fill','title':'进程池示例（填空）','content':'使用 ProcessPoolExecutor 提交任务可调用 executor.__1__(fn, *args)。','input':'','output':'','code':'from concurrent.futures import ProcessPoolExecutor\nwith ProcessPoolExecutor() as executor:\n    future = executor.__1__(func, 1)',
+      'options':'submit, map, run, start','answer':'1','explanation':'submit 用于提交单个可调用并返回 Future 对象。','example':''},
+
+    {'id':11,'type':'choice','title':'线程模型选择','content':'对于大量 I/O 小任务，哪种并发模型常更高效？','options':{'A':'线程或异步 I/O','B':'多进程一定更好','C':'只有单线程可用','D':'使用数据库代替并发'},'answer':'A','hints':['提示1: I/O 可以释放 GIL','提示2: asyncio 对大量连接友好','提示3: 线程实现简单'],'explanation':'I/O 密集型任务适合线程或异步模型来提高吞吐量。','example':''},
+
+    {'id':12,'type':'choice','title':'asyncio 适用场景','content':'asyncio 最适合哪类任务？','options':{'A':'大量并发 I/O（例如网络）','B':'CPU 密集型计算','C':'替代数据库事务','D':'管理操作系统进程'},'answer':'A','hints':['提示1: 协程轻量且切换开销小','提示2: 需要使用异步库配合','提示3: 不适用于 CPU 密集任务'],
+      'explanation':'asyncio 适合高并发 I/O 场景，如网络连接与异步处理。','example':''},
+
+    {'id':13,'type':'fill','title':'线程启动（填空）','content':'创建并启动线程常写 t = Thread(target=fn); __1__。','input':'','output':'','code':'from threading import Thread\nt = Thread(target=fn)\n__1__','options':'t.start(), t.run(), t.join(), t.create()', 'answer':'1','explanation':'调用 t.start() 启动线程并创建新的执行流，t.run() 只是直接调用目标函数。','example':''},
+
+    {'id':14,'type':'fill','title':'线程等待（填空）','content':'要等待线程结束应调用 __1__。','input':'','output':'','code':'t.start()\n__1__','options':'t.join(), t.wait(), t.stop(), t.terminate()', 'answer':'1','explanation':'t.join() 会阻塞直到线程执行结束。','example':''},
+
+    {'id':15,'type':'fill','title':'总结（填空）','content':'CPU 密集型选用 __1__，I/O 密集型可选 __2__ 或 __3__。','input':'','output':'','code':'','options':'multiprocessing, threading, asyncio, socket','answer':'1,2,3','explanation':'CPU 密集型使用多进程，I/O 密集型可使用线程或异步 I/O。','example':''}
+  ]
+}
+
+```

@@ -1,0 +1,38 @@
+```plaintext
+{
+  'unit': '第132单元：类与实例属性',
+  'questions': [
+    {'id':1,'type':'choice','title':'类属性与实例属性','content':'类属性与实例属性的主要区别是？','options':{'A':'类属性归类所有，实例属性归单个实例','B':'实例属性共享，类属性独立','C':'类属性只能是函数','D':'实例属性必须为私有'},'answer':'A','hints':['提示1: 修改类属性会影响所有实例（除非被覆盖）','提示2: 实例属性只属于该实例','提示3: 可用类名访问类属性'],'explanation':'类属性存在于类对象上，实例属性是在实例字典中。','example':''},
+
+    {'id':2,'type':'choice','title':'访问类属性','content':'通过哪个方式访问类属性更合适？','options':{'A':'ClassName.attr','B':'instance.attr 永远不行','C':'通过全局变量','D':'通过文件读取'},'answer':'A','hints':['提示1: 虽然 instance.attr 可访问，但 ClassName.attr 更明确','提示2: 使用类名可避免实例覆盖带来的歧义','提示3: 清晰易读'],'explanation':'使用类名访问类属性更直观。','example':''},
+
+    {'id':3,'type':'choice','title':'实例属性覆盖','content':'当实例赋值与类同名属性时会如何？','options':{'A':'在实例字典中创建新属性，覆盖查找','B':'修改类属性本身','C':'抛出异常','D':'创建全局变量'},'answer':'A','hints':['提示1: 实例属性掩盖类属性','提示2: 类属性仍在类上存在','提示3: del instance.attr 可恢复'],
+      'explanation':'赋值会在实例上创建实例属性，从而覆盖类属性查找。','example':''},
+
+    {'id':4,'type':'fill','title':'默认值陷阱（填空）','content':'当把可变对象作为类属性时，多个实例共享该对象；避免方法是将其设为 __1__ 并在 __2__ 中创建实例副本。','input':'','output':'','code':'class A:\n    data = __1__\n    def __2__(self):\n        self.data = []','options':'None, [], __init__, __new__','answer':'1,3','explanation':'不要把可变默认放在类属性上，应在 __init__ 中为实例创建独立对象。','example':''},
+
+    {'id':5,'type':'fill','title':'属性查找（填空）','content':'访问属性时，Python 首先在 __1__ 中查找，然后到 __2__。','input':'','output':'','code':'','options':'实例字典, 类, 全局, 文件','answer':'1,2','explanation':'属性查找顺序：实例字典 -> 类 -> 父类链。','example':''},
+
+    {'id':6,'type':'choice','title':'动态绑定属性','content':'Python 允许在运行时给实例绑定新属性吗？','options':{'A':'允许','B':'不允许','C':'仅在类定义中允许','D':'需要特殊关键字'},'answer':'A','hints':['提示1: 可以直接赋值 instance.x = 1','提示2: __slots__ 会限制绑定','提示3: 动态特性强大但要节制'],'explanation':'Python 可以动态给对象绑定属性，除非使用 __slots__ 限制。','example':''},
+
+    {'id':7,'type':'choice','title':'__slots__ 的作用','content':'为类定义 __slots__ 的主要目的是？','options':{'A':'节省内存并限制可绑定属性','B':'增加方法数量','C':'优化函数调用','D':'自动生成属性'},'answer':'A','hints':['提示1: __slots__ 会省去实例字典','提示2: 限制未经声明的属性绑定','提示3: 可用于大量实例节约内存'],'explanation':'__slots__ 用于限制实例属性并减少内存占用。','example':''},
+
+    {'id':8,'type':'choice','title':'属性描述符','content':'描述符协议（__get__/__set__）常用于？','options':{'A':'控制属性访问与赋值','B':'替代继承','C':'定义类方法','D':'管理模块导入'},'answer':'A','hints':['提示1: property 基于描述符实现','提示2: 可实现懒加载或验证','提示3: 常见于属性封装'],'explanation':'描述符用于拦截属性访问以实现定制行为。','example':''},
+
+    {'id':9,'type':'fill','title':'property 用法（填空）','content':'将方法变成只读属性常用装饰器为 __1__。','input':'','output':'','code':'class A:\n    @__1__\n    def x(self):\n        return 1','options':'property, staticmethod, classmethod, descriptor','answer':'1','explanation':'使用 @property 可把方法当作属性访问。','example':''},
+
+    {'id':10,'type':'fill','title':'删除属性（填空）','content':'要删除实例属性，使用语句 __1__。','input':'','output':'','code':'del __1__','options':'instance.attr, ClassName.attr, attr, self.attr','answer':'1','explanation':'使用 del instance.attr 可以删除该实例的属性。','example':''},
+
+    {'id':11,'type':'choice','title':'只读属性','content':'如何实现属性只读？','options':{'A':'使用 @property 只定义 getter 不定义 setter','B':'用 __slots__ 限制','C':'把属性设为私有就自动只读','D':'无法实现'},'answer':'A','hints':['提示1: 不提供 setter 即为只读','提示2: property 可定义 getter/setter/deleter','提示3: 也可用描述符自定义'],'explanation':'通过 property 不提供 setter 可实现只读属性。','example':''},
+
+    {'id':12,'type':'choice','title':'类变量修改','content':'若需在类方法中修改类变量，应使用哪个参数引用类？','options':{'A':'cls','B':'self','C':'global','D':'class'},'answer':'A','hints':['提示1: classmethod 接受 cls','提示2: cls 用于访问/修改类变量','提示3: self 为实例引用'],'explanation':'在 classmethod 中使用 cls 访问或修改类变量是常见做法。','example':''},
+
+    {'id':13,'type':'fill','title':'描述符示例（填空）','content':'实现属性访问控制可以定义类包含方法 __1__ 和 __2__。','input':'','output':'','code':'class D:\n    def __1__(self, instance, owner):\n        pass\n    def __2__(self, instance, value):\n        pass','options':'__get__, __set__, __init__, __call__','answer':'1,2','explanation':'描述符协议包括 __get__ 和 __set__ 等方法。','example':''},
+
+    {'id':14,'type':'fill','title':'访问限制（填空）','content':'把属性命名为 _x 常表示什么？','input':'','output':'','code':'class A:\n    _x = 1','options':'受保护的实现细节, 私有, 全局, 常量','answer':'1','explanation':'单下划线表示受保护，提示外部不要直接访问。','example':''},
+
+    {'id':15,'type':'fill','title':'总结（填空）','content':'类属性放在 __1__ 上，实例属性放在 __2__ 上。','input':'','output':'','code':'','options':'类对象, 实例对象, 模块, 全局命名空间','answer':'1,2','explanation':'类属性属于类对象，实例属性属于实例对象。','example':''}
+  ]
+}
+
+```

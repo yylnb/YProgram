@@ -1,0 +1,199 @@
+```plaintext
+{
+  'unit': '第125单元：返回值与类型转换',
+  'questions': [
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '返回值类型',
+      'content': '函数返回值的类型由什么决定？',
+      'options': {'A':'return 后表达式的类型','B':'函数定义时声明的类型','C':'调用者决定','D':'Python 版本'},
+      'answer': 'A',
+      'hints': ['提示1：返回的是表达式的计算结果','提示2：没有静态类型声明影响返回类型','提示3：可以返回任意对象'],
+      'explanation': '函数返回值的类型由 return 后表达式在运行时决定。',
+      'example': 'def f(): return 1\n# 返回 int'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '显式类型转换',
+      'content': '将整数转换为字符串应使用哪个函数？',
+      'options': {'A':'str','B':'int','C':'float','D':'bool'},
+      'answer': 'A',
+      'hints': ['提示1：str() 用于转换为字符串','提示2：int() 用于转换为整数','提示3：注意转换失败可能抛异常'],
+      'explanation': '使用 str(n) 将整数或其他对象转换为字符串。',
+      'example': 'str(123)  # "123"'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '自动类型转换',
+      'content': '表达式 1 + 2.0 的结果类型是？',
+      'options': {'A':'float','B':'int','C':'str','D':'complex'},
+      'answer': 'A',
+      'hints': ['提示1：有 float 参与通常会转为 float','提示2：数值运算遵循类型提升规则','提示3：1 是 int，2.0 是 float'],
+      'explanation': '混合整数和浮点数运算会得到浮点数结果。',
+      'example': '1 + 2.0  # 3.0'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '返回数字字符串（填空）',
+      'content': '将返回值转换为字符串并返回，填入正确序号。',
+      'input': '',
+      'output': '',
+      'code': 'def f(x):\n    return __1__\n\nprint(f(10))  # 输出 "10"',
+      'options': 'str(x), int(x), float(x), repr(x)',
+      'answer': '1',
+      'explanation': '使用 str(x) 将数字转换为字符串后返回。',
+      'example': ''
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '解析字符串（填空）',
+      'content': '把字符串 "123" 解析为整数应使用哪个序号？',
+      'input': '',
+      'output': '',
+      'code': 's = "123"\nprint(__1__)  # 123',
+      'options': 'int(s), str(s), float(s), bool(s)',
+      'answer': '1',
+      'explanation': 'int(s) 将数字形式的字符串转换为整数。',
+      'example': ''
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': 'repr 与 str',
+      'content': '下面关于 repr() 与 str() 的区别，说法正确的是？',
+      'options': {'A':'repr 更明确用于调试，str 更友好用于展示','B':'两者完全相同','C':'str 用于调试','D':'repr 返回 HTML'},
+      'answer': 'A',
+      'hints': ['提示1：repr 会尽量给出可以 eval 的表示','提示2：str 更可读','提示3：repr 常用于调试输出'],
+      'explanation': 'repr 给出更精确的表示，str 给出更易读的表示。',
+      'example': 'repr("a\n")  # "\'a\\n\'"'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '返回布尔值',
+      'content': '函数要返回布尔值，下面哪个写法更推荐？',
+      'options': {'A':'直接返回比较表达式，如 return x>0','B':'先 if then return True else return False','C':'返回字符串 "True"','D':'返回 1/0'},
+      'answer': 'A',
+      'hints': ['提示1：比较表达式已经是布尔值','提示2：简洁且可读','提示3：避免使用字符串表示布尔'],
+      'explanation': '直接返回比较表达式更简洁和 Pythonic。',
+      'example': 'def is_pos(x):\n    return x>0'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '异常与返回',
+      'content': '函数在执行时抛出异常会怎样？',
+      'options': {'A':'不会返回正常值，而是传播异常','B':'自动返回 None','C':'返回 False','D':'忽略异常继续返回'},
+      'answer': 'A',
+      'hints': ['提示1：异常会中断正常流程','提示2：可以捕获异常并返回默认值','提示3：未捕获会向上抛出'],
+      'explanation': '异常会打断函数执行，除非捕获，否则不会返回普通的返回值。',
+      'example': ''
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '安全转换（填空）',
+      'content': '把可能不是数字的字符串转换为整数，并在失败时返回 __1__。',
+      'input': '',
+      'output': '',
+      'code': 'def safe_int(s):\n    try:\n        return int(s)\n    except ValueError:\n        return __1__',
+      'options': 'None, 0, "", -1',
+      'answer': '1',
+      'explanation': '返回 None 可表示转换失败且不误导为有效数字。',
+      'example': ''
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '类型检查（填空）',
+      'content': '若要检查变量是否为整数，应使用 __1__。',
+      'input': '',
+      'output': '',
+      'code': 'x = 1\nif __1__:\n    print("int")',
+      'options': 'isinstance(x, int), type(x)==int, x.__class__==int, isinstance(x, str)',
+      'answer': '1',
+      'explanation': 'isinstance 更灵活且支持继承关系，推荐使用。',
+      'example': ''
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '隐式转换副作用',
+      'content': '隐式类型转换（coercion）有何潜在问题？',
+      'options': {'A':'可能导致精度或语义丢失','B':'总是更快更安全','C':'Python 不会进行隐式转换','D':'仅在字符串间发生'},
+      'answer': 'A',
+      'hints': ['提示1：混合类型运算需注意','提示2：浮点运算可能丢失精度','提示3：转换应显式进行以提高可读性'],
+      'explanation': '隐式转换可能导致意外结果，显式转换更安全。',
+      'example': ''
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '返回值文档',
+      'content': '如何在函数文档字符串中说明返回值类型？',
+      'options': {'A':'在 docstring 中描述返回的类型与含义','B':'不需要说明','C':'用注释代替 docstring','D':'只在源码注解中写'},
+      'answer': 'A',
+      'hints': ['提示1：清晰的 docstring 有助于使用者','提示2：可配合类型注解','提示3：包括返回值的含义'],
+      'explanation': '在 docstring 中明确说明返回值类型与语义是良好实践。',
+      'example': '"""Returns: int: count of items"""'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '返回生成器',
+      'content': '若函数使用 yield 返回值，函数本身会返回什么？',
+      'options': {'A':'返回生成器对象','B':'返回列表','C':'返回 None','D':'立刻执行并返回所有值'},
+      'answer': 'A',
+      'hints': ['提示1：yield 会使函数变为生成器','提示2：生成器按需产出值','提示3：可用 next() 或 for 遍历'],
+      'explanation': '包含 yield 的函数返回生成器对象，值在迭代时生成。',
+      'example': 'def g():\n    yield 1\n# g() 是生成器'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '复合返回（填空）',
+      'content': '要从函数中返回多个不同类型的值，推荐返回 __1__。',
+      'input': '',
+      'output': '',
+      'code': 'def f():\n    return __1__\n\n# 接收: a,b = f()',
+      'options': '元组, 字符串, 单个整数, 列表',
+      'answer': '1',
+      'explanation': '返回元组是一种常见且简洁的方式来返回多个值。',
+      'example': ''
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '练习（填空）',
+      'content': '写一行代码把变量 x 转为浮点并返回： return __1__',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': 'float(x), int(x), str(x), bool(x)',
+      'answer': '1',
+      'explanation': 'float(x) 将 x 转为浮点数并返回。',
+      'example': ''
+    }
+  ]
+}
+
+```

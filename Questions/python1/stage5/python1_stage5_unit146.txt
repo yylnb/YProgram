@@ -1,0 +1,203 @@
+```plaintext
+{
+  'unit': '第146单元：HTTP 与网络请求',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': 'HTTP 方法',
+      'content': '下列哪个不是常用的 HTTP 方法？',
+      'options': {'A': 'FETCH', 'B': 'GET', 'C': 'POST', 'D': 'PUT'},
+      'answer': 'A',
+      'hints': ['提示1：标准方法包括 GET/POST/PUT/DELETE', '提示2：FETCH 不是 HTTP 方法名'],
+      'explanation': 'FETCH 不是标准的 HTTP 方法，通常使用 GET/POST/PUT/DELETE。',
+      'example': ''
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': 'requests 库',
+      'content': '在 Python 中发送 HTTP 请求常用哪个第三方库？',
+      'options': {'A': 'requests', 'B': 'urllib3', 'C': 'http.client', 'D': 'socket'},
+      'answer': 'A',
+      'hints': ['提示1：requests API 简洁', '提示2：也可使用内置 urllib'],
+      'explanation': 'requests 是最常用且易用的第三方 HTTP 客户端库。',
+      'example': 'import requests\nr = requests.get("https://example.com")'
+    },
+
+    {
+      'id': 3,
+      'type': 'fill',
+      'title': '状态码（填空）',
+      'content': '表示请求成功的 HTTP 状态码通常是 __1__。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': '200, 404, 500, 301',
+      'answer': '1',
+      'explanation': '200 表示请求成功（OK）。',
+      'example': ''
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': 'GET 与 POST（填空）',
+      'content': 'GET 请求通常用于获取资源，而 POST 用于 __1__。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': '提交或修改数据, 下载文件, 建立连接, 查询 DNS',
+      'answer': '1',
+      'explanation': 'POST 常用于提交或修改服务器端的数据。',
+      'example': ''
+    },
+
+    {
+      'id': 5,
+      'type': 'choice',
+      'title': '超时参数',
+      'content': '使用 requests 时设置超时的参数名是？',
+      'options': {'A': 'timeout', 'B': 'wait', 'C': 'delay', 'D': 'interval'},
+      'answer': 'A',
+      'hints': ['提示1：requests.get(..., timeout=5)'],
+      'explanation': 'timeout 参数用于限制等待响应的秒数，避免无限阻塞。',
+      'example': 'requests.get(url, timeout=5)'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': 'JSON 响应',
+      'content': 'requests.Response 对象中获取 JSON 数据的方法是？',
+      'options': {'A': 'response.json()', 'B': 'json.loads(response)', 'C': 'response.to_json()', 'D': 'response.data'},
+      'answer': 'A',
+      'hints': ['提示1：response.json() 解析响应体为 Python 对象'],
+      'explanation': 'response.json() 会把响应体解析为 Python 数据结构。',
+      'example': ''
+    },
+
+    {
+      'id': 7,
+      'type': 'fill',
+      'title': '请求头（填空）',
+      'content': '在 requests 中可传递 headers 参数，如 headers={"__1__":"application/json"}。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': 'Content-Type, Accept, Host, User-Agent',
+      'answer': '1',
+      'explanation': 'Content-Type 指定请求体的媒体类型，例如 application/json。',
+      'example': ''
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '状态码分类',
+      'content': 'HTTP 的 4xx 类状态码表示什么？',
+      'options': {'A': '客户端错误', 'B': '服务器错误', 'C': '重定向', 'D': '信息性响应'},
+      'answer': 'A',
+      'hints': ['提示1：5xx 是服务器错误', '提示2：404 是未找到'],
+      'explanation': '4xx 表示客户端错误，例如 400/401/404。',
+      'example': ''
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '表单提交（填空）',
+      'content': '使用 requests.post 提交表单可传入参数 __1__ 来发送表单数据。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': 'data, json, params, files',
+      'answer': '1',
+      'explanation': 'data 参数用于提交表单编码的键值对。',
+      'example': ''
+    },
+
+    {
+      'id': 10,
+      'type': 'choice',
+      'title': 'SSL 验证',
+      'content': 'requests 默认会验证 HTTPS 证书，若要跳过验证可使用哪个参数？',
+      'options': {'A': 'verify=False', 'B': 'ssl=False', 'C': 'cert=False', 'D': 'secure=False'},
+      'answer': 'A',
+      'hints': ['提示1：不建议在生产环境中禁用验证'],
+      'explanation': 'verify=False 会跳过证书验证，但存在安全风险。',
+      'example': ''
+    },
+
+    {
+      'id': 11,
+      'type': 'fill',
+      'title': '查询参数（填空）',
+      'content': '要在 URL 中添加查询参数可使用 params={"q":"x"}，params 会被附加到 __1__。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': 'URL, headers, body, cookies',
+      'answer': '1',
+      'explanation': 'params 会被编码并附加到 URL 的查询字符串。',
+      'example': ''
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '会话对象',
+      'content': 'requests.Session 的作用是？',
+      'options': {'A': '在多次请求中保持连接池和 cookies', 'B': '替代 socket', 'C': '用于异步请求', 'D': '解析 HTML'},
+      'answer': 'A',
+      'hints': ['提示1：session 可保持 cookies', '提示2：减少握手开销'],
+      'explanation': 'Session 对象可复用连接并保持状态，如 cookies。',
+      'example': ''
+    },
+
+    {
+      'id': 13,
+      'type': 'fill',
+      'title': '文件上传（填空）',
+      'content': 'requests 上传文件时使用参数 __1__，如 files={"file": open("a","rb")}.',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': 'files, data, json, params',
+      'answer': '1',
+      'explanation': 'files 参数用于 multipart/form-data 文件上传。',
+      'example': ''
+    },
+
+    {
+      'id': 14,
+      'type': 'choice',
+      'title': '幂等性',
+      'content': '下列哪个 HTTP 方法通常被认为是幂等的？',
+      'options': {'A': 'PUT', 'B': 'POST', 'C': 'CONNECT', 'D': 'TRACE'},
+      'answer': 'A',
+      'hints': ['提示1：幂等表示多次执行效果相同', '提示2：GET/PUT/DELETE 通常为幂等'],
+      'explanation': 'PUT 通常是幂等的，POST 通常不是。',
+      'example': ''
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '总结（填空）',
+      'content': '网络请求应注意超时、重试和 __1__（如证书验证）。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': '安全, 速度, 并发, 缓存',
+      'answer': '1',
+      'explanation': '网络请求需兼顾安全性（例如证书验证）、超时与重试策略。',
+      'example': ''
+    }
+
+  ]
+}
+
+```

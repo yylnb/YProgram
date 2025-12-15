@@ -1,0 +1,203 @@
+```plaintext
+{
+  'unit': '第145单元：错误与异常处理',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '异常基类',
+      'content': 'Python 中所有异常的基类是？',
+      'options': {'A': 'BaseException', 'B': 'Exception', 'C': 'ValueError', 'D': 'RuntimeError'},
+      'answer': 'A',
+      'hints': ['提示1：Exception 继承自 BaseException', '提示2：KeyboardInterrupt 直接继承 BaseException', '提示3：一般捕获 Exception 即可'],
+      'explanation': 'BaseException 是所有异常的基类，日常捕获通常使用 Exception。',
+      'example': ''
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '捕获异常',
+      'content': '捕获并处理异常通常使用哪个语句？',
+      'options': {'A': 'try/except', 'B': 'if/else', 'C': 'for/else', 'D': 'with/as'},
+      'answer': 'A',
+      'hints': ['提示1：try 块放可能抛出的代码', '提示2：except 用于捕获特定异常', '提示3：finally 总会执行'],
+      'explanation': 'try/except 用于捕获并处理异常，finally 可用于清理。',
+      'example': ''
+    },
+
+    {
+      'id': 3,
+      'type': 'fill',
+      'title': '捕获特定异常（填空）',
+      'content': '要只捕获 ValueError，可以写为 except __1__:',
+      'input': '',
+      'output': '',
+      'code': 'try:\n    int("a")\nexcept __1__:\n    print("value error")',
+      'options': 'ValueError, Exception, BaseException, RuntimeError',
+      'answer': '1',
+      'explanation': '在 except 后指定异常类即可只捕获该类型异常。',
+      'example': ''
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '获取异常信息（填空）',
+      'content': '使用 except Exception as __1__ 可以获取异常对象以访问详情。',
+      'input': '',
+      'output': '',
+      'code': 'try:\n    1/0\nexcept Exception as __1__:\n    print(__1__)',
+      'options': 'e, err, exc, ex',
+      'answer': '1',
+      'explanation': '惯例常用 e 或 ex 来表示捕获的异常对象。',
+      'example': ''
+    },
+
+    {
+      'id': 5,
+      'type': 'choice',
+      'title': 'finally 块',
+      'content': 'finally 块在何时执行？',
+      'options': {'A': '无论是否发生异常都会执行', 'B': '仅在发生异常时执行', 'C': '仅在没有异常时执行', 'D': '只有在 except 中调用时执行'},
+      'answer': 'A',
+      'hints': ['提示1：用于清理资源', '提示2：finally 总会运行', '提示3：无论 try/except 结果如何'],
+      'explanation': 'finally 块用于执行清理代码，保证总会执行。',
+      'example': ''
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '抛出异常',
+      'content': '在代码中手动抛出异常使用哪个关键字？',
+      'options': {'A': 'raise', 'B': 'throw', 'C': 'fail', 'D': 'error'},
+      'answer': 'A',
+      'hints': ['提示1：raise Exception("msg")', '提示2：可在函数中抛出以上层捕获', '提示3：常用于输入校验'],
+      'explanation': '使用 raise 来主动抛出异常，触发异常处理流。',
+      'example': ''
+    },
+
+    {
+      'id': 7,
+      'type': 'fill',
+      'title': '自定义异常（填空）',
+      'content': '自定义异常通常通过 class MyError(__1__): 继承基类。',
+      'input': '',
+      'output': '',
+      'code': 'class MyError(__1__):\n    pass',
+      'options': 'Exception, BaseException, object, RuntimeError',
+      'answer': '1',
+      'explanation': '自定义异常通常继承自 Exception 以便被常规 except 捕获。',
+      'example': ''
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '异常链',
+      'content': '在 except 中重新抛出新异常但保留原始异常信息可使用哪个语法？',
+      'options': {'A': 'raise NewError from e', 'B': 'raise NewError with e', 'C': 'raise NewError, e', 'D': 'raise NewError(e)'},
+      'answer': 'A',
+      'hints': ['提示1：from 用于异常链', '提示2：可保留上下文信息', '提示3：方便调试'],
+      'explanation': '使用 raise ... from ... 可保留原始异常作为上下文。',
+      'example': ''
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '断言（填空）',
+      'content': '使用 assert 表达式可以在条件不满足时抛出 __1__ 异常。',
+      'input': '',
+      'output': '',
+      'code': 'assert x > 0, "x must > 0"',
+      'options': 'AssertionError, ValueError, RuntimeError, TypeError',
+      'answer': '1',
+      'explanation': 'assert 触发 AssertionError，通常用于调试检查。',
+      'example': ''
+    },
+
+    {
+      'id': 10,
+      'type': 'choice',
+      'title': '抑制异常',
+      'content': 'contextlib.suppress 用于？',
+      'options': {'A': '临时抑制特定异常', 'B': '增加日志', 'C': '重新抛出异常', 'D': '捕获所有异常并忽略'},
+      'answer': 'A',
+      'hints': ['提示1：with suppress(FileNotFoundError):', '提示2：仅抑制指定类型', '提示3：用于清理类似操作'],
+      'explanation': 'suppress 可以在 with 块中忽略特定异常类型。',
+      'example': ''
+    },
+
+    {
+      'id': 11,
+      'type': 'fill',
+      'title': '日志与异常（填空）',
+      'content': '在 except 中记录异常常用 logging.__1__() 函数来输出异常信息。',
+      'input': '',
+      'output': '',
+      'code': 'import logging\nlogging.__1__("error occurred", exc_info=True)',
+      'options': 'exception, error, warning, info',
+      'answer': '1',
+      'explanation': 'logging.exception 会记录堆栈信息，等价于 logging.error(..., exc_info=True)。',
+      'example': ''
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '清理资源',
+      'content': '若需确保资源释放，即使发生异常也要执行清理，应使用？',
+      'options': {'A': 'finally 或 with 上下文管理', 'B': '仅 try', 'C': '仅 except', 'D': 'pass'},
+      'answer': 'A',
+      'hints': ['提示1：finally 总会执行', '提示2：with 自动管理资源', '提示3：结合使用更稳健'],
+      'explanation': '使用 finally 或 with 可以保证资源清理。',
+      'example': ''
+    },
+
+    {
+      'id': 13,
+      'type': 'fill',
+      'title': '自定义消息（填空）',
+      'content': '抛出异常时可传入消息，如 raise ValueError("__1__")。',
+      'input': '',
+      'output': '',
+      'code': 'raise ValueError("__1__")',
+      'options': 'invalid input, ok, done, error',
+      'answer': '1',
+      'explanation': '为异常提供描述性消息有助于调试和日志记录。',
+      'example': ''
+    },
+
+    {
+      'id': 14,
+      'type': 'choice',
+      'title': '最佳实践',
+      'content': '关于异常处理的最佳实践，下列哪项更合适？',
+      'options': {'A': '只捕获你能处理的异常并记录详细信息', 'B': '捕获所有异常并忽略', 'C': '在每个函数内都使用 broad except', 'D': '避免日志记录'},
+      'answer': 'A',
+      'hints': ['提示1：不要吞掉异常', '提示2：记录上下文信息', '提示3：为用户提供有用的错误反馈'],
+      'explanation': '应只捕获并处理预期异常，记录足够信息并向上抛未处理的异常。',
+      'example': ''
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '总结（填空）',
+      'content': '异常处理的目标是 __1__ 程序的稳定性并提供可诊断的信息。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': '提高, 降低, 终止, 隐藏',
+      'answer': '1',
+      'explanation': '良好的异常处理提高程序鲁棒性并帮助排查问题。',
+      'example': ''
+    }
+
+  ]
+}
+
+```

@@ -1,0 +1,260 @@
+[
+  {
+    'id': 1,
+    'type': 'choice',
+    'title': 'return 的基本作用',
+    'content': '在函数中使用 return 语句，最核心的作用是什么？',
+    'options': {
+      'A': '在屏幕上输出结果',
+      'B': '结束函数执行并把结果返回给调用者',
+      'C': '定义一个全局变量',
+      'D': '暂停函数，稍后再继续执行'
+    },
+    'answer': 'B',
+    'hints': [
+      'return 和 print 的作用并不相同。',
+      '函数调用后，往往需要一个“结果”。',
+      'return 会把值交还给函数外部。'
+    ],
+    'explanation': 'return 用于结束函数执行，并将结果返回给调用该函数的地方。',
+    'example': 'def add(a, b):\n    return a + b'
+  },
+  {
+    'id': 2,
+    'type': 'choice',
+    'title': '没有 return 会怎样',
+    'content': '如果一个函数内部没有写 return，调用它时会返回什么？',
+    'options': {
+      'A': '0',
+      'B': 'False',
+      'C': 'None',
+      'D': '报错'
+    },
+    'answer': 'C',
+    'hints': [
+      'Python 中有一个特殊值表示“什么也没有”。',
+      '函数默认也会有返回值。',
+      '这个值经常用来表示“没有结果”。'
+    ],
+    'explanation': '如果函数中没有显式的 return，Python 会默认返回 None。',
+    'example': 'def foo():\n    pass\nresult = foo()  # result 是 None'
+  },
+  {
+    'id': 3,
+    'type': 'choice',
+    'title': 'return 与 print 的区别',
+    'content': '下面关于 return 和 print 的说法，哪一个是正确的？',
+    'options': {
+      'A': 'print 可以把值传递给函数外部，return 不行',
+      'B': 'return 会直接在控制台显示结果',
+      'C': 'print 用于显示，return 用于返回结果',
+      'D': 'return 和 print 可以完全互换使用'
+    },
+    'answer': 'C',
+    'hints': [
+      'print 的主要作用是“展示”。',
+      'return 的主要作用是“传值”。',
+      '函数调用是否能拿到结果是关键区别。'
+    ],
+    'explanation': 'print 只负责输出到屏幕，而 return 才能把结果返回给调用者继续使用。',
+    'example': 'x = len("hello")  # len 内部用的是 return'
+  },
+  {
+    'id': 4,
+    'type': 'fill',
+    'title': '最简单的返回值',
+    'content': '补全函数，使其返回变量 result 的值。',
+    'input': 'result = 42',
+    'output': '42',
+    'code': 'def get_result():\n    ___ result',
+    'options': 'print, return, yield, pass, output',
+    'answer': '2',
+    'explanation': '要把函数内部的值交给外部使用，必须使用 return。',
+    'example': 'def get_pi():\n    return 3.14'
+  },
+  {
+    'id': 5,
+    'type': 'fill',
+    'title': 'return 结束函数',
+    'content': '补全代码，使函数在条件满足时提前结束。',
+    'input': 'x = -1',
+    'output': 'None',
+    'code': 'def check_positive(x):\n    if x < 0:\n        ___\n    return x',
+    'options': 'break, continue, return, return None, pass',
+    'answer': '4',
+    'explanation': 'return 会立刻结束函数执行，这里 return None 用于提前返回。',
+    'example': 'if not data:\n    return None'
+  },
+  {
+    'id': 6,
+    'type': 'choice',
+    'title': '多个 return 的执行顺序',
+    'content': '一个函数中存在多个 return，哪条规则是正确的？',
+    'options': {
+      'A': '所有 return 都会执行',
+      'B': '只执行最后一个 return',
+      'C': '只执行条件满足时遇到的第一个 return',
+      'D': 'return 的顺序不确定'
+    },
+    'answer': 'C',
+    'hints': [
+      'return 会立即结束函数。',
+      '代码是从上到下执行的。',
+      '遇到 return 后不会再继续往下走。'
+    ],
+    'explanation': '函数执行到第一个被触发的 return 时就会结束，其后的代码不会执行。',
+    'example': 'if x > 0:\n    return 1\nreturn -1'
+  },
+  {
+    'id': 7,
+    'type': 'choice',
+    'title': 'return 与条件判断',
+    'content': '在函数中用 return 配合 if/else，主要是为了什么？',
+    'options': {
+      'A': '让函数更长',
+      'B': '根据不同情况返回不同结果',
+      'C': '替代所有的变量',
+      'D': '避免写函数名'
+    },
+    'answer': 'B',
+    'hints': [
+      '不同输入往往有不同输出。',
+      'if/else 用来分支逻辑。',
+      'return 决定最终结果。'
+    ],
+    'explanation': '通过 if/else + return，可以让函数在不同条件下返回不同的结果。',
+    'example': 'def abs_val(x):\n    if x >= 0:\n        return x\n    else:\n        return -x'
+  },
+  {
+    'id': 8,
+    'type': 'choice',
+    'title': 'return 后的代码',
+    'content': '在函数中，return 语句后面的代码会怎样？',
+    'options': {
+      'A': '正常执行',
+      'B': '延迟执行',
+      'C': '被跳过，不会执行',
+      'D': '只执行一次'
+    },
+    'answer': 'C',
+    'hints': [
+      'return 会结束函数。',
+      '函数结束意味着什么？',
+      '结束后不再继续执行内部代码。'
+    ],
+    'explanation': 'return 会立刻结束函数，return 后面的代码永远不会被执行。',
+    'example': 'return 10\nprint("这里永远不会执行")'
+  },
+  {
+    'id': 9,
+    'type': 'fill',
+    'title': '返回计算结果',
+    'content': '补全代码，使函数返回两个数的和。',
+    'input': 'a = 2\nb = 3',
+    'output': '5',
+    'code': 'def add(a, b):\n    ___ a + b',
+    'options': 'print, return, yield, output, sum',
+    'answer': '2',
+    'explanation': '函数需要用 return 把计算结果 a + b 返回。',
+    'example': 'total = add(5, 7)'
+  },
+  {
+    'id': 10,
+    'type': 'fill',
+    'title': 'return None 的省略写法',
+    'content': '补全代码，使函数在条件不满足时返回 None。',
+    'input': 'x = 0',
+    'output': 'None',
+    'code': 'def check(x):\n    if x == 0:\n        ___\n    return x',
+    'options': 'return, return None, pass, break, continue',
+    'answer': '1',
+    'explanation': '单独写 return 等价于 return None。',
+    'example': 'def stop():\n    return'
+  },
+  {
+    'id': 11,
+    'type': 'choice',
+    'title': 'return 的返回值类型',
+    'content': '关于 return 返回值的类型，下列说法正确的是哪一个？',
+    'options': {
+      'A': '只能返回整数',
+      'B': '只能返回字符串',
+      'C': '可以返回任意类型的对象',
+      'D': '只能返回一个变量'
+    },
+    'answer': 'C',
+    'hints': [
+      'Python 是动态类型语言。',
+      '函数结果不局限于一种类型。',
+      '列表、字典等也可以作为结果。'
+    ],
+    'explanation': 'Python 的 return 可以返回任意类型的对象，包括数字、字符串、列表、字典等。',
+    'example': 'return [1, 2, 3]'
+  },
+  {
+    'id': 12,
+    'type': 'choice',
+    'title': 'return 多个值',
+    'content': '函数中写 return a, b 实际返回的是什么？',
+    'options': {
+      'A': '两个独立的值',
+      'B': '一个列表',
+      'C': '一个元组',
+      'D': '报错'
+    },
+    'answer': 'C',
+    'hints': [
+      'Python 中逗号有特殊含义。',
+      'a, b 本身就是一种结构。',
+      '可以用多个变量接收这个返回值。'
+    ],
+    'explanation': 'return a, b 实际上返回的是一个元组 (a, b)。',
+    'example': 'x, y = get_pos()'
+  },
+  {
+    'id': 13,
+    'type': 'choice',
+    'title': 'return 与函数调用结果',
+    'content': '下面哪种写法能正确接收函数返回值？',
+    'options': {
+      'A': 'print = my_func()',
+      'B': 'my_func() = x',
+      'C': 'x = my_func()',
+      'D': 'return = my_func()'
+    },
+    'answer': 'C',
+    'hints': [
+      '函数调用可以出现在赋值右侧。',
+      '左侧应该是变量。',
+      'return 不能作为变量名使用。'
+    ],
+    'explanation': '函数调用的返回值可以赋给变量，如 x = my_func()。',
+    'example': 'length = len("abc")'
+  },
+  {
+    'id': 14,
+    'type': 'fill',
+    'title': '返回布尔结果',
+    'content': '补全函数，使其判断数字是否为偶数并返回结果。',
+    'input': 'n = 4',
+    'output': 'True',
+    'code': 'def is_even(n):\n    ___ n % 2 == 0',
+    'options': 'print, return, yield, output, bool',
+    'answer': '2',
+    'explanation': '函数应使用 return 返回 True 或 False。',
+    'example': 'if is_even(10):\n    print("偶数")'
+  },
+  {
+    'id': 15,
+    'type': 'fill',
+    'title': '用 return 控制流程',
+    'content': '补全代码：当列表为空时立即返回 0，否则返回元素个数。',
+    'input': 'data = []',
+    'output': '0',
+    'code': 'def count_items(data):\n    if not data:\n        ___ 0\n    ___ len(data)',
+    'options': 'return, print, yield, pass, output',
+    'answer': '1,1',
+    'explanation': 'return 不仅返回值，还能控制函数流程，在需要时提前结束。',
+    'example': 'def safe_len(x):\n    if x is None:\n        return 0\n    return len(x)'
+  }
+]

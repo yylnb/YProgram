@@ -1,0 +1,282 @@
+```plaintext
+{
+  'unit': '第121单元：函数的意义与简单定义',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '为什么使用函数',
+      'content': '小华写了很多重复的代码片段，老师建议将重复逻辑封装为函数，主要原因是？',
+      'options': {
+        'A': '提高代码复用与可维护性',
+        'B': '让程序运行更慢',
+        'C': '隐藏所有变量',
+        'D': '避免使用注释'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：函数能把重复逻辑集中管理',
+        '提示2：便于测试和修改',
+        '提示3': '更清晰的程序结构有助于团队协作'
+      ],
+      'explanation': '函数将重复代码封装为可重用单元，提高可读性和维护性，也便于测试。',
+      'example': '例如将计算税费的逻辑封装成 calc_tax(amount)'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '函数定义关键字',
+      'content': '在 Python 中定义函数应使用哪个关键字？',
+      'options': {
+        'A': 'def',
+        'B': 'function',
+        'C': 'func',
+        'D': 'define'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：Python 用一个简短的关键字开始函数定义',
+        '提示2：许多语言使用 function 或 func，但 Python 使用不同的词',
+        '提示3': '记住 def 即可'
+      ],
+      'explanation': 'Python 使用 def 来定义函数，例如 def greet(name):',
+      'example': 'def add(a, b):\n    return a + b'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '函数体缩进',
+      'content': '定义函数时函数体应该如何书写？',
+      'options': {
+        'A': '函数体需缩进表示属于函数',
+        'B': '函数体不需要缩进',
+        'C': '函数体必须用大括号',
+        'D': '函数体写在同一行即可'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：Python 通过缩进表示代码块',
+        '提示2：函数定义下一行应缩进',
+        '提示3': '缩进一致性很重要'
+      ],
+      'explanation': '在 Python 中，函数体通过缩进表示属于该函数，常用 4 个空格缩进。',
+      'example': 'def f():\n    print("hello")'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '补全简单函数（填空）',
+      'content': '请补全下列函数，使其返回参数 x 与 y 的和（按序填写选项编号）。',
+      'input': '',
+      'output': '',
+      'code': 'def add(x, y):\n    __1__\n\nprint(add(2,3))  # 输出 5',
+      'options': 'return x + y, x + y, print(x+y), yield x + y',
+      'answer': '1',
+      'explanation': '函数应使用 return 返回值，选项 1 为正确的返回语句。',
+      'example': '例如：def mul(a,b):\n    return a*b'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '补全调用（填空）',
+      'content': '调用函数并把结果赋值给变量 result，补全下列空。',
+      'input': '',
+      'output': '',
+      'code': 'def greet(name):\n    return "Hello " + name\n\nresult = __1__("Amy")\nprint(result)  # Hello Amy',
+      'options': 'greet, print, say, call',
+      'answer': '1',
+      'explanation': '调用函数应使用其函数名并传参，选项 greet 是正确的调用。',
+      'example': 'name = greet("Bob")'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '参数与实参',
+      'content': '下列哪项正确描述了“参数（parameter）”与“实参（argument）”的区别？',
+      'options': {
+        'A': '参数是函数定义处的占位符，实参是调用时提供的具体值',
+        'B': '两者完全相同',
+        'C': '实参只能是数字',
+        'D': '参数在调用时才出现'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：定义处写的是参数',
+        '提示2：调用时传的具体数据是实参',
+        '提示3': 记住“定义 vs 调用”的区分'
+      ],
+      'explanation': '参数出现在函数定义处，实参是调用函数时传入的具体值或表达式。',
+      'example': 'def f(x): ...  # x 为参数; f(2) 中 2 为实参'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '默认参数',
+      'content': '下面哪种写法为函数设置了默认参数？',
+      'options': {
+        'A': 'def greet(name="Guest"):',
+        'B': 'def greet(name):',
+        'C': 'def greet(): name = "Guest"',
+        'D': 'def greet = lambda name: name'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：默认参数在定义时通过等号赋值',
+        '提示2：调用时可以省略该参数',
+        '提示3': 注意默认参数的可变性问题'
+      ],
+      'explanation': '在函数定义处为参数赋默认值即可，调用时若省略则使用默认值。',
+      'example': 'def connect(host="localhost"):'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '返回值缺省',
+      'content': '如果函数没有 return 语句，调用后会得到什么？',
+      'options': {
+        'A': 'None',
+        'B': '0',
+        'C': '空字符串',
+        'D': '抛出异常'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：Python 对未返回值的函数有默认行为',
+        '提示2：使用 print 不等于 return',
+        '提示3': None 是 Python 的空值'
+      ],
+      'explanation': '在没有显式 return 的情况下，函数会返回 None。',
+      'example': 'def f():\n    pass\nprint(f())  # 输出 None'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '位置参数与关键字参数（填空）',
+      'content': '下面调用中，使用关键字参数的正确写法是？',
+      'input': '',
+      'output': '',
+      'code': 'def point(x, y):\n    return x, y\n\n# 调用示例\nprint(point(__1__))',
+      'options': '1,2, x=1, y=2, (1,2), x:1,y:2',
+      'answer': '3,4',
+      'explanation': '关键字参数写法为 x=1, y=2，按顺序填写两个选项编号。',
+      'example': 'point(x=3, y=4)'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '可变参数（填空）',
+      'content': '将任意多个位置实参收集为元组的语法是什么？',
+      'input': '',
+      'output': '',
+      'code': 'def all_args(__1__):\n    return __2__\n\nprint(all_args(1,2,3))  # (1, 2, 3)',
+      'options': '*args, args, **kwargs, *items',
+      'answer': '1,2',
+      'explanation': '使用 *args 收集位置参数，函数体中 args 为对应元组。',
+      'example': 'def f(*nums):\n    return sum(nums)'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '命名参数顺序',
+      'content': '在函数调用中，哪种参数顺序是合法的？',
+      'options': {
+        'A': '位置参数在前，关键字参数在后',
+        'B': '关键字参数在前，位置参数在后',
+        'C': '任意混合顺序都合法',
+        'D': '所有关键字参数必须单独调用'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：位置参数必须出现在关键字参数之前',
+        '提示2': 否则会出现语法错误',
+        '提示3': 保持位置在前更直观'
+      ],
+      'explanation': '调用时位置参数需放在关键字参数前面，否则解释器会报错。',
+      'example': 'f(1, y=2) 合法，f(x=1, 2) 非法'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '文档字符串实践',
+      'content': '下列哪项是写函数文档字符串的好习惯？',
+      'options': {
+        'A': '说明用途、参数与返回值的含义',
+        'B': '只写作者名字',
+        'C': '使用单个字母描述',
+        'D': '随意写注释即可'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：文档字符串应帮助使用者理解函数',
+        '提示2': 包含参数说明和返回值更完整',
+        '提示3': 不要留空或写无意义内容'
+      ],
+      'explanation': '清晰的 docstring 能帮助他人及未来的自己快速理解函数用途与输入输出。',
+      'example': 'def add(a,b):\n    """返回 a 与 b 的和"""'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '单元测试引导',
+      'content': '将函数拆分为小单元有助于什么？',
+      'options': {
+        'A': '更容易为其编写单元测试',
+        'B': '增加运行时错误',
+        'C': '使代码不可重用',
+        'D': '减少可读性'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：小函数职责单一更容易验证',
+        '提示2：便于写针对性的测试用例',
+        '提示3': 有助于定位错误'
+      ],
+      'explanation': '单一职责函数更容易被单元测试覆盖，从而提高代码可靠性。',
+      'example': ''
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '简单递归（填空）',
+      'content': '补全下面递归函数，使其返回 n 的阶乘（按序填写选项编号）。',
+      'input': '',
+      'output': '',
+      'code': 'def fact(n):\n    if n == 0:\n        return 1\n    else:\n        return __1__ * __2__\n\nprint(fact(5))  # 120',
+      'options': 'n, fact(n-1), n-1, fact(n)',
+      'answer': '1,2',
+      'explanation': '阶乘定义为 n * fact(n-1)，因此填入 n 与 fact(n-1)。',
+      'example': ''
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '总结（填空）',
+      'content': '函数的主要好处包括：__1__、__2__ 和 __3__。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': '复用, 可维护性, 隐藏所有细节, 可读性, 提高运行速度',
+      'answer': '1,2,4',
+      'explanation': '函数的主要好处是代码复用、提高可维护性与可读性。',
+      'example': ''
+    }
+
+  ]
+}
+
+```

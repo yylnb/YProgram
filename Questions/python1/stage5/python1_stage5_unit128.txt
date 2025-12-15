@@ -1,0 +1,199 @@
+```plaintext
+{
+  'unit': '第128单元：模块与包',
+  'questions': [
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '模块的定义',
+      'content': 'Python 模块通常指什么？',
+      'options': {'A':'单个 .py 文件','B':'目录','C':'二进制文件','D':'虚拟环境'},
+      'answer': 'A',
+      'hints': ['提示1：模块是可导入的 Python 文件','提示2：包是包含 __init__.py 的目录','提示3：模块提供函数和类'],
+      'explanation': '模块通常是一个 .py 文件，包含可复用的代码。',
+      'example': ''
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '包的含义',
+      'content': '什么是包（package）？',
+      'options': {'A':'含有 __init__.py 的目录','B':'一个模块的别名','C':'虚拟环境的一部分','D':'只包含二进制扩展'},
+      'answer': 'A',
+      'hints': ['提示1：包用于组织模块','提示2：可以有子包','提示3': '早期需要 __init__.py'],
+      'explanation': '包是一个包含模块和子包的目录，传统上带有 __init__.py 文件。',
+      'example': ''
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '相对导入',
+      'content': '在包内使用相对导入时，单个点（.）表示什么？',
+      'options': {'A':'当前包','B':'父包','C':'根包','D':'模块本身'},
+      'answer': 'A',
+      'hints': ['提示1：.. 表示父包','提示2：相对导入依赖包结构','提示3：仅在包内有效'],
+      'explanation': '单个点表示当前包，两个点表示父包。',
+      'example': ''
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '模块别名（填空）',
+      'content': '导入模块并使用别名，可以写成 import math as __1__。',
+      'input': '',
+      'output': '',
+      'code': 'import math as __1__\nprint(__1__.pi)',
+      'options': 'm, math, pi, mathpi',
+      'answer': '1',
+      'explanation': '可以用短别名（例如 m）来引用模块。',
+      'example': ''
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '__all__ 用法（填空）',
+      'content': '在模块中定义 __all__ 可以控制 from module import * 时导入的 __1__。',
+      'input': '',
+      'output': '',
+      'code': '__all__ = [__1__]',
+      'options': '"names", "__all__", "*", "module"',
+      'answer': '1',
+      'explanation': '__all__ 列表控制 star 导入时哪些名字会被导入。',
+      'example': ''
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '避免循环导入',
+      'content': '下面哪种做法可以减少循环导入问题？',
+      'options': {'A':'延迟导入（放在函数内部）','B':'在模块顶层相互导入','C':'使用 from module import *','D':'删除 __init__.py'},
+      'answer': 'A',
+      'hints': ['提示1：延迟导入仅在需要时导入','提示2：重构公共依赖到独立模块','提示3：循环导入常见错误来源'],
+      'explanation': '延迟导入或重构模块可以避免或缓解循环依赖问题。',
+      'example': ''
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '包初始化',
+      'content': '早期的 Python 包需要哪个文件来标识包目录？',
+      'options': {'A':'__init__.py','B':'setup.py','C':'requirements.txt','D':'pyproject.toml'},
+      'answer': 'A',
+      'hints': ['提示1：__init__.py 可包含包初始化代码','提示2：现代导包机制有所演进','提示3：仍可使用 __init__.py 来暴露接口'],
+      'explanation': '__init__.py 用于初始化包并在导入时执行相关代码。',
+      'example': ''
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '模块搜索路径',
+      'content': 'Python 在导入模块时从哪里查找模块？',
+      'options': {'A':'sys.path 列表所列路径','B':'操作系统 PATH 环境变量','C':'当前用户主目录','D':'随机路径'},
+      'answer': 'A',
+      'hints': ['提示1：sys.path 包含脚本目录和 site-packages','提示2：可以在运行时修改 sys.path','提示3：虚拟环境影响路径'],
+      'explanation': '导入时 Python 会按 sys.path 顺序查找模块。',
+      'example': ''
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '模块别名导入（填空）',
+      'content': '从模块导入特定名称: from math import __1__',
+      'input': '',
+      'output': '',
+      'code': 'from math import __1__\nprint(__1__)',
+      'options': 'pi, math, sin, *',
+      'answer': '1',
+      'explanation': 'from math import pi 可以直接使用 pi 名称。',
+      'example': ''
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '相对导入语法（填空）',
+      'content': '在包内部，要导入当前包的 sibling 模块，用法示例: from . import __1__',
+      'input': '',
+      'output': '',
+      'code': 'from . import __1__',
+      'options': 'sibling, parent, module, package',
+      'answer': '1',
+      'explanation': '使用 . 表示当前包，从而导入同一包的其他模块。',
+      'example': ''
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '动态导入',
+      'content': '若需在运行时按名字导入模块，应使用哪个函数？',
+      'options': {'A':'__import__ 或 importlib.import_module','B':'execfile','C':'open','D':'eval'},
+      'answer': 'A',
+      'hints': ['提示1：importlib.import_module 是推荐方式','提示2：__import__ 是内建函数','提示3：避免使用 exec 导入代码'],
+      'explanation': '可以使用 importlib.import_module 按字符串导入模块。',
+      'example': ''
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '包的相对导入限制',
+      'content': '相对导入在下列哪种情况下不可用？',
+      'options': {'A':'直接以脚本方式运行包内部模块','B':'作为包被导入时','C':'在测试环境中','D':'在虚拟环境中'},
+      'answer': 'A',
+      'hints': ['提示1：直接运行模块会使其 __name__ 为 "__main__"','提示2：相对导入依赖包上下文','提示3：将包作为模块运行更合适'],
+      'explanation': '直接以脚本运行包内模块导致包上下文丢失，从而无法使用相对导入。',
+      'example': ''
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '包的组织',
+      'content': '推荐如何组织大型项目的模块与包？',
+      'options': {'A':'按功能拆分成清晰的包和子包','B':'把所有代码放在一个模块里','C':'每个文件只放一个函数','D':'随意放置无结构'},
+      'answer': 'A',
+      'hints': ['提示1：按功能分组有助于可维护性','提示2：明确接口导出','提示3：使用 __init__.py 暴露 API'],
+      'explanation': '按功能组织包有利于扩展和维护，避免耦合过高。',
+      'example': ''
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '安装包（填空）',
+      'content': '要发布 Python 包，常用工具之一是 __1__。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': 'setuptools, pip, git, docker',
+      'answer': '1',
+      'explanation': 'setuptools 是常见的打包工具，现代可配合 pyproject.toml 使用。',
+      'example': ''
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '总结（填空）',
+      'content': '模块是一份 __1__，包是 __2__ 的集合。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': 'py 文件, 模块, 目录, 包',
+      'answer': '1,2',
+      'explanation': '模块通常是单个 .py 文件，包是模块或子包的组织结构。',
+      'example': ''
+    }
+  ]
+}
+
+```
