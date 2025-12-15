@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `que_fill_py_1` (
   `text` TEXT NOT NULL COMMENT '题目正文',
   `input` JSON DEFAULT NULL COMMENT '输入说明，JSON 数组',
   `output` JSON DEFAULT NULL COMMENT '输出说明，JSON 数组',
-  `code` JSON DEFAULT NOT NULL COMMENT '代码框架，JSON 数组',
+  `code` JSON NOT NULL COMMENT '代码框架，JSON 数组',
   `options` JSON DEFAULT NULL COMMENT '可选填项，JSON 数组，例如 ["s1","s2"]',
   `answer` JSON NOT NULL COMMENT '答案序列，1-based 索引，例如 [1,2]',
   `explanation` TEXT DEFAULT NULL,

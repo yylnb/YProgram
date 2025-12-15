@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS users (
   max_streak_days INT UNSIGNED DEFAULT 0,   -- 最大连续打卡天数
   lang JSON DEFAULT NULL,                   -- 学习语言（JSON 格式），例如 '["python","cpp"]'
   energy INT DEFAULT 30,                    -- 能量值
-  last_enregy_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  last_energy_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   contact VARCHAR(255) DEFAULT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -28,220 +28,220 @@ CREATE TABLE IF NOT EXISTS users (
 -- ===========================
 -- 题目表：选择题（Python / C++ / Java）
 -- ===========================
-CREATE TABLE IF NOT EXISTS questions_py (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  q_id INT NOT NULL,                      -- 题目编号（业务编号/逻辑编号）
-  unit_id INT NOT NULL,
-  title VARCHAR(255) DEFAULT NULL,
-  energy INT DEFAULT 3,                   -- 能量值
-  question_text TEXT NOT NULL,
-  options JSON NOT NULL,
-  answer INT NOT NULL,
-  hints JSON DEFAULT NULL,
-  explanation TEXT DEFAULT NULL,
-  example TEXT DEFAULT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE KEY uq_questions_py_qid (q_id),
-  INDEX idx_questions_py_unit (unit_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- CREATE TABLE IF NOT EXISTS questions_py (
+--   id INT AUTO_INCREMENT PRIMARY KEY,
+--   q_id INT NOT NULL,
+--   unit_id INT NOT NULL,
+--   title VARCHAR(255) DEFAULT NULL,
+--   energy INT DEFAULT 3,
+--   question_text TEXT NOT NULL,
+--   options JSON NOT NULL,
+--   answer INT NOT NULL,
+--   hints JSON DEFAULT NULL,
+--   explanation TEXT DEFAULT NULL,
+--   example TEXT DEFAULT NULL,
+--   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--   UNIQUE KEY uq_questions_py_qid (q_id),
+--   INDEX idx_questions_py_unit (unit_id)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS questions_cpp (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  q_id INT NOT NULL,
-  unit_id INT NOT NULL,
-  title VARCHAR(255) DEFAULT NULL,
-  energy INT DEFAULT 3,
-  question_text TEXT NOT NULL,
-  options JSON NOT NULL,
-  answer INT NOT NULL,
-  hints JSON DEFAULT NULL,
-  explanation TEXT DEFAULT NULL,
-  example TEXT DEFAULT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE KEY uq_questions_cpp_qid (q_id),
-  INDEX idx_questions_cpp_unit (unit_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- CREATE TABLE IF NOT EXISTS questions_cpp (
+--   id INT AUTO_INCREMENT PRIMARY KEY,
+--   q_id INT NOT NULL,
+--   unit_id INT NOT NULL,
+--   title VARCHAR(255) DEFAULT NULL,
+--   energy INT DEFAULT 3,
+--   question_text TEXT NOT NULL,
+--   options JSON NOT NULL,
+--   answer INT NOT NULL,
+--   hints JSON DEFAULT NULL,
+--   explanation TEXT DEFAULT NULL,
+--   example TEXT DEFAULT NULL,
+--   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--   UNIQUE KEY uq_questions_cpp_qid (q_id),
+--   INDEX idx_questions_cpp_unit (unit_id)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS questions_java (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  q_id INT NOT NULL,
-  unit_id INT NOT NULL,
-  title VARCHAR(255) DEFAULT NULL,
-  energy INT DEFAULT 3,
-  question_text TEXT NOT NULL,
-  options JSON NOT NULL,
-  answer INT NOT NULL,
-  hints JSON DEFAULT NULL,
-  explanation TEXT DEFAULT NULL,
-  example TEXT DEFAULT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE KEY uq_questions_java_qid (q_id),
-  INDEX idx_questions_java_unit (unit_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- CREATE TABLE IF NOT EXISTS questions_java (
+--   id INT AUTO_INCREMENT PRIMARY KEY,
+--   q_id INT NOT NULL,
+--   unit_id INT NOT NULL,
+--   title VARCHAR(255) DEFAULT NULL,
+--   energy INT DEFAULT 3,
+--   question_text TEXT NOT NULL,
+--   options JSON NOT NULL,
+--   answer INT NOT NULL,
+--   hints JSON DEFAULT NULL,
+--   explanation TEXT DEFAULT NULL,
+--   example TEXT DEFAULT NULL,
+--   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--   UNIQUE KEY uq_questions_java_qid (q_id),
+--   INDEX idx_questions_java_unit (unit_id)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ===========================
 -- 实操题表（exec）
 -- ===========================
-CREATE TABLE IF NOT EXISTS questions_py_exec (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  q_id INT NOT NULL,
-  unit_id INT NOT NULL,
-  title TEXT NOT NULL,
-  energy INT NOT NULL DEFAULT 3,
-  question_text TEXT NOT NULL,
-  hints JSON DEFAULT NULL,
-  link JSON NOT NULL,
-  eg_in1 TEXT NULL,
-  eg_out1 TEXT NULL,
-  eg_in2 TEXT NULL,
-  eg_out2 TEXT NULL,
-  eg_in3 TEXT NULL,
-  eg_out3 TEXT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE KEY uq_questions_py_exec_qid (q_id),
-  INDEX idx_questions_py_exec_unit (unit_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- CREATE TABLE IF NOT EXISTS questions_py_exec (
+--   id INT AUTO_INCREMENT PRIMARY KEY,
+--   q_id INT NOT NULL,
+--   unit_id INT NOT NULL,
+--   title TEXT NOT NULL,
+--   energy INT NOT NULL DEFAULT 3,
+--   question_text TEXT NOT NULL,
+--   hints JSON DEFAULT NULL,
+--   link JSON NOT NULL,
+--   eg_in1 TEXT NULL,
+--   eg_out1 TEXT NULL,
+--   eg_in2 TEXT NULL,
+--   eg_out2 TEXT NULL,
+--   eg_in3 TEXT NULL,
+--   eg_out3 TEXT NULL,
+--   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--   UNIQUE KEY uq_questions_py_exec_qid (q_id),
+--   INDEX idx_questions_py_exec_unit (unit_id)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-CREATE TABLE IF NOT EXISTS questions_cpp_exec (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  q_id INT NOT NULL,
-  unit_id INT NOT NULL,
-  title TEXT NOT NULL,
-  energy INT NOT NULL DEFAULT 3,
-  question_text TEXT NOT NULL,
-  hints JSON DEFAULT NULL,
-  link JSON NOT NULL,
-  eg_in1 TEXT NULL,
-  eg_out1 TEXT NULL,
-  eg_in2 TEXT NULL,
-  eg_out2 TEXT NULL,
-  eg_in3 TEXT NULL,
-  eg_out3 TEXT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE KEY uq_questions_py_exec_qid (q_id),
-  INDEX idx_questions_py_exec_unit (unit_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- CREATE TABLE IF NOT EXISTS questions_cpp_exec (
+--   id INT AUTO_INCREMENT PRIMARY KEY,
+--   q_id INT NOT NULL,
+--   unit_id INT NOT NULL,
+--   title TEXT NOT NULL,
+--   energy INT NOT NULL DEFAULT 3,
+--   question_text TEXT NOT NULL,
+--   hints JSON DEFAULT NULL,
+--   link JSON NOT NULL,
+--   eg_in1 TEXT NULL,
+--   eg_out1 TEXT NULL,
+--   eg_in2 TEXT NULL,
+--   eg_out2 TEXT NULL,
+--   eg_in3 TEXT NULL,
+--   eg_out3 TEXT NULL,
+--   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--   UNIQUE KEY uq_questions_py_exec_qid (q_id),
+--   INDEX idx_questions_py_exec_unit (unit_id)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS questions_java_exec (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  q_id INT NOT NULL,
-  unit_id INT NOT NULL,
-  title TEXT NOT NULL,
-  energy INT NOT NULL DEFAULT 3,
-  question_text TEXT NOT NULL,
-  hints JSON DEFAULT NULL,
-  link JSON NOT NULL,
-  eg_in1 TEXT NULL,
-  eg_out1 TEXT NULL,
-  eg_in2 TEXT NULL,
-  eg_out2 TEXT NULL,
-  eg_in3 TEXT NULL,
-  eg_out3 TEXT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE KEY uq_questions_py_exec_qid (q_id),
-  INDEX idx_questions_py_exec_unit (unit_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- CREATE TABLE IF NOT EXISTS questions_java_exec (
+--   id INT AUTO_INCREMENT PRIMARY KEY,
+--   q_id INT NOT NULL,
+--   unit_id INT NOT NULL,
+--   title TEXT NOT NULL,
+--   energy INT NOT NULL DEFAULT 3,
+--   question_text TEXT NOT NULL,
+--   hints JSON DEFAULT NULL,
+--   link JSON NOT NULL,
+--   eg_in1 TEXT NULL,
+--   eg_out1 TEXT NULL,
+--   eg_in2 TEXT NULL,
+--   eg_out2 TEXT NULL,
+--   eg_in3 TEXT NULL,
+--   eg_out3 TEXT NULL,
+--   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--   UNIQUE KEY uq_questions_py_exec_qid (q_id),
+--   INDEX idx_questions_py_exec_unit (unit_id)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ===========================
 -- 题目索引表（统一索引，用于 favorites 外键与快速查找）
 -- 说明：主键为 (lang, q_id)；source_table 和 source_id 指向真实存放题目的表/主键
 -- ===========================
-CREATE TABLE IF NOT EXISTS questions_index (
-  lang VARCHAR(16) NOT NULL,      -- 'python' / 'cpp' / 'java' 等
-  q_id INT NOT NULL,              -- 逻辑题号（在同一语言中唯一）
-  source_table VARCHAR(64) NOT NULL, -- e.g. 'questions_py' / 'questions_py_exec'
-  source_id INT NOT NULL,         -- 对应 source_table 的 id（物理主键）
-  unit_id INT DEFAULT NULL,
-  title VARCHAR(512) DEFAULT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (lang, q_id),
-  INDEX idx_questions_index_source (source_table, source_id),
-  INDEX idx_questions_index_lang_unit (lang, unit_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- CREATE TABLE IF NOT EXISTS questions_index (
+--   lang VARCHAR(16) NOT NULL,      -- 'python' / 'cpp' / 'java' 等
+--   q_id INT NOT NULL,              -- 逻辑题号（在同一语言中唯一）
+--   source_table VARCHAR(64) NOT NULL, -- e.g. 'questions_py' / 'questions_py_exec'
+--   source_id INT NOT NULL,         -- 对应 source_table 的 id（物理主键）
+--   unit_id INT DEFAULT NULL,
+--   title VARCHAR(512) DEFAULT NULL,
+--   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--   PRIMARY KEY (lang, q_id),
+--   INDEX idx_questions_index_source (source_table, source_id),
+--   INDEX idx_questions_index_lang_unit (lang, unit_id)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ===========================
 -- 收藏表（每种语言一张） — UPDATED: 包含 lang 字段，并且外键指向 questions_index (lang,q_id)
 -- 注意：在新建 schema 中我们直接让外键引用 questions_index
 -- ===========================
-CREATE TABLE IF NOT EXISTS questions_favorites_py (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  lang VARCHAR(16) NOT NULL DEFAULT 'python',
-  q_id INT NOT NULL,
-  unit_id INT NOT NULL,
-  page_id INT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  -- 外键指向 questions_index(lang,q_id)
-  CONSTRAINT fk_qfav_py_idx FOREIGN KEY (lang, q_id) REFERENCES questions_index(lang, q_id) ON DELETE CASCADE,
-  UNIQUE KEY uniq_user_question_py (user_id, lang, q_id),
-  INDEX idx_qfav_py_user (user_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- CREATE TABLE IF NOT EXISTS questions_favorites_py (
+--   id INT AUTO_INCREMENT PRIMARY KEY,
+--   user_id INT NOT NULL,
+--   lang VARCHAR(16) NOT NULL DEFAULT 'python',
+--   q_id INT NOT NULL,
+--   unit_id INT NOT NULL,
+--   page_id INT NOT NULL,
+--   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+--   -- 外键指向 questions_index(lang,q_id)
+--   CONSTRAINT fk_qfav_py_idx FOREIGN KEY (lang, q_id) REFERENCES questions_index(lang, q_id) ON DELETE CASCADE,
+--   UNIQUE KEY uniq_user_question_py (user_id, lang, q_id),
+--   INDEX idx_qfav_py_user (user_id)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS questions_favorites_cpp (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  lang VARCHAR(16) NOT NULL DEFAULT 'cpp',
-  q_id INT NOT NULL,
-  unit_id INT NOT NULL,
-  page_id INT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  CONSTRAINT fk_qfav_cpp_idx FOREIGN KEY (lang, q_id) REFERENCES questions_index(lang, q_id) ON DELETE CASCADE,
-  UNIQUE KEY uniq_user_question_cpp (user_id, lang, q_id),
-  INDEX idx_qfav_cpp_user (user_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- CREATE TABLE IF NOT EXISTS questions_favorites_cpp (
+--   id INT AUTO_INCREMENT PRIMARY KEY,
+--   user_id INT NOT NULL,
+--   lang VARCHAR(16) NOT NULL DEFAULT 'cpp',
+--   q_id INT NOT NULL,
+--   unit_id INT NOT NULL,
+--   page_id INT NOT NULL,
+--   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+--   CONSTRAINT fk_qfav_cpp_idx FOREIGN KEY (lang, q_id) REFERENCES questions_index(lang, q_id) ON DELETE CASCADE,
+--   UNIQUE KEY uniq_user_question_cpp (user_id, lang, q_id),
+--   INDEX idx_qfav_cpp_user (user_id)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS questions_favorites_java (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  lang VARCHAR(16) NOT NULL DEFAULT 'java',
-  q_id INT NOT NULL,
-  unit_id INT NOT NULL,
-  page_id INT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  CONSTRAINT fk_qfav_java_idx FOREIGN KEY (lang, q_id) REFERENCES questions_index(lang, q_id) ON DELETE CASCADE,
-  UNIQUE KEY uniq_user_question_java (user_id, lang, q_id),
-  INDEX idx_qfav_java_user (user_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- CREATE TABLE IF NOT EXISTS questions_favorites_java (
+--   id INT AUTO_INCREMENT PRIMARY KEY,
+--   user_id INT NOT NULL,
+--   lang VARCHAR(16) NOT NULL DEFAULT 'java',
+--   q_id INT NOT NULL,
+--   unit_id INT NOT NULL,
+--   page_id INT NOT NULL,
+--   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+--   CONSTRAINT fk_qfav_java_idx FOREIGN KEY (lang, q_id) REFERENCES questions_index(lang, q_id) ON DELETE CASCADE,
+--   UNIQUE KEY uniq_user_question_java (user_id, lang, q_id),
+--   INDEX idx_qfav_java_user (user_id)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ===========================
 -- 进度表（每语言）
 -- ===========================
-CREATE TABLE IF NOT EXISTS progress_py (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  unit_id INT NOT NULL,
-  current_index INT DEFAULT 0,
-  completed TINYINT(1) DEFAULT 0,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  UNIQUE KEY uniq_user_unit_py (user_id, unit_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- CREATE TABLE IF NOT EXISTS progress_py (
+--   id INT AUTO_INCREMENT PRIMARY KEY,
+--   user_id INT NOT NULL,
+--   unit_id INT NOT NULL,
+--   current_index INT DEFAULT 0,
+--   completed TINYINT(1) DEFAULT 0,
+--   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+--   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+--   UNIQUE KEY uniq_user_unit_py (user_id, unit_id)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS progress_cpp (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  unit_id INT NOT NULL,
-  current_index INT DEFAULT 0,
-  completed TINYINT(1) DEFAULT 0,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  UNIQUE KEY uniq_user_unit_cpp (user_id, unit_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- CREATE TABLE IF NOT EXISTS progress_cpp (
+--   id INT AUTO_INCREMENT PRIMARY KEY,
+--   user_id INT NOT NULL,
+--   unit_id INT NOT NULL,
+--   current_index INT DEFAULT 0,
+--   completed TINYINT(1) DEFAULT 0,
+--   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+--   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+--   UNIQUE KEY uniq_user_unit_cpp (user_id, unit_id)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS progress_java (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  unit_id INT NOT NULL,
-  current_index INT DEFAULT 0,
-  completed TINYINT(1) DEFAULT 0,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  UNIQUE KEY uniq_user_unit_java (user_id, unit_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- CREATE TABLE IF NOT EXISTS progress_java (
+--   id INT AUTO_INCREMENT PRIMARY KEY,
+--   user_id INT NOT NULL,
+--   unit_id INT NOT NULL,
+--   current_index INT DEFAULT 0,
+--   completed TINYINT(1) DEFAULT 0,
+--   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+--   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+--   UNIQUE KEY uniq_user_unit_java (user_id, unit_id)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ===========================
 -- memberships, library, favorites etc. (保留你原有的定义，略微调整索引)
