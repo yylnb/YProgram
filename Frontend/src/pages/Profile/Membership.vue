@@ -226,7 +226,7 @@ function handleInvite() {
   const username = (props.profile && props.profile.username) ? props.profile.username : '你的朋友'
   // const link = `${base}/invite/${inviteCode}`
   const weblink = `http://ypro.online`
-  const link = `朋友，我在 YProgram 找到了一套很棒的编程题库和，点击链接查看并注册：\n${weblink}\n（由 ${username} 推荐）`
+  const link = `朋友，我在 YProgram 找到了一套很棒的编程题库，点击链接查看并注册：\n${weblink}\n（记得报我名字哦，由 ${username} 推荐）`
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(link).then(() => {

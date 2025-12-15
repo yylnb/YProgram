@@ -44,7 +44,9 @@ export default {
   async mounted() {
     // 入口只负责加载当前用户 id 显示
     try {
-      const res = await axios.get('/api/user/me');
+      const res = await axios.get('/api/user/me',{
+        headers: { Authorization: `Bearer ${token}` }
+      });
       if (res && res.data) this.meId = res.data.id;
     } catch (e) {
       // 忽略错误（子组件各自处理自己的请求）

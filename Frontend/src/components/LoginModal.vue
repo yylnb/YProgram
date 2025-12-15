@@ -113,7 +113,7 @@ async function handleSubmit() {
   try {
     // 尝试登录
     try {
-      const res = await axios.post('http://localhost:5000/api/user/login', { username: username.value, password: password.value })
+      const res = await axios.post('/api/user/login', { username: username.value, password: password.value })
       if (res && res.data && res.data.token) {
         const token = res.data.token
         localStorage.setItem('yp_token', token)
@@ -147,7 +147,7 @@ async function handleSubmit() {
 
     // 尝试注册
     try {
-      const r = await axios.post('http://localhost:5000/api/user/register', { username: username.value, password: password.value })
+      const r = await axios.post('/api/user/register', { username: username.value, password: password.value })
       if (r && r.data && r.data.token) {
         const token = r.data.token
         localStorage.setItem('yp_token', token)
@@ -159,7 +159,7 @@ async function handleSubmit() {
         // 如果填写了邀请好友，则调用后端 invite 接口（后端负责校验并赠送）
         if (inviteFriend.value && inviteFriend.value.trim()) {
           try {
-            const resInvite = await axios.post('http://localhost:5000/api/user/invite', { referrer: inviteFriend.value.trim() }, {
+            const resInvite = await axios.post('/api/user/invite', { referrer: inviteFriend.value.trim() }, {
               headers: { Authorization: `Bearer ${token}` },
               timeout: 8000
             })
