@@ -268,7 +268,7 @@ section.grid {
 .fav-btn[disabled] { opacity: 0.6; cursor: not-allowed; }
 
 /* load more */
-.load-more-wrap { display:flex; justify-content:center; padding: 16px 0; z-index:2; }
+.load-more-wrap { display:flex; justify-content:center; margin-top: 10px; padding: 20px 0; z-index:2; }
 
 /* ---------- modal ---------- */
 /* backdrop: 轻度模糊覆盖，但保留黑底基调 */

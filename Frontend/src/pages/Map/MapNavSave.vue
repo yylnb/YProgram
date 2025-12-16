@@ -6,33 +6,17 @@
     </div>
 
     <div class="controls p-4 mb-4 flex flex-wrap gap-4 items-center">
-      <!-- ⭐ 语言选择（滑动胶囊） -->
-      <div
-        class="lang-select"
-        role="tablist"
-        aria-label="课程选择"
-      >
-        <!-- 当前语言（始终可见） -->
-        <div class="lang-current pill active">
-          {{
-            courses.find(c => c.value === localCourse)?.label
-          }}
-        </div>
-
-        <!-- 展开菜单 -->
-        <div class="lang-menu">
-          <button
-            v-for="course in courses"
-            :key="course.value"
-            class="pill lang-item"
-            :class="{ active: localCourse === course.value }"
-            @click="selectCourse(course.value)"
-            role="tab"
-            :aria-pressed="localCourse === course.value"
-          >
-            {{ course.label }}
-          </button>
-        </div>
+      <div class="languages flex gap-2 items-center" role="tablist" aria-label="课程选择">
+        <button
+          v-for="course in courses"
+          :key="course.value"
+          :class="['pill', { active: localCourse === course.value }]"
+          @click="selectCourse(course.value)"
+          role="tab"
+          :aria-pressed="localCourse === course.value"
+        >
+          {{ course.label }}
+        </button>
       </div>
 
       <div class="flex-1"></div>
@@ -78,7 +62,6 @@
       </div>
     </div>
 
-    <!-- stages-list 原样保留 -->
     <div class="stages-list mb-6 flex gap-4 flex-wrap" role="tablist" aria-label="阶段选择">
       <button
         v-for="(s, idx) in currentStages"
@@ -96,7 +79,6 @@
   </header>
 </template>
 
-
 <script setup>
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 import axios from 'axios'
@@ -110,9 +92,9 @@ const props = defineProps({
 const emit = defineEmits(['update:course','update:stage'])
 
 const courses = [
-  { value: 'python1', label: 'Python入门' },
-  { value: 'cpp1', label: 'C++入门' },
-  { value: 'java1', label: 'Java入门' }
+  { value: 'python1', label: 'Python' },
+  { value: 'cpp1', label: 'C++' },
+  { value: 'java1', label: 'Java' }
 ]
 
 /* ---- local state ---- */
@@ -156,17 +138,17 @@ const energyTooltip = computed(() => {
 
 /* ---- stages data (unchanged) ---- */
 const courseStageLabels = {
-  python1: ['一','二','三','四','五'],
+  python1: ['A','B','C','D','E'],
   cpp1: ['F','G','H','I','J'],
   java1: ['K','L','M','N','O']
 }
 const courseStages = {
   python1: [
-    { subtitle: '零基础入门：从零开始，轻松掌握' },
-    { subtitle: '条件判断：程序的决策十字路口' },
-    { subtitle: '循环：简化重复，提升效率' },
-    { subtitle: '数据结构：构建高效程序的基石' },
-    { subtitle: '函数：封装逻辑，代码更优雅' }
+    { subtitle: '入门基础：变量、类型与输出（Python 风格）' },
+    { subtitle: '流程控制与列表/字典' },
+    { subtitle: '函数、模块与文件操作（实践）' },
+    { subtitle: '面向对象与异步入门（async/await）' },
+    { subtitle: '实战项目：小爬虫与数据处理' }
   ],
   cpp1: [
     { subtitle: '基础语法与编译流程（C++ 特性）' },
@@ -461,8 +443,7 @@ onBeforeUnmount(() => {
   position: relative;
 } */
 .mapnav-root {
-  background-color: rgba(0, 0, 0, 0.245) !important;
-  backdrop-filter: blur(12px);
+  background-color: #000 !important;
   padding: 18px 30px 12px !important;
   position: relative;
 }
@@ -518,41 +499,29 @@ onBeforeUnmount(() => {
 .hero-right { left: 65%; }
 
 /* controls layout */
-.controls { z-index:2; display:flex; gap:12px; align-items:center; padding-left: 100px}
+.controls { z-index:2; display:flex; gap:12px; align-items:center; }
 
 /* pills */
 .pill {
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
-  padding: 10px 15px;
+  padding: 8px 12px;
   border-radius: 999px;
   cursor: pointer;
   font-weight: 700;
+  background: transparent !important;
   color: #fff !important;
+  border: 1px solid #8b5cf6 !important;
   transition: transform .12s ease, box-shadow .12s ease, color .12s, background .12s;
   opacity: 1 !important;
-    background:
-  radial-gradient(
-    circle at top right,
-    #4c4c4c,
-    transparent 40%
-  ),
-  radial-gradient(
-    circle at bottom left,
-    #4c4c4c,
-    transparent 40%
-  ),
-  #232323;
-  backdrop-filter: blur(12px);
-  border: 0.01px solid #AEAEAE;
 }
 .pill:not(.active):hover {
-  color: #fff !important;
-  transform: translateY(-3px);
-  background: #6b21a8;
-  border: 0.01px solid #AEAEAE;
-  box-shadow: 0 36px 80px rgba(132, 63, 141, 0.479);
+  background: linear-gradient(180deg, #f1eaff, #f7eefe) !important;
+  color: #1f0346 !important;
+  border-color: rgba(139,92,246,0.18) !important;
+  box-shadow: 0 8px 20px rgba(139,92,246,0.06) !important;
+  transform: translateY(-3px)
 }
 .pill.active {
   /* background: linear-gradient(180deg,rgb(132, 63, 141), rgb(94, 25, 95)) !important; */
@@ -561,10 +530,6 @@ onBeforeUnmount(() => {
   border-color: rgba(255,255,255,0.06) !important;
   box-shadow: 0 10px 28px rgba(109,40,217,0.18) !important;
   transform: translateY(-3px)
-}
-
-.stages-list{
-  padding-left: 100px;
 }
 
 /* stage buttons */
@@ -577,53 +542,29 @@ onBeforeUnmount(() => {
   padding:12px;
   opacity: 1 !important;
   border-radius: 12px;
-  /* background: transparent !important; */
-  /* background: linear-gradient(45deg, #4c4c4c 0%, #232323 25%, #232323 75%,#4c4c4c 100%); */
-  background:
-  radial-gradient(
-    circle at top right,
-    #4c4c4c,
-    transparent 40%
-  ),
-  radial-gradient(
-    circle at bottom left,
-    #4c4c4c,
-    transparent 40%
-  ),
-  #232323;
-  backdrop-filter: blur(12px);
+  background: transparent !important;
   color: #fff !important;
-  /* border: 1px solid #8b5cf6 !important; */
-  border: 0.01px solid #AEAEAE;
+  border: 1px solid #8b5cf6 !important;
   transition: background .12s ease, color .12s ease, box-shadow .12s ease, transform .12s ease;
 }
 .stage-btn:not(.active):hover {
-  background: #6b21a8;
-  border: 0.01px solid #AEAEAE;
-  box-shadow: 0 36px 80px rgba(132, 63, 141, 0.479);
+  background: linear-gradient(180deg, #f1eaff, #f7eefe) !important;
+  border-color: rgba(139,92,246,0.12) !important;
+  box-shadow: 0 12px 30px rgba(139,92,246,0.06) !important;
   transform: translateY(-5px);
 }
 .stage-btn.active {
   /* background: linear-gradient(180deg,rgb(132, 63, 141), rgb(94, 25, 95)) !important; */
-  /* background: linear-gradient(180deg,#8b5cf6,#6d28d9) !important; */
-  background:
-  radial-gradient( circle at top right, #8b5cf6, transparent 40%),
-  radial-gradient( circle at top left, #8b5cf6, transparent 40%),
-  radial-gradient( circle at bottom right, #8b5cf6, transparent 40%),
-  radial-gradient( circle at bottom left, #8b5cf6, transparent 40%),
-  #6d28d9;
+  background: linear-gradient(180deg,#8b5cf6,#6d28d9) !important;
   color: #fff !important;
   border-color: rgba(139,92,246,0.22) !important;
   transform: translateY(-6px);
-  box-shadow: 0 32px 80px rgba(108, 40, 217, 0.497) !important;
-  backdrop-filter: blur(12px);
+  box-shadow: 0 18px 48px rgba(109,40,217,0.14) !important;
 }
 .stage-title { font-weight: 800; color: #fff !important; }
 .stage-sub { font-size: 13px; color: #d1d5db !important; }
-/* .stage-btn:not(.active):hover .stage-title { color: #1f0346 !important;}
-.stage-btn:not(.active):hover .stage-sub {color: #1f0346 !important; } */
-.stage-btn:not(.active):hover .stage-title { color: #fff !important;}
-.stage-btn:not(.active):hover .stage-sub {color: #fff !important; }
+.stage-btn:not(.active):hover .stage-title { color: #1f0346 !important;}
+.stage-btn:not(.active):hover .stage-sub {color: #1f0346 !important; }
 
 /* energy panel */
 .energy-panel { display:flex; align-items:center; gap:10px; padding:6px 8px; border-radius:10px; cursor:pointer; user-select:none; transition: transform .12s ease, box-shadow .12s ease; background: rgba(176, 176, 176, 0.321) !important; border: 1px solid rgba(255,255,255,0.04) !important; color: #fff !important; }
@@ -640,76 +581,6 @@ onBeforeUnmount(() => {
 /* focus */
 .pill:focus, .btn-white:focus, .stage-btn:focus { outline: 3px solid rgba(139,92,246,0.18) !important; outline-offset: 2px; border-radius: 10px; }
 
-/* ===============================
-   Language Select – 滑动胶囊
-   =============================== */
-
-.lang-select {
-  position: relative;
-  display: flex;
-  align-items: center;
-  height: 56px;
-  min-width: 120px;
-  width: 140px;                 /* 折叠态宽度 */
-  padding: 4px;
-  border-radius: 999px;
-  cursor: pointer;
-  transition:
-    width 320ms cubic-bezier(.2,.9,.2,1),
-    box-shadow 280ms ease,
-    padding 260ms ease;
-  overflow: hidden;
-}
-
-/* 展开态 */
-.lang-select:hover {
-  width: 480px;
-  padding: 6px 10px;
-}
-
-/* 当前语言（始终可见） */
-.lang-current {
-  position: relative;
-  z-index: 3;
-  pointer-events: none;
-  white-space: nowrap;
-}
-
-/* 菜单容器 */
-.lang-menu {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  gap: 8px;
-  margin-left: 10px;
-  opacity: 0;
-  transform: translateX(8px);
-  pointer-events: none;
-  transition: opacity 260ms ease, transform 260ms ease;
-}
-
-/* 展开时显示 */
-.lang-select:hover .lang-menu {
-  opacity: 1;
-  transform: translateX(0);
-  pointer-events: auto;
-}
-
-/* 子项进入动画 */
-.lang-item {
-  transform: translateY(6px);
-  opacity: 0;
-  white-space: nowrap;
-  transition:
-    transform 200ms ease,
-    opacity 200ms ease;
-}
-
-.lang-select:hover .lang-item {
-  transform: translateY(0);
-  opacity: 1;
-}
-
 /* responsive tweaks omitted for brevity (kept from previous file) */
 @media (min-width: 641px) and (max-width: 1023px) {
   .lib-hero { height: 78px; }
@@ -718,7 +589,7 @@ onBeforeUnmount(() => {
   .hero-left { left: 30%; }
   .hero-right { left: 70%; }
   .controls { gap:10px; }
-  .pill { padding: 10px 15px; font-size: 14px; border-width: 1px; }
+  .pill { padding: 6px 10px; font-size: 14px; border-width: 1px; }
   .stage-btn { min-width: 150px; padding: 10px; gap: 5px; border-radius: 10px; }
   .stage-title { font-size: 18px; }
   .stage-sub { font-size: 12px; }

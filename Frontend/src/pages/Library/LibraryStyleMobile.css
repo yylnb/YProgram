@@ -20,7 +20,7 @@
   box-sizing: border-box;
   position: relative;
   z-index: 1;
-  padding: 18px 12px 18px;
+  padding: 18px 8px 18px;
   background-color: var(--bg-fallback);
   color: var(--text-strong);
 }
@@ -203,12 +203,12 @@ section.grid {
   background: #1c1c1c;
   position: relative; 
   margin-top: 25px;
-  margin-left: 10%;
-  margin-right: 10%;
-  padding: 30px 30px 70px 30px; 
+  margin-left: 1%;
+  margin-right: 1%;
+  padding: 30px 10px 70px 10px; 
   border-radius: 30px;
   /* border: 1px solid white; */
-  box-shadow: 12px 12px 36px rgba(194, 194, 194, 0.7);
+  box-shadow: 0px 0px 40px rgba(194, 194, 194, 0.7);
   z-index: 2; 
   display: grid; 
   grid-template-columns: repeat(1, 1fr); 
@@ -220,7 +220,7 @@ section.grid {
 .card {
   cursor: default;
   transition: transform 260ms cubic-bezier(.2,.9,.2,1), box-shadow 260ms cubic-bezier(.2,.9,.2,1), border-color 180ms;
-  border: 1px solid var(--card-border);
+  border: 0.8px solid #ffffff;
   background: linear-gradient(180deg, var(--card-bg), rgba(11,11,11,0.92));
   padding: 10px;
   border-radius: 12px;

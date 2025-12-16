@@ -85,12 +85,18 @@
           </article>
         </template>
       </template>
+
+      
+
+      <article v-if="hasMore" class="card p-4">
+        <!-- 加载更多 -->
+        <div class="load-more-wrap">
+          <button class="btn-primary" @click="loadMore" :disabled="loadingMore">{{ loadingMore ? '加载中…' : '加载更多' }}</button>
+        </div>
+      </article>
     </section>
 
-    <!-- 加载更多 -->
-    <div v-if="hasMore" class="load-more-wrap">
-      <button class="btn-primary" @click="loadMore" :disabled="loadingMore">{{ loadingMore ? '加载中…' : '加载更多' }}</button>
-    </div>
+
 
     <!-- 详情模态 -->
     <div v-if="showDetail" class="modal-backdrop" @click.self="closeDetail">

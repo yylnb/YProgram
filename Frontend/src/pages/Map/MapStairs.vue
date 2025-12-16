@@ -710,6 +710,17 @@ onBeforeUnmount(() => {
   .nodes-container { min-height: 760px; }
   .node-wrapper { width: 150px; }
   .unit-node { width: 150px; padding: 12px; }
+  .stage-map {
+    margin-left: 3%;
+    margin-right: 3%;
+    padding-left: 16px;
+    padding-right: 16px;
+    box-shadow: 0px 0px 40px rgba(194, 194, 194, 0.7);
+  }
+  .map-canvas {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
 }
 
 /* map inline message（确保暗色下可读） */
