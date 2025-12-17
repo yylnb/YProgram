@@ -46,12 +46,12 @@ module.exports = function (pool, authMiddleware) {
       const [countRows] = await pool.query(`SELECT COUNT(1) AS total FROM library ${whereSQL}`, params);
       const total = (countRows && countRows[0] && countRows[0].total) ? Number(countRows[0].total) : 0;
 
-      // 列表
+      // 列表 — **改为升序，避免“漏掉最小 id” 的分页现象**
       const pageSql = `
         SELECT id, lang, lb_id, difficulty, page, title, tags, summary
         FROM library
         ${whereSQL}
-        ORDER BY id DESC
+        ORDER BY id ASC
         LIMIT ? OFFSET ?`;
       const pageParams = params.concat([pageSize, offset]);
       const [rows] = await pool.query(pageSql, pageParams);
