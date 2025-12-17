@@ -48,10 +48,10 @@
             <div class="badge-sub" v-else>立即开通</div>
           </div>
 
-          <div class="account-line">
-            <!-- <div class="acc-label">账号</div> -->
+          <!-- <div class="account-line">
+            <div class="acc-label">账号</div>
             <div class="acc-value">{{ profile?.username ?? '未登录' }}</div>
-          </div>
+          </div> -->
         </div>
 
         <!-- 右侧：动作与提示 -->
@@ -385,6 +385,7 @@ onUnmounted(() => {
   align-items:center;
   justify-content:center;
   border: 1px solid rgba(255,255,255,0.02);
+  width: 100%;
 }
 .big-badge.active { 
   background: linear-gradient(144deg, rgb(255, 235, 82), rgba(229, 220, 129, 0.568));

@@ -357,9 +357,27 @@ async function goToPractice(fav) {
 .fav-list { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 12px; }
 .fav-item {
   padding: 12px;
-  border-radius: 10px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 20px;
+  background:
+  radial-gradient(
+    circle at top right,
+    #4c4c4c,
+    transparent 40%
+  ),
+  radial-gradient(
+    circle at bottom left,
+    #4c4c4c,
+    transparent 40%
+  ),
+  #232323;
+  backdrop-filter: blur(12px);
+  color: #fff !important;
+  border: 0.01px solid #aeaeae69;
+}
+.fav-item:hover {
+  background: #6b21a8;
+  border: 0.01px solid #AEAEAE;
+  box-shadow: 0 36px 80px rgba(132, 63, 141, 0.479);
 }
 .fav-main { display:flex; justify-content:space-between; gap: 12px; align-items:flex-start; }
 .fav-meta { flex:1; min-width: 0; }

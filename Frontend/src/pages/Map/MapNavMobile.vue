@@ -43,18 +43,45 @@
         </div>
       </div>
 
-      <!-- 课程选择 -->
-      <div class="languages w-90" role="tablist" aria-label="课程选择">
+      <!-- 课程选择（改为可折叠并带 stagger 的横向优先弹出） -->
+      <div class="languages-wrapper w-90" ref="languagesWrapper" aria-label="课程选择容器">
+        <!-- compact（始终显示当前项，点击展开/收起其余语言） -->
         <button
-          v-for="course in courses"
-          :key="course.value"
-          :class="['pill', { active: localCourse === course.value }]"
-          @click="selectCourse(course.value)"
-          role="tab"
-          :aria-pressed="localCourse === course.value"
+          class="languages-compact"
+          @click="toggleLanguages"
+          :aria-expanded="languagesVisible.toString()"
+          aria-controls="languages-list"
+          type="button"
         >
-          {{ course.label }}
+          <div class="compact-left">
+            <div class="lang-title">课程 {{ getCourseLabel(localCourse) }}</div>
+          </div>
+          <div class="chev" aria-hidden="true">▾</div>
         </button>
+
+        <!-- expanded container（出现在 compact 下方；compact 不会被替换） -->
+        <transition name="slide-fade">
+          <div
+            v-if="languagesVisible"
+            id="languages-list"
+            class="languages-list expanded"
+            :class="{ animate: animateLangChildren }"
+            role="tablist"
+            aria-label="课程选择"
+          >
+            <button
+              v-for="(course, idx) in courses"
+              :key="course.value"
+              @click="() => { selectCourse(course.value); closeLanguages(); }"
+              :class="['lang-btn pill', { active: localCourse === course.value }]"
+              :aria-pressed="localCourse === course.value"
+              type="button"
+              :style="langStyleForIndex(idx)"
+            >
+              {{ course.label }}
+            </button>
+          </div>
+        </transition>
       </div>
 
       <!-- <div class="actions w-full flex items-center gap-3 justify-between px-4">
@@ -137,9 +164,9 @@ const props = defineProps({
 const emit = defineEmits(['update:course','update:stage'])
 
 const courses = [
-  { value: 'python1', label: 'Python' },
-  { value: 'cpp1', label: 'C++' },
-  { value: 'java1', label: 'Java' }
+  { value: 'python1', label: 'Python入门' },
+  { value: 'cpp1', label: 'C++入门' },
+  { value: 'java1', label: 'Java入门' }
 ]
 
 const localCourse = ref(props.course)
@@ -151,7 +178,12 @@ watch(() => props.stage, (v) => { localStage.value = v })
 const stagesVisible = ref(false)      // 是否在 DOM 中（container）
 const animateChildren = ref(false)    // 是否触发子项的进入动画（最终态）
 
+// languages states (new) — 与 stages 行为类似，但横排优先并换行
+const languagesVisible = ref(false)
+const animateLangChildren = ref(false)
+
 const stagesWrapper = ref(null)
+const languagesWrapper = ref(null)
 
 // Default timings (ms) — 若你修改 CSS :root 变量，这里会尝试读取它们以保持同步
 const DEFAULTS = {
@@ -204,6 +236,32 @@ function closeStages() {
   }, delay)
 }
 
+// languages open/close/toggle (same idea as stages)
+// openLanguages: show the list (compact remains visible)
+async function openLanguages() {
+  if (languagesVisible.value) return
+  languagesVisible.value = true
+  await nextTick()
+  requestAnimationFrame(() => {
+    animateLangChildren.value = true
+  })
+}
+
+function closeLanguages() {
+  if (!languagesVisible.value) return
+  animateLangChildren.value = false
+  const delay = getContainerDurationMs()
+  setTimeout(() => {
+    languagesVisible.value = false
+  }, delay)
+}
+
+// toggle helper for compact button
+function toggleLanguages() {
+  if (languagesVisible.value) closeLanguages()
+  else openLanguages()
+}
+
 // When user chooses a stage from expanded list
 function onSelectStage(idx) {
   if (typeof idx !== 'number') return
@@ -219,6 +277,17 @@ function stageStyleForIndex(idx) {
   const stagger = getStaggerMs()
   const delayMs = animateChildren.value ? (idx * stagger) : 0
   // also set transition-duration for item; use CSS var if you prefer (we keep visual consistent)
+  const itemDuration = readCssMsVar('--stages-item-duration', DEFAULTS.itemDuration)
+  return {
+    transitionDelay: `${delayMs}ms`,
+    transitionDuration: `${itemDuration}ms`
+  }
+}
+
+// style for language buttons (staggered); same logic but for language children
+function langStyleForIndex(idx) {
+  const stagger = getStaggerMs()
+  const delayMs = animateLangChildren.value ? (idx * stagger) : 0
   const itemDuration = readCssMsVar('--stages-item-duration', DEFAULTS.itemDuration)
   return {
     transitionDelay: `${delayMs}ms`,
@@ -259,17 +328,17 @@ const energyTooltip = computed(() => {
 })
 
 const courseStageLabels = {
-  python1: ['A','B','C','D','E'],
+  python1: ['一','二','三','四','五'],
   cpp1: ['F','G','H','I','J'],
   java1: ['K','L','M','N','O']
 }
 const courseStages = {
   python1: [
-    { subtitle: '入门基础：变量、类型与输出（Python 风格）' },
-    { subtitle: '流程控制与列表/字典' },
-    { subtitle: '函数、模块与文件操作（实践）' },
-    { subtitle: '面向对象与异步入门（async/await）' },
-    { subtitle: '实战项目：小爬虫与数据处理' }
+    { subtitle: '零基础入门：从零开始，轻松掌握' },
+    { subtitle: '条件判断：程序的决策十字路口' },
+    { subtitle: '循环：简化重复，提升效率' },
+    { subtitle: '数据结构：构建高效程序的基石' },
+    { subtitle: '函数：封装逻辑，代码更优雅' }
   ],
   cpp1: [
     { subtitle: '基础语法与编译流程（C++ 特性）' },
@@ -300,6 +369,17 @@ function getStageLabel(idx) {
   if (labels && labels[idx] !== undefined) return labels[idx]
   return String(idx + 1)
 }
+
+// helper to show current course label in compact languages button
+function getCourseLabel(courseVal) {
+  const found = courses.find(c => c.value === courseVal)
+  return found ? found.label : courseVal
+}
+const currentCourseSubtitle = computed(() => {
+  const map = courseStages[localCourse.value] || defaultStages
+  const idx = Number(localStage.value) || 0
+  return (map && map[idx] && map[idx].subtitle) ? map[idx].subtitle : ''
+})
 
 /* ---- storage helpers: yp_current and yp_select (rename from yp_progress) ---- */
 function readJsonKey(key) {
@@ -445,15 +525,26 @@ async function onRefresh() {
 
 /* keyboard / outside click handling */
 function onKeydown(e) {
-  if (!stagesVisible.value) return
-  if (e.key === 'Escape') closeStages()
+  // close either panel on Escape
+  if (e.key === 'Escape') {
+    if (stagesVisible.value) closeStages()
+    if (languagesVisible.value) closeLanguages()
+  }
 }
 function onDocClick(e) {
-  if (!stagesVisible.value) return
-  const wrapper = stagesWrapper.value
-  if (!wrapper) return
-  if (!wrapper.contains(e.target)) {
-    closeStages()
+  // close stages if visible and click outside
+  if (stagesVisible.value) {
+    const wrapper = stagesWrapper.value
+    if (wrapper && !wrapper.contains(e.target)) {
+      closeStages()
+    }
+  }
+  // close languages if visible and click outside
+  if (languagesVisible.value) {
+    const lwrap = languagesWrapper.value
+    if (lwrap && !lwrap.contains(e.target)) {
+      closeLanguages()
+    }
   }
 }
 
@@ -594,7 +685,8 @@ onBeforeUnmount(() => {
   justify-content: center;
   transform: translateX(-50%); 
   white-space: nowrap;
-  background: linear-gradient(90deg, #0e78e9 0%, #c63be9 100%); 
+  /* background: linear-gradient(90deg, #0e78e9 0%, #c63be9 100%);  */
+  background: #fff;
   -webkit-background-clip: text; 
   background-clip: text; 
   -webkit-text-fill-color: transparent; 
@@ -602,12 +694,79 @@ onBeforeUnmount(() => {
 }
 .hero-left { left: 13%; } .hero-right { left: 87%; }
 
+* { box-sizing: border-box; }
+
 /* controls */
 .controls { display: flex; flex-direction: column; width: 100%; align-items: center; gap: 8px; }
 
-/* courses left-aligned, 90% width */
+/* ---------- 语言选择（新） ---------- */
+/* compact (single current language) - purple and left-aligned text */
+.languages-wrapper { width: 90%; display: block; padding-left: 2%; box-sizing: border-box; }
+.languages-compact { width:100%; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 12px; border-radius:12px; background:linear-gradient(180deg,#8b5cf6,#6d28d9); color:#fff; box-sizing:border-box; transition: transform .18s ease, box-shadow .18s ease; box-shadow:0 8px 22px rgba(109,40,217,0.14); border:1px solid rgba(255,255,255,0.04); }
+.languages-compact:hover { transform: translateY(-3px); box-shadow:0 10px 28px rgba(109,40,217,0.16); }
+.languages-compact .compact-left { display:flex; flex-direction:column; align-items:flex-start; text-align:left; gap:4px; flex:1; }
+.lang-title { font-size:15px; font-weight:800; text-align:left; color:#fff; }
+.lang-sub { font-size:12px; color: rgba(255,255,255,0.9); }
+
+/* expanded languages container: horizontal-first, then wrap */
+.languages-list.expanded {
+  width:100%;
+  display:flex;
+  flex-direction: row;
+  flex-wrap: wrap;          /* allow wrapping to next line */
+  justify-content:flex-start;
+  gap:8px;
+  padding:12px 4%;
+  box-sizing:border-box;
+  align-items:flex-start;
+}
+
+/* language button base (reuses pill visuals) */
+.lang-btn {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 12px;
+  font-size:13px;
+  font-weight:700;
+  border-radius:8px;
+  border: 0.01px solid #aeaeae69;
+  background:
+  radial-gradient(
+    circle at top right,
+    #4c4c4c,
+    transparent 40%
+  ),
+  radial-gradient(
+    circle at bottom left,
+    #4c4c4c,
+    transparent 40%
+  ),
+  #232323;
+  color:#fff !important;
+  transition: all .15s ease;
+  /* initial hidden state */
+  transform: translateY(-8px);
+  opacity: 0;
+  box-sizing: border-box;
+}
+
+/* active visual */
+.lang-btn.active { background: linear-gradient(180deg,#8b5cf6,#6d28d9); border-color: rgba(139,92,246,0.22); color:#fff !important; transform: translateY(0); box-shadow: 0 8px 22px rgba(109,40,217,0.14); }
+
+/* when animateLangChildren is true we add class .animate on container; this selector is the final state */
+.languages-list.expanded.animate .lang-btn {
+  opacity: 1;
+  transform: translateY(0);
+  transition-property: transform, opacity;
+  transition-timing-function: cubic-bezier(.18,.9,.2,1);
+}
+
+/* courses left-aligned, 90% width (kept for compatibility) */
 .languages.w-90 { width: 90%; display:flex; flex-wrap:wrap; justify-content:flex-start; gap:6px; padding-left:2%; box-sizing:border-box; }
-.pill { display:inline-flex; align-items:center; justify-content:center; padding:6px 10px; font-size:13px; font-weight:700; border-radius:8px; border:1px solid #8b5cf6 !important; background:transparent; color:#fff !important; transition: all .15s ease; }
+
+/* ---------- 课程 pill（保留旧样式以兼容） ---------- */
+.pill { display:inline-flex; align-items:center; justify-content:center; padding:6px 10px; font-size:13px; font-weight:700; border-radius:8px;  color:#fff !important; transition: all .15s ease; }
 .pill.active { background: linear-gradient(180deg,#8b5cf6,#6d28d9); border-color: rgba(139,92,246,0.22); color:#fff !important; transform: translateY(-2px); box-shadow: 0 8px 22px rgba(109,40,217,0.14); }
 
 /* energy panel */
@@ -634,8 +793,19 @@ onBeforeUnmount(() => {
   width: 90%;
   padding: 12px 14px;
   border-radius: 10px;
-  border: 1px solid #8b5cf6;
-  background: transparent;
+  border: 0.01px solid #aeaeae69;
+  background:
+  radial-gradient(
+    circle at top right,
+    #4c4c4c,
+    transparent 40%
+  ),
+  radial-gradient(
+    circle at bottom left,
+    #4c4c4c,
+    transparent 40%
+  ),
+  #232323;
   color: #fff !important;
   display: flex;
   flex-direction: column;
@@ -672,5 +842,5 @@ onBeforeUnmount(() => {
 .stage-sub { font-size: 12px; color: #d1d5db !important; }
 
 /* focus outlines */
-.pill:focus, .btn-white:focus, .stage-btn:focus, .stage-compact:focus { outline: 3px solid rgba(139,92,246,0.18) !important; outline-offset: 2px; border-radius: 10px; }
+.pill:focus, .btn-white:focus, .stage-btn:focus, .stage-compact:focus, .languages-compact:focus, .lang-btn:focus { outline: 3px solid rgba(139,92,246,0.18) !important; outline-offset: 2px; border-radius: 10px; }
 </style>

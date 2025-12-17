@@ -406,13 +406,14 @@ onMounted(() => { init() })
 .calendar-title { font-size: 22px; font-weight: 800; text-align:center; margin: 0; color: #fff; }
 
 .controls { display:flex; gap:10px; align-items:center; justify-content:center; width:100%; margin-top: 8px; }
-.month-label { font-weight:700; padding:6px 12px; border-radius:8px; background: rgba(255,255,255,0.06); color: #fff; }
+.month-label { font-weight:700; padding:6px 12px; border-radius:8px; background: rgba(255,255,255,0.06); color: #fff; white-space: nowrap;}
 .btn-try {
   background: rgba(255,255,255,0.02);
   border: 1px solid rgba(255,255,255,0.06);
   padding: 6px 10px;
   border-radius: 8px;
   font-weight:700; color:#fff; cursor:pointer;
+  white-space: nowrap;
 }
 .btn-try:disabled { opacity: 0.5; cursor:not-allowed; }
 

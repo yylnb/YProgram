@@ -104,23 +104,40 @@
   border-radius: 999px;
   cursor: pointer;
   font-weight: 700;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  background:
+  radial-gradient(
+    circle at top right,
+    #4c4c4c,
+    transparent 40%
+  ),
+  radial-gradient(
+    circle at bottom left,
+    #4c4c4c,
+    transparent 40%
+  ),
+  #232323;
+  border: 0.01px solid #aeaeae69;
   color: var(--text-strong);
-  border: 1px solid #8b5cf6;
   -webkit-backdrop-filter: blur(6px) saturate(110%);
-  backdrop-filter: blur(6px) saturate(110%);
+  backdrop-filter: blur(12px);
   transition: transform .12s ease, box-shadow .12s ease, color .12s;
 }
 /* .pill:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,0.6); } */
 .pill:not(.active):hover {
-  background: linear-gradient(180deg, #f1eaff, #f7eefe);
   transform: translateY(-2px); 
-  box-shadow: 0 8px 18px rgba(0,0,0,0.6);
-  color: var(--text-hover);
+  color: #fff;
+  background: #6b21a8;
+  border: 0.01px solid #AEAEAE;
+  box-shadow: 0 36px 80px rgba(132, 63, 141, 0.479);
 }
 .pill.active {
   /* background: linear-gradient(180deg, var(--primary), var(--primary-600)); */
-  background: linear-gradient(180deg,#8b5cf6,#6d28d9);
+  background:
+  radial-gradient( circle at top right, #8b5cf6, transparent 40%),
+  radial-gradient( circle at top left, #8b5cf6, transparent 40%),
+  radial-gradient( circle at bottom right, #8b5cf6, transparent 40%),
+  radial-gradient( circle at bottom left, #8b5cf6, transparent 40%),
+  #6d28d9;
   color: #ffffff;
   border-color: rgba(255,255,255,0.08);
   border-radius: 999px;

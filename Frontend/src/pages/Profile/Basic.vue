@@ -37,13 +37,13 @@
       <!-- 右侧：信息卡片（加入时长 / 打卡 / 学习语言） -->
       <div class="right">
         <div class="stats-row">
-          <div class="stat-card">
+          <div class="stat-card" :style="cardStyle">
             <div class="stat-label">加入时长</div>
             <div class="stat-value" v-if="joinDays !== null">{{ joinDays }} 天</div>
             <div class="stat-value muted" v-else>未知</div>
           </div>
 
-          <div class="stat-card">
+          <div class="stat-card" :style="cardStyle">
             <div class="stat-label">打卡天数</div>
             <div class="stat-value" v-if="streakDisplay !== null">{{ streakDisplay }} 天</div>
             <div class="stat-value muted" v-else>— 天</div>
@@ -51,7 +51,7 @@
             <div class="stat-sub muted" v-else>最大连续打卡：— 天</div>
           </div>
 
-          <div class="stat-card">
+          <div class="stat-card" :style="cardStyle">
             <div class="stat-label">学习的语言</div>
             <div class="stat-value" v-if="languagesDisplay && languagesDisplay.length">
               <div class="lang-list">
@@ -220,6 +220,17 @@ const avatarStyle = computed(() => {
   }
 })
 
+const cardStyle = computed(() => {
+  if (avatarBg.value) {
+    return {
+      background: "radial-gradient( circle at bottom right, "+ avatarBg.value +", transparent 40%), #232323"
+    }
+  }
+  return {
+    background: "radial-gradient( circle at bottom right, #4c4c4c, transparent 40%), #232323"
+  }
+})
+
 async function copyId() {
   try {
     await navigator.clipboard.writeText(displayId.value)
@@ -343,7 +354,7 @@ watch(createdRaw, calcJoinDays)
 /* 小屏幕下改为单列 */
 @media (max-width: 720px) {
   .basic-grid { grid-template-columns: 1fr; }
-  .avatar-wrap { margin: 0 auto; }
+  .avatar-wrap { margin: 0 0; }
 }
 
 /* 左侧 */
@@ -416,7 +427,6 @@ watch(createdRaw, calcJoinDays)
 .right { display:flex; flex-direction:column; gap:16px; }
 .stats-row { display:flex; gap:14px; flex-wrap:wrap; }
 .stat-card {
-  background: rgba(255,255,255,0.02);
   padding:14px;
   border-radius:12px;
   min-width:160px;
@@ -424,7 +434,15 @@ watch(createdRaw, calcJoinDays)
   display:flex;
   flex-direction:column;
   gap:8px;
-  border: 1px solid rgba(255,255,255,0.03);
+  /* background:
+  radial-gradient(
+    circle at bottom right,
+    #ff88007e,
+    transparent 40%
+  ),
+  #232323; */
+  backdrop-filter: blur(12px);
+  border: 0.01px solid #aeaeae69;
 }
 .stat-label { font-size:13px; color:#9CA3AF; }
 .stat-value { font-weight:900; font-size:18px; color:#fff; }

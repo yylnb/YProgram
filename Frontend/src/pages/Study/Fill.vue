@@ -906,6 +906,11 @@ function onNextClick() {
   nextDisabled.value = true;
   const nextIndex = props.questionIndex + 1;
   emit('next', { questionIndex: props.questionIndex, nextIndex });
+  emit('next', {
+    questionIndex: props.questionIndex,
+    nextIndex: nextIndex,
+    isLast: isLastQuestion.value
+  });
   setTimeout(() => { nextDisabled.value = false; }, 600);
 }
 
@@ -942,6 +947,12 @@ onBeforeUnmount(() => {
   color: #fff;
   box-shadow: 12px 12px 36px rgba(194, 194, 194, 0.7);
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+@media (max-width: 900px) {
+  .fill-root {
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+  }
 }
 
 /* Header: 横排（题号 + 标题）—— 使用 Choice.vue 风格 */

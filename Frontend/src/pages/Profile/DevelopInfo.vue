@@ -469,6 +469,6 @@ function toggleDetail(id) {
   .dev-card { width: 46%; }
   .thanks-card { width: 46%; }
   .detail-top { flex-direction: column; align-items: center; text-align:center; }
-  .hover-info { left: 50%; transform: translateX(-50%); top: 110%; }
+  .hover-info { width: 150px; left: 50%; transform: translateX(-50%); top: 110%; }
 }
 </style>

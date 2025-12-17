@@ -532,7 +532,7 @@ onBeforeUnmount(() => {
   color: #fff !important;
   transition: transform .12s ease, box-shadow .12s ease, color .12s, background .12s;
   opacity: 1 !important;
-    background:
+  background:
   radial-gradient(
     circle at top right,
     #4c4c4c,
@@ -545,7 +545,7 @@ onBeforeUnmount(() => {
   ),
   #232323;
   backdrop-filter: blur(12px);
-  border: 0.01px solid #AEAEAE;
+  border: 0.01px solid #aeaeae69;
 }
 .pill:not(.active):hover {
   color: #fff !important;
@@ -593,8 +593,7 @@ onBeforeUnmount(() => {
   #232323;
   backdrop-filter: blur(12px);
   color: #fff !important;
-  /* border: 1px solid #8b5cf6 !important; */
-  border: 0.01px solid #AEAEAE;
+  border: 0.01px solid #aeaeae69;
   transition: background .12s ease, color .12s ease, box-shadow .12s ease, transform .12s ease;
 }
 .stage-btn:not(.active):hover {
