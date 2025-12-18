@@ -119,56 +119,57 @@ module.exports = function (pool, authMiddleware) {
 
   /**
    * POST /api/calendar/checkin/manual
-   * body: { date?: 'YYYY-MM-DD' }  // 默认为今天
-   *
-   * 在手动打卡时仍然使用数据库判断 "今天"（如果 date 没传则用 CURDATE()）
+   * body: {
+   *   date?: 'YYYY-MM-DD',   // 可选
+   *   color?: '#ffffff'      // 可选，文本
+   * }
    */
   router.post('/checkin/manual', authMiddleware, async (req, res) => {
     const userId = req.user.id
     const dateFromBody = req.body && req.body.date ? String(req.body.date) : null
+    const colorFromBody = req.body && req.body.color ? String(req.body.color) : null
 
     let conn
     try {
       conn = await pool.getConnection()
       await conn.beginTransaction()
 
-      // 先取当日消耗：如果 user 提供了 date，用该 date；否则使用 CURDATE()
       if (dateFromBody) {
-        // 如果客户端传日期，我们用客户端传的日期去核验（注意：客户端传日期应为本地用户视图的日期）
-        const [rows] = await conn.query('SELECT cost_today, last_update FROM energy_daily WHERE user_id = ? LIMIT 1', [userId])
-        let costToday = 0
-        if (rows && rows.length > 0) {
-          const last = toYMD(rows[0].last_update)
-          costToday = (last === dateFromBody) ? Number(rows[0].cost_today || 0) : 0
-        }
+        // ---------- 使用客户端传入日期 ----------
+        const [exist] = await conn.query(
+          'SELECT id FROM checkin_records WHERE user_id = ? AND date = ? LIMIT 1',
+          [userId, dateFromBody]
+        )
 
-        if (costToday < CHECKIN_THRESHOLD) {
-          await conn.rollback()
-          return res.status(400).json({ ok: false, message: `今日能量不足：${costToday}/${CHECKIN_THRESHOLD}` })
-        }
-
-        const [exist] = await conn.query('SELECT id FROM checkin_records WHERE user_id = ? AND date = ? LIMIT 1', [userId, dateFromBody])
         if (exist && exist.length > 0) {
           await conn.commit()
           return res.json({ ok: true, message: '已打卡', created: false })
         }
 
-        await conn.query('INSERT INTO checkin_records (user_id, date) VALUES (?, ?)', [userId, dateFromBody])
+        await conn.query(
+          'INSERT INTO checkin_records (user_id, date, color) VALUES (?, ?, ?)',
+          [userId, dateFromBody, colorFromBody]
+        )
+
         await conn.commit()
         return res.json({ ok: true, message: '打卡成功', created: true })
       } else {
-        // 未传 date -> 使用数据库 CURDATE() 做比较和插入，避免时区不一致
-        // 检查本日 cost
-        const [rows] = await conn.query('SELECT cost_today FROM energy_daily WHERE user_id = ? AND DATE(last_update) = CURDATE() LIMIT 1', [userId])
-        const costToday = (rows && rows.length > 0) ? Number(rows[0].cost_today || 0) : 0
+        // ---------- 使用数据库 CURDATE() ----------
+        const [exist] = await conn.query(
+          'SELECT id FROM checkin_records WHERE user_id = ? AND date = CURDATE() LIMIT 1',
+          [userId]
+        )
 
-        if (costToday < CHECKIN_THRESHOLD) {
-          await conn.rollback()
-          return res.status(400).json({ ok: false, message: `今日能量不足：${costToday}/${CHECKIN_THRESHOLD}` })
+        if (exist && exist.length > 0) {
+          await conn.commit()
+          return res.json({ ok: true, message: '已打卡', created: false })
         }
 
-        // 插入（若不存在）
-        await conn.query('INSERT IGNORE INTO checkin_records (user_id, date) VALUES (?, CURDATE())', [userId])
+        await conn.query(
+          'INSERT INTO checkin_records (user_id, date, color) VALUES (?, CURDATE(), ?)',
+          [userId, colorFromBody]
+        )
+
         await conn.commit()
         return res.json({ ok: true, message: '打卡成功', created: true })
       }
@@ -180,6 +181,7 @@ module.exports = function (pool, authMiddleware) {
       if (conn) conn.release && conn.release()
     }
   })
+
 
   /**
    * GET /api/calendar/checkins/:year/:month
@@ -206,18 +208,30 @@ module.exports = function (pool, authMiddleware) {
 
   /**
    * GET /api/calendar/checkins/today
-   * 快速判断今天是否已打卡（使用 DB CURDATE()）
+   * return: { checked: boolean, color?: string }
    */
   router.get('/checkins/today', authMiddleware, async (req, res) => {
     const userId = req.user.id
     try {
-      const [rows] = await pool.query('SELECT 1 FROM checkin_records WHERE user_id = ? AND date = CURDATE() LIMIT 1', [userId])
-      return res.json({ checked: !!(rows && rows.length > 0) })
+      const [rows] = await pool.query(
+        'SELECT color FROM checkin_records WHERE user_id = ? AND date = CURDATE() LIMIT 1',
+        [userId]
+      )
+
+      if (rows && rows.length > 0) {
+        return res.json({
+          checked: true,
+          color: rows[0].color || null
+        })
+      }
+
+      return res.json({ checked: false })
     } catch (err) {
       console.error('GET /api/calendar/checkins/today error', err)
       return res.status(500).json({ error: 'internal error' })
     }
   })
+
 
   return router
 }
