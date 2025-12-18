@@ -627,7 +627,7 @@ onBeforeUnmount(() => {
 /* energy panel */
 .energy-panel { display:flex; align-items:center; gap:10px; padding:6px 8px; border-radius:10px; cursor:pointer; user-select:none; transition: transform .12s ease, box-shadow .12s ease; background: rgba(176, 176, 176, 0.321) !important; border: 1px solid rgba(255,255,255,0.04) !important; color: #fff !important; }
 .energy-panel:hover { transform: translateY(-2px) !important; box-shadow: 0 10px 20px rgba(255,255,255,0.02) !important; }
-.battery { position: relative; width: 46px; height: 22px; display:flex; align-items:center; overflow: hidden; box-sizing: border-box; }
+.battery { position: relative; width: 46px; height: 22px; display:flex; align-items:center; overflow: hidden; box-sizing: border-box;}
 .battery-body { width: 36px; height: 22px; border-radius: 4px; border: 2px solid rgba(255,255,255,0.12); position: relative; background: rgba(255,255,255,0.08); overflow:hidden; }
 .battery-fill { position:absolute; left:0; top:0; bottom:0; width:0%; transition: width 0.6s ease; background: linear-gradient(90deg,#22c55e,#10b981); }
 .energy-panel.low .battery-fill { background: linear-gradient(90deg,#ef4444,#f97316); }

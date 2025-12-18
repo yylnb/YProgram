@@ -380,7 +380,7 @@ function formatDuration(seconds) {
   color: white;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
-  z-index: 60;
+  z-index: 999;
   backdrop-filter: blur(8px) saturate(120%);
   -webkit-backdrop-filter: blur(8px) saturate(120%);
   box-shadow: 0 8px 22px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
@@ -390,6 +390,9 @@ function formatDuration(seconds) {
   background: linear-gradient(144deg,  #f3f2f3b5, #a3a1afa4 50%, #aab6b7aa);
 }
 .back-map:disabled{ opacity:0.55; cursor:not-allowed; }
+@media (max-width: 700px) {
+  .back-map { display: none; }
+}
 
 /* 固定电池（右上） — 放大并垂直布局，风格与返回按钮呼应 */
 .battery-fixed {
@@ -411,6 +414,16 @@ function formatDuration(seconds) {
   box-shadow: 0 8px 22px rgba(0,0,0,0.45);
   min-width: 96px;
   text-align: center;
+}
+@media (max-width: 900px) {
+  .battery-fixed {
+    top: 12px;
+    right: 10px;
+    padding: 8px 12px 0;
+    gap: 3px;
+  }
+  .energy-user-fixed { flex-direction: column; gap:3px; }
+  .energy-numbers-fixed { font-size:10px; }
 }
 
 /* 未登录小块在固定电池内的样式 */
@@ -466,11 +479,8 @@ function formatDuration(seconds) {
 @media (max-width:640px){
   .title-wrap{ flex-direction:column; align-items:center; gap:12px; min-height: auto; padding-bottom: 6px; }
   .back-map{ left:10px; top:10px; padding:8px 12px; font-size:15px; }
-  .battery-fixed { right: 10px; top: 8px; padding: 8px 10px; min-width: 78px; }
   /* 在小屏上把标题改回静态，避免 absolute 引起布局问题 */
   .title-center { position: static; transform: none; pointer-events: auto; margin-bottom: 6px; top: unset; left: unset; }
-  .energy-user-fixed { flex-direction: column; gap:6px; }
-  .energy-numbers-fixed { font-size:13px; }
   .progress-bar-outer { height:10px; }
 }
 </style>

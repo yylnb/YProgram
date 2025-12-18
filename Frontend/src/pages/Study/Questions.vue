@@ -19,10 +19,14 @@
         :disabled="disabledForChild"
         :totalQuestions="totalQuestions"
         :progress="progressDataLocal"
+        :save-checkin-fn="saveCheckin"
+        :checkin-pending="pendingCheckinSave"
+        :checkin-error="checkinSaveError"
         @correct="onChildCorrect"
         @next="onChildNext"
         @back="onFinishBack"
         @next-unit="onFinishNextUnit"
+        @checkin-complete="onCheckinComplete"
       />
     </template>
 
@@ -34,6 +38,7 @@
 
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
 
 // 子组件
@@ -41,8 +46,11 @@ import Choice from './Choice.vue';
 import Fill from './Fill.vue';
 import Finish from './Finish.vue'; // 完成页
 
+// router
+const router = useRouter();
+const route = useRoute();
+
 // props from parent (StudyNew.vue)
-// 支持同时传入 courseFull 或 course（兼容）
 const props = defineProps({
   questionIndex: { type: Number, default: null },
   language: { type: String, default: '' },
@@ -50,14 +58,12 @@ const props = defineProps({
   course: { type: String, default: '' },     // StudyNew.vue 里传 :course="courseFull"
   unitId: { type: [String, Number], default: '' },
   token: { type: String, default: '' },
-  // optional parent-provided progressData (will be merged/used)
   progressData: { type: [Object, null], default: null },
-  // allow override total questions if needed
   totalQuestionsProp: { type: Number, default: 15 }
 });
 
 // emits
-const emit = defineEmits(['select-question', 'answered', 'progress-updated', 'unit-complete', 'next-clicked', 'finish-back', 'finish-next']);
+const emit = defineEmits(['select-question', 'answered', 'progress-updated', 'unit-complete', 'next-clicked', 'finish-back', 'finish-next', 'checkin-saved']);
 
 // state
 const loading = ref(false);
@@ -68,6 +74,10 @@ const totalQuestions = Number(props.totalQuestionsProp || 15);
 const currentQuestionIndex = ref(1);
 const disabledForChild = ref(false);
 const pendingSave = ref(false);
+
+// 新增：打卡相关 state
+const pendingCheckinSave = ref(false);
+const checkinSaveError = ref('');
 
 // 是否已完成单元（进入 Finish.vue）
 const isFinished = ref(false);
@@ -97,7 +107,6 @@ function parseCourseString(str) {
   };
 }
 const courseFullProp = computed(() => {
-  // 优先使用 props.courseFull，再使用 props.course
   return String(props.courseFull || props.course || '');
 });
 const parsedCourse = computed(() => parseCourseString(courseFullProp.value));
@@ -148,7 +157,6 @@ async function fetchProgress() {
     const res = await axios.get(url, cfg);
     progressDataLocal.value = res?.data ?? null;
 
-    // 如果后端返回已完成状态，则直接进入完成页
     const completedFlag = progressDataLocal.value?.completed ?? progressDataLocal.value?.is_completed ?? null;
     if (completedFlag === 1 || completedFlag === true || String(completedFlag) === '1') {
       isFinished.value = true;
@@ -186,7 +194,6 @@ async function determineIndexAndLoad() {
   else if (fromProgress !== null) currentQuestionIndex.value = clampIndex(fromProgress);
   else currentQuestionIndex.value = 1;
 
-  // 如果 progress 表示已完成 -> 直接进入完成页（不去加载题）
   const completedFlag = progressDataLocal.value?.completed ?? progressDataLocal.value?.is_completed ?? null;
   if (completedFlag === 1 || completedFlag === true || String(completedFlag) === '1') {
     isFinished.value = true;
@@ -244,11 +251,6 @@ async function fetchQuestion(qid) {
 }
 
 // ----------------------- save progress (POST /api/progress) -----------------------
-/*
-  调用后端 POST /api/progress
-  body: { unit_id, current_index, completed, lang, index }
-  返回示例： { success:true, deletedRows:0, insertedId:123, table: 'progresspython_1' }
-*/
 async function saveProgress(nextIndex, completedFlag = 0) {
   saveError.value = '';
 
@@ -257,16 +259,13 @@ async function saveProgress(nextIndex, completedFlag = 0) {
     return null;
   }
 
-  // === 1. lang：必须是后端识别的主语言 ===
-  const lang = langForProgressApi(); // e.g. 'python'
+  const lang = langForProgressApi();
 
-  // === 2. index：必须在多表场景下稳定传递 ===
   let index = idxForApi();
   if (typeof index === 'undefined' && parsedCourse.value.index) {
     index = parsedCourse.value.index;
   }
 
-  // === 3. 严格按后端 schema 构造 body ===
   const body = {
     unit_id: String(props.unitId),
     current_index: nextIndex,
@@ -274,7 +273,6 @@ async function saveProgress(nextIndex, completedFlag = 0) {
     lang
   };
 
-  // ⚠️ 只有在 index 存在时才传（与你后端逻辑一致）
   if (typeof index !== 'undefined' && index !== null) {
     body.index = index;
   }
@@ -292,7 +290,6 @@ async function saveProgress(nextIndex, completedFlag = 0) {
 
     const res = await axios.post('/api/progress', body, cfg);
 
-    // === 4. 本地进度与后端表状态同步 ===
     progressDataLocal.value = {
       unit_id: body.unit_id,
       current_index: body.current_index,
@@ -308,23 +305,68 @@ async function saveProgress(nextIndex, completedFlag = 0) {
   } catch (err) {
     console.error('POST /api/progress error', err);
     saveError.value =
-      err?.response?.data?.error ??
-     _attachDefaultErrorMessage();
+      err?.response?.data?.error ?? '保存进度失败，请检查网络或后端';
     return null;
   } finally {
     pendingSave.value = false;
   }
 }
 
+// ----------------------- 新增：saveCheckin (POST /api/checkin) -----------------------
+/*
+  body: { unit_id, date, color, lang, index, note? }
+  返回示例： { success:true, insertedId:123, record: {...} }
+*/
+async function saveCheckin(payload = {}) {
+  // payload 应包含 color, date(optional), note(optional)
+  checkinSaveError.value = '';
+
+  if (!props.unitId) {
+    checkinSaveError.value = '缺少 unitId，无法保存打卡';
+    return null;
+  }
+
+  const lang = langForProgressApi();
+  let index = idxForApi();
+  if (typeof index === 'undefined' && parsedCourse.value.index) {
+    index = parsedCourse.value.index;
+  }
+
+  const today = new Date().toISOString().slice(0, 10);
+  const body = {
+    unit_id: String(props.unitId),
+    date: payload.date ?? today,
+    color: payload.color ?? null,
+    lang,
+    index: index ?? null,
+    note: payload.note ?? null
+  };
+
+  try {
+    pendingCheckinSave.value = true;
+    const cfg = { withCredentials: true, timeout: 8000 };
+    if (props.token) cfg.headers = { Authorization: `Bearer ${props.token}` };
+
+    const res = await axios.post('/api/checkin', body, cfg);
+
+    // emit 事件，供上层或 StudyNew.vue 监听并作出响应
+    emit('checkin-saved', res?.data ?? null);
+
+    // 可选：把打卡信息合并到本地 progressData（若需要）
+    if (!progressDataLocal.value) progressDataLocal.value = {};
+    progressDataLocal.value.last_checkin = res?.data?.record ?? (body);
+
+    return res?.data ?? null;
+  } catch (err) {
+    console.error('POST /api/checkin error', err);
+    checkinSaveError.value = err?.response?.data?.error ?? '打卡保存失败，请稍后重试';
+    return null;
+  } finally {
+    pendingCheckinSave.value = false;
+  }
+}
 
 // ----------------------- child event handlers -----------------------
-/*
-  说明：
-  - onChildCorrect：当子组件 emit('correct')（答对）时，尝试保存进度（current_index = current + 1）
-    但不立刻切题（等待子组件的 next 行为）
-  - onChildNext：当子组件 emit('next')（用户点击下一题/完成）时，真正切题或进入完成页
-*/
-
 async function onChildCorrect(payload) {
   const isLast = currentQuestionIndex.value === totalQuestions;
 
@@ -361,11 +403,91 @@ async function onChildNext(payload) {
 }
 
 function onFinishBack(payload) {
+  // 先向上层广播事件（保持原有行为）
   emit('finish-back', payload);
+
+  // 然后导航到地图页面
+  try {
+    router.push({ path: '/map' });
+  } catch (err) {
+    console.warn('router.push /map failed', err);
+  }
 }
 
 function onFinishNextUnit(payload) {
+  // 先向上层广播事件（保持原有行为）
   emit('finish-next', payload);
+
+  // 然后尝试导航到下一单元
+  try {
+    // 首先尝试从当前路由解析： /study/:course/:unit
+    const currentPath = (route && route.path) ? route.path : '';
+    const studyMatch = currentPath.match(/^\/study\/([^\/]+)\/(\d+)(?:\/.*)?$/);
+
+    if (studyMatch) {
+      const courseName = studyMatch[1];
+      const unitNum = Number(studyMatch[2]);
+      if (!Number.isFinite(unitNum)) {
+        // fallback to map
+        router.push({ path: '/map' });
+        return;
+      }
+      const nextUnit = unitNum + 1;
+      if (nextUnit > 150) {
+        router.push({ path: '/map' });
+        return;
+      }
+      router.push({ path: `/study/${encodeURIComponent(courseName)}/${nextUnit}` });
+      return;
+    }
+
+    // 如果当前路由无法解析，再尝试使用 courseFullProp（例如 "python1"）
+    const courseStr = courseFullProp.value || '';
+    if (courseStr) {
+      // 尝试从 progressDataLocal / props 获取当前单元编号（优先 progressDataLocal.unit_number / current_unit 等）
+      let currentUnitNum = null;
+      if (progressDataLocal.value) {
+        // 常见字段尝试
+        const cand = progressDataLocal.value.unit_number ?? progressDataLocal.value.unit ?? progressDataLocal.value.current_unit ?? progressDataLocal.value.current_index ?? null;
+        if (cand !== null && typeof cand !== 'undefined') {
+          const n = Number(cand);
+          if (Number.isFinite(n)) currentUnitNum = n;
+        }
+      }
+
+      // 如果仍然没有，从 props.questionIndex 或 currentQuestionIndex 取保底（可能不是单元号，但作为 best-effort）
+      if (currentUnitNum === null) {
+        // 如果 URL 没法取，尝试用 1 作为默认
+        currentUnitNum = Number(props.questionIndex ?? currentQuestionIndex.value ?? 1);
+      }
+
+      let nextUnit = Number(currentUnitNum) + 1;
+      if (!Number.isFinite(nextUnit)) {
+        router.push({ path: '/map' });
+        return;
+      }
+      if (nextUnit > 150) {
+        router.push({ path: '/map' });
+        return;
+      }
+      router.push({ path: `/study/${encodeURIComponent(courseStr)}/${nextUnit}` });
+      return;
+    }
+
+    // 最后兜底返回地图
+    router.push({ path: '/map' });
+
+  } catch (err) {
+    console.warn('onFinishNextUnit navigation failed', err);
+    try { router.push({ path: '/map' }); } catch (e) {}
+  }
+}
+
+// 当 Finish.vue 内部打卡完成后 emit 回来，会触发这里（如果你希望父层做额外处理）
+function onCheckinComplete(data) {
+  // data 是 saveCheckin 返回的 res.data
+  // 目前我们只是把它 log，并可做进一步处理（比如导航提示）
+  console.log('checkin completed', data);
 }
 
 // ----------------------- watchers & lifecycle -----------------------
@@ -386,16 +508,12 @@ watch(
   async (val) => {
     if (!val) return;
 
-    // incoming index vs local index
     const incomingIdx = val.current_index ?? val.currentIndex ?? null;
     const localIdx = progressDataLocal.value ? (progressDataLocal.value.current_index ?? progressDataLocal.value.currentIndex ?? null) : null;
 
-    // update local
     progressDataLocal.value = val;
 
-    // If it's likely the same data that came from this component's save, don't auto-jump
     if (incomingIdx !== null && localIdx !== null && Number(incomingIdx) === Number(localIdx)) {
-      // But still check completed flag
       const completedFlag = val.completed ?? val.is_completed ?? null;
       if (completedFlag === 1 || completedFlag === true || String(completedFlag) === '1') {
         isFinished.value = true;
@@ -403,7 +521,6 @@ watch(
       return;
     }
 
-    // external update - if parent did not lock questionIndex, sync to incoming index
     if (typeof props.questionIndex !== 'number' || props.questionIndex === null) {
       const ci = val.current_index ?? val.currentIndex ?? null;
       if (ci) {
@@ -413,7 +530,6 @@ watch(
       }
     }
 
-    // If parent passed completed flag, enter finish page
     const completedFlag = val.completed ?? val.is_completed ?? null;
     if (completedFlag === 1 || completedFlag === true || String(completedFlag) === '1') {
       isFinished.value = true;

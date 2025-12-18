@@ -1,7 +1,7 @@
 <template>
   <header class="mapnav-root" aria-label="地图导航">
     <!-- 顶部标题 -->
-    <div class="lib-hero p-6 mb-6">
+    <div class="lib-hero p-6">
       <div class="hero-title hero-left">学习地图</div>
       <div class="hero-title hero-right">闯关模式</div>
     </div>
@@ -9,7 +9,7 @@
     <!-- 控件区：电池在上，课程在下（课程左对齐） -->
     <div class="controls p-4 mb-4 flex flex-col gap-6 items-center">
        <!-- 能量面板 -->
-      <div class="energy-wrap w-full flex justify-end px-4">
+      <div class="energy-wrap w-full flex justify-end mb-4">
         <div
           class="energy-panel"
           :class="{ vip: isVip, low: isLow }"
@@ -21,7 +21,7 @@
           <div class="battery" aria-hidden="true">
             <div class="battery-cap"></div>
             <div class="battery-body">
-              <div class="battery-fill" :style="{ width: energyPercent + '%' }"></div>
+              <div class="battery-fill" :style="[{ width: energyPercent + '%' }, batteryVip]"></div>
             </div>
           </div>
           <div class="energy-text">
@@ -308,6 +308,9 @@ const loadingProgress = ref(false)
 const showLocalLoginModal = ref(false)
 
 const token = computed(() => localStorage.getItem('yp_token') || null)
+const batteryVip = computed(() => {
+  if (isVip.value) return {background: '#fbbf24'}
+})
 const energyPercent = computed(() => {
   if (isVip.value) return 100
   if (!maxEnergy.value || maxEnergy.value === 0) return 0
