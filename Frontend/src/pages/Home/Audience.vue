@@ -88,15 +88,15 @@ const audiences = ref([
     srcset: '/worker-480.jpg 480w, /worker-800.jpg 800w, /worker-1200.jpg 1200w',
     link: '/map'
   },
-  {
-    title: '长者',
-    emoji: '🧓',
-    tagline: '有点跟不上时代？',
-    desc: '从入门到趣味项目、循序渐进，让你也能与时俱进。',
-    src: '/elderly.jpg',
-    srcset: '/elderly-480.jpg 480w, /elderly-800.jpg 800w, /elderly-1200.jpg 1200w',
-    link: '/map'
-  },
+  // {
+  //   title: '长者',
+  //   emoji: '🧓',
+  //   tagline: '有点跟不上时代？',
+  //   desc: '从入门到趣味项目、循序渐进，让你也能与时俱进。',
+  //   src: '/elderly.jpg',
+  //   srcset: '/elderly-480.jpg 480w, /elderly-800.jpg 800w, /elderly-1200.jpg 1200w',
+  //   link: '/map'
+  // },
   {
     title: '幼儿',
     emoji: '🧸',
@@ -106,15 +106,15 @@ const audiences = ref([
     srcset: '/children-480.jpg 480w, /children-800.jpg 800w, /children-1200.jpg 1200w',
     link: '/map'
   },
-  {
-    title: '教师',
-    emoji: '👩‍🏫',
-    tagline: '想要更好的教学工具？',
-    desc: '丰富的教学资源与课程，助力老师高效备课与授课。',
-    src: '/teacher.jpg',
-    srcset: '/children-480.jpg 480w, /children-800.jpg 800w, /children-1200.jpg 1200w',
-    link: '/map'
-  }
+  // {
+  //   title: '教师',
+  //   emoji: '👩‍🏫',
+  //   tagline: '想要更好的教学工具？',
+  //   desc: '丰富的教学资源与课程，助力老师高效备课与授课。',
+  //   src: '/teacher.jpg',
+  //   srcset: '/children-480.jpg 480w, /children-800.jpg 800w, /children-1200.jpg 1200w',
+  //   link: '/map'
+  // }
 ])
 </script>
 
@@ -149,7 +149,12 @@ const audiences = ref([
 /* 网格布局 */
 .grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
 @media (min-width: 640px) { .grid { grid-template-columns: repeat(2, 1fr); gap: 20px; } }
-@media (min-width: 1024px) { .grid { grid-template-columns: repeat(3, 1fr); gap: 24px; } }
+@media (min-width: 1024px) { 
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 24px; } 
+  .flip-card-wrapper {
+    max-width: 500px;
+  }
+}
 
 /* 卡片包装器：渐变背景 + 白色字体 */
 .flip-card-wrapper {

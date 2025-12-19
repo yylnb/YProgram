@@ -286,7 +286,10 @@ async function onNodeClick(node) {
   }
   try {
     pressedNodeKey.value = null
-    router.push({ name: "Study", params: { course: currentCourse.value, unitId: String(node.localNumber)} })
+    router.push({
+      name: "Study",
+      params: { course: currentCourse.value, unitId: String(node.localNumber) }
+    })
   } catch (e) {}
 }
 function showInlineMessage(text) {

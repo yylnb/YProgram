@@ -82,18 +82,6 @@ const checkinSaveError = ref('');
 // 是否已完成单元（进入 Finish.vue）
 const isFinished = ref(false);
 
-// ---------- 新增的本地标记（用于避免误判完成） ----------
-/*
-  justAnsweredLast:
-    - 在本次会话里，用户刚刚答对了最后一题（由 onChildCorrect 设置）
-    - 仅当用户答对最后一题时为 true，用来立即显示完成页（无需等待后端响应）
-  lastSavedCompleted:
-    - 当我们向后端成功保存 completed=1 时设为 true（由 saveProgress 设置）
-    - 用于在 save 成功后保持完成态，即便后端返回或父组件同步略有延迟
-*/
-const justAnsweredLast = ref(false);
-const lastSavedCompleted = ref(false);
-
 // ----------------------- helpers: component choice -----------------------
 function isFillByIndex(idx) {
   if (!idx || typeof idx !== 'number') return false;
@@ -169,15 +157,11 @@ async function fetchProgress() {
     const res = await axios.get(url, cfg);
     progressDataLocal.value = res?.data ?? null;
 
-    // 如果后端返回已完成状态，则直接进入完成页
     const completedFlag = progressDataLocal.value?.completed ?? progressDataLocal.value?.is_completed ?? null;
-    // 只有当后端明确返回 completed=1 时，才把 isFinished 设为 true
     if (completedFlag === 1 || completedFlag === true || String(completedFlag) === '1') {
       isFinished.value = true;
-      lastSavedCompleted.value = true; // keep local marker in sync
     } else {
       isFinished.value = false;
-      // don't clear justAnsweredLast here (it represents a just-happened event)
     }
   } catch (err) {
     console.warn('fetchProgress error', err);
@@ -210,13 +194,8 @@ async function determineIndexAndLoad() {
   else if (fromProgress !== null) currentQuestionIndex.value = clampIndex(fromProgress);
   else currentQuestionIndex.value = 1;
 
-  // 仅当后端明确表明 completed=1，或我们本地刚刚保存 completed=1，或刚答对最后一题（justAnsweredLast）时，进入完成页
   const completedFlag = progressDataLocal.value?.completed ?? progressDataLocal.value?.is_completed ?? null;
-  if (
-    (completedFlag === 1 || completedFlag === true || String(completedFlag) === '1')
-    || lastSavedCompleted.value
-    || justAnsweredLast.value
-  ) {
+  if (completedFlag === 1 || completedFlag === true || String(completedFlag) === '1') {
     isFinished.value = true;
     emit('select-question', { questionIndex: currentQuestionIndex.value });
     return;
@@ -227,18 +206,6 @@ async function determineIndexAndLoad() {
   emit('select-question', { questionIndex: currentQuestionIndex.value });
   await fetchQuestion(currentQuestionIndex.value);
 }
-
-const resolvedUnitId = computed(() => {
-  const v = props.unitId ?? route.params.unitId
-  const n = Number(v)
-  return Number.isFinite(n) ? n : null
-})
-
-const resolvedCourseIndex = computed(() => {
-  const raw = String(route.params.course || '')
-  const m = raw.match(/(\d+)$/)
-  return m ? Number(m[1]) : null
-})
 
 async function fetchQuestion(qid) {
   loadError.value = ''
@@ -255,34 +222,14 @@ async function fetchQuestion(qid) {
 
     // 🔧 FIX: course / unit 只来自 props / route
     const courseIdx = resolvedCourseIndex.value
-    // resolvedUnitId.value 原本被直接作为最后一个 q_id 传给后端 —— 这会把 unit number 当成题号
-    // 我们需要把单元号 + 单元内题号 转换为 全局题号 q_global = totalQuestions*(unitNumber-1) + q_in_unit
-    // 先解析 unitNumber 的最佳来源（优先 resolvedUnitId，再退回 parsedCourse.index，再兜底 1）
-    let unitNumber = null
-    if (typeof resolvedUnitId.value === 'number' && Number.isFinite(resolvedUnitId.value)) {
-      unitNumber = Number(resolvedUnitId.value)
-    } else if (parsedCourse.value.index) {
-      const n = Number(parsedCourse.value.index)
-      if (Number.isFinite(n)) unitNumber = n
-    } else {
-      // 兜底：尝试从 props.unitId（字符串形式）再尝试 route param
-      const tryV = props.unitId ?? route.params.unitId
-      const tn = Number(tryV)
-      unitNumber = Number.isFinite(tn) ? tn : 1
-    }
+    const unitId = resolvedUnitId.value
 
-    // clamp 单元内题号到 1..totalQuestions
-    const qInUnit = clampIndex(Number(qid))
-
-    // 计算全局题号
-    const qGlobal = (Number(totalQuestions) * (Number(unitNumber) - 1)) + Number(qInUnit)
-
-    if (!courseIdx || !qGlobal) {
-      loadError.value = '课程或题号无效'
+    if (!courseIdx || !unitId) {
+      loadError.value = '课程或单元ID无效'
       return
     }
 
-    const url = `/api/question/${encodeURIComponent(form)}/${encodeURIComponent(langShort)}/${encodeURIComponent(String(courseIdx))}/${encodeURIComponent(String(qGlobal))}`
+    const url = `/api/question/${encodeURIComponent(form)}/${encodeURIComponent(langShort)}/${encodeURIComponent(String(courseIdx))}/${encodeURIComponent(String(unitId))}`
 
     const cfg = { withCredentials: true, timeout: 8000 }
     if (props.token) cfg.headers = { Authorization: `Bearer ${props.token}` }
@@ -351,7 +298,6 @@ async function saveProgress(nextIndex, completedFlag = 0) {
 
     const res = await axios.post('/api/progress', body, cfg);
 
-    // 合成本地进度对象
     progressDataLocal.value = {
       unit_id: body.unit_id,
       current_index: body.current_index,
@@ -360,11 +306,6 @@ async function saveProgress(nextIndex, completedFlag = 0) {
       index: body.index ?? null,
       table: res?.data?.table ?? null
     };
-
-    // ---- 关键：如果我们刚刚把 completed 设为 1 且保存成功，记录本地标记 ----
-    if (body.completed === 1) {
-      lastSavedCompleted.value = true;
-    }
 
     emit('progress-updated', progressDataLocal.value);
 
@@ -379,12 +320,25 @@ async function saveProgress(nextIndex, completedFlag = 0) {
   }
 }
 
+const resolvedUnitId = computed(() => {
+  const v = props.unitId ?? route.params.unitId
+  const n = Number(v)
+  return Number.isFinite(n) ? n : null
+})
+
+const resolvedCourseIndex = computed(() => {
+  const raw = String(route.params.course || '')
+  const m = raw.match(/(\d+)$/)
+  return m ? Number(m[1]) : null
+})
+
 // ----------------------- 新增：saveCheckin (POST /api/checkin) -----------------------
 /*
   body: { unit_id, date, color, lang, index, note? }
   返回示例： { success:true, insertedId:123, record: {...} }
 */
 async function saveCheckin(payload = {}) {
+  // payload 应包含 color, date(optional), note(optional)
   checkinSaveError.value = '';
 
   if (!props.unitId) {
@@ -415,8 +369,10 @@ async function saveCheckin(payload = {}) {
 
     const res = await axios.post('/api/checkin', body, cfg);
 
+    // emit 事件，供上层或 StudyNew.vue 监听并作出响应
     emit('checkin-saved', res?.data ?? null);
 
+    // 可选：把打卡信息合并到本地 progressData（若需要）
     if (!progressDataLocal.value) progressDataLocal.value = {};
     progressDataLocal.value.last_checkin = res?.data?.record ?? (body);
 
@@ -437,56 +393,30 @@ async function onChildCorrect(payload) {
   disabledForChild.value = true;
 
   if (isLast) {
-    // ✅ 最后一题：先标记 justAnsweredLast 为 true（立即生效），再保存 completed=1
-    justAnsweredLast.value = true;
-
+    // ✅ 最后一题：完成单元
     await saveProgress(totalQuestions, 1);
-
-    // 标记完成状态（saveProgress 会把 lastSavedCompleted 设为 true）
     isFinished.value = true;
-
-    // 向父组件通知单元完成（携带最新进度）
     emit('unit-complete', { unitId: props.unitId, progress: progressDataLocal.value });
-
-    // 注意：不改变 currentQuestionIndex（仍显示最后一题的 Finish.vue）
   } else {
-    // ✅ 普通题：只推进进度（保存 current_index = current + 1, completed=0）
-    // 清除 justAnsweredLast（如果之前为 true，说明那是历史标记）
-    justAnsweredLast.value = false;
+    // ✅ 普通题：只推进进度
     await saveProgress(currentQuestionIndex.value + 1, 0);
   }
 
   disabledForChild.value = false;
 
-  // 通知父组件 answered（保留 attempts 等信息）
   emit('answered', {
     correct: true,
-    attempts: payload?.attempts ?? 1,
-    questionIndex: currentQuestionIndex.value,
-    progress: progressDataLocal.value
+    questionIndex: currentQuestionIndex.value
   });
 }
 
 async function onChildNext(payload) {
-  // 这里 next 仅用于切题（由用户点击“下一题”触发）
-  const nextIdx = (payload && typeof payload.nextIndex === 'number') ? clampIndex(payload.nextIndex) : clampIndex(currentQuestionIndex.value + 1);
+  const nextIdx = currentQuestionIndex.value + 1;
 
-  // 立即广播用户点击“下一题”的意图（携带 nextIndex 与当前 progress）
-  emit('next-clicked', { nextIndex: nextIdx, progress: progressDataLocal.value });
+  emit('next-clicked', { nextIndex: nextIdx });
 
-  // 如果 child 明确告知这是最后一题（payload.isLast） 或 nextIdx > totalQuestions -> 单元完成
-  const childSaysLast = !!(payload && payload.isLast);
+  if (nextIdx > totalQuestions) return;
 
-  if (childSaysLast || nextIdx > totalQuestions) {
-    // 在绝大多数合理实现中，完成是由 onChildCorrect 触发的；
-    // 这里保留兼容逻辑：如果 child 强制认为是最后，尝试保存 completed 并触发 unit-complete
-    await saveProgress(nextIdx, 1);
-    isFinished.value = true;
-    emit('unit-complete', { unitId: props.unitId, progress: progressDataLocal.value });
-    return;
-  }
-
-  // Normal next question flow:
   currentQuestionIndex.value = nextIdx;
   emit('select-question', { questionIndex: nextIdx });
   await fetchQuestion(nextIdx);
@@ -575,6 +505,8 @@ function onFinishNextUnit(payload) {
 
 // 当 Finish.vue 内部打卡完成后 emit 回来，会触发这里（如果你希望父层做额外处理）
 function onCheckinComplete(data) {
+  // data 是 saveCheckin 返回的 res.data
+  // 目前我们只是把它 log，并可做进一步处理（比如导航提示）
   console.log('checkin completed', data);
 }
 
@@ -602,10 +534,8 @@ watch(
     progressDataLocal.value = val;
 
     if (incomingIdx !== null && localIdx !== null && Number(incomingIdx) === Number(localIdx)) {
-      // 同步后仍需根据 completed 字段决定是否进入完成页
       const completedFlag = val.completed ?? val.is_completed ?? null;
       if (completedFlag === 1 || completedFlag === true || String(completedFlag) === '1') {
-        lastSavedCompleted.value = true;
         isFinished.value = true;
       }
       return;
@@ -622,7 +552,6 @@ watch(
 
     const completedFlag = val.completed ?? val.is_completed ?? null;
     if (completedFlag === 1 || completedFlag === true || String(completedFlag) === '1') {
-      lastSavedCompleted.value = true;
       isFinished.value = true;
     }
   },
