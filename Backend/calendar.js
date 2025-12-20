@@ -206,6 +206,42 @@ module.exports = function (pool, authMiddleware) {
     }
   })
 
+//   router.get('/checkins/:year/:month', authMiddleware, async (req, res) => {
+//   const userId = req.user.id
+//   const year = Number(req.params.year)
+//   const month = Number(req.params.month)
+
+//   if (!year || !month || month < 1 || month > 12) {
+//     return res.status(400).json({ error: 'invalid year/month' })
+//   }
+
+//   try {
+//     const [rows] = await pool.query(
+//       `
+//       SELECT
+//         DATE_FORMAT(\`date\`, '%Y-%m-%d') AS date,
+//         \`color\`
+//       FROM checkin_records
+//       WHERE user_id = ?
+//         AND YEAR(\`date\`) = ?
+//         AND MONTH(\`date\`) = ?
+//       ORDER BY \`date\`
+//       `,
+//       [userId, year, month]
+//     )
+
+//     const records = (rows || []).map(r => ({
+//       date: r.date,
+//       color: r.color
+//     }))
+
+//     return res.json(records)
+//   } catch (err) {
+//     console.error('GET /api/calendar/checkins error', err)
+//     return res.status(500).json({ error: 'internal error' })
+//   }
+// })
+
   /**
    * GET /api/calendar/checkins/today
    * return: { checked: boolean, color?: string }
