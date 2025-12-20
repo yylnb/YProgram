@@ -127,4 +127,7 @@ function onRootClick() {
   border-right-color: rgba(27, 124, 228, 0.815); */
   border-color: white;
 }
+@media (min-width: 1200px) {
+  .border-self { border: 2px solid #ffffffbf; }
+}
 </style>

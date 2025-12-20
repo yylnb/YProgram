@@ -7,7 +7,7 @@
       </header>
 
       <div class="modal-body">
-        <div class="left-col">
+        <div class="left-col" ref="leftCol">
           <!-- avatar preview -->
           <div class="avatar-preview" :style="avatarPreviewStyle">
             <span v-if="emoji" class="preview-emoji">{{ emoji }}</span>
@@ -17,51 +17,57 @@
           <div class="field small">
             <label>头像 Emoji</label>
             <div class="control-row">
-              <button class="emoji-btn" @click="toggleEmojiPicker">{{ emoji || '选择 Emoji' }}</button>
+              <button class="emoji-btn" ref="emojiBtn" @click="toggleEmojiPicker">{{ emoji || '选择 Emoji' }}</button>
               <button class="btn-mini" @click="clearEmoji">清除</button>
             </div>
 
-            <div v-if="showEmojiPicker" class="palette emoji-palette">
-              <div class="emoji-grid">
-                <button
-                  v-for="(e, idx) in emojiOptions"
-                  :key="'e'+idx"
-                  class="emoji-item"
-                  @click="selectEmoji(e)"
-                >{{ e }}</button>
+            <!-- teleport 到 body 的 overlay（不在 modal flow 中） -->
+            <teleport to="body">
+              <div v-if="showEmojiPicker" class="palette emoji-palette overlay" :style="emojiStyle" @click.stop>
+                <div class="emoji-grid">
+                  <button
+                    v-for="(e, idx) in emojiOptions"
+                    :key="'e'+idx"
+                    class="emoji-item"
+                    @click="selectEmoji(e)"
+                  >{{ e }}</button>
 
-                <!-- custom option -->
-                <div class="emoji-custom">
-                  <input v-model="customEmoji" placeholder="自定义 emoji" @keyup.enter="applyCustomEmoji" />
-                  <button class="btn-mini" @click="applyCustomEmoji">应用自定义</button>
+                  <!-- custom option -->
+                  <div class="emoji-custom">
+                    <input v-model="customEmoji" placeholder="自定义 emoji" @keyup.enter="applyCustomEmoji" />
+                    <button class="btn-mini" @click="applyCustomEmoji">应用自定义</button>
+                  </div>
                 </div>
               </div>
-            </div>
+            </teleport>
           </div>
 
           <div class="field small">
             <label>头像背景色</label>
             <div class="control-row">
-              <button class="color-btn" @click="toggleColorPicker" :style="{ background: color }">{{ colorLabel }}</button>
+              <button class="color-btn" ref="colorBtn" @click="toggleColorPicker" :style="{ background: color }">{{ colorLabel }}</button>
               <button class="btn-mini" @click="clearColor">清除</button>
             </div>
 
-            <div v-if="showColorPicker" class="palette color-palette">
-              <div class="color-grid">
-                <button
-                  v-for="(c, idx) in colorOptions"
-                  :key="'c'+idx"
-                  class="color-item"
-                  :style="{ background: c }"
-                  @click="selectColor(c)"
-                ></button>
+            <!-- teleport 到 body 的颜色面板 overlay -->
+            <teleport to="body">
+              <div v-if="showColorPicker" class="palette color-palette overlay color-overlay" :style="colorStyle" @click.stop>
+                <div class="color-grid">
+                  <button
+                    v-for="(c, idx) in colorOptions"
+                    :key="'c'+idx"
+                    class="color-item"
+                    :style="{ background: c }"
+                    @click="selectColor(c)"
+                  ></button>
+                </div>
               </div>
-            </div>
+            </teleport>
           </div>
 
           <!-- 专门的头像保存按钮 -->
           <div class="field">
-            <div class="hint">头像设置单独保存（emoji 与 背景色）</div>
+            <!-- <div class="hint">头像设置单独保存（emoji 与 背景色）</div> -->
             <div style="margin-top:8px;">
               <button class="btn btn-primary" :disabled="savingAvatar" @click="saveAvatar">
                 <span v-if="savingAvatar">保存中…</span>
@@ -91,7 +97,7 @@
               </div>
             </div>
 
-            <p class="hint">修改用户名需要后端校验。若用户名重复会提示并允许重新输入。</p>
+            <!-- <p class="hint">修改用户名需要后端校验。若用户名重复会提示并允许重新输入。</p> -->
             <div v-if="usernameMsg" class="msg" :class="{'msg-error': usernameError, 'msg-success': !usernameError}">{{ usernameMsg }}</div>
           </div>
 
@@ -116,7 +122,7 @@
                 </div>
               </div>
             </div>
-            <p class="hint">更改密码会直接在此处调用后端接口并在成功后刷新页面。</p>
+            <!-- <p class="hint">更改密码会直接在此处调用后端接口并在成功后刷新页面。</p> -->
             <div v-if="passwordMsg" class="msg" :class="{'msg-error': passwordError, 'msg-success': !passwordError}">{{ passwordMsg }}</div>
           </div>
 
@@ -138,7 +144,7 @@
               </div>
             </div>
 
-            <p class="hint">联系方式修改将同步到后端并在成功后刷新页面。</p>
+            <!-- <p class="hint">联系方式修改将同步到后端并在成功后刷新页面。</p> -->
             <div v-if="contactMsg" class="msg" :class="{'msg-error': contactError, 'msg-success': !contactError}">{{ contactMsg }}</div>
           </div>
 
@@ -153,7 +159,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, nextTick, watch, onBeforeUnmount } from 'vue'
 import axios from 'axios'
 
 const emit = defineEmits(['close','saved'])
@@ -201,6 +207,13 @@ const savingAvatar = ref(false)
 const avatarMsg = ref('')
 const avatarError = ref(false)
 
+// refs for buttons & positioning
+const emojiBtn = ref(null)
+const colorBtn = ref(null)
+const leftCol = ref(null)
+const emojiStyle = ref({})
+const colorStyle = ref({})
+
 // load existing from localStorage
 onMounted(() => {
   try {
@@ -215,11 +228,30 @@ onMounted(() => {
   } catch (e) {
     // ignore parse errors
   }
+
+  // update positions if open initially
+  addWindowListeners()
+})
+
+onBeforeUnmount(() => {
+  removeWindowListeners()
 })
 
 // helpers
-function toggleEmojiPicker(){ showEmojiPicker.value = !showEmojiPicker.value; showColorPicker.value = false }
-function toggleColorPicker(){ showColorPicker.value = !showColorPicker.value; showEmojiPicker.value = false }
+function toggleEmojiPicker(){ 
+  showEmojiPicker.value = !showEmojiPicker.value; 
+  showColorPicker.value = false;
+  if (showEmojiPicker.value) {
+    nextTick(updateEmojiPos)
+  }
+}
+function toggleColorPicker(){ 
+  showColorPicker.value = !showColorPicker.value; 
+  showEmojiPicker.value = false;
+  if (showColorPicker.value) {
+    nextTick(updateColorPos)
+  }
+}
 function selectEmoji(e){ emoji.value = e; showEmojiPicker.value = false; clearMsgAfterDelay() }
 function applyCustomEmoji(){
   const s = (customEmoji.value || '').trim()
@@ -252,6 +284,75 @@ const avatarPreviewStyle = computed(()=>{
     color: '#fff'
   }
 })
+
+// position update helpers
+function updateEmojiPos() {
+  if (!emojiBtn.value) return
+  const rect = emojiBtn.value.getBoundingClientRect()
+  // place below button, but if not enough space place above
+  const pad = 8
+  const elWidth = 320
+  const elHeightEstimate = 220
+  let left = rect.left
+  // ensure not overflow right
+  if (left + elWidth > window.innerWidth - 12) left = window.innerWidth - elWidth - 12
+  if (left < 12) left = 12
+
+  let top = rect.bottom + pad
+  if (top + elHeightEstimate > window.innerHeight - 12) {
+    // place above
+    top = rect.top - elHeightEstimate - pad
+    if (top < 12) top = 12
+  }
+
+  emojiStyle.value = {
+    position: 'absolute',
+    top: `${top}px`,
+    left: `${left}px`,
+    width: `${elWidth}px`,
+    zIndex: 4000
+  }
+}
+
+function updateColorPos() {
+  if (!colorBtn.value) return
+  const rect = colorBtn.value.getBoundingClientRect()
+  const pad = 8
+  const elWidth = 260
+  const elHeightEstimate = 180
+  let left = rect.left
+  if (left + elWidth > window.innerWidth - 12) left = window.innerWidth - elWidth - 12
+  if (left < 12) left = 12
+
+  let top = rect.bottom + pad
+  if (top + elHeightEstimate > window.innerHeight - 12) {
+    top = rect.top - elHeightEstimate - pad
+    if (top < 12) top = 12
+  }
+
+  colorStyle.value = {
+    position: 'absolute',
+    top: `${top}px`,
+    left: `${left}px`,
+    width: `${elWidth}px`,
+    zIndex: 4000
+  }
+}
+
+function addWindowListeners() {
+  window.addEventListener('resize', onWindowChange)
+  window.addEventListener('scroll', onWindowChange, true)
+}
+
+function removeWindowListeners() {
+  window.removeEventListener('resize', onWindowChange)
+  window.removeEventListener('scroll', onWindowChange, true)
+}
+
+function onWindowChange() {
+  if (showEmojiPicker.value) nextTick(updateEmojiPos)
+  if (showColorPicker.value) nextTick(updateColorPos)
+}
 
 // small helpers
 function handleClose(){ emit('close') }
@@ -498,81 +599,384 @@ function cancelEditPassword(){
 </script>
 
 <style scoped>
-/* （样式保持不变，直接沿用你原来的） */
+/* ===============================
+   Modal Backdrop & Card (Dark)
+================================ */
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background: rgba(2,6,23,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.65);
   z-index: 2000;
   padding: 20px;
 }
+
 .modal-card {
   width: 920px;
   max-width: 98%;
-  background: white;
-  border-radius: 12px;
+  min-height: 70vh;
+  max-height: 80vh;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(30px);
+  border-radius: 14px;
   padding: 18px;
-  box-shadow: 0 20px 60px rgba(2,6,23,0.6);
+  box-shadow: 12px 12px 36px rgba(194, 194, 194, 0.7);
   display: flex;
   flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.737);
+  overflow: auto;
 }
-.modal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
-.modal-title { font-size:20px; font-weight:900; color:#0f172a; }
-.close-btn { background:transparent; border:none; font-size:18px; cursor:pointer; }
 
-.modal-body { display:flex; gap:18px; }
-.left-col { width:320px; display:flex; flex-direction:column; gap:12px; }
-.right-col { flex:1; display:flex; flex-direction:column; gap:12px; }
+/* ===============================
+   Header
+================================ */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
 
+.modal-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #cbd5f5;
+}
+.close-btn:hover {
+  color: #ffffff;
+}
+
+/* ===============================
+   Layout
+================================ */
+.modal-body {
+  display: flex;
+  gap: 18px;
+}
+
+.left-col {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative; /* keep for potential internal absolute positioning */
+}
+
+.right-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ===============================
+   Avatar Preview
+================================ */
 .avatar-preview {
-  width:120px;
-  height:120px;
-  border-radius:16px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:36px;
-  font-weight:900;
-  box-shadow: 0 12px 30px rgba(2,6,23,0.08);
+  width: 120px;
+  height: 120px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  font-weight: 900;
+  color: #ffffff;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.6);
 }
-.preview-emoji { font-size:44px }
 
-.field { display:flex; flex-direction:column; gap:8px; }
-.field.small { gap:6px; }
-.field label { font-size:13px; color:#374151; font-weight:800; }
-.control-row { display:flex; gap:8px; align-items:center; }
-.emoji-btn, .color-btn { padding:8px 12px; border-radius:8px; border:1px solid rgba(15,23,42,0.06); cursor:pointer; background:white }
-.btn-mini { padding:6px 8px; border-radius:8px; border:1px solid rgba(15,23,42,0.06); background:white; cursor:pointer }
+.preview-emoji {
+  font-size: 44px;
+}
 
-.palette { margin-top:8px; border-radius:8px; padding:10px; background: #fafafa; border:1px solid rgba(15,23,42,0.04) }
-.emoji-grid { display:flex; flex-wrap:wrap; gap:6px; }
-.emoji-item { width:44px; height:36px; display:flex; align-items:center; justify-content:center; font-size:20px; border-radius:8px; background:white; border:1px solid rgba(15,23,42,0.04); cursor:pointer }
-.emoji-custom { display:flex; gap:8px; align-items:center; margin-left:6px; margin-top:6px; }
-.emoji-custom input { padding:6px; border-radius:8px; border:1px solid rgba(15,23,42,0.06); }
+/* ===============================
+   Fields & Labels
+================================ */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
-.color-grid { display:grid; grid-template-columns: repeat(5, 1fr); gap:8px; }
-.color-item { width:100%; aspect-ratio: 1/1; border-radius:8px; border:1px solid rgba(15,23,42,0.06); cursor:pointer }
+.field.small {
+  gap: 6px;
+}
 
-.username-row, .password-row { display:flex; gap:12px; align-items:flex-start; }
-.username-row input, .password-row input, .field input { padding:8px 10px; border-radius:8px; border:1px solid rgba(15,23,42,0.08); min-width:180px; }
-.name-actions, .pw-actions { display:flex; gap:8px; flex-direction:column; }
-.btn-small { padding:6px 8px; border-radius:8px; border:1px solid rgba(15,23,42,0.06); background:white; cursor:pointer }
-.btn-small.primary { background: linear-gradient(90deg,#2563eb,#7c3aed); color:white; border:none; }
-.pw-inputs { display:flex; flex-direction:column; gap:8px; }
-.pw-placeholder { padding:8px 12px; color:#6b7280 }
+.field label {
+  font-size: 13px;
+  font-weight: 800;
+  color: #e5e7eb;
+}
 
-.actions-row { display:flex; gap:10px; justify-content:flex-end; margin-top:6px }
-.btn { padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:800 }
-.btn-primary { background: linear-gradient(90deg,#2563eb,#7c3aed); color:#fff; border:none }
-.btn-outline { background: #fff; border:1px solid rgba(15,23,42,0.08); color:#0f172a }
+.control-row {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
 
-.hint { font-size:12px; color:#6b7280; margin-top:4px }
+/* ===============================
+   Inputs
+================================ */
+.field input,
+.username-row input,
+.password-row input,
+.emoji-custom input {
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #0f1629;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #ffffff;
+  outline: none;
+}
 
-/* message styles */
-.msg { margin-left:12px; font-size:13px; }
-.msg-error { color:#dc2626; }
-.msg-success { color:#16a34a; }
+.field input::placeholder {
+  color: #6b7280;
+}
+
+.field input:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 1px rgba(124,58,237,0.4);
+}
+
+/* ===============================
+   Buttons
+================================ */
+.emoji-btn,
+.color-btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #111827;
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.08);
+  cursor: pointer;
+}
+.color-btn {
+  margin-left: 12px;
+  margin-right: 10px;
+}
+
+.btn-mini {
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: #fffffff8;
+  color: #000;
+  border: 1px solid rgba(255,255,255,0.08);
+  cursor: pointer;
+}
+.btn-mini:hover {
+  background: #ffffffae;
+  transform: translateY(-2px);
+}
+
+.emoji-btn:hover {
+  background: #020617;
+}
+
+/* ===============================
+   Palette (Emoji / Color) - overlay styles
+   These are rendered in body via teleport
+================================ */
+.overlay {
+  border-radius: 10px;
+  padding: 10px;
+  background: linear-gradient(180deg, rgba(10,12,18,0.96), rgba(18,20,28,0.98));
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 20px 60px rgba(2,6,23,0.6);
+  max-height: 65vh;
+  overflow: auto;
+}
+
+/* keep previous palette class compatibility */
+.palette {
+  margin-top: 8px;
+  border-radius: 10px;
+  padding: 10px;
+  border: none;
+}
+
+.emoji-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.emoji-item {
+  width: 44px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  border-radius: 8px;
+  background: #0f172a;
+  border: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+}
+
+.emoji-item:hover {
+  background: #1e293b;
+}
+
+.emoji-custom {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-left: 6px;
+  margin-top: 6px;
+}
+
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.color-item {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer;
+}
+
+/* ===============================
+   Username / Password Rows
+================================ */
+.username-row,
+.password-row {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.name-actions,
+.pw-actions {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+}
+
+.btn-small {
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: #fffffff8;
+  color: #000;
+  border: 1px solid rgba(255,255,255,0.08);
+  cursor: pointer;
+}
+.btn-small:hover {
+  background: #ffffffae;
+  transform: translateY(-2px);
+}
+
+.btn-small.primary {
+  background: linear-gradient(90deg, #2563eb, #7c3aed);
+  color: #ffffff;
+  border: none;
+}
+
+.pw-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pw-placeholder {
+  padding: 8px 12px;
+  color: #9ca3af;
+}
+
+/* ===============================
+   Footer Actions
+================================ */
+.actions-row {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+.btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #2563eb, #7c3aed);
+  color: #ffffff;
+  border: none;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #ffffff;
+}
+.btn-outline:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+/* ===============================
+   Hint & Messages
+================================ */
+.hint {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+.msg {
+  margin-left: 12px;
+  font-size: 13px;
+}
+
+.msg-error {
+  color: #f87171;
+}
+
+.msg-success {
+  color: #34d399;
+}
+
+/* small responsive tweak */
+@media (max-width: 760px) {
+  .modal-card { width: 96%; padding: 12px; }
+  .avatar-preview { width: 96px; height: 96px; }
+  /* modal 内部改为纵向布局 */
+  .modal-body {
+    flex-direction: column;
+  }
+
+  /* 左右栏都占满宽度 */
+  .left-col,
+  .right-col {
+    width: 100%;
+  }
+
+  /* modal 本身允许纵向滚动 */
+  .modal-card {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  /* 给底部一点安全空间，避免被系统手势遮挡 */
+  .modal-body {
+    padding-bottom: 12px;
+  }
+}
+  
+
 </style>

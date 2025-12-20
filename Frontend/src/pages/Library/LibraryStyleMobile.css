@@ -76,7 +76,8 @@
   justify-content: center;
   transform: translateX(-50%);
   white-space: nowrap;
-  background: linear-gradient(144deg, #AF40FF, #5B42F3 50%, #00DDEB);
+  /* background: linear-gradient(144deg, #AF40FF, #5B42F3 50%, #00DDEB); */
+  background: #fff;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

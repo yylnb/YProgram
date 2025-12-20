@@ -442,7 +442,7 @@ watch(createdRaw, calcJoinDays)
   ),
   #232323; */
   backdrop-filter: blur(12px);
-  border: 0.01px solid #aeaeae69;
+  border: 1px solid #aeaeae;
 }
 .stat-label { font-size:13px; color:#9CA3AF; }
 .stat-value { font-weight:900; font-size:18px; color:#fff; }

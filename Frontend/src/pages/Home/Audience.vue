@@ -2,7 +2,7 @@
   <section class="audience-cards" aria-label="受众群体">
     <div class="container">
       <h2 class="heading">适配不同场景与年龄</h2>
-      <p class="sub">为学生、职场人、长者与孩子提供定制化的编程学习路径</p>
+      <p class="sub">为学生、职场人与孩子提供定制化的编程学习路径</p>
 
       <div class="grid">
         <FlipCard
@@ -11,7 +11,7 @@
           class="group flip-card-wrapper"
           :aria-labelledby="`title-${idx}`"
           :flipOnHover="true"
-          :clickable="false"
+          :clickable="true"
         >
           <!-- front: 照片 + 底部居中 emoji + title -->
           <template #default>
@@ -222,9 +222,21 @@ const audiences = ref([
   box-sizing: border-box;
   /* 背面也使用渐变，但偏深以区分正面（保持与卡片主色一致） */
   /* background: linear-gradient(180deg, rgba(14,120,233,0.95) 0%, rgba(237,58,237,0.95) 100%); */
-  background: black;
   color: #ffffff;
+  background:
+  radial-gradient(
+    circle at top right,
+    #4c4c4c,
+    transparent 40%
+  ),
+  radial-gradient(
+    circle at bottom left,
+    #4c4c4c,
+    transparent 40%
+  ),
+  #232323;
 }
+
 .back-content {
   width: 100%;
   max-width: 420px;
@@ -263,12 +275,14 @@ const audiences = ref([
 .btn:focus-visible {
   transform: translateY(-2px);
   /* 渐变填充（水平渐变） */
-  background-image: linear-gradient(45deg, #196ac1 0%, #bb38bb 100%);
-  background-color: transparent;
+  /* background-image: linear-gradient(45deg, #196ac1 0%, #bb38bb 100%);
+  background-color: transparent; */
   color: #ffffff;
   border: 1px solid rgba(255,255,255,0.08); /* 轻保留边框，避免突然消失 */
   box-shadow: 0 6px 18px rgba(14,120,233,0.18);
   outline: none;
+  background: #6b21a8;
+  box-shadow: 0 36px 80px rgba(132, 63, 141, 0.479);
 }
 
 /* 响应式：小屏时图片高度减小与卡片高度调整 */

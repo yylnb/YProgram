@@ -31,7 +31,7 @@
               v-model="username"
               type="text"
               class="input"
-              placeholder="例如：xiaoming"
+              placeholder="希望怎么称呼你？"
               autocomplete="username"
             />
           </div>
@@ -230,25 +230,27 @@ async function handleSubmit() {
   align-items: center;
   justify-content: center;
 
-  padding: 1.5rem; /* p-6 */
-  background: rgba(8, 10, 20, 0.45);
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.65);
 }
 
 .modal {
   width: 100%;
   max-width: 480px;
 
-  background-color: #ffffff;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  backdrop-filter: blur(6px) saturate(110%);
   border-radius: 12px;
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.511);
 
   box-shadow:
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -4px rgba(0, 0, 0, 0.1); /* shadow-lg */
+    12px 12px 36px rgba(194, 194, 194, 0.786),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .modal-body {
-  padding: 1.5rem; /* p-6 */
+  padding: 1.5rem;
 }
 
 .modal-header {
@@ -256,36 +258,36 @@ async function handleSubmit() {
   align-items: center;
   justify-content: space-between;
 
-  margin-bottom: 1rem; /* mb-4 */
+  margin-bottom: 1rem;
 }
 
 .modal-title {
-  font-size: 1.125rem; /* text-lg */
+  font-size: 1.125rem;
   line-height: 1.75rem;
-  font-weight: 700; /* font-bold */
-  color: #0f172a; /* text-slate-900 */
+  font-weight: 700;
+  color: #f8fafc; /* 白字 */
 }
 
 /* === form === */
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1rem; /* space-y-4 */
+  gap: 1rem;
 }
 
 .form-item {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem; /* space-y-1 */
+  gap: 0.25rem;
 }
 
 .label {
-  display: block;
-  font-size: 0.875rem; /* text-sm */
+  font-size: 0.875rem;
   line-height: 1.25rem;
-  color: #374151; /* text-gray-700 */
+  color: #cbd5f5; /* 浅灰蓝 */
 }
 
+/* === password === */
 .password-wrap {
   position: relative;
 }
@@ -293,38 +295,45 @@ async function handleSubmit() {
 /* === inputs === */
 .input {
   width: 100%;
-  font-size: 0.875rem; /* text-sm */
+  font-size: 0.875rem;
   line-height: 1.25rem;
 
   padding: 10px 12px;
-  border-radius: 0.75rem; /* rounded-xl */
-  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 0.75rem;
 
+  background-color: #111827; /* 输入框深色 */
+  color: #f9fafb;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
   outline: none;
 
   transition:
-    box-shadow 0.12s ease,
-    border-color 0.12s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
     transform 0.06s ease;
 }
 
+.input::placeholder {
+  color: #6b7280;
+}
+
 .input:focus {
-  border-color: rgba(37, 99, 235, 0.5);
-  box-shadow: 0 10px 26px rgba(37, 99, 235, 0.06);
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
   transform: translateY(-1px);
 }
 
 .input-password {
-  padding-right: 3rem; /* pr-12 */
+  padding-right: 3rem;
 }
 
 .password-toggle {
   position: absolute;
-  right: 0.5rem; /* right-2 */
-  top: 0.625rem; /* top-2.5 */
+  right: 0.5rem;
+  top: 0.625rem;
 
-  font-size: 0.875rem; /* text-sm */
-  color: #6b7280; /* text-gray-500 */
+  font-size: 0.875rem;
+  color: #9ca3af;
 
   background: transparent;
   border: none;
@@ -332,29 +341,37 @@ async function handleSubmit() {
 }
 
 .password-toggle:hover {
-  color: #374151; /* hover:text-gray-700 */
+  color: #e5e7eb;
 }
 
 /* === buttons === */
 .primary-btn {
   width: 100%;
-
   padding: 12px 14px;
-  border-radius: 0.75rem; /* rounded-xl */
+
+  border-radius: 0.75rem;
   border: none;
 
-  font-weight: 800; /* font-extrabold */
+  font-weight: 800;
   color: #ffffff;
 
-  background: linear-gradient(90deg, #2563eb, #7c3aed);
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
   cursor: pointer;
+
+  transition: transform 0.08s ease, opacity 0.15s ease;
+}
+
+.primary-btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 36px 100px #8a5cf6a8;
 }
 
 .primary-btn:disabled {
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
+/* === close button === */
 .close-btn {
   background: transparent;
   border: none;
@@ -362,41 +379,43 @@ async function handleSubmit() {
   font-size: 18px;
   cursor: pointer;
 
-  color: #9ca3af; /* text-gray-400 */
+  color: #9ca3af;
 }
 
 .close-btn:hover {
-  color: #374151; /* hover:text-gray-700 */
+  color: #f9fafb;
 }
 
 /* === hints & alerts === */
 .hint {
-  margin-top: 0.25rem; /* mt-1 */
-  font-size: 0.75rem; /* text-xs */
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
   line-height: 1rem;
-  color: #9ca3af; /* text-gray-400 */
+  color: #94a3b8;
 }
 
 .alert {
-  margin-top: 0.5rem; /* mt-2 */
-  padding: 0.5rem 0.75rem; /* px-3 py-2 */
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
 
-  font-size: 0.875rem; /* text-sm */
+  font-size: 0.875rem;
   line-height: 1.25rem;
 
-  border-radius: 0.375rem; /* rounded */
+  border-radius: 0.375rem;
   border: 1px solid;
 }
 
+/* 错误提示：暗红 */
 .alert-error {
-  color: #dc2626; /* text-red-600 */
-  background-color: #fef2f2; /* bg-red-50 */
-  border-color: #fee2e2; /* border-red-100 */
+  color: #fecaca;
+  background-color: rgba(127, 29, 29, 0.25);
+  border-color: rgba(239, 68, 68, 0.35);
 }
 
+/* 成功提示：暗绿 */
 .alert-success {
-  color: #15803d; /* text-green-700 */
-  background-color: #f0fdf4; /* bg-green-50 */
-  border-color: #dcfce7; /* border-green-100 */
+  color: #bbf7d0;
+  background-color: rgba(22, 101, 52, 0.25);
+  border-color: rgba(34, 197, 94, 0.35);
 }
 </style>

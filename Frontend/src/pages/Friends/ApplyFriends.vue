@@ -9,7 +9,7 @@
       <input
         v-model="searchQuery"
         @keydown.enter.prevent="onEnterSearch"
-        placeholder="输入用户名或 ID 搜索（回车立即搜索）"
+        placeholder="输入用户名或 ID（回车立即搜索）"
         class="search-input"
       />
       <div class="search-actions">

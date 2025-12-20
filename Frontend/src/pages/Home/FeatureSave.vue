@@ -44,6 +44,87 @@
 
     </div>
   </section>
+
+  <!-- DEMO: 联动模块（根据 carousel 当前项切换内容） -->
+  <section class="demo-section" aria-label="联动示例/3秒上手">
+    <div class="demo-inner">
+      <!-- 左侧 -->
+      <div class="demo-left">
+        <h2 class="demo-title reveal">{{ demoHeading }}</h2>
+        <p class="demo-sub reveal">{{ demoSub }}</p>
+
+        <!-- Runner: 现在只使用最简单的 textarea 编辑器 -->
+        <div v-if="showRunner" class="runner-block">
+          <div class="demo-controls">
+            <label class="demo-label">
+              语言：
+              <select v-model="demoLang" @change="onLangChange">
+                <option value="python">Python</option>
+                <option value="cpp">C++</option>
+              </select>
+            </label>
+
+            <div class="examples-list">
+              <span class="example-note">示例：</span>
+              <button v-for="ex in examplesForLang" :key="ex.id" class="example-btn" @click="loadExample(ex)">
+                {{ ex.title }}
+              </button>
+            </div>
+          </div>
+
+          <div class="demo-editor">
+            <!-- 简单 textarea 编辑器（与 demoCode 直接绑定） -->
+            <textarea v-model="demoCode" :disabled="isRunning" aria-label="代码编辑器"></textarea>
+          </div>
+
+          <div class="progress-bar" v-if="isRunning">
+            <div class="progress-fill" :style="{ width: progress + '%' }"></div>
+          </div>
+
+          <div class="demo-actions">
+            <button class="btn-main" @click="runDemo" :disabled="isRunning">
+              <span v-if="!isRunning">运行 3 秒演示</span>
+              <span v-else>运行中… {{ progressDisplay }}</span>
+            </button>
+
+            <button class="btn-secondary" @click="resetDemo" :disabled="isRunning">重置示例</button>
+          </div>
+
+          <div class="demo-output" aria-live="polite">
+            <div class="output-label">输出（stdout）：</div>
+            <pre class="output-area">{{ lastStdout }}</pre>
+
+            <div class="output-label">错误输出（stderr）：</div>
+            <pre class="output-area error">{{ lastStderr }}</pre>
+          </div>
+        </div>
+
+        <!-- 否则：feature-readonly 展示 -->
+        <div v-else class="feature-examples-block">
+          <div v-if="featureExamplesForActive.length">
+            <div v-for="(ex, idx) in featureExamplesForActive" :key="ex.id" class="feature-example">
+              <h3 style="margin:0 0 6px 0;">{{ ex.title }}</h3>
+              <pre style="white-space:pre-wrap; background:#0f172a08; padding:10px; border-radius:8px; border:1px solid rgba(15,23,42,0.04)">{{ ex.code }}</pre>
+            </div>
+          </div>
+          <div v-else>
+            <p>我们为该项准备了专属示例，敬请期待～</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右侧 -->
+      <div class="demo-right">
+        <div class="demo-hint">
+          <h3>{{ rightHintTitle }}</h3>
+          <p>{{ rightHintText }}</p>
+          <ul v-if="rightHintList && rightHintList.length">
+            <li v-for="(li, i) in rightHintList" :key="i">{{ li }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script setup>
@@ -113,6 +194,13 @@ function onCardClick(i) { if (i !== currentIndex.value) currentIndex.value = i }
 
 /* -------------------- DEMO: 简化版编辑器 + 预置示例 -------------------- */
 const demoLang = ref('python')
+const demoCode = ref(`# Python 示例：打印问候\nprint("Hello from YProgram!")\n`)
+const demoStdin = ref('')
+const lastStdout = ref('')
+const lastStderr = ref('')
+const isRunning = ref(false)
+const progress = ref(0)
+const progressDisplay = computed(() => `${Math.round(progress.value)}%`)
 
 const EXAMPLES = [
   { id: 'py-print', lang: 'python', title: '打印', code: `# 输出一行文字\nprint("Hello, YProgram!")\n` },
@@ -125,16 +213,112 @@ const EXAMPLES = [
   { id: 'cpp-algo', lang: 'cpp', title: '简单算法（求和）', code: `#include <bits/stdc++.h>\nusing namespace std;\nint main(){ vector<int> v={1,2,3,4,5}; cout << accumulate(v.begin(), v.end(), 0) << \"\\n\"; return 0; }\n` },
   { id: 'cpp-if', lang: 'cpp', title: '条件判断', code: `#include <iostream>\nusing namespace std;\nint main(){ int x=10; if(x%2==0) cout<<\"x 是偶数\\n\"; else cout<<\"x 是奇数\\n\"; return 0; }\n` }
 ]
+const examplesForLang = computed(() => EXAMPLES.filter(e => e.lang === demoLang.value))
 
 /* featureExamples map（保持你原来的映射） */
 const featureExamples = { 0: ['py-loop','py-if'], 1: ['py-print','py-algo'], 2: ['py-loop','cpp-loop'], 3: ['py-if','cpp-if'], 4: ['py-algo','cpp-algo'], 5: ['py-print','cpp-print'] }
 const activeFeature = computed(() => { const idx = Number(currentIndex.value || 0); return carouselItems.value[idx] || carouselItems.value[0] })
 const showRunner = computed(() => { return activeFeature.value && (activeFeature.value.title === '在线测评' || activeFeature.value.id === 2) })
+const demoHeading = computed(() => { return showRunner.value ? '3 秒上手 · 试运行示例' : `${activeFeature.value?.title || ''} · 示例演示` })
+const demoSub = computed(() => { return showRunner.value ? '无需配置，在线运行 Python / C++ 小示例，立刻看到结果。' : (activeFeature.value?.desc || '') })
 
+const rightHintTitle = computed(() => { if (showRunner.value) return '为什么 3 秒演示？'; return `探索：${activeFeature.value?.title || ''}` })
+const rightHintText = computed(() => {
+  if (showRunner.value) return '快速得到输出，感受从写到运行的闭环：你会发现入门并不难。'
+  switch (activeFeature.value?.id) {
+    case 1: return '情景化教学：把问题放到真实场景，学得更自然。'
+    case 2: return '在线测评：无缝连接题库与评测，实时反馈。'
+    case 3: return '交互任务：动手做小任务，提升实践能力。'
+    case 4: return '每日打卡：坚持才能看到进步，我们帮你记录。'
+    case 5: return '闯关式学习：通过关卡设计激励学习。'
+    default: return ''
+  }
+})
+const rightHintList = computed(() => {
+  if (showRunner.value) return ['支持 Python / C++（与后端沙箱一致）', '执行受限（超时与资源限制）以保证平台安全', '示例可直接替换成你的代码，方便体验']
+  switch (activeFeature.value?.id) {
+    case 0: return ['真实场景驱动问题', '案例导向，立刻上手']
+    case 2: return ['任务驱动设计', '多种题型：选择/填空/代码']
+    case 3: return ['短时见效，每天 10 分钟', '自动记录学习轨迹']
+    case 4: return ['逐步解锁更难关卡', '成就系统激励学习']
+    case 5: return ['合作学习，互相督促', '排行榜与奖励机制']
+    default: return []
+  }
+})
+const featureExamplesForActive = computed(() => {
+  const idx = Number(currentIndex.value || 0); const ids = featureExamples[idx] || []
+  return ids.map(id => EXAMPLES.find(e => e.id === id)).filter(Boolean)
+})
+
+/* ---------- 编辑器相关函数 ---------- */
+function onLangChange() {
+  const userEdited = demoCode.value && !EXAMPLES.some(ex => ex.code === demoCode.value)
+  if (!userEdited) {
+    const first = EXAMPLES.find(e => e.lang === demoLang.value)
+    if (first) { demoCode.value = first.code; demoStdin.value = first.stdin || '' }
+  }
+}
+function loadExample(ex) {
+  demoLang.value = ex.lang
+  demoCode.value = ex.code || ''
+  demoStdin.value = ex.stdin || ''
+}
 
 /* ---------- Demo 运行 / 进度 ---------- */
 let _demoProgressTimer = null
+let _demoRunStart = 0
+function startProgress(minMs = 3000) {
+  clearProgress()
+  progress.value = 0
+  _demoRunStart = Date.now()
+  const start = _demoRunStart
+  _demoProgressTimer = setInterval(() => {
+    const elapsed = Date.now() - start
+    if (elapsed < minMs) progress.value = Math.min(80, Math.round((elapsed / minMs) * 80))
+    else { const extra = Math.min(15, Math.floor((elapsed - minMs) / 100)); progress.value = Math.min(95, 80 + extra) }
+  }, 120)
+}
 function clearProgress() { if (_demoProgressTimer) { clearInterval(_demoProgressTimer); _demoProgressTimer = null } }
+function completeProgress() { progress.value = 100; clearProgress(); setTimeout(() => { progress.value = 0 }, 420) }
+
+async function runDemo(minDelay = 3000) {
+  if (isRunning.value) return
+  isRunning.value = true; lastStdout.value = ''; lastStderr.value = ''; progress.value = 0
+
+  const payload = { lang: demoLang.value, code: demoCode.value, ...(demoStdin.value ? { stdin: demoStdin.value } : {}) }
+
+  startProgress(minDelay); _demoRunStart = Date.now()
+  const controller = new AbortController(); const FETCH_TIMEOUT = 12000
+  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT)
+
+  try {
+    const resp = await fetch('/api/exec', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: controller.signal
+    })
+    let data = {}
+    try { data = await resp.json() } catch (jsonErr) { data = { error: 'invalid-json-response', stderr: await resp.text().catch(() => '') } }
+    const elapsed = Date.now() - _demoRunStart; const remain = Math.max(0, minDelay - elapsed)
+    if (remain > 0) await new Promise(r => setTimeout(r, remain))
+    lastStdout.value = data.stdout || ''
+    lastStderr.value = data.stderr || (data.error ? String(data.error) : '')
+  } catch (err) {
+    const elapsed2 = Date.now() - _demoRunStart; const remain2 = Math.max(0, minDelay - elapsed2)
+    if (remain2 > 0) await new Promise(r => setTimeout(r, remain2))
+    if (err.name === 'AbortError') { lastStdout.value = ''; lastStderr.value = '请求超时或已中止 (timeout)' }
+    else { lastStdout.value = ''; lastStderr.value = err.message || String(err) }
+  } finally {
+    clearTimeout(timeoutId); completeProgress()
+    setTimeout(() => { isRunning.value = false }, 220)
+  }
+}
+
+function resetDemo() {
+  if (isRunning.value) return
+  const first = EXAMPLES.find(e => e.lang === demoLang.value)
+  demoCode.value = first ? first.code : ''
+  demoStdin.value = first ? (first.stdin || '') : ''
+  lastStdout.value = ''; lastStderr.value = ''; progress.value = 0
+}
 
 /* ---------- 当 carousel currentIndex 变化时做联动与预加载（Feature 自己处理 audience 预加载） ---------- */
 watch(currentIndex, (nv, ov) => {

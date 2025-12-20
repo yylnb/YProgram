@@ -138,9 +138,6 @@ const thanks = ref([
     name: 'Zhang',
     note: '',
     avatar: new URL('@/assets/avatars/zh.jpg', import.meta.url).href,
-  },
-  {
-
   }
 ])
 
