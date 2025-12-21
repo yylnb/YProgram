@@ -31,34 +31,35 @@
             </text>
           </g>
 
-          <!-- 坦克履带 pills (只在同一行、当月内连接) -->
-          <g v-for="(row, r) in oldWeeks" :key="'p-old-'+r">
-            <template v-for="seg in segmentsInRow(row, r, oldCheckedSet, oldYear, oldMonth)" :key="'pseg-old-'+r+'-'+seg.startCol">
-              <rect
-                :x="cellX(seg.startCol) + 6"
-                :y="cellY(r) + 6"
-                :width="Math.max((seg.endCol - seg.startCol + 1) * cellSize - 12, cellSize - 12)"
-                :height="cellSize - 12"
-                rx="18" ry="18"
-                :fill="tankColor"
-                :stroke="tankColor"
-                stroke-width="1"
-              />
-            </template>
-          </g>
+          <!-- === 变更点：移除原来的 segmentsInRow 合并 pill 绘制，改为每个格子单独绘制 pill（可单独上色） === -->
 
-          <!-- 日号与已打卡圆 -->
+          <!-- 日号与已打卡圆 / 每格单独 pill -->
           <g font-family="Inter, Arial, Helvetica, sans-serif" text-anchor="middle">
             <template v-for="(row, r) in oldWeeks" :key="'row-old-'+r">
               <template v-for="(cell, c) in row" :key="'cell-old-'+r+'-'+c">
                 <g v-if="cell">
+                  <!-- 每日单独的 pill（当日已打卡则绘制，颜色来自 oldColorMap） -->
+                  <rect
+                    v-if="isCheckedBySetAndMonth(cell, oldCheckedSet, oldYear, oldMonth)"
+                    :x="cellX(c) + 6"
+                    :y="cellY(r) + 6"
+                    :width="Math.max(cellSize - 12, 4)"
+                    :height="cellSize - 12"
+                    rx="30" ry="30"
+                    :fill="colorForDate(cell, oldColorMap)"
+                    :stroke="colorForDate(cell, oldColorMap)"
+                    stroke-width="1"
+                  />
+
+                  <!-- 圆点（可保留或移除，这里保留以减少改动） -->
                   <circle
                     v-if="isCheckedBySetAndMonth(cell, oldCheckedSet, oldYear, oldMonth)"
                     :cx="cellX(c) + cellSize/2"
                     :cy="cellY(r) + cellSize/2"
-                    :r="Math.min(cellSize/2 - 8, 20)"
-                    :fill="tankColor"
+                    :r="Math.min(cellSize/2 - 22, 10)"
+                    :fill="colorForDate(cell, oldColorMap)"
                   />
+
                   <text
                     v-if="isSameMonth(cell, oldYear, oldMonth)"
                     :x="cellX(c) + cellSize/2"
@@ -103,32 +104,31 @@
             </text>
           </g>
 
-          <g v-for="(row, r) in newWeeks" :key="'p-new-'+r">
-            <template v-for="seg in segmentsInRow(row, r, newCheckedSet, targetYear, targetMonth)" :key="'pseg-new-'+r+'-'+seg.startCol">
-              <rect
-                :x="cellX(seg.startCol) + 6"
-                :y="cellY(r) + 6"
-                :width="Math.max((seg.endCol - seg.startCol + 1) * cellSize - 12, cellSize - 12)"
-                :height="cellSize - 12"
-                rx="18" ry="18"
-                :fill="tankColor"
-                :stroke="tankColor"
-                stroke-width="1"
-              />
-            </template>
-          </g>
-
+          <!-- === 新层：每格单独绘制 pill（与旧层一致） === -->
           <g font-family="Inter, Arial, Helvetica, sans-serif" text-anchor="middle">
             <template v-for="(row, r) in newWeeks" :key="'row-new-'+r">
               <template v-for="(cell, c) in row" :key="'cell-new-'+r+'-'+c">
                 <g v-if="cell">
+                  <rect
+                    v-if="isCheckedBySetAndMonth(cell, newCheckedSet, targetYear, targetMonth)"
+                    :x="cellX(c) + 6"
+                    :y="cellY(r) + 6"
+                    :width="Math.max(cellSize - 12, 4)"
+                    :height="cellSize - 12"
+                    rx="30" ry="30"
+                    :fill="colorForDate(cell, newColorMap)"
+                    :stroke="colorForDate(cell, newColorMap)"
+                    stroke-width="1"
+                  />
+
                   <circle
                     v-if="isCheckedBySetAndMonth(cell, newCheckedSet, targetYear, targetMonth)"
                     :cx="cellX(c) + cellSize/2"
                     :cy="cellY(r) + cellSize/2"
-                    :r="Math.min(cellSize/2 - 8, 20)"
-                    :fill="tankColor"
+                    :r="Math.min(cellSize/2 - 22, 10)"
+                    :fill="colorForDate(cell, newColorMap)"
                   />
+
                   <text
                     v-if="isSameMonth(cell, targetYear, targetMonth)"
                     :x="cellX(c) + cellSize/2"
@@ -198,7 +198,8 @@ const paddingY = 46
 const weekdays = ['日','一','二','三','四','五','六']
 
 // theme
-const tankColor = '#166534'
+const tankColor = '#166534'   // 你原来的默认色（保留）
+const DEFAULT_COLOR = tankColor
 
 // ------------- layer data -------------
 const targetYear = ref(currentYear.value)
@@ -206,13 +207,29 @@ const targetMonth = ref(currentMonth.value)
 
 const oldWeeks = ref([])   // 6 x 7 grid of Date objects
 const newWeeks = ref([])
-const oldChecked = ref([]) // array of 'YYYY-MM-DD'
+
+// 变更：oldChecked / newChecked 存储对象数组：[{ date: 'YYYY-MM-DD', color: 'xxx' }]
+const oldChecked = ref([])
 const newChecked = ref([])
+
 const oldYear = ref(currentYear.value)
 const oldMonth = ref(currentMonth.value)
 
-const oldCheckedSet = computed(() => new Set(oldChecked.value))
-const newCheckedSet = computed(() => new Set(newChecked.value))
+// derived sets (只包含日期字符串)，用于 isCheckedBySetAndMonth
+const oldCheckedSet = computed(() => new Set(oldChecked.value.map(i => i.date)))
+const newCheckedSet = computed(() => new Set(newChecked.value.map(i => i.date)))
+
+// derived maps：日期 -> color，用于取颜色
+const oldColorMap = computed(() => {
+  const m = new Map()
+  oldChecked.value.forEach(i => m.set(i.date, normalizeColor(i.color)))
+  return m
+})
+const newColorMap = computed(() => {
+  const m = new Map()
+  newChecked.value.forEach(i => m.set(i.date, normalizeColor(i.color)))
+  return m
+})
 
 // helpers
 function pad(n) { return n < 10 ? `0${n}` : `${n}` }
@@ -255,7 +272,7 @@ function buildWeeksFixed6(year, month) {
   return weeksArr
 }
 
-// segments only consider same-month checked days
+// segmentsInRow 保留（不再用于绘制 pill），以免影响其它逻辑（你原来可能有依赖）
 function segmentsInRow(row, rowIndex, checkedSet, layerYear, layerMonth) {
   const segs = []
   let i = 0
@@ -278,24 +295,66 @@ function isCheckedBySetAndMonth(date, setRef, y, m) {
   return setRef.has(ymdFromDate(date))
 }
 
+// ============ 新增颜色相关工具 ============
+// 简单的颜色规范化：如果不是字符串或为空，返回默认色；否则 trim 后返回
+function normalizeColor(c) {
+  if (typeof c !== 'string') return DEFAULT_COLOR
+  const s = c.trim()
+  if (!s) return DEFAULT_COLOR
+  return s
+}
+
+// 根据 Date 对象和 colorMap 获取颜色（map 存储的 key = 'YYYY-MM-DD'）
+function colorForDate(date, colorMap) {
+  const key = ymdFromDate(date)
+  return (colorMap && colorMap.get(key)) || DEFAULT_COLOR
+}
+
 // API
 function getAuthHeaders() {
   const token = localStorage.getItem('yp_token')
   return token ? { Authorization: `Bearer ${token}` } : {}
 }
 
+/**
+ * fetchCheckinsFor(year, month)
+ * 支持两种后端返回格式：
+ *  - 旧格式: ['YYYY-MM-DD', ...]
+ *  - 新格式: [{ date: 'YYYY-MM-DD', color: 'green' }, ...]
+ *
+ * 返回标准化后的数组： [{ date: 'YYYY-MM-DD', color: '#166534' }, ... ]
+ */
 async function fetchCheckinsFor(year, month) {
   try {
     const headers = getAuthHeaders()
     if (!headers.Authorization) return []
     const res = await axios.get(`/api/calendar/checkins/${year}/${month}`, { headers })
-    if (Array.isArray(res.data)) {
-      return res.data.map(d => {
-        const dt = isoToLocalDate(d) || new Date(d)
-        return `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}`
+    if (!Array.isArray(res.data)) return []
+
+    // normalize
+    return res.data
+      .map(item => {
+        // old format: string
+        if (typeof item === 'string') {
+          const dt = isoToLocalDate(item) || new Date(item)
+          if (!dt) return null
+          return { date: `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}`, color: DEFAULT_COLOR }
+        }
+
+        // new format: object with date and optional color
+        if (item && (item.date || item.date_str)) {
+          const dateStr = item.date || item.date_str
+          const dt = isoToLocalDate(dateStr) || new Date(dateStr)
+          if (!dt) return null
+          return {
+            date: `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}`,
+            color: normalizeColor(item.color)
+          }
+        }
+
+        return null
       })
-    }
-    return []
+      .filter(Boolean)
   } catch (err) {
     console.error('fetchCheckins error', err)
     throw err
@@ -378,10 +437,11 @@ async function reload() {
 }
 
 const currentMonthCheckedCount = computed(() => {
-  return oldChecked.value.filter(s => {
-    const m = s.split('-')
-    if (m.length !== 3) return false
-    return Number(m[0]) === oldYear.value && Number(m[1]) === oldMonth.value
+  return oldChecked.value.filter(item => {
+    if (!item || !item.date) return false
+    const parts = item.date.split('-')
+    if (parts.length !== 3) return false
+    return Number(parts[0]) === oldYear.value && Number(parts[1]) === oldMonth.value
   }).length
 })
 
@@ -427,7 +487,7 @@ onMounted(() => { init() })
 }
 .svg-el { width:100%; height:auto; display:block; }
 
-/* animation classes */
+ /* animation classes */
 .anim-left.old-layer { animation: old-slide-left 420ms forwards; }
 .anim-left.new-layer { animation: new-slide-left 420ms forwards; }
 .anim-right.old-layer { animation: old-slide-right 420ms forwards; }

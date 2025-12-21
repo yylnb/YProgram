@@ -16,7 +16,7 @@ import { ref, onMounted, onBeforeUnmount, defineAsyncComponent } from 'vue'
 /* 你可以在这里修改导航项，或从父组件传入 props（示例里内置 items） */
 const items = [
   { to: '/', label: '首页' },
-  { to: '/map', label: '我的学习' },
+  { to: '/map', label: '学习地图' },
   { to: '/library', label: '资料库' },
   { to: '/friends', label: '我的好友' },
   { to: '/profile', label: '个人信息' }

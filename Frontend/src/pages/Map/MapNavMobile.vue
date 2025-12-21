@@ -332,8 +332,8 @@ const energyTooltip = computed(() => {
 
 const courseStageLabels = {
   python1: ['一','二','三','四','五'],
-  cpp1: ['F','G','H','I','J'],
-  java1: ['K','L','M','N','O']
+  cpp1: ['一','二','三','四','五'],
+  java1: ['一','二','三','四','五']
 }
 const courseStages = {
   python1: [

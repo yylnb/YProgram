@@ -284,6 +284,12 @@ watch(() => props.questionIndex, () => {
   box-shadow: 12px 12px 36px rgba(194, 194, 194, 0.7);
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
+@media (max-width: 900px) {
+  .choice-root {
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+  }
+}
 
 /* Header：题号与标题并列，左对齐 */
 .choice-header {
@@ -306,6 +312,12 @@ watch(() => props.questionIndex, () => {
   /* 渐变色底（可调整颜色） */
   background: linear-gradient(135deg,#ff7a18 0%, #af002d 50%, #6a11cb 100%);
   box-shadow: 0 6px 18px rgba(0,0,0,0.6), inset 0 -6px 18px rgba(255,255,255,0.04);
+}
+@media (max-width: 900px) {
+  .q-number-wrap {
+    width: 44px;
+    height: 44px;
+  }
 }
 
 /* 题号数字样式 */
@@ -338,6 +350,11 @@ watch(() => props.questionIndex, () => {
   grid-template-columns: 1fr 1fr; /* 两列 */
   gap:14px;
 }
+@media (max-width: 900px) {
+  .options {
+    grid-template-columns: 1fr;
+  }
+}
 
 /* 单个 option 样式（变大、居中、纯白色边框） */
 .option {
@@ -355,6 +372,11 @@ watch(() => props.questionIndex, () => {
   min-height:72px;              /* 更大尺寸 */
   box-sizing:border-box;
   overflow:hidden;
+}
+@media (max-width: 900px) {
+  .option {
+    min-height: 60px;
+  }
 }
 
 /* 悬停略微抬起 */
@@ -381,6 +403,13 @@ watch(() => props.questionIndex, () => {
   font-size:16px;
   flex-shrink:0;
   box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+@media (max-width: 900px) {
+  .opt-key {
+    width: 35px;
+    height: 35px;
+    font-size: 14px;
+  }
 }
 
 /* 选项文本：水平垂直居中显示（视觉中心） */
@@ -495,9 +524,9 @@ watch(() => props.questionIndex, () => {
 
 .explain-box {
   padding:14px;
-  border-radius:10px;
-  background: rgba(255,255,255,0.02);
-  border:1px solid rgba(255,255,255,0.04);
+  border-radius:20px;
+  background: rgba(0, 0, 0, 0.351);
+  border:1px solid rgba(255, 255, 255, 0.273);
   color:#dbeefe;
 }
 .btn-next {

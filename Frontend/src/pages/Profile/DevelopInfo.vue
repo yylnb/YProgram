@@ -375,6 +375,11 @@ function toggleDetail(id) {
   margin: 8px 0 12px 30px;
   color: rgba(255,255,255,0.9);
 }
+@media (max-width: 700px) {
+  .detail-name{ margin-left: 0;}
+  .detail-role{ margin-left: 0;}
+  .detail-desc{ margin-left: 7px;}
+}
 
 /* 联系方式列表 */
 .contact-list {

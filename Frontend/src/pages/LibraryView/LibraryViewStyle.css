@@ -9,6 +9,15 @@
   box-shadow: 12px 12px 36px rgba(194, 194, 194, 0.7);
   border-radius: 30px;
 }
+@media (max-width: 900px) {
+  .library-view {
+    margin-top: 70px;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+    padding: 22px 2px;
+    width: auto;
+  }
+}
 
 /* card */
 .card {
@@ -30,7 +39,7 @@
 
 /* small utility buttons to fit dark theme */
 .btn-action {
-  background: linear-gradient(90deg,#374151,#7c3aed);
+  background: linear-gradient(90deg,#946fb1,#7c3aed);
   color: white;
   border: none;
   padding: 8px 12px;
@@ -38,7 +47,7 @@
   font-weight: 700;
   cursor: pointer;
 }
-.btn-action:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(124,58,237,0.12); }
+.btn-action:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(177, 172, 185, 0.12); }
 
 /* primary button */
 .btn-primary {
@@ -72,6 +81,7 @@
   color: #e6eef8;
   outline: none;
 }
+.input-sm option { background: #1c1c1c; color: #e6eef8; }
 
 /* title and meta */
 .title {

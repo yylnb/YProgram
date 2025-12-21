@@ -317,8 +317,9 @@ async function goToPractice(fav) {
 .card {
   background: #1c1c1c;
   border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 30px;
-  padding: 18px;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow:0 10px 30px rgba(2,6,23,0.06);
 }
 
 /* Header */
@@ -399,6 +400,7 @@ async function goToPractice(fav) {
   background: transparent;
   color: #fff;
   border: 1px solid rgba(255,255,255,0.06);
+  white-space: nowrap;
 }
 .btn-outline:disabled { opacity: 0.5; cursor: not-allowed; }
 .btn-primary {

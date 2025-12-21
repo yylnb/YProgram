@@ -23,7 +23,7 @@
             <span :class="difficultyClass(topic.difficulty)" class="difficulty-badge">
               {{ difficultyLabel(topic.difficulty) }}
             </span>
-            <span class="text-xs text-muted">最后更新：{{ formatDate(topic.updated_at) }}</span>
+            <!-- <span class="text-xs text-muted">最后更新：{{ formatDate(topic.updated_at) }}</span> -->
           </div>
         </div>
 

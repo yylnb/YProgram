@@ -18,7 +18,7 @@
             <div class="front-face">
               <div class="front-media" aria-hidden="true">
                 <picture>
-                  <source :srcset="a.srcset" sizes="(max-width:640px) 480px, (max-width:1024px) 800px, 1200px" />
+                  <source :srcset="a.srcset" sizes="480px" />
                   <img
                     :src="a.src"
                     :alt="a.title + ' 背景图'"
@@ -67,7 +67,7 @@ const audiences = ref([
     tagline: '怎么学都学不会？',
     desc: '海量题库、别出心裁的刷题方式，帮你稳拿高分。',
     src: '/student.jpg',
-    srcset: '/student-480.jpg 480w, /student-800.jpg 800w, /student-1200.jpg 1200w',
+    srcset: '/student-480.jpg 480w',
     link: '/map'
   },
   {
@@ -76,7 +76,7 @@ const audiences = ref([
     tagline: '找工作怕技能不够？',
     desc: '帮助你从投简历到拿 Offer 更自信。',
     src: '/jobhunter.jpg',
-    srcset: '/jobhunter-480.jpg 480w, /jobhunter-800.jpg 800w, /jobhunter-1200.jpg 1200w',
+    srcset: '/jobhunter-480.jpg 480w',
     link: '/map'
   },
   {
@@ -85,7 +85,7 @@ const audiences = ref([
     tagline: '工作中困难无法解决？',
     desc: '尝试使用编程工具，帮助你创新性提高效率。',
     src: '/worker.jpg',
-    srcset: '/worker-480.jpg 480w, /worker-800.jpg 800w, /worker-1200.jpg 1200w',
+    srcset: '/worker-480.jpg 480w',
     link: '/map'
   },
   // {
@@ -103,7 +103,7 @@ const audiences = ref([
     tagline: '从小培养学习兴趣？',
     desc: '有趣的可视化编程与交互，让孩子在游戏中学会逻辑与创造。',
     src: '/children.jpg',
-    srcset: '/children-480.jpg 480w, /children-800.jpg 800w, /children-1200.jpg 1200w',
+    srcset: '/children-480.jpg 480w',
     link: '/map'
   },
   // {

@@ -246,9 +246,9 @@ function nodeStateClass(localNumber) {
 // stage label mapping — use currentCourse as key
 function getStageLabel(idx) {
   const labels = {
-    python1: ['A','B','C','D','E'],
-    cpp1: ['F','G','H','I','J'],
-    java1: ['K','L','M','N','O'],
+    python1: ['一','二','三','四','五'],
+    cpp1: ['一','二','三','四','五'],
+    java1: ['一','二','三','四','五'],
     // compatibility
     python: ['A','B','C','D','E'],
     cpp: ['F','G','H','I','J'],

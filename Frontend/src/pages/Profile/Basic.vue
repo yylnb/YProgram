@@ -71,7 +71,7 @@
 
         <div class="actions">
           <button class="btn btn-primary" @click="openEdit">编辑个人资料</button>
-          <!-- 账户设置 已移除 -->
+          <button class="btn" style="border: 1px solid #fff;" @click="logout">登出</button>
         </div>
       </div>
     </div>
@@ -164,6 +164,12 @@ function parseLangValue(raw) {
   } catch (e) {
     return [s]
   }
+}
+/* ===== 登出 ===== */
+function logout () {
+  localStorage.removeItem('yp_token')
+  localStorage.removeItem('yp_user')
+  router.push('/')
 }
 
 const displayId = computed(() => {
@@ -465,7 +471,11 @@ watch(createdRaw, calcJoinDays)
 
 /* 按钮 */
 .actions { display:flex; gap:12px; margin-top:6px; }
-.btn { padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:800; font-size:14px; }
+.btn { padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:800; font-size:14px; background: transparent;}
+.btn:hover {
+  transform: translateY(-3px);
+    transition: all 0.2s ease-in-out;
+}
 .btn-primary {
   background: linear-gradient(90deg,#2563eb,#7c3aed);
   color:white;

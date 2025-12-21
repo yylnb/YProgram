@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../pages/Home.vue'
-import Study from '../pages/StudyNew.vue'
+import Study from '../pages/Study.vue'
 import Library from '../pages/Library.vue'
 import Friends from '../pages/Friends.vue'
 import Profile from '../pages/Profile.vue'

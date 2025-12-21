@@ -23,7 +23,7 @@
 
             <!-- teleport 到 body 的 overlay（不在 modal flow 中） -->
             <teleport to="body">
-              <div v-if="showEmojiPicker" class="palette emoji-palette overlay" :style="emojiStyle" @click.stop>
+              <!-- <div v-if="showEmojiPicker" class="palette emoji-palette overlay" :style="emojiStyle" @click.stop>
                 <div class="emoji-grid">
                   <button
                     v-for="(e, idx) in emojiOptions"
@@ -32,10 +32,36 @@
                     @click="selectEmoji(e)"
                   >{{ e }}</button>
 
-                  <!-- custom option -->
                   <div class="emoji-custom">
                     <input v-model="customEmoji" placeholder="自定义 emoji" @keyup.enter="applyCustomEmoji" />
                     <button class="btn-mini" @click="applyCustomEmoji">应用自定义</button>
+                  </div>
+                </div>
+              </div> -->
+
+              <div
+                v-if="showEmojiPicker"
+                class="overlay-mask"
+                @click="showEmojiPicker = false"
+              >
+                <div
+                  class="palette emoji-palette overlay"
+                  :style="emojiStyle"
+                  @click.stop
+                >
+                  <div class="emoji-grid">
+                    <button
+                      v-for="(e, idx) in emojiOptions"
+                      :key="'e'+idx"
+                      class="emoji-item"
+                      @click="selectEmoji(e)"
+                    >{{ e }}</button>
+
+                    <!-- custom option -->
+                    <div class="emoji-custom">
+                      <input v-model="customEmoji" placeholder="自定义 emoji" @keyup.enter="applyCustomEmoji" />
+                      <button class="btn-mini" @click="applyCustomEmoji">应用自定义</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -51,7 +77,7 @@
 
             <!-- teleport 到 body 的颜色面板 overlay -->
             <teleport to="body">
-              <div v-if="showColorPicker" class="palette color-palette overlay color-overlay" :style="colorStyle" @click.stop>
+              <!-- <div v-if="showColorPicker" class="palette color-palette overlay color-overlay" :style="colorStyle" @click.stop>
                 <div class="color-grid">
                   <button
                     v-for="(c, idx) in colorOptions"
@@ -60,6 +86,28 @@
                     :style="{ background: c }"
                     @click="selectColor(c)"
                   ></button>
+                </div>
+              </div> -->
+
+              <div
+                v-if="showColorPicker"
+                class="overlay-mask"
+                @click="showColorPicker = false"
+              >
+                <div
+                  class="palette color-palette overlay color-overlay"
+                  :style="colorStyle"
+                  @click.stop
+                >
+                  <div class="color-grid">
+                    <button
+                      v-for="(c, idx) in colorOptions"
+                      :key="'c'+idx"
+                      class="color-item"
+                      :style="{ background: c }"
+                      @click="selectColor(c)"
+                    ></button>
+                  </div>
                 </div>
               </div>
             </teleport>
@@ -649,12 +697,14 @@ function cancelEditPassword(){
 .close-btn {
   background: transparent;
   border: none;
-  font-size: 18px;
+  font-size: 25px;
   cursor: pointer;
   color: #cbd5f5;
 }
 .close-btn:hover {
   color: #ffffff;
+  transform: translateY(-3px);
+  transition: all 0.2s ease-in-out;
 }
 
 /* ===============================
@@ -777,6 +827,7 @@ function cancelEditPassword(){
 .btn-mini:hover {
   background: #ffffffae;
   transform: translateY(-2px);
+  transition: all 0.2s ease-in-out;
 }
 
 .emoji-btn:hover {
@@ -851,6 +902,16 @@ function cancelEditPassword(){
 }
 
 /* ===============================
+   Overlay click-outside mask
+================================ */
+.overlay-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 3999; /* 比 modal 高，比 overlay 低 */
+  background: transparent;
+}
+
+/* ===============================
    Username / Password Rows
 ================================ */
 .username-row,
@@ -878,6 +939,7 @@ function cancelEditPassword(){
 .btn-small:hover {
   background: #ffffffae;
   transform: translateY(-2px);
+  transition: all 0.2s ease-in-out;
 }
 
 .btn-small.primary {
