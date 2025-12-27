@@ -10,7 +10,7 @@
           :key="idx"
           class="group flip-card-wrapper"
           :aria-labelledby="`title-${idx}`"
-          :flipOnHover="true"
+          :flipOnHover="true"x
           :clickable="true"
         >
           <!-- front: 照片 + 底部居中 emoji + title -->
@@ -18,7 +18,7 @@
             <div class="front-face">
               <div class="front-media" aria-hidden="true">
                 <picture>
-                  <source :srcset="a.srcset" sizes="480px" />
+                  <source :srcset="a.srcset" sizes="800px" />
                   <img
                     :src="a.src"
                     :alt="a.title + ' 背景图'"
@@ -44,9 +44,7 @@
               <div class="back-content">
                 <h3 class="back-tagline">{{ a.tagline }}</h3>
                 <p class="back-desc">{{ a.desc }}</p>
-                <div class="back-actions">
-                  <a :href="a.link" class="btn" :aria-label="`体验 ${a.title}`">去体验</a>
-                </div>
+                <a :href="a.link" class="btn" :aria-label="`体验 ${a.title}`">去体验</a>
               </div>
             </div>
           </template>
@@ -67,7 +65,7 @@ const audiences = ref([
     tagline: '怎么学都学不会？',
     desc: '海量题库、别出心裁的刷题方式，帮你稳拿高分。',
     src: '/student.jpg',
-    srcset: '/student-480.jpg 480w',
+    srcset: '/student-800.jpg 800w',
     link: '/map'
   },
   {
@@ -76,7 +74,7 @@ const audiences = ref([
     tagline: '找工作怕技能不够？',
     desc: '帮助你从投简历到拿 Offer 更自信。',
     src: '/jobhunter.jpg',
-    srcset: '/jobhunter-480.jpg 480w',
+    srcset: '/jobhunter-800.jpg 800w',
     link: '/map'
   },
   {
@@ -85,7 +83,7 @@ const audiences = ref([
     tagline: '工作中困难无法解决？',
     desc: '尝试使用编程工具，帮助你创新性提高效率。',
     src: '/worker.jpg',
-    srcset: '/worker-480.jpg 480w',
+    srcset: '/worker-800.jpg 800w',
     link: '/map'
   },
   // {
@@ -103,7 +101,7 @@ const audiences = ref([
     tagline: '从小培养学习兴趣？',
     desc: '有趣的可视化编程与交互，让孩子在游戏中学会逻辑与创造。',
     src: '/children.jpg',
-    srcset: '/children-480.jpg 480w',
+    srcset: '/children-800.jpg 800w',
     link: '/map'
   },
   // {
@@ -242,7 +240,7 @@ const audiences = ref([
   max-width: 420px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 20px;
 }
 .back-tagline {
   margin: 0;

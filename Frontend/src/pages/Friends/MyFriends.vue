@@ -9,7 +9,13 @@
 
     <ul v-else-if="friends.length" class="friends-list">
       <li v-for="f in friends" :key="f.id" class="friend-item">
-        <div class="avatar-large">{{ f.username ? f.username.charAt(0).toUpperCase() : '#' }}</div>
+        <!-- 优先显示 user_emoji；有 user_color 时使用其作为背景色 -->
+        <div
+          class="avatar-large"
+          :style="avatarStyle(f)"
+        >
+          {{ f.user_emoji ? f.user_emoji : (f.username ? f.username.charAt(0).toUpperCase() : '#') }}
+        </div>
 
         <div class="info">
           <div class="top">
@@ -22,7 +28,7 @@
           <div class="meta">
             <div class="id">ID: {{ f.id }}</div>
             <div v-if="f.bio" class="bio">{{ f.bio }}</div>
-            <div v-else class="bio muted">这个人很懒，什么都没留下～</div>
+            <!-- <div v-else class="bio muted">这个人很懒，什么都没留下～</div> -->
           </div>
         </div>
 
@@ -126,6 +132,42 @@ export default {
         console.error('删除好友失败', err.response?.data || err.message);
         alert(err.response?.data?.error || '删除失败');
       }
+    },
+
+    // ---------- 新增：头像样式计算 ----------
+    avatarStyle(user) {
+      // 如果没有 user 或者没有 user_color，返回空对象（使用默认样式）
+      if (!user || !user.user_color) {
+        return {};
+      }
+      const color = String(user.user_color).trim();
+      const textColor = this._avatarTextColorFromHex(color);
+      return {
+        background: color,
+        color: textColor
+      };
+    },
+
+    // 通过 hex 颜色判断黑白文字对比，返回 '#000' 或 '#fff'
+    _avatarTextColorFromHex(hex) {
+      try {
+        if (!hex || typeof hex !== 'string') return '#fff';
+        let h = hex.replace('#', '').trim();
+        if (h.length === 3) {
+          // expand short form e.g. 'abc' -> 'aabbcc'
+          h = h.split('').map(ch => ch + ch).join('');
+        }
+        if (h.length !== 6) return '#fff';
+        const r = parseInt(h.substring(0,2), 16);
+        const g = parseInt(h.substring(2,4), 16);
+        const b = parseInt(h.substring(4,6), 16);
+        if (Number.isNaN(r) || Number.isNaN(g) || Number.isNaN(b)) return '#fff';
+        // brightness formula
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        return brightness > 128 ? '#000' : '#fff';
+      } catch (e) {
+        return '#fff';
+      }
     }
   },
   async mounted() {
@@ -162,6 +204,7 @@ export default {
   padding:12px;
   border-radius:10px;
 }
+/* avatar */
 .avatar-large {
   width:64px;
   height:64px;
@@ -172,7 +215,10 @@ export default {
   justify-content:center;
   color:#fff;
   font-weight:700;
-  font-size:22px;
+  font-size:28px; /* 增大以更好显示 emoji */
+  line-height:1;
+  user-select:none;
+  flex-shrink:0;
 }
 .info { flex:1; min-width:0; }
 .top { display:flex; gap:10px; align-items:center; }

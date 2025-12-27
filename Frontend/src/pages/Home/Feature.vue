@@ -53,12 +53,12 @@ import { ref, computed, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
 /* -------------------- carousel state -------------------- */
 const carouselRef = ref(null)
 const carouselItems = ref([
-  { id: 1, title: '情景化教学', desc: '通过真实场景引入问题，让编程更加实用。', img: '' },
-  { id: 2, title: '在线测评', desc: '不用下载任何软件，随时随地学编程。', img: '' },
-  { id: 3, title: '交互任务', desc: '改变传统打代码式枯燥学习，采用选择题等多种题型。', img: '' },
-  { id: 4, title: '每日打卡任务', desc: '每天积累10分钟，从量变到质变。', img: '' },
-  { id: 5, title: '闯关式学习', desc: '学习进步可视化，让学习更有成就感。', img: '' },
-  { id: 6, title: '好友助力', desc: '邀请好友一起学，学习更有动力。', img: '' }
+  { id: 1, title: '情景化教学', desc: '通过真实场景引入问题，让编程更加实用。', img: '/001.png' },
+  { id: 2, title: '交互任务', desc: '改变传统打代码式枯燥学习，采用选择题等多种题型。', img: '/002.png' },
+  { id: 3, title: '每日打卡任务', desc: '每天积累10分钟，从量变到质变。', img: '/003.png' },
+  { id: 4, title: '闯关式学习', desc: '学习进步可视化，让学习更有成就感。', img: '/004.png' },
+  { id: 5, title: '好友助力', desc: '邀请好友一起学，学习更有动力。', img: '/005.png' },
+  { id: 6, title: '在线测评（敬请期待）', desc: '不用下载任何软件，随时随地学编程。', img: '/006.png' },
 ])
 const count = computed(() => carouselItems.value.length)
 const currentIndex = ref(Math.floor(carouselItems.value.length / 2))
@@ -174,22 +174,151 @@ onBeforeUnmount(() => { stopAutoPlay(); clearProgress(); if (_demoProgressTimer)
 
 <style scoped>
 /* 特性 + demo 局部样式（从原 Home.vue 中抽取） */
-.features-section { width:100%; padding: 6rem 2rem; background: black; display:block; box-sizing:border-box; }
-.features-inner { max-width:1200px; margin:0 auto; text-align:center; position:relative; }
-.features-heading { font-size:2rem; font-weight:700; margin-bottom:0.25rem; color:#fff; }
-.features-sub { color:#9da6b3; margin-bottom:1.25rem; }
+.features-section { 
+  width:100%; 
+  padding: 6rem 2rem; 
+  background: black; 
+  display:block; 
+  box-sizing:border-box; 
+}
+.features-inner { 
+  max-width:1200px; 
+  margin:0 auto; 
+  text-align:center; 
+  position:relative; 
+}
+.features-heading { 
+  font-size:2rem; 
+  font-weight:700; 
+  margin-bottom:0.25rem; 
+  color:#fff; 
+}
+.features-sub { 
+  color:#9da6b3; 
+  margin-bottom:1.25rem; 
+}
 
-.carousel { position:relative; margin-top: 1.25rem; height: 420px; perspective: 1400px; display:flex; align-items:center; justify-content:center; user-select:none; touch-action: pan-y; }
-.carousel-track { position:relative; width:100%; height:100%; display:flex; align-items:center; justify-content:center; transform-style: preserve-3d; will-change: transform; overflow: visible; }
-.card { position:absolute; width: 320px; max-width: 38vw; min-width: 260px; height: 360px; border-radius: 18px; background: linear-gradient(180deg,#ffffff,#f6f7ff); box-shadow: 0 20px 40px rgba(2,6,23,0.08); display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-end; padding:18px; box-sizing:border-box; cursor:pointer; transition: transform 520ms cubic-bezier(.2,.9,.2,1), opacity 420ms ease, box-shadow 420ms ease; backface-visibility: hidden; }
-.card.is-center { box-shadow: 0 30px 60px rgba(2,6,23,0.12); }
-.card-media { position:absolute; inset:0; border-radius:18px; overflow:hidden; }
-.card-media img { width:100%; height:100%; object-fit:cover; display:block; filter: saturate(1.02) contrast(0.98); }
-.card-body { position:relative; z-index:3; color:#0f172a; text-align:left; width:100%; }
-.card-title { font-size:1.15rem; font-weight:700; margin-bottom:8px; }
-.card-desc { font-size:0.95rem; color:#334155; }
-.carousel-nav { position:absolute; top:50%; width:44px; height:44px; border-radius:9999px; background:rgba(255,255,255,0.85); display:flex; align-items:center; justify-content:center; border:1px solid rgba(15,23,42,0.06); transform: translateY(-50%); cursor:pointer; z-index:999; font-size:22px; line-height:1; }
-.carousel-nav.left { left:12px; } .carousel-nav.right { right:12px; }
+.carousel { 
+  position:relative; 
+  margin-top: 1.25rem; 
+  height: 420px; 
+  perspective: 1400px; 
+  display:flex; 
+  align-items:center; 
+  justify-content:center; 
+  user-select:none; 
+  touch-action: pan-y; 
+}
+.carousel-track { 
+  position:relative; 
+  width:100%; 
+  height:100%; 
+  display:flex; 
+  align-items:center; 
+  justify-content:center; 
+  transform-style: preserve-3d;
+   will-change: transform; 
+   overflow: visible; 
+  }
+.card { 
+  position:absolute; 
+  width: 320px; 
+  max-width: 38vw; 
+  min-width: 260px; 
+  height: 360px; 
+  border-radius: 18px; 
+  background: linear-gradient(180deg,#ffffff,#f6f7ff); 
+  box-shadow: 0 20px 40px rgba(2,6,23,0.08); 
+  display:flex; 
+  flex-direction:column; 
+  align-items:flex-start; 
+  justify-content:flex-end; 
+  padding:18px; 
+  box-sizing:border-box; 
+  cursor:pointer; 
+  transition: transform 520ms cubic-bezier(.2,.9,.2,1), opacity 420ms ease, box-shadow 420ms ease; 
+  backface-visibility: hidden;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 33%;          /* 控制模糊区域高度 */
+  border-radius: 0 0 18px 18px;
+  z-index: 2;
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,0.05) 40%,
+    rgba(0,0,0,0.35) 75%,
+    rgba(0,0,0,0.45) 100%
+  );
+  pointer-events: none;
+}
+
+.card.is-center { 
+  box-shadow: 0 30px 60px rgba(2,6,23,0.12); 
+}
+.card-media { 
+  position:absolute; 
+  inset:0; 
+  border-radius:18px; 
+  overflow:hidden; 
+}
+.card-media img { 
+  width:100%; 
+  height:100%; 
+  object-fit:cover; 
+  display:block; 
+  filter: saturate(1.02) contrast(0.98); 
+}
+.card-body { 
+  position:relative; 
+  z-index:3; 
+  color:#0f172a; 
+  text-align:left; 
+  width:100%; 
+}
+.card-title { 
+  font-size:1.15rem; 
+  font-weight:700; 
+  margin-bottom:8px; 
+  color: #fff;
+}
+.card-desc { 
+  font-size:0.95rem; 
+  color:#e4e4e4d2; 
+}
+.carousel-nav { 
+  position:absolute; 
+  top:50%; 
+  width:44px; 
+  height:44px; 
+  border-radius:9999px; 
+  background:rgba(255,255,255,0.85); 
+  display:flex; 
+  align-items:center; 
+  justify-content:center; 
+  border:1px solid rgba(15,23,42,0.06); 
+  transform: translateY(-50%); 
+  cursor:pointer; 
+  z-index:999; 
+  font-size:22px; 
+  line-height:1; 
+}
+.carousel-nav.left { 
+  left:12px; 
+} 
+.carousel-nav.right { 
+  right:12px; 
+}
 
 /* DEMO */
 .demo-section { width:100%; padding:64px 20px; background: linear-gradient(180deg,#fbfcff 0,#ffffff 100%); box-sizing:border-box; }
