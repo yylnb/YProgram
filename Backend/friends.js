@@ -22,19 +22,30 @@ module.exports = (pool, authMiddleware) => {
 
     try {
       const [rows] = await pool.query(
-        `SELECT u.id, u.username, u.created_at
-         FROM friends f
-         JOIN users u ON (CASE WHEN f.user_id = ? THEN f.friend_id ELSE f.user_id END) = u.id
-         WHERE f.user_id = ? OR f.friend_id = ?
-         ORDER BY f.created_at DESC`,
+        `SELECT 
+          u.id,
+          u.username,
+          u.user_emoji,
+          u.user_color,
+          u.created_at
+        FROM friends f
+        JOIN users u 
+          ON (CASE 
+                WHEN f.user_id = ? THEN f.friend_id 
+                ELSE f.user_id 
+              END) = u.id
+        WHERE f.user_id = ? OR f.friend_id = ?
+        ORDER BY f.created_at DESC`,
         [userId, userId, userId]
       );
+
       res.json(rows);
     } catch (err) {
       console.error('GET /friends error', err);
       res.status(500).json({ error: '获取好友失败' });
     }
   });
+
 
   // ---------- 批量检查关系状态（前端在一批 search results 上标记） ----------
   // GET /statuses?ids=1,2,3
