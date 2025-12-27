@@ -313,6 +313,11 @@ onBeforeUnmount(() => { stopAutoPlay(); clearProgress(); if (_demoProgressTimer)
   font-size:22px; 
   line-height:1; 
 }
+@media (max-width: 1100px) {
+  .carousel-nav {
+    display: none;
+  }
+}
 .carousel-nav.left { 
   left:12px; 
 } 

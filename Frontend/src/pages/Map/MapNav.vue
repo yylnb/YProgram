@@ -305,7 +305,7 @@ async function fetchEnergy() {
     energy.value = 0; maxEnergy.value = 30; secondsToNext.value = null; _lastEnergyUpdateAt = null; return
   }
   try {
-    const res = await axios.get('http://localhost:5000/api/user/energy', { headers:{ Authorization:`Bearer ${token.value}` }, timeout:6000 })
+    const res = await axios.get('/api/user/energy', { headers:{ Authorization:`Bearer ${token.value}` }, timeout:6000 })
     if (res && res.status === 200 && res.data) {
       const d = res.data
       energy.value = Number.isFinite(Number(d.energy)) ? Number(d.energy) : (d.energy ? Number(d.energy) : 0)
@@ -322,7 +322,7 @@ async function fetchEnergy() {
 async function fetchMembership() {
   if (!token.value) { isVip.value = false; return }
   try {
-    const r = await axios.get('http://localhost:5000/api/user/membership', { headers:{ Authorization:`Bearer ${token.value}` }, timeout:6000 })
+    const r = await axios.get('/api/user/membership', { headers:{ Authorization:`Bearer ${token.value}` }, timeout:6000 })
     if (r && r.data && r.data.end_at) { isVip.value = new Date(r.data.end_at) > new Date() } else isVip.value = false
   } catch (e) { isVip.value = false }
 }

@@ -7,7 +7,7 @@
     </div>
 
     <!-- 控件区：电池在上，课程在下（课程左对齐） -->
-    <div class="controls p-4 mb-4 flex flex-col gap-6 items-center">
+    <div class="controls p-4 mb-2 flex flex-col gap-10 items-center">
        <!-- 能量面板 -->
       <div class="energy-wrap w-full flex justify-end mb-4">
         <div
@@ -478,7 +478,7 @@ async function fetchEnergy() {
     energy.value = 0; maxEnergy.value = 30; secondsToNext.value = null; _lastEnergyUpdateAt = null; return
   }
   try {
-    const res = await axios.get('http://localhost:5000/api/user/energy', { headers:{ Authorization:`Bearer ${token.value}` }, timeout:6000 })
+    const res = await axios.get('/api/user/energy', { headers:{ Authorization:`Bearer ${token.value}` }, timeout:6000 })
     if (res && res.status === 200 && res.data) {
       const d = res.data
       energy.value = Number.isFinite(Number(d.energy)) ? Number(d.energy) : (d.energy ? Number(d.energy) : 0)
@@ -495,7 +495,7 @@ async function fetchEnergy() {
 async function fetchMembership() {
   if (!token.value) { isVip.value = false; return }
   try {
-    const r = await axios.get('http://localhost:5000/api/user/membership', { headers:{ Authorization:`Bearer ${token.value}` }, timeout:6000 })
+    const r = await axios.get('/api/user/membership', { headers:{ Authorization:`Bearer ${token.value}` }, timeout:6000 })
     if (r && r.data && r.data.end_at) { isVip.value = new Date(r.data.end_at) > new Date() } else isVip.value = false
   } catch (e) { isVip.value = false }
 }
@@ -704,7 +704,7 @@ onBeforeUnmount(() => {
 
 /* ---------- 语言选择（新） ---------- */
 /* compact (single current language) - purple and left-aligned text */
-.languages-wrapper { width: 90%; display: block; padding-left: 2%; box-sizing: border-box; }
+.languages-wrapper { width: 100%; display: block; padding-left: 2%; box-sizing: border-box; }
 .languages-compact { width:100%; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 12px; border-radius:12px; background:linear-gradient(180deg,#8b5cf6,#6d28d9); color:#fff; box-sizing:border-box; transition: transform .18s ease, box-shadow .18s ease; box-shadow:0 8px 22px rgba(109,40,217,0.14); border:1px solid rgba(255,255,255,0.04); }
 .languages-compact:hover { transform: translateY(-3px); box-shadow:0 10px 28px rgba(109,40,217,0.16); }
 .languages-compact .compact-left { display:flex; flex-direction:column; align-items:flex-start; text-align:left; gap:4px; flex:1; }

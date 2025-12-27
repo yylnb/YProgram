@@ -82,7 +82,7 @@
       <p class="contact-text">
         如果你在使用过程中发现 Bug、功能异常或有新的建议，
         欢迎随时通过邮件联系我们：<br />
-        <span class="email">leonyeungee@qq.com</span>
+        <span class="email">leonyeungee@qq.com / leonyeungee@gmail.com</span>
       </p>
 
       <!-- 版本号 -->
@@ -134,10 +134,34 @@ const thanks = ref([
     avatar: new URL('@/assets/avatars/gemini.png', import.meta.url).href,
   },
   {
+    id: 't-deepseek',
+    name: 'DeepSeek',
+    note: '提供API接口',
+    avatar: new URL('@/assets/avatars/DeepSeek.png', import.meta.url).href,
+  },
+  {
     id: 't-oss',
     name: 'Zhang',
     note: '',
     avatar: new URL('@/assets/avatars/zh.jpg', import.meta.url).href,
+  },
+  {
+    id: 't-toss',
+    name: 'iicannotsleep',
+    note: '大力支持',
+    avatar: new URL('@/assets/avatars/iicannotsleep.png', import.meta.url).href,
+  },
+  {
+    id: 't-toss',
+    name: 'Diego',
+    note: '大力支持',
+    avatar: new URL('@/assets/avatars/Diego.jpg', import.meta.url).href,
+  },
+  {
+    id: 't-toss',
+    name: 'Vader Li',
+    note: '大力支持',
+    avatar: new URL('@/assets/avatars/Vader Li.jpg', import.meta.url).href
   }
 ])
 
@@ -267,7 +291,15 @@ function toggleDetail(id) {
 
 /* 特别感谢排列 */
 .thanks-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  place-items: center;
+  gap: 16px;
+}
+@media (max-width: 700px) {
+  .thanks-row {
+      grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 /* 使特别感谢卡片里的头像与昵称垂直居中 */
@@ -275,7 +307,7 @@ function toggleDetail(id) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100px;
+  width: auto;
   text-align: center;
   position: relative;
 }
@@ -305,6 +337,7 @@ function toggleDetail(id) {
   box-shadow: 0 8px 20px rgba(255, 255, 255, 0.61);
 }
 .thx-avatar {
+  max-width: none; 
   width: 56px;
   height: 56px;
   border-radius: 50%;
@@ -315,6 +348,7 @@ function toggleDetail(id) {
 .nickname {
   margin-top: 8px;
   font-size: 12px;
+  white-space: nowrap;
 }
 
 /* 悬停提示 */

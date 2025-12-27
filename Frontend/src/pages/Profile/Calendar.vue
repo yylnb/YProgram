@@ -159,7 +159,7 @@
     <div class="mt-4 info">
       <span v-if="loading">加载中…</span>
       <span v-else-if="error" class="text-red-400">错误：{{ error }}</span>
-      <span v-else>已加载 {{ currentMonthCheckedCount }} 天的打卡数据（{{ displayYear }}-{{ pad(displayMonth) }}）。</span>
+      <span v-else>已加载 {{ currentMonthCheckedCount }} 天的打卡数据（{{ displayYear }}-{{ pad(displayMonth) }}）</span>
     </div>
   </div>
 </template>
