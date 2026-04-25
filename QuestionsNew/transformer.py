@@ -5,7 +5,7 @@ from openai import OpenAI
 
 # ================= 配置区域 =================
 # 替换为你的 DeepSeek API Key
-API_KEY = "sk-eeea8f33515f40e1b7c80d20960b5a28"
+API_KEY = ""
 
 # 初始化 DeepSeek 客户端
 client = OpenAI(

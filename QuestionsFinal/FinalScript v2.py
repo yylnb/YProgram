@@ -22,7 +22,7 @@ from openai import OpenAI
 # ========== 配置区 ==========
 # ----------------------------
 # DeepSeek API key: 使用环境变量 DEEPSEEK_API_KEY（推荐）
-DEEPSEEK_API_KEY = "sk-eeea8f33515f40e1b7c80d20960b5a28"
+DEEPSEEK_API_KEY = ""
 # 如果临时测试需要，也可在这里写明（不推荐长期硬编码）
 # DEEPSEEK_API_KEY = "sk-..."
 

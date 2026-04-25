@@ -21,7 +21,7 @@ from openai import OpenAI
 # ----------------------------
 # ========== 配置区 ==========
 # ----------------------------
-DEEPSEEK_API_KEY = "sk-eeea8f33515f40e1b7c80d20960b5a28"
+DEEPSEEK_API_KEY = ""
 DEEPSEEK_BASE_URL = "https://api.deepseek.com"
 MODEL_NAME = "deepseek-reasoner"
 

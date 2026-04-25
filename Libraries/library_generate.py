@@ -16,7 +16,7 @@ import os
 
 
 # ===================== 配置参数（全部写死） =====================
-DEESEEK_API_KEY = "sk-07f4e4faded64ed1988a7b5795e1cc47"  # <-- 替换为你的实际 Key
+DEESEEK_API_KEY = ""  # <-- 替换为你的实际 Key
 THEMES_FILE = Path(r"F:\\project\\YProgram\\Libraries\\outline.txt")                    # 每行一个主题
 LANG = "Python"
 DIFFICULTY = "intermediate"

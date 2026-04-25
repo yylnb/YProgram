@@ -27,7 +27,7 @@ import requests
 # ========== 配置区 ==========
 # ---------------------------
 # API key：你可以把 key 填在这里（不推荐长期明文保存），或在运行前用环境变量 DEEPSEEK_API_KEY 设置。
-DEEPSEEK_API_KEY = "sk-eeea8f33515f40e1b7c80d20960b5a28"
+DEEPSEEK_API_KEY = ""
 
 # DeepSeek API endpoint（如需替换为实际 endpoint，请改这里）
 DEEPSEEK_BASE_URL = "https://api.deepseek.com"
