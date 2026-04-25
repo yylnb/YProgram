@@ -1,0 +1,201 @@
+```plaintext
+{
+  'unit': '第27单元：分支逻辑的测试与调试',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '针对分支的单元测试',
+      'content': '编写单元测试时应覆盖哪些情形？',
+      'options': {'A':'所有分支路径与边界条件','B':'仅成功路径','C':'仅失败路径','D':'测试不必要'},
+      'answer': 'A',
+      'hints': ['覆盖更多路径保证行为','包括异常及边界情况'],
+      'explanation': '单元测试应覆盖各分支以保证不同分支的正确性。',
+      'example': '测试 if/elif/else 各路径'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '断点调试',
+      'content': '调试复杂分支逻辑时常用方法是？',
+      'options': {'A':'在关键分支处设断点观察变量','B':'随意插入 print','C':'删除分支','D':'重启系统'},
+      'answer': 'A',
+      'hints': ['观察运行时状态','定位错综复杂的分支错误'],
+      'explanation': '使用断点可逐步观察程序状态并定位问题。',
+      'example': '在 IDE 中断点运行'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '覆盖率工具',
+      'content': '使用覆盖率工具可以帮助？',
+      'options': {'A':'发现测试未覆盖的分支','B':'提高程序速度','C':'减少文件大小','D':'自动修复代码'},
+      'answer': 'A',
+      'hints': ['查看哪些行未被执行','补充相应测试'],
+      'explanation': '覆盖率报告能显示未执行到的分支，以便补充测试用例。',
+      'example': 'pytest --cov'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '写测试用例示例',
+      'content': '补全：为 is_even 函数添加简单断言。',
+      'input': '',
+      'output': '',
+      'code': 'def is_even(n):\n    return n%2==0\nassert is_even(2)\nassert not is_even(3)',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '用断言快速验证函数在典型输入上的行为。',
+      'example': 'assert add(1,2)==3'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '使用日志帮助调试',
+      'content': '补全：在关键分支记录日志信息。',
+      'input': '',
+      'output': '',
+      'code': 'import logging\nlogging.info("enter branch A with x=%s", x)',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '在分支中记录必要上下文有助于线下排查问题。',
+      'example': 'logger.debug(...)'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '模拟边界条件',
+      'content': '为覆盖边界分支测试应如何设计输入？',
+      'options': {'A':'包含等于边界和紧邻边界的输入','B':'只测试边界外的值','C':'只测试极大值','D':'不需要边界测试'},
+      'answer': 'A',
+      'hints': ['等于边界的行为很重要','包括 -1,0,1 等邻近值'],
+      'explanation': '边界和邻近值常常暴露 off-by-one 错误。',
+      'example': 'test with n=0 and n=1'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '使用断言 vs 异常',
+      'content': '单元测试中用断言的优点是？',
+      'options': {'A':'简洁且失败会直接暴露问题','B':'会隐藏错误','C':'无法自动化','D':'使测试慢'},
+      'answer': 'A',
+      'hints': ['断言是快速检查的好方法'],
+      'explanation': '断言能直观表达预期并在不满足时抛出错误，便于自动化测试。',
+      'example': 'assert f(x)==y'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '回放问题',
+      'content': '定位复杂分支错误时，回放日志能帮助什么？',
+      'options': {'A':'还原引发错误的输入与流程','B':'自动修复错误','C':'替代测试','D':'使问题更难'},
+      'answer': 'A',
+      'hints': ['日志记录输入和状态','便于还原问题场景'],
+      'explanation': '有详尽日志可以准确还原错误触发路径，利于定位问题。',
+      'example': 'log input and state'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '断点示例',
+      'content': '补全：在调试时可用 pdb 设断点。',
+      'input': '',
+      'output': '',
+      'code': 'import pdb; pdb.set_trace()\n# 运行到此处进入调试控制台',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': 'pdb.set_trace 可在运行时进入交互式调试。',
+      'example': '使用 IDE 的断点功能'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '模拟异常场景',
+      'content': '补全：用 with 捕获文件打开异常示例。',
+      'input': '',
+      'output': '',
+      'code': 'try:\n    with open("nofile") as f:\n        pass\nexcept FileNotFoundError:\n    print("missing")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '在测试中模拟异常可以验证异常处理路径。',
+      'example': 'except Exception as e: ...'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '边界条件自动化',
+      'content': '自动化测试边界时应结合什么工具？',
+      'options': {'A':'参数化测试框架（如 pytest param）','B':'手动运行每次测试','C':'只用 print 观察','D':'不测试边界'},
+      'answer': 'A',
+      'hints': ['参数化便于覆盖多个输入组合'],
+      'explanation': '使用参数化可以方便地为同一测试函数传入多组边界数据。',
+      'example': '@pytest.mark.parametrize("n", [0,1,2])'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '回归测试',
+      'content': '发现分支错误后应建立什么以防止复发？',
+      'options': {'A':'覆盖该场景的回归测试','B':'忽略并重构','C':'删掉该功能','D':'只修复线上'},
+      'answer': 'A',
+      'hints': ['把错误场景加入测试用例','保持后续变更不破坏行为'],
+      'explanation': '回归测试能在未来修改中检测出同类错误是否再次出现。',
+      'example': '新增测试用例后加入 CI'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '模拟外部依赖',
+      'content': '为测试分支逻辑如何处理网络或数据库？',
+      'options': {'A':'使用 mock 模拟外部服务','B':'总是调用真实服务','C':'删除测试','D':'使用随机数据'},
+      'answer': 'A',
+      'hints': ['mock 有助于隔离单元测试','控制返回值便于覆盖各种分支'],
+      'explanation': '用 mock 可以稳定模拟外部依赖并覆盖不同返回情况。',
+      'example': 'with patch("requests.get") as m: ...'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '记录断言失败信息',
+      'content': '补全：断言失败时打印有助于定位的问题上下文。',
+      'input': '',
+      'output': '',
+      'code': 'assert result==expected, f"got {result}, expected {expected}"',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '附带信息的断言能更快定位错误原因。',
+      'example': 'assert x==y, "mismatch"'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '用临时数据复现问题',
+      'content': '补全：准备小规模输入以复现分支错误。',
+      'input': '',
+      'output': '',
+      'code': 'data = [edge_case1, edge_case2]\nfor d in data:\n    run(d)',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '用代表性小样本快速定位并修复分支错误。',
+      'example': '构造最小复现样例'
+    }
+
+  ]
+}
+
+```

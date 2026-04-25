@@ -1,0 +1,631 @@
+[
+  {
+    "id": 1,
+    "type": "choice",
+    "title": "冰淇淋的加法",
+    "content": "小胖今天买了2个冰淇淋，妈妈又奖励了他1个，他想用Python计算总数，哪个表达式正确？",
+    "options": [
+      "2 冰淇淋 + 1 冰淇淋",
+      "2 + \"1\"",
+      "2 + 1",
+      "add(2, 1)"
+    ],
+    "answer": "C",
+    "hints": [
+      "加法运算是对数字进行的。",
+      "去掉非数字的词语和符号。",
+      "最简单的数字相加写法就是 `2+1`。"
+    ],
+    "explanation": "在Python中，`+` 运算符用于数字相加。选项C是整数2和整数1直接相加，语法正确。选项A包含了非数字字符；选项B是整数与字符串相加；选项D使用了不存在的add函数。",
+    "example": "计算两个整数之和：`result = 5 + 3`，result的值将是8。"
+  },
+  {
+    "id": 2,
+    "type": "choice",
+    "title": "零花钱的减法",
+    "content": "阿强有100元零花钱，买玩具花了35元，他想用Python算算还剩多少，哪个表达式不对？",
+    "options": [
+      "100 - 35",
+      "100 - \"35\"",
+      "money = 100; money - 35",
+      "100 - 035"
+    ],
+    "answer": "B",
+    "hints": [
+      "减法运算要求两边都是数字。",
+      "\"35\"是文本，不是数字。",
+      "检查哪个选项的类型不匹配。"
+    ],
+    "explanation": "在Python中，`-` 运算符要求两边操作数都是数值类型（如整数）。选项B尝试用整数100减去字符串\"35\"，类型不匹配会导致错误。其他选项在语法或结果上都是有效的。",
+    "example": "正确的减法：`remain = 50 - 20` 结果是30。错误减法：`50 - \"20\"` 会报错。"
+  },
+  {
+    "id": 3,
+    "type": "choice",
+    "title": "+号的双重身份",
+    "content": "Python中的`+`号遇到数字和字符串时表现不同，哪个场景`+`号会把东西连起来而不是加起来？",
+    "options": [
+      "10 + 20",
+      "\"10\" + \"20\"",
+      "10 + \"20\"",
+      "\"10\" + 20"
+    ],
+    "answer": "B",
+    "hints": [
+      "想想+号连接文本的情况。",
+      "引号包起来的是字符串（文本）。",
+      "两边都是文本时，`+`负责拼接。"
+    ],
+    "explanation": "当 `+` 运算符两边都是字符串时，它的功能是字符串拼接。选项B中\"10\"和\"20\"都是字符串，所以结果是\"1020\"。其他选项要么是数值相加，要么是类型错误。",
+    "example": "字符串拼接示例：`name = \"小\" + \"明\"`，结果是\"小明\"。"
+  },
+  {
+    "id": 4,
+    "type": "fill",
+    "title": "计算找零",
+    "content": "帮助收银员小明完成这个计算顾客找零的程序，他收了顾客100元，商品价格是57元。",
+    "input": null,
+    "output": [
+      "找零金额为：43"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "# 计算找零"
+            },
+            {
+              "type": "code_line",
+              "value": "received = 100"
+            },
+            {
+              "type": "code_line",
+              "value": "price = 57"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "change = received "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " price"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(\"找零金额为：\", change)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "+",
+      "-",
+      "*",
+      "//",
+      "%",
+      "&",
+      "找零"
+    ],
+    "answer": [
+      2
+    ],
+    "explanation": "找零的计算公式是‘收款金额 - 商品价格’。因此，received 和 price 之间应该使用减法运算符 `-`。",
+    "example": "类似地，计算剩余生命值：`hp_left = total_hp - damage`。"
+  },
+  {
+    "id": 5,
+    "type": "fill",
+    "title": "温度转换",
+    "content": "小华从美国网站看到今天气温是68华氏度，他想知道相当于多少摄氏度。（转换公式：摄氏度 = (华氏度 - 32) / 1.8）",
+    "input": null,
+    "output": [
+      "68华氏度相当于20.0摄氏度"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "fahrenheit = 68"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "celsius = (fahrenheit "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " 32) "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " 1.8"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(f\"{fahrenheit}华氏度相当于{celsius}摄氏度\")"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "//",
+      "%",
+      "**",
+      ">>"
+    ],
+    "answer": [
+      2,
+      4
+    ],
+    "explanation": "根据公式，首先需要用华氏度减去32（用 `-`），然后用得到的结果除以1.8（用 `/`）。",
+    "example": "类似计算：`average = (score1 + score2) / 2` 先做加法，再做除法。"
+  },
+  {
+    "id": 6,
+    "type": "choice",
+    "title": "运算的优先级",
+    "content": "小丽想计算“1加2乘以3”，她写了`1 + 2 * 3`。Python会先算加号还是乘号？结果是多少？",
+    "options": [
+      "先算加号，结果是9",
+      "先算乘号，结果是7",
+      "先算加号，结果是7",
+      "从左到右算，结果是9"
+    ],
+    "answer": "B",
+    "hints": [
+      "数学里有“先乘除后加减”的规则。",
+      "Python也遵循这个数学运算优先级。",
+      "试试心算：`2 * 3` 先，然后 `1 + ...`。"
+    ],
+    "explanation": "在Python中，乘号 `*` 的运算优先级高于加号 `+`。因此表达式 `1 + 2 * 3` 会先计算 `2 * 3` 得到6，再计算 `1 + 6`，最终结果是7。",
+    "example": "理解优先级：`3 + 4 * 2` 结果是11，不是14。可以使用括号`(3+4)*2`来改变顺序得到14。"
+  },
+  {
+    "id": 7,
+    "type": "choice",
+    "title": "变量运算游戏",
+    "content": "已知 `a = 5`, `b = 2`，执行 `c = a - b + a` 后，变量 `c` 的值是多少？",
+    "options": [
+      "3",
+      "7",
+      "8",
+      "12"
+    ],
+    "answer": "C",
+    "hints": [
+      "把a和b的值代入公式。",
+      "注意运算符从左到右结合。",
+      "计算步骤：5 - 2 = 3，然后 3 + 5 = ?"
+    ],
+    "explanation": "将a=5，b=2代入表达式 `a - b + a`，即 `5 - 2 + 5`。加法和减法优先级相同，按从左到右顺序计算：先算 `5 - 2` 得3，再算 `3 + 5` 得8。因此c的值为8。",
+    "example": "变量运算：`x=10; y=3; z = x - y + 2` 结果是9。"
+  },
+  {
+    "id": 8,
+    "type": "choice",
+    "title": "连字符还是减号？",
+    "content": "大牛写了一句代码：`result = 50-30`，他自信满满，但Python却报错了。可能的原因是什么？",
+    "options": [
+      "数字写太大了",
+      "减号`-`前后没加空格",
+      "他写的是连字符‘-’，不是减号‘-’",
+      "Python不支持减法"
+    ],
+    "answer": "C",
+    "hints": [
+      "检查符号是不是从英文输入法输入的。",
+      "有些字体下，连字符和减号长得一样，但编码不同。",
+      "最可能的原因是符号输入错误。"
+    ],
+    "explanation": "在某些情况下（如从富文本复制），可能输入的是全角连字符“－”或其它类似字符，而非Python能识别的半角减号“-”。虽然题目中选项B的写法（不加空格）在语法上是完全正确的，但结合“报错”和“可能的原因”这一描述，C是最常见的隐蔽错误。",
+    "example": "务必使用英文半角符号：正确 `5 - 3`， 错误 `5 － 3`（全角符号）。"
+  },
+  {
+    "id": 9,
+    "type": "fill",
+    "title": "组装欢迎语",
+    "content": "机器人需要生成一句动态欢迎语：“[姓名]，你好！今天是第[天数]天。”，请补全代码。",
+    "input": null,
+    "output": [
+      "小明，你好！今天是第100天。"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "name = \"小明\""
+            },
+            {
+              "type": "code_line",
+              "value": "days = 100"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "greeting = name + \"，你好！今天是第\" + "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " + \"天。\""
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(greeting)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "days",
+      "str(days)",
+      "\"days\"",
+      "100",
+      "days + 1"
+    ],
+    "answer": [
+      2
+    ],
+    "explanation": "变量`days`是整数类型，不能直接与字符串用`+`拼接。需要使用`str()`函数将其转换为字符串。因此正确的选项是`str(days)`。",
+    "example": "数字转字符串拼接：`info = \"年龄：\" + str(age)`。"
+  },
+  {
+    "id": 10,
+    "type": "fill",
+    "title": "混合运算迷宫",
+    "content": "根据运算规则，补全下面的计算过程，求出`final_score`的值。",
+    "input": null,
+    "output": [
+      "最终得分是: 9"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "base = 10"
+            },
+            {
+              "type": "code_line",
+              "value": "bonus = 2"
+            },
+            {
+              "type": "code_line",
+              "value": "penalty = 3"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "final_score = base "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " bonus "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " penalty"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(\"最终得分是:\", final_score)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "先 + 后 -",
+      "先 - 后 +",
+      "先 * 后 /"
+    ],
+    "answer": [
+      5,
+      1
+    ],
+    "explanation": "为了得到结果9，计算过程应为：先计算 `base + bonus`（10+2=12），再减去 `penalty`（12-3=9）。因此第一个空填`+`，第二个空填`-`。这体现了使用括号`(base + bonus) - penalty`或默认从左到右但结果相同的逻辑。",
+    "example": "混合运算顺序很重要：`score = (start + gain) - loss`。"
+  },
+  {
+    "id": 11,
+    "type": "choice",
+    "title": "字符串的魔法加法",
+    "content": "运行代码 `print(\"1\" + \"2\" + \"3\")` 会得到什么结果？",
+    "options": [
+      "\"123\"",
+      "6",
+      "\"6\"",
+      "报错"
+    ],
+    "answer": "A",
+    "hints": [
+      "这里的1，2，3都是字符串。",
+      "回忆一下`+`对字符串的作用。",
+      "把三个字符串文本连起来。"
+    ],
+    "explanation": "当 `+` 运算符的操作数都是字符串时，它执行的是字符串拼接操作。`\"1\" + \"2\" + \"3\"` 会将三个字符依次连接起来，形成新的字符串 `\"123\"`。",
+    "example": "多个字符串拼接：`s = \"Py\" + \"th\" + \"on\"` 结果是 \"Python\"。"
+  },
+  {
+    "id": 12,
+    "type": "choice",
+    "title": "存款计算器",
+    "content": "你的初始存款是2000元，第一笔收入500元，第二笔支出800元。用Python表达式表示最终存款，哪项正确？",
+    "options": [
+      "2000 - 500 + 800",
+      "2000 + 500 + 800",
+      "2000 + 500 - 800",
+      "2000 - 500 - 800"
+    ],
+    "answer": "C",
+    "hints": [
+      "收入是加，支出是减。",
+      "初始存款加上收入，再减去支出。",
+      "代入数字：2000 + 500 - 800。"
+    ],
+    "explanation": "最终存款 = 初始存款 + 收入 - 支出。因此，对应2000元初始，收入500元（加500），支出800元（减800），正确的表达式是 `2000 + 500 - 800`。",
+    "example": "计算余额：`balance = initial + salary - cost`。"
+  },
+  {
+    "id": 13,
+    "type": "choice",
+    "title": "神秘的负号",
+    "content": "在Python中，`-5` 这个表达式里的 `-` 是什么？",
+    "options": [
+      "减法运算符",
+      "负号（一元运算符）",
+      "连字符",
+      "注释符号"
+    ],
+    "answer": "B",
+    "hints": [
+      "它只有一个操作数（5）。",
+      "减法需要两个数，比如 `a - b`。",
+      "它表示数字5的相反数。"
+    ],
+    "explanation": "当 `-` 后面紧跟一个数字或变量时（如 `-5`， `-x`），它作为一元运算符使用，表示取负（求相反数）。这与需要两个操作数的二元减法运算符（如 `a - b`）不同。",
+    "example": "一元负号：`negative = -10`， negative的值是-10。"
+  },
+  {
+    "id": 14,
+    "type": "fill",
+    "title": "游戏生命值计算",
+    "content": "游戏角色初始生命100点，被攻击掉血（damage）后，使用一瓶小药水回复15点生命。请补全计算当前生命的代码。",
+    "input": null,
+    "output": [
+      "当前生命值: 65"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "hp_initial = 100"
+            },
+            {
+              "type": "code_line",
+              "value": "damage = 40"
+            },
+            {
+              "type": "code_line",
+              "value": "potion = 15"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "hp_current = (hp_initial "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " damage) "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " potion"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(\"当前生命值:\", hp_current)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "与前面相同符号",
+      "先-后+",
+      "先+后-"
+    ],
+    "answer": [
+      2,
+      1
+    ],
+    "explanation": "当前生命 = 初始生命 - 伤害值 + 药水回复值。因此，先做减法 `hp_initial - damage`，再做加法 `... + potion`。第一个空填 `-`，第二个空填 `+`。",
+    "example": "类似逻辑：`grade_final = (grade_mid - penalty) + bonus`。"
+  },
+  {
+    "id": 15,
+    "type": "fill",
+    "title": "制作完整地址",
+    "content": "程序需要将省、市、区拼接成一个完整的地址字符串，中间用“-”连接。",
+    "input": null,
+    "output": [
+      "地址: 广东省-深圳市-南山区"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "province = \"广东省\""
+            },
+            {
+              "type": "code_line",
+              "value": "city = \"深圳市\""
+            },
+            {
+              "type": "code_line",
+              "value": "district = \"南山区\""
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "address = province + "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " + city + "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " + district"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(\"地址:\", address)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "\"-\"",
+      "\" \"",
+      "province",
+      "city",
+      "-",
+      "&",
+      "，"
+    ],
+    "answer": [
+      1,
+      1
+    ],
+    "explanation": "题目要求用“-”连接。在拼接字符串时，需要将连字符也作为一个字符串（`\"-\"`）加入到加法表达式中。两个空都应该填入字符串 `\"-\"`。",
+    "example": "用加号连接带分隔符的字符串：`full_name = first_name + \" \" + last_name`。"
+  }
+]

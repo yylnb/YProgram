@@ -1,0 +1,887 @@
+---------------YProgram项目---------------
+9.19
+我在别的聊天里让你帮我搭建编程学习网站，并且让你帮我设计Python学习题目，现在我们在这里继续。
+我的课程设置：5阶段x10单元x15题目，题目分为选择题和实操题（在线代码运行，使用docker容器）两种。
+我现在需要把题目导入数据库。我的思路：
+1.选择题导入sql表格“questions_py”，表头
+我现在需要把题目导入数据库。我的思路：
+
+1.选择题导入sql表格“questions_py”，表头有“id、q_id、unit_id、title、energy、question_text、options、answer、hints、explanation、example、created_at”，其中：
+1）energy代表消耗题目的能量，都设置为2。
+2）question_text代表选择题的提问。
+3）options代表每个选项。
+4）answer是0~3的数字，分别代表ABCD。
+5）hints代表提示，共有3个。每点错一次就会生成提示，提示强度逐渐提高，最多3次。
+6）explanation表示对于答案的解释。
+7）example表示举一反三的代码。
+2.实操题导入sql表格“questions_py_exec”（需要你帮我写sql代码创建），表头有“id、q_id、title、energy、question_text、hints、link、created_at”，其中：
+1）energy代表消耗的能量，都设置为3。
+2）hints只包含一个项，在用户提交代码运行错误之后会显示。
+3）link会链接到资料库的某一个卡片，你现在先设置链接到“/library”就好了。
+请你： 1.根据表头所需要的信息和你刚刚给的“阶段一第一单元”的题目，扩充题目信息。（不需要额外发给我） 2.按照以下格式生成json代码。 例：
+
+每日小结：
+1.首页受众模块做成卡片式。reason：风格统一。
+2.每个阶段的第一个单元默认解锁。（待定）
+3.题目要更简单一点，一开始就用def、字典有点难了。reason：考虑到初学者，即完全不会python的人。
+4.stdin分行、提示（stdin是什么）。
+5.每道题都有知识点联系---与资料库联系。
+6.资料库学习加分？（待定）
+7.实操题目做错后也有两次提示。（还有跳过）
+
+
+9.20
+-- migration.sql
+USE study_app;
+
+-- 1) 创建 questions_index（如果尚未创建）
+CREATE TABLE IF NOT EXISTS questions_index (
+  lang VARCHAR(16) NOT NULL,
+  q_id INT NOT NULL,
+  source_table VARCHAR(64) NOT NULL,
+  source_id INT NOT NULL,
+  unit_id INT DEFAULT NULL,
+  title VARCHAR(512) DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (lang, q_id),
+  INDEX idx_questions_index_source (source_table, source_id),
+  INDEX idx_questions_index_lang_unit (lang, unit_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 2) 将现有题目数据导入到 questions_index（按语言和表）
+-- Python 选择题
+INSERT IGNORE INTO questions_index (lang, q_id, source_table, source_id, unit_id, title, created_at)
+SELECT 'python', q_id, 'questions_py', id, unit_id, title, created_at FROM questions_py WHERE q_id IS NOT NULL;
+
+-- Python 实操题
+INSERT IGNORE INTO questions_index (lang, q_id, source_table, source_id, unit_id, title, created_at)
+SELECT 'python', q_id, 'questions_py_exec', id, unit_id, title, created_at FROM questions_py_exec WHERE q_id IS NOT NULL;
+
+-- C++ 选择题
+INSERT IGNORE INTO questions_index (lang, q_id, source_table, source_id, unit_id, title, created_at)
+SELECT 'cpp', q_id, 'questions_cpp', id, unit_id, title, created_at FROM questions_cpp WHERE q_id IS NOT NULL;
+
+-- C++ 实操题
+INSERT IGNORE INTO questions_index (lang, q_id, source_table, source_id, unit_id, title, created_at)
+SELECT 'cpp', q_id, 'questions_cpp_exec', id, unit_id, title, created_at FROM questions_cpp_exec WHERE q_id IS NOT NULL;
+
+-- Java 选择题
+INSERT IGNORE INTO questions_index (lang, q_id, source_table, source_id, unit_id, title, created_at)
+SELECT 'java', q_id, 'questions_java', id, unit_id, title, created_at FROM questions_java WHERE q_id IS NOT NULL;
+
+-- Java 实操题
+INSERT IGNORE INTO questions_index (lang, q_id, source_table, source_id, unit_id, title, created_at)
+SELECT 'java', q_id, 'questions_java_exec', id, unit_id, title, created_at FROM questions_java_exec WHERE q_id IS NOT NULL;
+
+-- 3) 为 favorites 表添加 lang 列（若尚不存在），并为已有行填充对应语言
+-- Python favorites
+ALTER TABLE questions_favorites_py
+  ADD COLUMN IF NOT EXISTS lang VARCHAR(16) NOT NULL DEFAULT 'python';
+
+UPDATE questions_favorites_py SET lang = 'python' WHERE lang IS NULL OR lang = '';
+
+-- C++ favorites
+ALTER TABLE questions_favorites_cpp
+  ADD COLUMN IF NOT EXISTS lang VARCHAR(16) NOT NULL DEFAULT 'cpp';
+
+UPDATE questions_favorites_cpp SET lang = 'cpp' WHERE lang IS NULL OR lang = '';
+
+-- Java favorites
+ALTER TABLE questions_favorites_java
+  ADD COLUMN IF NOT EXISTS lang VARCHAR(16) NOT NULL DEFAULT 'java';
+
+UPDATE questions_favorites_java SET lang = 'java' WHERE lang IS NULL OR lang = '';
+
+-- 4) 删除原来的外键约束（如果存在），然后添加新的外键约束指向 questions_index(lang,q_id)
+-- Because foreign key names might differ between deployments, we attempt to find them dynamically and drop them.
+
+-- Helper: drop any foreign key on favorites that references questions_* tables
+-- We'll use a prepared statement to drop constraints if they exist.
+
+-- For Python favorites: find FK that references questions_py or questions_py_exec or questions_py (old)
+SET @tbl = 'questions_favorites_py';
+SELECT CONCAT('ALTER TABLE `', TABLE_NAME, '` DROP FOREIGN KEY `', CONSTRAINT_NAME, '`;') AS stmt
+INTO @drop_stmt
+FROM information_schema.REFERENTIAL_CONSTRAINTS rc
+JOIN information_schema.KEY_COLUMN_USAGE kcu 
+  ON rc.CONSTRAINT_NAME = kcu.CONSTRAINT_NAME AND rc.CONSTRAINT_SCHEMA = kcu.CONSTRAINT_SCHEMA
+WHERE rc.CONSTRAINT_SCHEMA = DATABASE()
+  AND rc.TABLE_NAME = @tbl
+  AND (rc.REFERENCED_TABLE_NAME LIKE 'questions\_%');
+
+-- Execute drop if found
+-- Note: If multiple constraints found, the SELECT INTO will only return one; so we run a loop variant:
+DROP PROCEDURE IF EXISTS drop_fks_for_table;
+DELIMITER $$
+CREATE PROCEDURE drop_fks_for_table(IN in_tbl VARCHAR(128))
+BEGIN
+  DECLARE done INT DEFAULT FALSE;
+  DECLARE cur_stmt TEXT;
+  DECLARE cur CURSOR FOR
+    SELECT CONCAT('ALTER TABLE `', kcu.TABLE_NAME, '` DROP FOREIGN KEY `', kcu.CONSTRAINT_NAME, '`;') AS stmt
+    FROM information_schema.KEY_COLUMN_USAGE kcu
+    WHERE kcu.CONSTRAINT_SCHEMA = DATABASE()
+      AND kcu.TABLE_NAME = in_tbl
+      AND kcu.REFERENCED_TABLE_NAME LIKE 'questions\_%';
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+  OPEN cur;
+  read_loop: LOOP
+    FETCH cur INTO cur_stmt;
+    IF done THEN
+      LEAVE read_loop;
+    END IF;
+    SET @s = cur_stmt;
+    PREPARE ps FROM @s;
+    EXECUTE ps;
+    DEALLOCATE PREPARE ps;
+  END LOOP;
+  CLOSE cur;
+END$$
+DELIMITER ;
+
+-- Drop FK constraints (if any) for each favorites table
+CALL drop_fks_for_table('questions_favorites_py');
+CALL drop_fks_for_table('questions_favorites_cpp');
+CALL drop_fks_for_table('questions_favorites_java');
+
+-- Remove the temporary procedure
+DROP PROCEDURE IF EXISTS drop_fks_for_table;
+
+-- 5) 添加新的外键 (lang, q_id) -> questions_index(lang, q_id)
+-- But first ensure there is an index on (lang,q_id) in favorites (unique key uses user/lang/qid).
+-- Python favorites: add constraint if not exists
+ALTER TABLE questions_favorites_py
+  ADD CONSTRAINT IF NOT EXISTS fk_qfav_py_idx FOREIGN KEY (lang, q_id) REFERENCES questions_index(lang, q_id) ON DELETE CASCADE;
+
+ALTER TABLE questions_favorites_cpp
+  ADD CONSTRAINT IF NOT EXISTS fk_qfav_cpp_idx FOREIGN KEY (lang, q_id) REFERENCES questions_index(lang, q_id) ON DELETE CASCADE;
+
+ALTER TABLE questions_favorites_java
+  ADD CONSTRAINT IF NOT EXISTS fk_qfav_java_idx FOREIGN KEY (lang, q_id) REFERENCES questions_index(lang, q_id) ON DELETE CASCADE;
+
+-- 6) Sanity check: ensure that any favorites rows have a matching questions_index entry.
+-- If any favorites refer to missing index entries, list them for manual handling.
+SELECT 'MISSING_INDEX_PY' AS kind, f.* 
+FROM questions_favorites_py f
+LEFT JOIN questions_index idx ON idx.lang = f.lang AND idx.q_id = f.q_id
+WHERE idx.q_id IS NULL;
+
+SELECT 'MISSING_INDEX_CPP' AS kind, f.* 
+FROM questions_favorites_cpp f
+LEFT JOIN questions_index idx ON idx.lang = f.lang AND idx.q_id = f.q_id
+WHERE idx.q_id IS NULL;
+
+SELECT 'MISSING_INDEX_JAVA' AS kind, f.* 
+FROM questions_favorites_java f
+LEFT JOIN questions_index idx ON idx.lang = f.lang AND idx.q_id = f.q_id
+WHERE idx.q_id IS NULL;
+
+-- If any rows are returned above, please inspect them.
+-- Optionally, you can delete or fix them. Example (BE CAREFUL) to remove invalid favorites:
+-- DELETE f FROM questions_favorites_py f LEFT JOIN questions_index idx ON idx.lang = f.lang AND idx.q_id = f.q_id WHERE idx.q_id IS NULL;
+
+-- 7) (Optional) If you prefer, rebuild unique keys to include lang as we did in schema
+-- Ensure the unique keys exist and include lang
+-- For python favorites: drop old unique if name differs and create new unique
+ALTER TABLE questions_favorites_py
+  DROP INDEX IF EXISTS uniq_user_question,
+  ADD UNIQUE KEY uniq_user_question_py (user_id, lang, q_id);
+
+ALTER TABLE questions_favorites_cpp
+  DROP INDEX IF EXISTS uniq_user_question,
+  ADD UNIQUE KEY uniq_user_question_cpp (user_id, lang, q_id);
+
+ALTER TABLE questions_favorites_java
+  DROP INDEX IF EXISTS uniq_user_question,
+  ADD UNIQUE KEY uniq_user_question_java (user_id, lang, q_id);
+
+-- Migration finished message (just a comment)
+-- Migration complete. Please inspect the MISSING_INDEX_* queries above for any orphan favorites,
+-- and fix or delete them manually if necessary.
+
+现在我的课程设置是这样的：
+一共分为10个阶段（难度递增）。每个单元都有一定数量的课时点，
+1.前6个阶段，难度递增，并且：
+1）前2个阶段里，每个单元都有2个课时点，每个课时点用来学习
+
+现在我的课程设置是这样的：
+一共分为10个阶段（难度递增）。
+1.课时点规则：每个单元都有一定数量的课时点，表示需要学习的知识点数。例如：如果某个单元有3个课时点，那么要新学习1个1课时的知识点和1个2课时的知识点；如果某个单元有4个课时点，那么这个单元要新学习2个2课时的知识点，或者新学习1个1课时的知识点和1个3课时的知识点。
+2.知识点出现规则：如果先学知识点A再学知识点B，那么知识点A所在的单元就不会出现知识点B，但知识点B的单元可以出现知识点A。确保不会遇到没学过的知识点，并且时刻回顾运用已学过的知识点。
+1.前6个阶段，难度递增，并且其中： 
+1）前2个阶段里，每个单元都有2个课时点，每个课时点用来学习新知识点。
+2）后4个阶段里，每个单元都有3个课时点，每个课时点用来学习新知识点。
+2.后4个阶段，难度均衡，并且其中每个单元都有2个课时点。如果遇到4个课时点的知识点，那么把一个知识点拆成两个单元来学习。
+请你把每个单元对应的知识点给我（整体按照你刚刚所给的顺序，但可以有小范围的随机和打乱）：
+1.新学习的知识点。
+2.会复习到的知识点。
+
+情景化还不够生活化、实用化、吸引人。请你再改一下，可以更长一些，像一个小故事一样。
+如果某一个单元中的几个知识点不能很好地组成一个情景，那可以考虑把某个知识点与其它单元的某个知识点互换。但还是要遵守规则：课时点规则和知识点出现规则。
+
+我想优化的地方：
+1.情景的主题更多样化一点。你现在的很多情景都是工作场景，但可以加入更多日常的场景。让人读起来会有这样的感受：哦！我也遇到过这种情况。但是那个时候我不会编程所以解决不了问题，现在学会编程就可以解决了！
+2.有些时候你用了中文的繁体字，比如“复习”的“习”和“课时”的“时”，请你改回中文简体字。
+请按照刚刚的格式再给我一份文本。
+
+
+9.21
+我现在要继续做的事情是设计具体的题目。
+我的想法是：
+1.题目分为两种：选择题（ABCD项）和实操题（用户手写代码，网站使用docker在线运行代码）。
+2.每个单元有30道题，其中1/2/3题为选择题，4/5题为实操题，6/7/8题为选择题，9/10题为实操题，以此类推。
+3.每个单元内题目难度逐渐递增。例如某个单元涵盖两个知识点A和B，那么1-5题学习知识点A（基础），6-10题学习知识点B（基础），11-15题学习知识点A（进阶），16-20题学习知识点B（进阶），21-30题知识点A和B综合出题。要复习的知识点可以在1-30题内任意加入。
+请你根据你刚刚给的大纲，给我第一阶段第一单元和第二单元的题目。要求包含：题目、选项（选择题）、输入和输出示例（实操题）、用于做错之后的提示（选择题提供3个，实操题提供2个；提示强度均为递增）。
+
+好的，我想导出为JSON格式，存储在MYSQL中。字段要求：
+1.选择题导出在questions_py表格中，表头有：“id、q_id、unit_id、title、energy、question_text、options、answer、hints、explanation、example、created_at”，其中：
+1）energy代表消耗题目的能量，都设置为2。
+2）question_text代表选择题的提问。
+3）options代表每个选项。类型为JSON。
+4）answer是0~3的数字，分别代表ABCD。
+5）hints代表提示，共有3个。类型为JSON。
+6）explanation表示对于答案的解释。
+7）example表示举一反三的代码。
+2.实操题导出在表格“questions_py_exec”，表头有“id、q_id、unit_id、title、energy、question_text、hints、link、eg_in1、eg_out2、eg_in2、eg_out2、eg_in3、eg_out3、created_at”，其中： 
+1）energy代表消耗的能量，都设置为3。
+2）hints代表提示，共有2个。类型为JSON
+3）link会链接到资料库的某一个卡片，类型为JSON。你先设置3个项，每个项都是“/library”。
+4）eg_in1、eg_in2、eg_in3代表输入示例。你刚刚给的文本里一般只包含了1个实例，请你再补全2个。
+5）eg_out1、eg_out2、eg_out3代表输出示例。你刚刚给的文本里一般只包含了1个实例，请你再补全2个。
+例如（我会给你一些sql代码例子）：
+选择题的例子：
+```
+INSERT INTO questions_py (q_id, unit_id, title, energy, question_text, options, answer, hints, explanation, example)
+VALUES
+(1, 1, '文本类型识别', 2,
+ 'Python 中表示“文字（字符串）”的类型是下列哪一个？',
+ JSON_ARRAY('int','str','list','dict'),
+ 1,
+ JSON_ARRAY(
+  '提示1：字符串通常用引号表示，例如 "hello" 或 \'hi\'。',
+  '提示2：Python 中专门表示文字的是 <code>str</code> 类型。',
+  '提示3：可用 <code>isinstance("abc", str)</code> 验证一个值是否为字符串。'
+ ),
+ '在 Python 中，文本（字符序列）使用 <code>str</code> 类型表示。',
+ 'name = \"apple\"\nprint(type(name))  # <class \'str\'>'
+),
+
+(2, 1, '浮点数识别', 2,
+ '`price = 12.5` 中的 `12.5` 在 Python 中属于哪种类型？',
+ JSON_ARRAY('int','float','str','bool'),
+ 1,
+ JSON_ARRAY(
+  '提示1：它是带小数点的数字。',
+  '提示2：带小数点的数通常为浮点数（float）。',
+  '提示3：可用 <code>type(12.5)</code> 验证其类型。'
+ ),
+ '包含小数点的数字在 Python 中是 <code>float</code> 类型。',
+ 'price = 12.5\nprint(type(price))  # <class \'float\'>'
+)
+```
+
+9.22
+我想你继续生成第三和四单元的题目。
+1.3情景：吃饭时你和室友轮流结账，常常算错零头。今晚你决定写一个“AA 制”小脚本：从命令行读取总额和参与人数，自动计算每人应付金额并输出四舍五入的结果，还能显示“多付/少付”的提示。你想着如果能把小票截图与结果关联就更方便以后查账。这个场景逼着你把 input()、数学运算与字符串格式化结合起来。 
+新学：3. 输入 input —— 本单元新学 1 课时（共 1 课时）；4. 运算符 —— 本单元新学 1 课时（共 2 课时，分段学习）
+复习：1. 输出与打印 —— 复习 1 课时；2. 变量与数据类型 —— 复习 2 课时
+1.4情景：你在浏览电商做功课，看到一个打折商品，不确定是否划算。你想写个折扣计算器：输入原价与折扣、预算然后判断是否低于你的预算，并给出“买/不买/再等等”的建议。为保证正确，你还要处理边界情况（比如 0 折、100 折、负数输入），并输出诊断信息。这个任务让你把比较运算和算术运算组合成实用工具。
+新学：4. 运算符 —— 本单元新学 1 课时（共 2 课时，分段学习）
+复习：3. 输入 input —— 复习 1 课时；1. 输出与打印 —— 复习 1 课时
+我现在要继续做的事情是设计具体的题目。 
+我的想法是（和之前的一样）： 
+1.题目分为两种：选择题（ABCD项）和实操题（用户手写代码，网站使用docker在线运行代码）。
+2.每个单元有30道题，其中1/2/3题为选择题，4/5题为实操题，6/7/8题为选择题，9/10题为实操题，以此类推。
+3.每个单元内题目难度逐渐递增。例如某个单元涵盖两个知识点A和B，那么1-5题学习知识点A（基础），6-10题学习知识点B（基础），11-15题学习知识点A（进阶），16-20题学习知识点B（进阶），21-30题知识点A和B综合出题。要复习的知识点可以在1-30题内任意加入。
+请你根据你刚刚给的大纲，给我第一阶段第一单元和第二单元的题目。要求包含：题目、选项（选择题）、输入和输出示例（实操题）、用于做错之后的提示（选择题提供3个，实操题提供2个；提示强度均为递增）。
+
+很不错，请生成MySQL INSERT 语句（像之前那样）写入 questions_py 与 questions_py_exec 表，并且按照规范字段。我可以把字段再给你一次：
+1.选择题导出在questions_py表格中，表头有：“id、q_id、unit_id、title、energy、question_text、options、answer、hints、explanation、example”。
+2.实操题导出在表格“questions_py_exec”，表头有“id、q_id、unit_id、title、energy、question_text、hints、link、eg_in1、eg_out2、eg_in2、eg_out2、eg_in3、eg_out3”。
+记得两点：
+1.如果JSON_ARRAY('A','B','C')的项里面有单引号时（比如A中有don't这样的单词），请把对应的项的外层引号改为双引号（比如把'A'改成"A"）。
+2.使用中文简体字，不要出现繁体字。
+
+
+9.23
+https://designerdailyreport.com/
+左上角（绿色）---清新绿松石色---#A2EAE3---rgb(162, 234, 227)
+右下角（粉红色）---柔和珊瑚粉色---#F7B9C9---rgb(247, 185, 201)
+米黄色（#fce4c0）棕色（#cc8b24）
+
+
+9.24
+如果使用紫色（柔和的紫色，在#843f8d左右）呢？
+请你仅修改颜色，然后再次返回完整的代码。
+
+我在别的聊天里让你帮我搭建编程学习网站，我们现在在这里继续搭建。
+现在我想填补资料库里的内容。资料库是用来显示各种知识点的地方。
+首先我们先重新搭建MySQL数据库，用于储存各种知识点。
+请你帮我编写sql表格library生成代码，表头包含：id、lang、lb_id、difficulty、page、title、tags、summary、content、eg_in1、eg_out1、eg_in2、eg_out2、eg_in3、eg_out3，其中：
+1.lb_id是每个语言中知识点的唯一标号。
+2.difficulty分为“beginner”、“intermediate”、“dvanced”三种，分别是入门、中级、高级。
+3.page代表页码，每15个知识点为一页（这个可以之后导入数据的时候再设置）。
+4.title是标题，tags是JSON格式的标签，summary是概述，conten是具体内容。
+5.eg_in和eg_out是输入和输出的示例，都是JSON格式，以数组形式存储若干个项。
+6.最后created_at是插入数据时自动生成的时间。 
+另外，还有一个收藏表格library_favorites，表头包含：id、lang、lb_id、title、page、created_at。
+
+'1', 'python', 'beginner', '1', '输出 print()', '[\"基础\", \"输出\"]', 'Python 中使用 print() 输出内容。', 'print() 是 Python 最常用的输出函数，可以输出字符串、变量和表达式的值。', 'print(\"Hello, World!\")', '2025-09-01 17:10:06'
+'2', 'python', 'intermediate', '1', '列表推导式', '[\"集合\", \"简写\"]', '列表推导式可以快速生成列表。', '列表推导式是 for 循环的简写，可以用来创建新列表。', '[x**2 for x in range(5)]', '2025-09-01 17:10:06'
+'3', 'javascript', 'beginner', '1', '变量声明 let/const', '[\"基础\", \"变量\"]', 'JavaScript 使用 let 和 const 声明变量。', 'let 用于声明可变变量，const 用于声明常量。', 'let x = 10;\nconst y = 20;', '2025-09-01 17:10:06'
+'4', 'javascript', 'intermediate', '1', '数组 map()', '[\"数组\", \"函数式编程\"]', 'map() 可对数组的每个元素执行回调并返回新数组。', 'map() 是函数式编程的常用方法，用于对数组元素进行变换。', '[1, 2, 3].map(x => x * 2);', '2025-09-01 17:10:06'
+'5', 'java', 'beginner', '1', 'Hello World 程序', '[\"基础\", \"输出\"]', 'Java 中最经典的 Hello World 程序。', 'Java 程序从 main 方法开始执行，System.out.println 用于输出。', 'public class Main {\n  public static void main(String[] args) {\n    System.out.println(\"Hello, World!\");\n  }\n}', '2025-09-01 17:10:06'
+'6', 'java', 'intermediate', '1', 'for-each 循环', '[\"循环\", \"语法\"]', 'Java for-each 用于遍历集合或数组。', 'for-each 循环语法简洁，不需要索引。', 'int[] nums = {1, 2, 3};\nfor (int n : nums) {\n  System.out.println(n);\n}', '2025-09-01 17:10:06'
+
+
+
+9.25
+33122E
+
+
+9.28
+题目设置：
+
+import useLanguage from '../javascript_map/language.js'
+import useProgress from '../javascript_map/progress.js'
+import useEnergy from '../javascript_map/Energy.js'
+import useNodes from '../javascript_map/nodes.js'
+
+
+9.29
+不好，这个闯关路线的显示不好看，我们换一种。
+把整个界面做成一个“楼梯登山”的路线，示意“学习是人类进步的阶梯”。具体样式要求：
+1.视角正对着楼梯。
+2.默认视角正前方是正在学习的单元。
+3.可以滚动鼠标或按住拖动向上滑或向下滑，滑动的时候沿着楼梯上下滑动。
+4.每完成一个阶段就会出现不同颜色的灯塔。
+5.时刻在页面顶端显示一个卡片，卡片显示下一个将要到达的灯塔的样式、距离（还要学习多少个单元）。
+6.点击第5点中的卡片，就会显示所有的阶段。
+请你按照我上面的提示，尝试给我一份Map.vue完整代码。
+
+
+9.30
+请你在你给的上一篇代码的基础上修改，非必要不修改原来的变量名、逻辑，然后给我完整的、完美的代码。
+
+我在别的聊天里让你帮我搭建编程学习网站，我们现在在这里继续优化。
+我们现在目标是优化Map.vue的界面UI，增加一个如图的阶梯：
+1.使用html去渲染，要求楼梯能随着鼠标滚动而真实地滚动。
+2.楼梯表面渲染单元卡片，每间隔两级阶梯就在表面放置一个单元卡片。
+3.题库共分为三种语言，每种语言都有10个阶段，每个阶段都有30个单元。
+以下是我的Map.vue的原版代码。
+
+
+10.5
+npx shadcn-vue@latest add "https://registry.inspira-ui.com/fluid-cursor.json"
+npx shadcn-vue@latest add "https://registry.inspira-ui.com/wavy-background.json"
+
+https://inspira-ui.com/docs/components/input-and-forms/input
+https://inspira-ui.com/docs/components/cards/flip-card
+https://inspira-ui.com/docs/components/miscellaneous/marquee
+https://inspira-ui.com/docs/components/miscellaneous/photo-gallery
+https://inspira-ui.com/docs/components/miscellaneous/testimonial-slider
+https://inspira-ui.com/docs/components/special-effects/particle-image
+https://inspira-ui.com/docs/components/special-effects/scratch-to-reveal   刮彩票
+https://inspira-ui.com/docs/components/special-effects/spring-calendar   日历
+https://inspira-ui.com/docs/components/text-animations/blur-reveal
+https://inspira-ui.com/docs/components/text-animations/letter-pullup
+
+
+10.12
+从#0e78e9 0%到#ed3aed 100%
+
+<640px mobile
+641px-1023px pad
+>1024px computer
+
+
+10.13
+linear-gradient(180deg,#8b5cf6,#6d28d9)
+rgba(139,92,246,0.22)
+linear-gradient(90deg, #0e78e9 0%, #ed3aed 100%)
+
+linear-gradient(90deg, #0e78e9 0%, #7a4de0 50%, #ed3aed 100%)
+
+10.25
+我在别的聊天里让你帮我搭建编程学习网站，我们现在在这里继续搭建。我们这次来优化Study.vue。
+我们要做的事情：
+1.建立题目数据库（全新的表格，不再是以前的study_app）。
+2.设计前端页面（简略版）。
+3.优化前端页面的基础布局。
+4.设计后端api接口，让前端和后端跑通。
+5.设计编程学习框架，并且完成每一道题的设计。
+6.进一步优化界面ui。
+
+我们一步一步来，先做第一步。生成MySQL表格questions。
+注意，我之前用的数据全部在数据库study_app中（包括用户信息、题目进度），只有题库是放在表格questions中的。
+现在先请你帮我写：
+1.生成questions数据库。
+2.生成questions数据库中的子table：que_choice_py_1/que_choice_cpp_1/que_choice_c_1/que_choice_java_1/que_fill_py_1/que_fill_cpp_1/que_fill_c_1/que_fill_java_1
+3.que_choice_*表格指的是选择题，表头有：id/q_id/unit_id/title/text/options/answer/hints/explanation/example。其中options代表ABCD四个选项，用JSON格式储存；其中hints代表选错后给出的提示，一共三个提示，用JSON格式储存；其中answer代表题目的答案的序数（1,2,3...），用INT储存。
+4.que_fill_*表格指的是填空题，表头有：id/q_id/unit_id/title/text/options/answer/explanation/example。其中options代表可选入填空的选项，用JSON格式储存；其中answer代表选项的顺序，用JSON格式储存。
+请你先给出生成MySQL表格的代码。
+
+
+10.28
+
+10.30
+
+10.31
+我在别的聊天里让你帮我搭建编程学习网站，我们现在在这里继续搭建。我们回顾一下我们要做的事情： 
+1.建立题目数据库（全新的表格，不再是以前的study_app）。 
+2.设计前端页面（简略版）。
+3.优化前端页面的基础布局。
+4.设计后端api接口。
+5.优化前端接口，让前端和后端跑通。
+6.设计编程学习框架，并且完成每一道题的设计。
+7.进一步优化界面ui。
+
+所以需要的信息传输有：
+1.Map.vue告诉StudyNew.vue需要获取哪个单元的信息、用户的进度到第几题了。
+2.StudyNew.vue告诉Questions.vue需要获取哪个单元的信息、用户的进度到第几题了。
+3.Questions.vue获取该单元的全部题目。
+4.Questions.vue通过用户的进度计算应该渲染Choice.vue组件还是渲染Fill.vue组件。
+
+
+我在别的聊天里让你帮我搭建编程学习网站，我们现在在这里继续搭建。我们回顾一下我们要做的事情： 
+1.建立题目数据库（全新的表格，不再是以前的study_app）。 
+2.设计前端页面（简略版）。 
+3.优化前端页面的基础布局。 
+4.设计后端api接口。 
+5.优化前端接口，让前端和后端跑通。 
+6.设计编程学习框架，并且完成每一道题的设计。  
+7.进一步优化界面ui。  
+我们刚刚完成了第4步，现在继续完成第5步。
+首先，我的页面逻辑是这样的：
+```
+MapStairs.vue选择单元---StudyNew.vue进入对应单元---组件1Hero.vue
+                                                                                  ---组件2Questions.vue---子组件1Choice.vue
+                                                                                                                      ---子组件2Fill.vue
+```
+所以需要的信息传输有：
+1.MapStairs.vue告诉StudyNew.vue需要获取哪个单元的信息、用户的进度到第几题了。
+2.StudyNew.vue告诉Questions.vue需要获取哪个单元的信息、用户的进度到第几题了。
+3.Questions.vue获取该单元的全部题目。
+4.Questions.vue通过用户的进度计算应该渲染Choice.vue组件还是渲染Fill.vue组件。
+
+首先，请你帮我检查MapStairs.vue是否有告诉StudyNew.vue需要获取哪个单元的信息、用户的进度到第几题了等信息？
+
+11.1
+
+11.2
+那我再修改一次页面信息储存逻辑：
+
+1.打开总网站时，从数据库api接口拉取进度同步到localstorage中。命名yp_progress，数据包含课程和其对应的进度，。
+打开地图页面时，在localStorage拉取用户进度，储存到Pinia中。
+从学习界面退出时，再把pinia中的学习进度发送到localstorage和数据库api。
+
+11.4
+再修改一下：
+1.移动端的拖动还是不行，继续修改。 
+2.增加回“点击自动填入”的功能。 
+3.我重新捋一下选项从“可选项”位置被拖动的逻辑： 
+（1）当选项被拖动时，选项跟着鼠标或触摸位置移动。 
+（2）当选项被拖动时，选项原有的位置变成纯灰色，并且保持占位（占位处只有纯灰色）。 
+（3）当选项被安放时，选项原有的位置的占位取消，后面的选项补上空位。 
+4.选项从“可选项”位置被点击时的逻辑： 
+（1）当选项被点击时，自动填入可选空位中。同时在“可选项”位置的占位取消，后面的选项补上。 
+5.选项从“已填入”的位置被拖动时的逻辑： 
+（1）当选项被拖动时，选项跟着鼠标或触摸位置移动。 
+（2）当选项被拖动时，“可选项”位置出现该选项的占位，占位同样为纯灰色。 
+（3）当选项被安放时，“已填入”的位置恢复“未填入”的状态。 
+6.选项从“已填入”的位置被点击时的逻辑： 
+（1）当可选项被点击时，自动填回“可选项”的位置。 
+请你认真结合以上全部需求，再给我一次完整的、完美的代码。
+
+
+11.10
+交互逻辑：
+1.MapStairs.vue选择某个单元（包含lang/ index/unit_id），然后告诉StudyNew.vue。
+2.StudyNew.vue从后端api获取学习进度（包含lang/index/current_index），并告诉子组件Hero.vue和子组件Questions.vue。
+3.Questions.vue通过获取到的学习进度，从后端api获取整个单元的全部题目。
+4.Questions.vue根据进度选择渲染哪道题，根据题目的号码选择渲染选择题（Choice.vue）或填空题（Fill.vue），并且把题目信息交给对应的子组件。
+
+我还要继续优化：
+1.现在的情况是：
+1）当用户没有提交过答案时，点击选项会出现蓝色的效果；
+2）当用户提交过一次答案并且答案正确时，正确的答案会显示绿色，其他的选项不可选；
+3）当用户提交过一次答案并且答案错误时，正确的答案会显示绿色，但被选中的错误答案会显示红色，此时再点击其它的选项，被选中的选项也会显示红色。
+2.我想改成这样：
+1）和2）两种情况保持不变。
+3）当用户提交过一次答案并且答案错误时，正确答案先不要显示。
+
+
+11.11
+rgba(184, 184, 184, 0.45)
+linear-gradient(144deg, #AF40FF, #5B42F3 50%, #00DDEB)
+
+
+11.12
+根据你刚刚的总结，有几个地方需要修改：
+1.Main的网络请求：全部保持不变。
+2.Detail的网络请求：
+（1）
+1.对于Main向Detail传输：
+（1）props增加
+
+linear-gradient(rgb(132, 63, 141), rgb(94, 25, 95))
+
+/* background: linear-gradient(144deg, #AF40FF, #5B42F3 50%, #00DDEB); */
+  /* background: linear-gradient(180deg, #f85414, #d3c5fa); */
+  /* background: linear-gradient(180deg, #4435aa, #d9d3f7); */
+  /* background: linear-gradient(180deg, #2ad4af, #ece8e5); */
+  /* background: linear-gradient(90deg, #324263, #b0e4ed); */
+  /* background: linear-gradient(180deg, #72316b, #dcf8fd); */
+  /* background: linear-gradient(180deg, #5b83b8, #ffd4ea); */
+
+
+11.21
+继续修改：
+1.当点击某个语言pill时，push到路由“/study”，但在此之前，修改localStorage中储存的语言信息。我现在在localStorage中储存的信息有：
+yp_select:"{"python1":0,"cpp1":0,"java1":0}"（记录总的语言对应的阶段）
+yp_current:"{"course":"python1","stage":0}"（记录最近学习的语言）
+所以，点击pill时，将yp_current的course切换到
+
+我已经把post改成了patch（不需要你给我返回代码了，你记得写前端代码时匹配就行）。
+我们现在修改BasicChange.vue：
+1.取消原来的总的“保存”按钮
+2..用户头像emoji、头像背景色这两个信息设定一个“保存”选项，放在它们下面。
+3.给“联系方式”也单独设立一个“修改”选项（和“用户名”的修改类似）。
+4.用户名的修改：当用户点击“确定”后，先查询和等待后端返回，
+
+
+11.28
+Python（主课程）
+
+Python 入门
+
+Python 进阶
+
+Python 编程实践（项目）
+
+Python 专项课程（分类）
+
+Python 爬虫
+
+Python 数据分析
+
+Python Web 后端（FastAPI）
+
+Python 自动化办公
+
+Python 机器学习
+
+Python 深度学习
+
+Python 小游戏开发
+
+Python AI 应用
+
+我想你更改一下对“选择填空题”的字面理解，其实“选择填空题”不一定要“从四个相似的选项中”选出一个正确答案，这样跟普通选择题没什么区别。“选择填空题”应该更加聚焦“填空题”的性质。
+例如：
+标题：如何输出“Hello World”？
+题目：_____("_______")
+选项：A:print B:printf C:cout D:"Hello World" F:Hello World G:"Hello""World"
+“选择填空题”可以出得非常灵活，在完整的代码语句中挖空，让用户理解和记忆代码的编写。
+相比之下，“选择题”就会比较传统一些，是固定的ABCD选项，不过题目的提问本身也可以出得很灵活。
+请你再给我一次unit1的题目。
+
+对于你刚刚发给我的excel表格，我想你修改一下里面的格式。
+你写在里面的“选择填空题”的选项只有4个，但是我提醒过你可以写多个挖空、选项。“选择填空题”的答案你可以以字母出现的顺序来编号。例如：
+标题：如何输出“Hello World”？
+题目：_____("_______")
+选项：A:print B:printf C:cout D:"Hello World" F:Hello World G:"Hello""World"
+答案：A D
+请你再生成一次excel文件。
+
+
+11.30
+“课程整体采用 5 个阶段，每阶段 12 个单元，每单元 15 题；每单元题型和难度固定：题号 1–3、6–8、11–13 为传统选择题（多选项 ABCD…，题干或代码片段出题），题号 4–5、9–10、14–15 为‘选择填空题’（在完整代码或语句中挖空，选项为若干代码片段/字符串/符号，可远多于 4 个干扰项，答项由字母列出，若需多个空则按填空顺序列出答案字母）；题目难度分层：1–5 为简单、6–15 为进阶。数据库输出格式：选择题写入表 que_choice_py_1、填空题写入表 que_fill_py_1，每条 INSERT 包含字段 (q_id,unit_id,title,text,options,answer,hints,explanation,example)；options 用 JSON_OBJECT 存储（键为大写字母，值为选项文本或代码片段），选择题 answer 存数字（A=1,B=2,...），选择填空题 answer 存为 JSON_ARRAY，内容为正确选项字母按顺序（例如 JSON_ARRAY('A','D')），hints 用 JSON_ARRAY 给出若干提示短句，explanation 为详细解析文本，example 为示例代码或运行结果说明。JSON格式不需要"\"的转义字符。输出时只返回可直接复制执行的代码（SQL/JSON 插入语句或纯 JSON 数据），不要额外的格式化装饰或说明文本。”
+
+课程整体采用 5 个阶段，每阶段 12 个单元，每单元 15 题；每单元题型和难度固定：题号 1–3、6–8、11–13 为传统选择题（多选项 ABCD…，题干或代码片段出题），题号 4–5、9–10、14–15 为“选择填空题”（在完整代码或语句中挖空，选项为若干代码片段/字符串/符号，可远多于 4 个干扰项，答项由字母列出；若需多个空则按填空顺序列出答案字母）；题目难度分层：1–5 为简单、6–15 为进阶。数据库输出格式：选择题写入表 que_choice_py_1、填空题写入表 que_fill_py_1；每条 INSERT 包含字段 (q_id, unit_id, title, text, options, answer, hints, explanation, example)（**仅选择题包含 hints 字段；填空题表 que_fill_py_1 不含 hints 字段**）。options 用 JSON_OBJECT 存储（键为大写字母，值为选项文本或代码片段），选择题 answer 存数字（A=1,B=2,...），选择填空题 answer 存为 JSON_ARRAY，内容为正确选项字母按顺序（例如 JSON_ARRAY('A','D')），hints（仅针对选择题）用 JSON_ARRAY 给出若干提示短句，explanation 为详细解析文本，example 为示例代码或运行结果说明。JSON 格式不需要反斜杠转义字符。输出时只返回可直接复制执行的代码（SQL/JSON 插入语句或纯 JSON 数据），不要额外的格式化装饰或说明文本。
+
+Use the following instructions when generating Python beginner-course questions and database insert statements. Be strict: follow formats, field orders, and data types exactly, and output only executable SQL INSERT statements or pure JSON payloads (no extra explanation, no commentary, no backslashes added for escaping).
+
+Course structure and difficulty
+• Course = 5 stages.
+• Each stage = 12 units.
+• Each unit = 15 questions.
+• Difficulty: questions 1–5 = easy; questions 6–15 = advanced.
+
+Question-type mapping by index in each unit
+• Choice (traditional MCQ) = questions 1–3, 6–8, 11–13.
+• Fill (“selection-fill” where code lines are segmented and blanks are chosen from an options pool) = questions 4–5, 9–10, 14–15.
+
+Database tables and required output formats
+• Choice questions → table que_choice_py_1. Every INSERT row must include columns in this exact order:
+(q_id, unit_id, title, text, options, answer, hints, explanation, example).
+
+text: a single SQL string (can include code) — not JSON_ARRAY.
+
+options: use JSON_OBJECT with uppercase letter keys 'A','B','C',... and string values (code snippets or option text). Example: JSON_OBJECT('A','print("x")','B','printf("x")','C','echo "x"').
+
+answer: numeric integer where A=1, B=2, C=3, etc. (single integer per row).
+
+hints: JSON_ARRAY(...) of short hint strings (choice questions only).
+
+explanation: a plain SQL string with the reasoning.
+
+example: a plain SQL string with a small example usage or expected output.
+
+• Fill questions → table que_fill_py_1. Every INSERT row must include columns in this exact order:
+(q_id, unit_id, title, text, options, answer, explanation, example).
+
+text: must be a JSON_ARRAY(...) of ordered text segments (strings). Do not include placeholders or empty strings. If a question has n blanks, supply exactly n+1 segments in text so the blanks are naturally formed between consecutive segments. Example for 2 blanks: JSON_ARRAY('print(', '"Hello", ', ')') would be wrong because it has only 3 segments but must match the actual blanks — follow the blank/segment rule precisely.
+
+options: must be a JSON_ARRAY(...) of option strings (no letter labels). Options can be any code fragment, string literal, symbol, identifier; quantity is unlimited and may exceed 4.
+
+answer: must be a JSON_ARRAY(...) of integers (1-based indices) that reference positions in the options array. The array length equals the number of blanks; each integer corresponds to the correct option index for that blank in order. Example: if options = JSON_ARRAY('print','printf','"World"','World') and the two blanks require print and "World", set answer = JSON_ARRAY(1,3). Do not use letters here.
+
+explanation and example: plain SQL strings as above.
+
+que_fill_py_1 rows do not include a hints field.
+
+JSON / SQL string rules
+• Use SQL functions JSON_OBJECT(...) for choice options and JSON_ARRAY(...) for any array fields where specified.
+• Do not introduce unnecessary backslash escape characters in JSON content. In SQL string literals use the database’s normal quoting rules (e.g., single quotes escaped as two single quotes) but do not add backslashes.
+• text, options, and answer must be valid JSON values inside the SQL statement (i.e., JSON_ARRAY(...) or JSON_OBJECT(...)) and must reflect the structure described above.
+
+Answer encoding summary
+• Choice answers → single integer (A=1, B=2, C=3, ...).
+• Fill answers → JSON_ARRAY of 1-based integer indices referring to options.
+
+Formatting and output policy
+• Always produce only executable SQL INSERT statements or pure JSON payloads matching the exact column order and types described.
+• Never output explanatory prose, markdown, or extra decorations — output must be copy-paste ready.
+• Ensure text segmentation for fill questions strictly equals blanks+1 segments; ensure answer length equals number of blanks.
+• Ensure choice options are labeled with uppercase letters in JSON_OBJECT and the answer is the correct numeric index.
+• Maintain the course structure and type mapping above for any unit you generate.
+
+Small examples (for reference inside the prompt — these are examples only and should be followed exactly when generating rows):
+• Choice row example:
+INSERT INTO que_choice_py_1 (q_id,unit_id,title,text,options,answer,hints,explanation,example) VALUES (1,1,'Title','Question text', JSON_OBJECT('A','optA','B','optB','C','optC'), 2, JSON_ARRAY('hint1','hint2'), 'explain','example');
+
+• Fill row example:
+INSERT INTO que_fill_py_1 (q_id,unit_id,title,text,options,answer,explanation,example) VALUES (4,1,'Fill Title', JSON_ARRAY('print(', ', ', ')'), JSON_ARRAY('x','"Hello"','len(x)'), JSON_ARRAY(1,2), 'explain','example');
+
+我现在需要做的事情是，按照你刚刚给我的方法：
+
+1.修改MySQL数据库的表头。
+2.以新的格式填充数据。
+3.修改后端对数据库的引用，并且按照格式发送给前端。
+4.修改前端对后端发来的数据的处理，这里包含html结构的优化和css的优化。
+
+请你写四条ai可以一眼就看明白的一段话的prompt，分别对应四个步骤。
+这是为你准备的四条 Prompt。你可以直接把它们复制给 AI（比如 ChatGPT、Claude 或 DeepSeek），每一条都能精准触发你想要的代码或操作。
+提示：在使用第3和第4条时，最好把你的编程语言（如 Java/Python/Node.js）和前端框架（如 Vue/React）加在括号里，AI 写出的代码会更准。
+1. 修改数据库表结构
+Prompt: 请帮我写一条 MySQL 的 ALTER TABLE 语句，修改 questions 表中的 content 字段。将其数据类型改为 JSON（如果版本不支持则用 LONGTEXT），以便我存储结构化的题目数据。该字段将不再存储简单的字符串，而是存储一个包含多个对象的 JSON 数组，每个对象将包含 type（如 'text', 'code_block', 'slot'）和 value 属性。
+
+2. 以新格式填充数据
+Prompt: 请帮我把这道 Python 填空题：“补全代码，使其输出： A B print("A") print( [填空] )” 转换成刚才定义的 JSON 数组格式，并写出对应的 MySQL UPDATE 语句。请务必按照以下结构拆分数据：
+一段 text 类型存储题干。
+一段 code_block 类型存储前半部分多行代码（A\nB\nprint(\"A\")\n），确保换行符在内。
+一段 code_inline 类型存储 print(。
+一个 slot 类型对象存储填空位，请不要使用 value 字段，而使用 index: 0 来标识它是第一个空位。
+最后一段 code_inline 存储 )。
+我注意到JSON_OBJECT里不需要转义字符，所以请你去掉。
+请确保 JSON 结构正确无误，以便直接用于数据库更新。
+
+3. 修改后端接口逻辑
+Prompt: 我正在使用 node.js 开发后端。请修改获取题目详情的 API 接口逻辑：从数据库读取 text 字段后，不要将其作为普通字符串直接返回，而是要解析为真正的 JSON 对象（或 List/Array），确保 HTTP 响应的 Content-Type 为 application/json，以便前端接收到的是一个可遍历的数组结构。
+
+4. 修改前端渲染与样式
+Prompt: 我正在使用 Vue3 。请依据后端返回的 JSON 数组重写题目渲染组件的 HTML 和 CSS。要求：使用 v-for/map 遍历数组；对于 text 类型用普通标签；对于 code_block 类型使用 <pre> 标签配合 white-space: pre-wrap 保留换行；关键点是，对于紧接在代码块后的 code_inline 和 slot 类型，必须通过 CSS（如 display: inline）强制让它们和上一行代码保持在同一行显示，绝对不能出现换行错位。
+
+1. 数据库结构设计 Prompt
+Prompt: 编写 MySQL 的 ALTER TABLE 语句，修改或添加 questions 表的四个新字段，以支持结构化的编程题数据。新字段及其类型要求如下：
+题目text：TEXT，存储纯文本题干。（原先的是JSON）
+输入input：JSON，存储测试用例输入（可为空）。
+输出output：JSON，存储预期输出结果（可为空）。
+代码code：JSON，存储代码结构和空位的核心 JSON 对象（非空）。
+
+2. 数据格式化 Prompt
+Prompt: 针对一道要求输出 A\nB 的 Python 填空题，生成 代码 字段所需的完整 JSON 结构体。题目内容为：“A B print('A') print( [空位] )”。
+JSON 结构必须包含一个 segments 数组：
+第一个 Segment 必须是 code_block 类型，包含一个 lines 数组，用于存储多行代码 (A, B, print("A"))。
+第二个 Segment 必须是 code_inline 类型，包含一个 parts 数组，用于存储带空位的行 (print(, slot, ))。
+确保 slot 对象使用 index: 0 标识空位，并保证所有代码字符串中的引号转义正确。
+
+3. 后端逻辑更新 Prompt
+Prompt: 编写 [后端语言/框架，如 Python Flask] 的 API 控制器逻辑，用于获取题目详情。该逻辑必须从数据库中获取 题目 (TEXT) 和 代码 (JSON) 字段。确保在构建 API 响应时，代码 字段的内容被正确解析为一个可遍历的 JSON 对象，而不是作为字符串返回，并设置响应的 Content-Type 为 application/json。
+
+4. 前端渲染实现 Prompt
+Prompt: 使用 [前端框架，如 Vue3] 编写题目渲染组件的 HTML 模板和配套 CSS。该组件应接收包含 题目 和 代码 字段的对象。
+题目 字段直接渲染为普通文本。
+代码 字段的渲染必须实现精确对齐：遍历 segments。
+code_block 类型：遍历其 lines 数组，每行代码渲染到 <span class="code-line-text"> 中，并在末尾手动插入 <br> 标签。
+code_inline 类型：渲染其 parts 数组，所有元素（code 和 slot）使用 <span> 渲染。
+CSS 样式要求： 对代码文本应用 white-space: pre 保留空格，并确保所有代码和 blank-slot 元素都通过 display: inline 或 inline-block 保持在行内上下文，以消除渲染错位。
+
+{
+  "segments": [
+    // 块1: 多行代码，通过 <br> 强制换行
+    {
+      "type": "code_block",
+      "lines": [
+        { "type": "code_line", "value": "A" },
+        { "type": "code_line", "value": "B" },
+        { "type": "code_line", "value": "print(\"A\")" }
+      ]
+    },
+    // 块2: 包含空位的单行，所有元素保持行内对齐
+    {
+      "type": "code_inline",
+      "parts": [
+        { "type": "code", "value": "print(" },
+        { "type": "slot", "index": 0 }, // 使用 index 标识空位
+        { "type": "code", "value": ")" }
+      ]
+    }
+  ]
+}
+
+
+12.2
+1-3   选择题
+4-5   选择填空题
+6-8   选择题
+9-10  填空题
+11-12 编程阅读题（判断输出）
+13-15 简单编程题（写代码）
+
+Python 入门
+Python 进阶
+Python 爬虫
+Python 数据分析
+Python Web 后端（FastAPI）
+Python 自动化办公
+Python 机器学习
+Python 深度学习
+Python 小游戏开发
+Python AI 应用
+
+----------------------------------------------------------------------------------------------------------------------------------------
+为课程“<<COURSE_NAME>>”生成完整的课程大纲（5 个阶段 × 每阶段 30 个单元 = 共 150 单元），并按以下严格规则输出人可读大纲与机器可解析的 JSON：
+
+基本约束
+1. 整体目标：面向零基础到入门熟练度（或按传入参数设定的停顿点）。默认“入门类”课程在“函数”章节结束（可通过参数 STOP_AT_TOPICS 覆盖）。
+2. 节奏：用户每天学习 1 个单元，每个单元应能支持 ≈15 道练习题（题量固定为 15 道）。
+3. 粒度：知识点细分到“每天可学完且做 15 题”的程度。避免把大型主题一次性塞入单元；困难主题可拆成多个单元。
+4. 不包含环境安装、解释器安装或开机配置类单元（如果需要另开一份“环境”短课再做）。
+5. 不要在课程中频繁放“小练习”“综合项目”。仅允许固定复习单元（见下）。
+6. 复习安排：每 10 个单元设为“**小复习**”（第 10、20、30…），每个阶段第 30 单元为“**阶段总复习**”。
+7. 课程末尾（若为入门类）停止在“函数”相关章节；若为进阶类/语言特性不同则按 STOP_AT_TOPICS 指定。
+8. 不自动引入面向对象、高级迭代器、装饰器、并发等进阶主题，除非显式要求。
+
+单元输出规范（每个单元必须包含以下字段）
+- unit_index: 整数（全课程连续编号 1..150）
+- stage: 阶段编号 1..5
+- title: 单元标题（简短）
+- kind: 普通 / 小复习 / 阶段总复习（自动标注）
+- learning_objectives: 1-3 条短句，陈述本单元必须掌握的可观察行为
+- lesson_summary: 1 段（不超过 60-120 字）教学要点与示例提示
+- questions: 长度恰好 15 的数组，每题结构：
+  - q_index: 该单元内题号 1..15
+  - type: "mcq"（选择） / "fill_blank"（填空） / "coding"（编程） / "tf"（判断） / "short_answer"
+  - prompt: 题干（含必要输入输出说明）
+  - answer: 标准答案或参考解（编程题给出示例解与要点）
+  - difficulty: 1-5（1 最简单，5 最难）
+  - tags: 若干标签（例如 "字符串"、"循环"）
+- est_time_minutes: 预计完成该单元学习与 15 题所需分钟（默认 60–90 分钟，按每日制约设为 60–90）
+- notes: 可选的教师备注（如：是否允许跳过、预备知识）
+
+输出格式要求
+1. 返回两部分：A）**人类可读大纲**（阶段与每 10 单元的标题列表） B）**机器可解析 JSON**（数组形式包含 150 个 unit 对象，严格遵循上面字段）。
+2. JSON 必须是有效的、可直接写入文件的结构（键使用小写下划线命名）。
+3. 若课程为“入门类”，自动将单元主题限制在变量、运算、字符串、输入输出、条件判断、循环、基础数据结构、函数；不包含 OOP 与高级特性。
+4. 若接收到参数 EXTRA_REMOVE 或 TRIM_TOPICS，允许删减不必要的单元并保持每阶段单元数为 30（以复习单元替代被删内容）。
+
+生成风格与质量控制
+- 每个 lesson_summary 要清晰、可执行、示例指向具体代码片段（在 summary 中以一句话示例）。
+- 每道题须与 learning_objectives 直接关联，题目难度从易到难分布（前 5 题偏易，第 6–10 中等，11–15 稍难）。
+- 编程题须包含输入说明与样例 I/O；答案给出参考实现思路与关键边界处理。
+- 小复习单元题目侧重覆盖前 9 个单元的核心点（15 题覆盖面广）。
+- 阶段总复习单元题目侧重综合能力与思路整合（不做大型项目题，只做结合题目）。
+
+使用占位与参数（可选）
+- <<COURSE_NAME>>：课程名（如 "Python 入门"）
+- STOP_AT_TOPICS：默认 "functions"；可传入列表覆盖（如 ["functions","file_io"]）
+- DAILY_QUESTIONS_COUNT：默认 15（可覆盖）
+- UNITS_PER_STAGE：默认 30（可覆盖）
+- INCLUDE_INSTALL_UNIT：默认 false（若 true，请额外生成单元但需用户确认）
+
+请基于上述约束，生成两部分输出（可读大纲 + JSON），并在 JSON 顶部加入 metadata 字段：{ course_name, generated_at(ISO8601), total_units, units_per_stage, daily_questions_count, stop_at_topics }。  
+只需返回大纲与 JSON（不要额外解释设计理由）。 
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+每单元题型和难度固定：
+1.题号 1–3、6–8、11–13 为传统选择题（多选项 ABCD）；需要列出标题（简短的文本）、题目内容（文本，不可多行）、4个选项及其内容、答案、3个提示（用于答错后显示，提示程度逐渐递增）、解释（用于答对后显示）、1个示例（用于答对后显示，提升用户举一反三的能力）。
+2.题号 4–5、9–10、14–15 为“选择填空题”（在完整代码或语句中挖空，选项为若干代码片段/字符串/符号，可远多于 4 个干扰项；若需多个空则按填空顺序列出答案数字顺序，但每个答案只能使用一次）；需要列出标题（简短的文本）、题目内容（文本，不可多行）、用于题目提问的输入（可选，可多行）、用于题目提问的输出（可选，可多行）、用于题目的含有挖空的代码（必须，可多行）、选项（用逗号分隔）、答案（数字序列，用逗号分隔）、解释（用于答对后显示）、1个示例（用于答对后显示，提升用户举一反三的能力）。
+3.题目难度分层：1–5 为简单、6–15 为进阶。
+每单元题目内容：
+1.总体，重要！：结合实用的情景化出题；题目和选项必须确保内容、语法正确；紧扣知识点出题；完全、全面地覆盖知识点的内容；除了基础语法，不随意使用其它高级库和高级知识；使用轻松、风趣、互动的语言。
+2.传统选择题：题目内容聚焦知识点概念和语法的辨析和记忆。
+3.选择填空题：题目内容聚焦对代码逻辑的整体理解和记忆。
+4.若有“复习上一单元”的指令，则在第6题至第10题安排复习任务。若没有复习指令，则可忽略此需求。
+使用不严格的JSON格式输出，可以出现双引号和单引号，不使用反义字符，可以出现"\n"的换行符号；不需要注释，并且放在代码区中。
+
+输出示例，传统选择题：
+```
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': 'print 的最基本用途',
+      'content': '小明第一次学习 Python，他想在屏幕上输出“Hello”。他应该使用哪一条语句？',
+      'options': {
+        'A': 'print(Hello)',
+        'B': 'print("Hello")',
+        'C': 'echo "Hello"',
+        'D': 'output("Hello")'
+      },
+      'answer': 'B',
+      'hints': [
+        'Python 输出通常使用一个固定的函数。',
+        '字符串必须被某种方式包裹。',
+        '检查一下哪个选项既是 Python 语法又有正确的字符串写法。'
+      ],
+      'explanation': 'print("Hello") 是标准的 Python 输出语句，字符串必须用引号括起。',
+      'example': '例如你也可以输出你的名字：print("Leon")'
+    },
+```
+输出示例，选择填空题：
+```
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '输出变量内容',
+      'content': '根据给定变量，补全输出句子。',
+      'input': 'name = "Lucy"',
+      'output': 'Hello Lucy',
+      'code': '___("Hello", ___)',
+      'options': 'print, name, output, echo',
+      'answer': '1,2',
+      'explanation': 'print 是输出函数，name 是变量，组合后输出 Hello Lucy。',
+      'example': '例如你也可以输出 print("Hello", username)'
+    },
+```
+
+12.17
+我在别的聊天里让你帮我搭建编程学习网站，我们现在在这里继续搭建。我现在需要完成对Study.vue的完善。
+我使用Vue3+node.js+MySQL完成开发，并且组件之间有这样的关系：
+StudyNew.vue--子组件一Hero.vue
+                       --子组件二Questions.vue--子组件一Choice.vue
+                                                               --子组件二Fill.vue
+                                                               --子组件三Finish.vue
+我现在已经基本上完成了全部内容，但是还没有做“单元完成”界面，以及用户打卡的网络请求逻辑
+
+
+12.31
+但你现在的做法太武断了。我们重申一下json转成sql脚本的要求：
+1.单个\，应该对应四个\，也就是\\\\。 
+2.单个双引号"，应该使用\\\"。 
+3.单个换行符\n，应该用\\n。
+你现在的情况是：
+1.单个单引号"，你变成了\\\\"，但应该是\\\"。
+所以拓展\的个数时，你要看\后面跟着什么。如果\后面是双引号，那就要多两个\，

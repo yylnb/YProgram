@@ -1,0 +1,467 @@
+[
+  {
+    "id": 1,
+    "type": "choice",
+    "title": "变量命名大考验",
+    "content": "阿强想用Python记录小猫的年龄，下面哪个变量名是合法的呢？",
+    "options": [
+      "123cat",
+      "cat-age",
+      "cat age",
+      "cat_age"
+    ],
+    "answer": "D",
+    "hints": [
+      "变量名不能以数字开头哦！",
+      "变量名中不能包含连字符-。",
+      "变量名中不能包含空格，但可以用下划线_连接。"
+    ],
+    "explanation": "合法的变量名只能包含字母、数字和下划线，且不能以数字开头。选项A以数字开头，B包含连字符，C包含空格，只有D符合规则。",
+    "example": "类似合法的变量名：my_dog、score_1。"
+  },
+  {
+    "id": 2,
+    "type": "choice",
+    "title": "浮点数陷阱",
+    "content": "阿珍在计算0.1加0.2时，Python给出的结果最接近以下哪个选项？",
+    "options": [
+      "0.3",
+      "0.30000000000000004",
+      "0.29999999999999999",
+      "0.31"
+    ],
+    "answer": "B",
+    "hints": [
+      "浮点数在计算机内部是二进制表示的。",
+      "很多十进制小数无法精确转换成二进制。",
+      "因此0.1+0.2并不精确等于0.3。"
+    ],
+    "explanation": "由于二进制浮点数的精度限制，0.1+0.2在Python中的计算结果为0.30000000000000004，而不是精确的0.3。",
+    "example": "类似地，0.3+0.6可能得到0.8999999999999999。"
+  },
+  {
+    "id": 3,
+    "type": "choice",
+    "title": "谁先谁后？",
+    "content": "计算表达式 3 + 4 * 2 的结果，你知道Python会先算哪一步吗？",
+    "options": [
+      "14",
+      "11",
+      "10",
+      "9"
+    ],
+    "answer": "B",
+    "hints": [
+      "记住‘先乘除，后加减’的口诀。",
+      "乘法运算符 * 的优先级比加法 + 高。",
+      "所以先算4*2=8，再算3+8=11。"
+    ],
+    "explanation": "在Python中，乘法的优先级高于加法，因此先计算4*2得到8，再计算3+8得到11。",
+    "example": "类似的，1 + 2 * 3 结果是7，而不是9。"
+  },
+  {
+    "id": 4,
+    "type": "fill",
+    "title": "填空命名",
+    "content": "请帮小明的宠物仓鼠选择一个合法的变量名，并给它赋值100。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " = "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "hamster_age",
+      "2hamster",
+      "hamster-age",
+      "hamster age",
+      "100",
+      "200",
+      "hamster"
+    ],
+    "answer": [
+      0,
+      4
+    ],
+    "explanation": "变量名hamster_age是合法的，它由字母、数字和下划线组成，且不以数字开头。赋值100是整数。",
+    "example": "类似合法赋值：dog_weight = 15。"
+  },
+  {
+    "id": 5,
+    "type": "fill",
+    "title": "浮点数填空",
+    "content": "请选择正确的运算符，让代码计算0.1加0.2。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "result = 0.1 "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " 0.2"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "//",
+      "%"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "使用加法运算符+可以计算两个数的和，表达式为0.1 + 0.2。",
+    "example": "类似的，计算0.3+0.6：result = 0.3 + 0.6。"
+  },
+  {
+    "id": 6,
+    "type": "choice",
+    "title": "命名规范进阶",
+    "content": "下列哪个变量名是合法的，并且最符合Python推荐的命名风格？",
+    "options": [
+      "MyCar",
+      "myCar",
+      "my_car",
+      "MY_CAR"
+    ],
+    "answer": "C",
+    "hints": [
+      "Python推荐使用小写字母和下划线。",
+      "驼峰命名法虽然合法，但不是首选。",
+      "全大写通常用于表示常量。"
+    ],
+    "explanation": "Python官方推荐使用小写字母和下划线组合的蛇形命名法（如my_car），其他选项虽然语法合法但不符合命名规范。",
+    "example": "类似的推荐命名：student_name、total_score。"
+  },
+  {
+    "id": 7,
+    "type": "choice",
+    "title": "浮点数比较进阶",
+    "content": "考虑到浮点数精度问题，以下哪种方式最适合判断两个浮点数a和b是否‘相等’？",
+    "options": [
+      "a == b",
+      "a is b",
+      "abs(a - b) < 1e-9",
+      "a = b"
+    ],
+    "answer": "C",
+    "hints": [
+      "直接使用==可能会因为微小误差而误判。",
+      "is比较的是内存地址，不是数值。",
+      "通常使用两数差的绝对值小于一个很小的阈值来判断。"
+    ],
+    "explanation": "由于精度问题，直接使用==比较浮点数可能不准确。应使用两数差的绝对值小于一个很小的数（如1e-9）来判断是否近似相等。",
+    "example": "判断0.1+0.2是否等于0.3：abs((0.1+0.2) - 0.3) < 1e-9。"
+  },
+  {
+    "id": 8,
+    "type": "choice",
+    "title": "优先级进阶",
+    "content": "表达式 2 ** 3 * 4 的结果是多少？",
+    "options": [
+      "32",
+      "256",
+      "4096",
+      "64"
+    ],
+    "answer": "A",
+    "hints": [
+      "指数运算符**的优先级很高。",
+      "先算2**3，得到8。",
+      "再算8*4，得到32。"
+    ],
+    "explanation": "指数运算符**的优先级高于乘法*，因此先计算2的3次方得到8，再乘以4得到32。",
+    "example": "类似的，3 ** 2 * 2 的结果是18，而不是36。"
+  },
+  {
+    "id": 9,
+    "type": "fill",
+    "title": "表达式填空进阶",
+    "content": "请选择正确的运算符，让表达式5 __ 2的结果为10。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "result = 5 "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " 2"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "//",
+      "%",
+      "**"
+    ],
+    "answer": [
+      2
+    ],
+    "explanation": "使用乘法运算符*，5*2=10，可以得到结果为10。",
+    "example": "类似的，4*5=20。"
+  },
+  {
+    "id": 10,
+    "type": "fill",
+    "title": "变量与浮点数进阶",
+    "content": "请完成代码，计算并输出圆周率π（取值3.14）乘以2的结果。",
+    "input": null,
+    "output": [
+      "6.28"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "pi = "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "type": "code_line",
+          "value": "print(pi * 2)"
+        }
+      ]
+    },
+    "options": [
+      "3.14",
+      "3.14159",
+      "3",
+      "3.0",
+      "3.14f",
+      "3.14d"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "pi被赋值为浮点数3.14，pi*2的结果是6.28，print函数会输出这个结果。",
+    "example": "类似地，定义半径r=5，计算面积area=3.14*r*r。"
+  },
+  {
+    "id": 11,
+    "type": "choice",
+    "title": "变量命名综合",
+    "content": "以下哪个变量名是非法（invalid）的？",
+    "options": [
+      "_private",
+      "2public",
+      "public_2",
+      "public2_"
+    ],
+    "answer": "B",
+    "hints": [
+      "变量名可以以下划线开头。",
+      "变量名中可以包含数字。",
+      "但是，变量名不能以数字开头。"
+    ],
+    "explanation": "变量名不能以数字开头，因此2public是非法的。其他选项都是合法的变量名。",
+    "example": "合法变量名示例：_var, var2, var_2。"
+  },
+  {
+    "id": 12,
+    "type": "choice",
+    "title": "浮点数综合",
+    "content": "关于Python中的浮点数，以下哪个说法是正确的？",
+    "options": [
+      "浮点数运算总是精确的",
+      "浮点数不能表示负数",
+      "浮点数在计算机中是二进制近似表示的",
+      "浮点数只能表示小数"
+    ],
+    "answer": "C",
+    "hints": [
+      "浮点数运算可能存在微小误差。",
+      "浮点数可以表示负数，如-3.14。",
+      "因为二进制表示的限制，很多十进制小数无法精确存储。"
+    ],
+    "explanation": "浮点数在计算机中是以二进制近似表示的，因此有些十进制小数（如0.1）无法精确表示，可能导致计算误差。",
+    "example": "例如，0.1+0.2的结果是0.30000000000000004，而非精确的0.3。"
+  },
+  {
+    "id": 13,
+    "type": "choice",
+    "title": "运算符综合",
+    "content": "表达式 10 % 3 ** 2 的结果是多少？",
+    "options": [
+      "1",
+      "8",
+      "0",
+      "9"
+    ],
+    "answer": "A",
+    "hints": [
+      "指数运算符**的优先级很高。",
+      "先算3**2，得到9。",
+      "再算10%9，得到余数1。"
+    ],
+    "explanation": "指数运算符**的优先级高于取模%，因此先计算3的2次方得到9，再计算10除以9的余数得到1。",
+    "example": "类似的，2 ** 3 % 3 结果是2，因为2**3=8，8%3=2。"
+  },
+  {
+    "id": 14,
+    "type": "fill",
+    "title": "综合填空一",
+    "content": "请完成代码，让变量a为10，变量b为3，然后计算a除以b的浮点数结果。",
+    "input": null,
+    "output": [
+      "3.3333333333333335"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "a = "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "b = "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            }
+          ]
+        },
+        {
+          "type": "code_line",
+          "value": "print(a / b)"
+        }
+      ]
+    },
+    "options": [
+      "10",
+      "3",
+      "5",
+      "2",
+      "1",
+      "0",
+      "10.0",
+      "3.0"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "a被赋值为10，b被赋值为3，a/b的结果是3.3333333333333335，因为整数相除在Python 3中默认得到浮点数。",
+    "example": "类似地，5/2的结果是2.5。"
+  },
+  {
+    "id": 15,
+    "type": "fill",
+    "title": "综合填空二",
+    "content": "请选择正确的运算符，让表达式 4 __ 2 __ 2 的结果为8。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "result = 4 "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " 2 "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " 2"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "//",
+      "%",
+      "**"
+    ],
+    "answer": [
+      6,
+      3
+    ],
+    "explanation": "表达式为4 ** 2 / 2。先计算4**2=16（指数运算优先级高），再计算16/2=8，得到结果8。",
+    "example": "类似的，2 ** 3 * 2 的结果是16。"
+  }
+]

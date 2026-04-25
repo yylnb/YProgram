@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第65单元：break（基础）',
+  'questions': [
+    {'id':1,'type':'choice','title':'break 的基本作用','content':'在循环中使用 break 会？','options':{'A':'立即退出循环','B':'跳过本次迭代','C':'结束程序','D':'重置变量'},'answer':'A','hints':['强制终止循环','跳到循环外继续执行'],'explanation':'break 会立即退出最近的循环并继续执行循环后面的代码。','example':'for i in range(5):\n    if cond: break'},
+    {'id':2,'type':'choice','title':'break 所在层级','content':'当循环嵌套时，break 会退出哪一层？','options':{'A':'最近的那一层循环','B':'最外层循环','C':'所有循环','D':'不会退出任何循环'},'answer':'A','hints':['局部退出','配合标志变量可退出外层'],'explanation':'break 只退出包含它的最内层循环。','example':'use flag to exit outer loop'},
+    {'id':3,'type':'choice','title':'break vs return','content':'在函数内循环中，break 与 return 区别？','options':{'A':'break 退出循环，return 返回函数','B':'两者相同','C':'break 返回值','D':'return 只跳过一轮'},'answer':'A','hints':['return 结束整个函数','break 只结束循环'],'explanation':'return 会结束函数执行并返回值，而 break 仅跳出循环。','example':'return vs break'},
+    {'id':4,'type':'fill','title':'用 break 退出','content':'补全：找到目标值时退出循环。','input':'3','output':'found','code':'i=0\nwhile True:\n    i+=1\n    if i==3:\n        print("found")\n        break','options':'示例已给出','answer':'1','explanation':'遇到目标立即使用 break 退出循环。','example':'break on match'},
+    {'id':5,'type':'fill','title':'嵌套中用 break','content':'补全：内层 break 不会退出外层。','input':'','output':'','code':'for i in range(2):\n    for j in range(3):\n        break','options':'示例已给出','answer':'1','explanation':'内层 break 只终止内层循环。','example':'需要 flag 退出外层'},
+    {'id':6,'type':'choice','title':'break 的常见用途','content':'下面哪个是 break 常见用途？','options':{'A':'在找到结果后停止搜索','B':'强制重启程序','C':'跳过循环体第一行','D':'用于定义函数'},'answer':'A','hints':['搜索类算法常用','效率考虑'],'explanation':'在遍历中一旦找到匹配项常用 break 提高效率。','example':'find and break'},
+    {'id':7,'type':'choice','title':'与 else 一起使用','content':'for/while 的 else 块在何种情况下执行？','options':{'A':'循环未被 break 打断时执行','B':'循环每次都执行','C':'循环被 break 时执行','D':'无意义'},'answer':'A','hints':['else 是循环完成后的补充','被 break 则不执行'],'explanation':'循环正常结束时（未被 break）会执行 else 语句块。','example':'for x in seq: ... else: ...'},
+    {'id':8,'type':'choice','title':'性能影响','content':'频繁使用 break 会如何影响性能？','options':{'A':'通常有利于性能但要确保逻辑正确','B':'总是降低性能','C':'提升内存','D':'无影响'},'answer':'A','hints':['快速退出避免不必要迭代','但过度复杂的跳转影响可读性'],'explanation':'break 可减少不必要的迭代，从性能角度可能有好处，但影响代码可读性要权衡。','example':'break early'},
+    {'id':9,'type':'fill','title':'在循环中查找元素','content':'补全：找到元素后退出并打印索引。','input':'','output':'2','code':'arr=[1,2,3]\nfor i,v in enumerate(arr):\n    if v==3:\n        print(i)\n        break','options':'示例已给出','answer':'1','explanation':'找到目标后打印索引并 break。','example':'enumerate + break'},
+    {'id':10,'type':'fill','title':'标志退出外层','content':'补全：用 flag 在内层触发退出外层。','input':'','output':'','code':'done=False\nfor i in range(5):\n    for j in range(5):\n        if cond:\n            done=True\n            break\n    if done:\n        break','options':'示例已给出','answer':'1','explanation':'通过 flag 在内层触发后检查以退出外层循环。','example':'flag pattern'},
+    {'id':11,'type':'choice','title':'不当使用风险','content':'在循环中随处使用 break 可能导致？','options':{'A':'降低可读性','B':'自动并行','C':'提升稳定性','D':'语法错误'},'answer':'A','hints':['跳转太多使逻辑难懂','应控制使用场景'],'explanation':'频繁使用 break 会使控制流跳转复杂，影响可读性。','example':'limit break usage'},
+    {'id':12,'type':'choice','title':'替代方案','content':'如果不想用 break，常用替代是？','options':{'A':'用条件变量控制循环','B':'删除循环','C':'无限循环','D':'用 goto'},'answer':'A','hints':['使用布尔变量或修改条件'],'explanation':'通过布尔变量改变循环条件可代替 break，代码更显式。','example':'running=False'},
+    {'id':13,'type':'choice','title':'break 在 while 的位置','content':'将 break 放在循环体中靠近检测点有什么好处？','options':{'A':'更直观并减少额外代码','B':'没有区别','C':'不推荐','D':'会报错'},'answer':'A','hints':['靠近检测点便于理解','减少状态传播'],'explanation':'把 break 放在检测点能使退出意图更清晰。','example':'if found: break'},
+    {'id':14,'type':'fill','title':'在 user input 中退出','content':'补全：当输入 "q" 时退出。','input':'q','output':'','code':'while True:\n    s=input()\n    if s=="q":\n        break','options':'示例已给出','answer':'1','explanation':'基于用户输入的 sentinel 值可立即退出循环。','example':'sentinel input'},
+    {'id':15,'type':'fill','title':'结合异常使用 break','content':'补全：遇异常打印并 break。','input':'','output':'','code':'while True:\n    try:\n        do()\n    except Exception as e:\n        print(e)\n        break','options':'示例已给出','answer':'1','explanation':'在异常情形下可以记录并使用 break 优雅退出循环。','example':'handle exception then break'}
+  ]
+}
+
+```
+
+*** End Patch

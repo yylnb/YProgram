@@ -1,0 +1,201 @@
+```plaintext
+{
+  'unit': '第25单元：异常输入与健壮性',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '输入健壮性',
+      'content': '处理用户输入时第一步通常是？',
+      'options': {'A':'验证并清洗输入','B':'直接使用输入','C':'将输入写入日志','D':'忽略所有输入'},
+      'answer': 'A',
+      'hints': ['去除空白','检查类型与范围'],
+      'explanation': '首先验证并清洗输入能避免后续错误与安全问题。',
+      'example': 's = s.strip()'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '异常捕获',
+      'content': '当输入可能导致 ValueError，应使用？',
+      'options': {'A':'try/except 捕获并处理','B':'让异常冒泡导致程序崩溃','C':'忽略异常','D':'提前退出程序'},
+      'answer': 'A',
+      'hints': ['捕获特定异常','提供友好提示或默认值'],
+      'explanation': '捕获并处理异常可以提升程序健壮性并给用户反馈。',
+      'example': 'try: int(s) except ValueError: ...'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '默认值策略',
+      'content': '当输入缺失时优先使用什么？',
+      'options': {'A':'合理的默认值或提示','B':'随机值','C':'空字符串写入数据库','D':'直接抛出异常'},
+      'answer': 'A',
+      'hints': ['为流程保留默认分支','避免产生后续错误'],
+      'explanation': '提供合理默认值或提示可以使流程继续并便于用户修正。',
+      'example': 'name = input() or "guest"'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '数值解析',
+      'content': '补全：解析整数并在错误时打印 invalid。',
+      'input': 's=abc',
+      'output': 'invalid',
+      'code': 'try:\n    n = int(input())\nexcept ValueError:\n    print("invalid")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '使用 try/except 处理转换错误。',
+      'example': 'except: print("bad")'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '安全读取文件名',
+      'content': '补全：避免空文件名导致异常。',
+      'input': 'name=""',
+      'output': 'invalid',
+      'code': 'name = input().strip()\nif not name:\n    print("invalid")\nelse:\n    open(name)',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '先校验文件名避免 open 抛出 FileNotFoundError 或安全问题。',
+      'example': 'if not filename: ...'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '异常日志',
+      'content': '记录异常信息时应注意？',
+      'options': {'A':'记录堆栈和上下文但避开敏感数据','B':'把所有用户数据写日志','C':'只记录错误代码','D':'从不记录'},
+      'answer': 'A',
+      'hints': ['平衡排查与隐私','避免日志泄露敏感信息'],
+      'explanation': '记录有用上下文便于排查，同时避免泄露敏感用户数据。',
+      'example': 'log.exception(e)'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '回退与重试',
+      'content': '对暂时性错误的推荐处理方式是？',
+      'options': {'A':'自动重试若合理并记录失败','B':'立即放弃不记录','C':'无限重试不限制','D':'抛出致命错误'},
+      'answer': 'A',
+      'hints': ['短时间重试可恢复临时故障','需要限制次数与间隔'],
+      'explanation': '对临时错误有限重试通常能提高鲁棒性，同时要避免无限重试带来问题。',
+      'example': 'for i in range(3): try: ... except: sleep(1)'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '忽略与处理',
+      'content': '对于非关键字段的解析错误，常见做法是？',
+      'options': {'A':'记录并使用默认值','B':'中断整个流程','C':'抛出未处理异常','D':'忽视且不记录'},
+      'answer': 'A',
+      'hints': ['非关键字段用默认值','记录以便追踪'],
+      'explanation': '对非关键字段使用默认值并记录可以保证流程继续且便于调试。',
+      'example': 'age = int(s) if s else 0'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '限制输入长度',
+      'content': '补全：若输入长度超过 100 则截断。',
+      'input': 's="a'*150+'"',
+      'output': '',
+      'code': 's = input()\nif len(s) > 100:\n    s = s[:100]\nprint(s)',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '对超长输入进行截断以防止资源耗尽或注入问题。',
+      'example': 's = s[:max_len]'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '白名单校验',
+      'content': '补全：只接受特定值集合内的输入。',
+      'input': 'c="yes"',
+      'output': 'accepted',
+      'code': 'c = input().strip()\nif c in ("yes","no"):\n    print("accepted")\nelse:\n    print("rejected")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '白名单可以避免非法或意外输入导致问题。',
+      'example': 'if choice in options: ...'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '异常优先级',
+      'content': '当多个异常类型可能出现时应当？',
+      'options': {'A':'按从具体到通用顺序捕获','B':'只捕获通用异常','C':'不捕获任何异常','D':'随机捕获'},
+      'answer': 'A',
+      'hints': ['具体异常先捕获','通用异常放最后'],
+      'explanation': '先捕获具体异常有助于针对性处理，再用通用异常兜底。',
+      'example': 'except FileNotFoundError: ...\nexcept Exception: ...'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '用户提示与开发提示',
+      'content': '对于用户应展示何种错误信息？',
+      'options': {'A':'友好且不泄露内部细节','B':'详细堆栈信息','C':'数据库内容','D':'原始请求报文'},
+      'answer': 'A',
+      'hints': ['保护系统内部信息','同时给出可操作提示'],
+      'explanation': '向用户显示友好信息，内部日志记录详细错误信息用于排查。',
+      'example': 'print("操作失败，请稍后重试")'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '容错设计',
+      'content': '系统应尽量做到哪种容错方式？',
+      'options': {'A':'降级服务或返回默认结果','B':'全部停止服务','C':'抛弃请求并不记录','D':'返回随机数据'},
+      'answer': 'A',
+      'hints': ['降级保证可用性','记录问题便于修复'],
+      'explanation': '在异常时通过降级保持核心功能能提高可用性。',
+      'example': '返回缓存数据代替实时计算'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '安全默认值示例',
+      'content': '补全：当未提供 locale 时设为 "en"。',
+      'input': '',
+      'output': 'en',
+      'code': 'locale = input().strip() or "en"\nprint(locale)',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '使用 or 提供默认值是常见简洁写法。',
+      'example': 'value = x or default'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '错误码返回',
+      'content': '补全：遇到错误返回状态码 400。',
+      'input': '',
+      'output': '400',
+      'code': 'print("400 Bad Request")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '用规范状态码表达客户端错误便于前端处理。',
+      'example': 'HTTP 400 表示错误请求'
+    }
+
+  ]
+}
+
+```

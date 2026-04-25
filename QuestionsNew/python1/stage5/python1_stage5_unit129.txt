@@ -1,0 +1,199 @@
+```plaintext
+{
+  'unit': '第129单元：输入输出与文件操作',
+  'questions': [
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '打开文件模式',
+      'content': '以写入模式打开文件应使用哪个模式字符串？',
+      'options': {'A':'w','B':'r','C':'a','D':'x'},
+      'answer': 'A',
+      'hints': ['提示1：w 会覆盖文件','提示2：a 为追加','提示3：r 为只读'],
+      'explanation': '使用 "w" 模式打开文件会覆盖或创建新文件以供写入。',
+      'example': 'open("f.txt","w")'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': 'with 上下文管理',
+      'content': '使用 with open(...) as f 的好处是？',
+      'options': {'A':'自动关闭文件并管理资源','B':'提高文件读写速度','C':'使文件变为只读','D':'文件永不关闭'},
+      'answer': 'A',
+      'hints': ['提示1：上下文管理器自动处理清理','提示2：避免忘记 close','提示3：推荐用于文件操作'],
+      'explanation': 'with 语句确保退出上下文时文件被正确关闭，避免资源泄漏。',
+      'example': ''
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '读取整文件',
+      'content': '要一次性读取整个文件文本，应使用哪个方法？',
+      'options': {'A':'read()','B':'readline()','C':'readlines()','D':'iterfile()'},
+      'answer': 'A',
+      'hints': ['提示1：read 返回整个字符串','提示2：readline 返回一行','提示3：readlines 返回行列表'],
+      'explanation': 'f.read() 会返回文件全部内容的字符串。',
+      'example': ''
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '写入文件（填空）',
+      'content': '向文件写入字符串应调用 f.__1__(s)。',
+      'input': '',
+      'output': '',
+      'code': 'with open("a.txt","w") as f:\n    f.__1__("hello")',
+      'options': 'write, writelines, read, readline',
+      'answer': '1',
+      'explanation': '使用 write 方法向文件写入字符串。',
+      'example': ''
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '二进制模式（填空）',
+      'content': '若要以二进制方式读取文件，应使用模式 "__1__"。',
+      'input': '',
+      'output': '',
+      'code': 'with open("b.bin","__1__") as f:\n    data = f.read()',
+      'options': 'rb, r, wb, w',
+      'answer': '1',
+      'explanation': '在模式中加入 b 表示二进制读写，例如 "rb"。',
+      'example': ''
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '文件指针',
+      'content': 'f.seek(0) 的作用是什么？',
+      'options': {'A':'将文件指针移动到开头','B':'关闭文件','C':'清空文件内容','D':'追加数据'},
+      'answer': 'A',
+      'hints': ['提示1：seek 可移动指针','提示2：seek(0) 回到开头','提示3：read 从指针处开始读'],
+      'explanation': 'seek(0) 将文件指针移动到文件开头位置。',
+      'example': ''
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '文本编码',
+      'content': '打开文件并指定 UTF-8 编码应写成？',
+      'options': {'A':'open("f.txt","r", encoding="utf-8")','B':'open("f.txt","r",encode="utf-8")','C':'open("f.txt","rb")','D':'open("f.txt","r", mode="utf-8")'},
+      'answer': 'A',
+      'hints': ['提示1：参数名为 encoding','提示2：二进制模式不使用 encoding','提示3：推荐显式指定编码'],
+      'explanation': '使用 encoding 参数可指定文本编码，如 UTF-8。',
+      'example': ''
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '异常处理',
+      'content': '在文件操作中，为了确保文件关闭，除了 with 还可以在 finally 中做什么？',
+      'options': {'A':'调用 f.close()','B':'抛出异常','C':'调用 exit()','D':'递归调用函数'},
+      'answer': 'A',
+      'hints': ['提示1：finally 块用于清理','提示2：在异常路径也会执行','提示3：close 释放资源'],
+      'explanation': '在 finally 中调用 close() 可确保文件资源被释放。',
+      'example': ''
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '逐行读取（填空）',
+      'content': '遍历文件对象 for line in f: 可以逐行读取，等价于使用 __1__。',
+      'input': '',
+      'output': '',
+      'code': 'with open("f.txt") as f:\n    for line in f:\n        print(line)',
+      'options': 'readline, read, readlines, seek',
+      'answer': '1',
+      'explanation': '文件迭代器内部使用 readline 来逐行读取。',
+      'example': ''
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '写入多行（填空）',
+      'content': '将行列表写入文件可使用 f.__1__(lines)。',
+      'input': '',
+      'output': '',
+      'code': 'lines = ["a\n","b\n"]\nwith open("out.txt","w") as f:\n    f.__1__(lines)',
+      'options': 'writelines, write, writeall, writeline',
+      'answer': '1',
+      'explanation': 'writelines 接受一个字符串序列并写入文件(不自动加换行)。',
+      'example': ''
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '二进制读写',
+      'content': '读取二进制文件时返回的类型是？',
+      'options': {'A':'bytes','B':'str','C':'list','D':'bytearray'},
+      'answer': 'A',
+      'hints': ['提示1：rb 返回 bytes','提示2：wb 接受 bytes','提示3：可用 bytearray 转换'],
+      'explanation': '以二进制模式读取文件会返回 bytes 对象。',
+      'example': ''
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': 'JSON 文件',
+      'content': '要读写 JSON 文件通常使用哪个模块？',
+      'options': {'A':'json','B':'csv','C':'pickle','D':'xml'},
+      'answer': 'A',
+      'hints': ['提示1：json.load 和 json.dump','提示2：csv 用于逗号分隔数据','提示3：pickle 用于 Python 特有序列化'],
+      'explanation': 'json 模块用于序列化和反序列化 JSON 数据到文件。',
+      'example': ''
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '临时文件',
+      'content': '创建临时文件应使用哪个模块？',
+      'options': {'A':'tempfile','B':'os','C':'sys','D':'shutil'},
+      'answer': 'A',
+      'hints': ['提示1：tempfile 提供安全的临时文件/目录','提示2：避免在根目录手动创建临时文件','提示3：常用 TemporaryFile, NamedTemporaryFile'],
+      'explanation': 'tempfile 模块用于创建安全的临时文件或目录。',
+      'example': ''
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '权限错误（填空）',
+      'content': '尝试写入只读文件会抛出 __1__ 异常。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': 'PermissionError, FileNotFoundError, ValueError, TypeError',
+      'answer': '1',
+      'explanation': '写入受限文件通常会抛出 PermissionError。',
+      'example': ''
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '总结（填空）',
+      'content': '文本模式读写返回 __1__，二进制模式返回 __2__。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': 'str, bytes, list, dict',
+      'answer': '1,2',
+      'explanation': '文本模式读写返回字符串，二进制模式返回字节序列。',
+      'example': ''
+    }
+  ]
+}
+
+```

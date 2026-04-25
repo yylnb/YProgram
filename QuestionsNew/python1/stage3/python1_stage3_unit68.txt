@@ -1,0 +1,26 @@
+```plaintext
+{
+  'unit': '第68单元：continue（常见误区）',
+  'questions': [
+    {'id':1,'type':'choice','title':'误区：continue 导致退出循环','content':'continue 会退出循环吗？','options':{'A':'不会，只跳过本次','B':'会退出所有循环','C':'会退出函数','D':'退出程序'},'answer':'A','hints':['仅跳过本次迭代','区别于 break','影响后续逻辑'],'explanation':'continue 仅跳过本次剩余语句并进入下一次迭代。','example':'if cond: continue'},
+    {'id':2,'type':'choice','title':'误区：continue 不需更新计数器','content':'使用 continue 是否可省略计数器更新？','options':{'A':'不可以，可能导致无限循环','B':'可以','C':'只在 for 中可以','D':'只在 while 中可以'},'answer':'A','hints':['更新发生位置要注意','确保每次迭代都能前进'],'explanation':'即使使用 continue 也应保证计数器在合适位置更新以避免死循环。','example':'update early'},
+    {'id':3,'type':'choice','title':'误区：continue 会跳到循环外','content':'下面哪个说法错误？ continue 跳到循环外部继续执行','options':{'A':'错误','B':'正确','C':'有时正确','D':'取决于解释器'},'answer':'A','hints':['continue 只是继续下一次迭代','不会退出循环'],'explanation':'continue 不会导致跳出循环，仅进入下一次迭代。','example':'continue semantics'},
+    {'id':4,'type':'fill','title':'误区修正示例','content':'补全：确保计数器在可执行路径被更新。','input':'','output':'','code':'i=0\nwhile i<3:\n    i+=1\n    if cond:\n        continue\n    do()',
+      'options':'示例已给出','answer':'1','explanation':'把计数器更新放在可能执行 continue 之前，避免跳过更新。','example':'update first'},
+    {'id':5,'type':'fill','title':'统计跳过','content':'补全：记录被跳过项目的索引。','input':'','output':'','code':'i=0\nskips=[]\nwhile i<len(lst):\n    if skip_cond(lst[i]):\n        skips.append(i)\n        i+=1\n        continue\n    i+=1','options':'示例已给出','answer':'1','explanation':'在跳过前记录索引并更新计数器。','example':'collect skipped indices'},
+    {'id':6,'type':'choice','title':'continue 与嵌套','content':'内层 continue 会影响外层循环吗？','options':{'A':'不会，只影响内层','B':'会影响外层','C':'退出所有循环','D':'报错'},'answer':'A','hints':['行为与 break 类似的层级限制','可能需 flag 交互'], 'explanation':'内层的 continue 只影响内层循环，不会直接影响外层。','example':'nested continue'},
+    {'id':7,'type':'choice','title':'替代 continue','content':'不希望使用 continue，可用哪种写法代替？','options':{'A':'用条件把后续逻辑包裹起来','B':'删除后续逻辑','C':'用 break','D':'用异常'},'answer':'A','hints':['显式条件通常更易读','避免跳转'], 'explanation':'将需要执行的逻辑放在 if 块中可以替代 continue，控制流更直观。','example':'if not cond: do()'},
+    {'id':8,'type':'choice','title':'可读性建议','content':'在复杂循环中使用 continue 时，建议？','options':{'A':'尽量保持简单并注释原因','B':'随处使用','C':'不需注释','D':'用更多嵌套'},'answer':'A','hints':['注明原因便于维护','避免过多跳转点'], 'explanation':'在复杂逻辑处使用 continue 时应加注释并考虑重构。','example':'# skip empty entry'},
+    {'id':9,'type':'fill','title':'避免跳过更新','content':'补全：示例中先更新索引再 continue。','input':'','output':'','code':'i=0\nwhile i<n:\n    i+=1\n    if cond:\n        continue','options':'示例已给出','answer':'1','explanation':'在可能 continue 的位置之前更新索引能避免无限循环。','example':'update before skip'},
+    {'id':10,'type':'fill','title':'跳过并记录值','content':'补全：跳过时保存被跳过的值。','input':'','output':'','code':'skipped=[]\nfor v in lst:\n    if cond(v):\n        skipped.append(v)\n        continue','options':'示例已给出','answer':'1','explanation':'在跳过时记录值可用于后续处理。','example':'collect then continue'},
+    {'id':11,'type':'choice','title':'边界情况','content':'使用 continue 时要特别注意哪些边界？','options':{'A':'计数器更新与条件可达性','B':'注释数量','C':'函数名长度','D':'缩进空格'},'answer':'A','hints':['重点关注循环控制变量','测试边界场景'], 'explanation':'计数器与退出条件是使用 continue 时的关键边界问题。','example':'test edge cases'},
+    {'id':12,'type':'choice','title':'调试技巧','content':'调试被 continue 跳过的分支可做什么？','options':{'A':'在跳过点打印或断点','B':'删除 continue','C':'增加更多 continue','D':'不调试'},'answer':'A','hints':['观察被跳过的输入状态','用小样本复现'],'explanation':'在跳过点添加日志或断点有助于理解为何被跳过。','example':'print debug info'},
+    {'id':13,'type':'choice','title':'性能考虑','content':'大量使用 continue 会带来什么？','options':{'A':'主要影响可读性，性能影响小','B':'显著降低速度','C':'提高内存','D':'修改变量类型'},'answer':'A','hints':['continue 本身开销小','循环体操作决定性能'], 'explanation':'continue 对性能影响微小，主要需注意逻辑清晰性。','example':'profile if needed'},
+    {'id':14,'type':'fill','title':'说明跳过原因','content':'补全：在代码中写明跳过理由注释。','input':'','output':'','code':'if invalid:\n    # invalid format, skip\n    continue','options':'示例已给出','answer':'1','explanation':'注释帮助维护者快速理解跳过原因。','example':'# reason'},
+    {'id':15,'type':'fill','title':'测试跳过路径','content':'补全：为跳过路径添加测试用例。','input':'','output':'','code':'def test_skip():\n    assert process([bad_item]) == expected','options':'示例已给出','answer':'1','explanation':'对跳过分支写测试可避免回归问题。','example':'unit test for skip'}
+  ]
+}
+
+```
+
+*** End Patch

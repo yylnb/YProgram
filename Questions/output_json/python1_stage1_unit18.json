@@ -1,0 +1,343 @@
+[
+  {
+    "q_id": "1",
+    "type": "choice",
+    "title": "split 的基本功能",
+    "text": "小李正在整理一句用空格分隔的英文句子，他想把句子拆成单词列表，应使用哪个方法？",
+    "explanation": "split() 会将字符串按空格拆成列表，是最常用的分割方法。",
+    "example": "例如：\"a b c\".split() 结果为 [\"a\", \"b\", \"c\"]",
+    "hints": [
+      "Python 中用于拆分字符串的方法是固定的。",
+      "默认按空格拆分。",
+      "最常见的“切割字符串”方法就是 split。"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "sentence.break()",
+      "B": "sentence.split()",
+      "C": "sentence.cut(\" \")",
+      "D": "sentence.divide()"
+    },
+    "answer": "B"
+  },
+  {
+    "q_id": "2",
+    "type": "choice",
+    "title": "join 的用途",
+    "text": "小明有一个列表 [\"a\",\"b\",\"c\"]，他想把它变成 \"a-b-c\"，应如何做？",
+    "explanation": "join 的正确结构是 \"分隔符\".join(list)。",
+    "example": "例如：\",\".join([\"x\",\"y\"]) → \"x,y\"",
+    "hints": [
+      "注意 join 的调用者是谁。",
+      "join 是“分隔符”.join(列表)。",
+      "哪个选项里分隔符在前面？"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "\"-\".merge([\"a\",\"b\",\"c\"])",
+      "B": "join([\"a\",\"b\",\"c\"], \"-\")",
+      "C": "\"-\".join([\"a\",\"b\",\"c\"])",
+      "D": "[\"a\",\"b\",\"c\"].join(\"-\")"
+    },
+    "answer": "C"
+  },
+  {
+    "q_id": "3",
+    "type": "choice",
+    "title": "split 的分隔符",
+    "text": "下面哪段代码会把字符串按逗号分割？",
+    "explanation": "split(\",\") 会按照逗号拆分字符串。",
+    "example": "例如：\"1|2|3\".split(\"|\") → [\"1\",\"2\",\"3\"]",
+    "hints": [
+      "split 默认按空格。",
+      "如果想按指定符号拆分，需要传入该字符。",
+      "只有一个选项使用 split(\",\")。"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "\"a,b,c\".split()",
+      "B": "\"a,b,c\".split(\",\")",
+      "C": "\"a,b,c\".cut(\",\")",
+      "D": "\"a,b,c\".join(\",\")"
+    },
+    "answer": "B"
+  },
+  {
+    "q_id": "4",
+    "type": "fill",
+    "title": "用 split 拆分 CSV 数据",
+    "text": "把一行用逗号分隔的字符串拆成列表。",
+    "explanation": "split(\",\") 能将字符串按逗号拆分成列表。",
+    "example": "例如：\"a,b,c\".split(\",\") → [\"a\",\"b\",\"c\"]",
+    "hints": null,
+    "input": "row = \"Tom,20,Student\"",
+    "output": "['Tom','20','Student']",
+    "raw_code": "result = row.__1__(\",\")",
+    "options": [
+      "split",
+      "join",
+      "replace",
+      "find",
+      "upper",
+      "lower"
+    ],
+    "answer": [
+      1
+    ]
+  },
+  {
+    "q_id": "5",
+    "type": "fill",
+    "title": "使用 join 组装路径",
+    "text": "把路径片段列表组合成 URL。",
+    "explanation": "\"/\".join(parts) 会使用 / 拼出路径字符串。",
+    "example": "例如：\"-\".join([\"2024\",\"01\",\"01\"]) → \"2024-01-01\"",
+    "hints": null,
+    "input": "parts = [\"api\",\"v1\",\"users\"]",
+    "output": "\"api/v1/users\"",
+    "raw_code": "url = __1__ .__2__(parts)",
+    "options": [
+      "\"/\"",
+      "join",
+      "split",
+      "\"-\"",
+      "replace",
+      "find"
+    ],
+    "answer": [
+      1,
+      2
+    ]
+  },
+  {
+    "q_id": "6",
+    "type": "choice",
+    "title": "复习 find：查找位置",
+    "text": "在字符串 \"hello python\" 中查找 \"py\"，应得到什么？",
+    "explanation": "find(\"py\") 会返回起始索引 6。",
+    "example": "\"abc\".find(\"b\") → 1",
+    "hints": [
+      "find 返回“位置”，不是布尔值。",
+      "从 0 开始计数。",
+      "h e l l o _ p → p 在第 6 位。"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "True",
+      "B": "False",
+      "C": "6",
+      "D": "-1"
+    },
+    "answer": "C"
+  },
+  {
+    "q_id": "7",
+    "type": "choice",
+    "title": "复习 replace：替换文本",
+    "text": "执行 \"I love tea\".replace(\"tea\",\"coffee\") 的结果是什么？",
+    "explanation": "replace(\"tea\",\"coffee\") → \"I love coffee\"。",
+    "example": "\"hello\".replace(\"l\",\"*\") → \"he**o\"",
+    "hints": [
+      "replace 会直接替换旧字符串为新字符串。",
+      "不会自动重复附加。",
+      "注意大小写敏感。"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "\"I love tea coffee\"",
+      "B": "\"I love coffee\"",
+      "C": "\"I love\"",
+      "D": "\"I love Tea\""
+    },
+    "answer": "B"
+  },
+  {
+    "q_id": "8",
+    "type": "choice",
+    "title": "复习 find：找不到情况",
+    "text": "\"python\".find(\"Java\") 的返回值是什么？",
+    "explanation": "find() 未找到时返回 -1。",
+    "example": "\"abc\".find(\"z\") → -1",
+    "hints": [
+      "找不到时不会报错。",
+      "也不会返回 None。",
+      "找不到 → -1。"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "0",
+      "B": "None",
+      "C": "-1",
+      "D": "TypeError"
+    },
+    "answer": "C"
+  },
+  {
+    "q_id": "9",
+    "type": "fill",
+    "title": "复习 replace：替换敏感词",
+    "text": "把评论中的 \"bad\" 替换为 \"***\"。",
+    "explanation": "replace(\"bad\",\"***\") 即可替换敏感词。",
+    "example": "\"oh no\".replace(\"no\",\"yes\") → \"oh yes\"",
+    "hints": null,
+    "input": "text = \"This is bad behavior!\"",
+    "output": "\"This is *** behavior!\"",
+    "raw_code": "cleaned = text.__1__(\"bad\", __2__)",
+    "options": [
+      "find",
+      "replace",
+      "\"***\"",
+      "split",
+      "join",
+      "\"bad behavior\""
+    ],
+    "answer": [
+      2,
+      3
+    ]
+  },
+  {
+    "q_id": "10",
+    "type": "fill",
+    "title": "复习 find：判断内容是否出现",
+    "text": "判断字符串里是否出现关键字。",
+    "explanation": "find(\"Error\") 若找到不会返回 -1，因此 != -1 表示出现。",
+    "example": "\"abc\".find(\"a\") != -1 → True",
+    "hints": null,
+    "input": "msg = \"Error: network timeout\"",
+    "output": "True",
+    "raw_code": "has_error = msg.__1__(\"Error\") != __2__",
+    "options": [
+      "find",
+      "replace",
+      "-1",
+      "0",
+      "split"
+    ],
+    "answer": [
+      1,
+      3
+    ]
+  },
+  {
+    "q_id": "11",
+    "type": "choice",
+    "title": "split 的结果类型",
+    "text": "\"a b c\".split() 的结果是什么类型？",
+    "explanation": "split() 永远返回列表。",
+    "example": "\"x y\".split() → [\"x\",\"y\"]",
+    "hints": [
+      "split 的目标是把字符串拆成多个片段的集合。",
+      "集合的形式是什么？",
+      "split 返回 list。"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "字符串",
+      "B": "元组",
+      "C": "列表",
+      "D": "整数"
+    },
+    "answer": "C"
+  },
+  {
+    "q_id": "12",
+    "type": "choice",
+    "title": "join 的限制",
+    "text": "下面哪个列表不能直接使用 \",\".join()？",
+    "explanation": "join 要求列表中所有元素均为 str。",
+    "example": "正确方法：\",\".join(map(str,[1,2,3]))",
+    "hints": [
+      "join 要求所有元素必须是字符串。",
+      "列表里的类型很关键。",
+      "数字不能直接 join。"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "[\"a\",\"b\"]",
+      "B": "[\"1\",\"2\",\"3\"]",
+      "C": "[\"hello\",\"world\"]",
+      "D": "[1,2,3]"
+    },
+    "answer": "D"
+  },
+  {
+    "q_id": "13",
+    "type": "choice",
+    "title": "split 的最大拆分数",
+    "text": "\"a-b-c-d\".split(\"-\", 2) 的结果是什么？",
+    "explanation": "拆两次得到 [\"a\",\"b\",\"c-d\"]。",
+    "example": "\"1-2-3-4\".split(\"-\",1) → [\"1\",\"2-3-4\"]",
+    "hints": [
+      "第二个参数是最多拆分几次。",
+      "拆两次后剩下的部分整体作为最后一项。",
+      "按顺序拆两次即可。"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "[\"a\",\"b\",\"c\",\"d\"]",
+      "B": "[\"a\",\"b\",\"c-d\"]",
+      "C": "[\"a-b\",\"c\",\"d\"]",
+      "D": "[\"a\",\"b-c-d\"]"
+    },
+    "answer": "B"
+  },
+  {
+    "q_id": "14",
+    "type": "fill",
+    "title": "混合使用 split 和 join",
+    "text": "把句子拆成单词，再重新用下划线连接。",
+    "explanation": "words = text.split()；\"_\" .join(words) → \"Python_is_fun\"。",
+    "example": "\"a b c\".split() → [\"a\",\"b\",\"c\"] 再用 \"-\".join → \"a-b-c\"",
+    "hints": null,
+    "input": "text = \"Python is fun\"",
+    "output": "\"Python_is_fun\"",
+    "raw_code": "words = text.__1__()\nresult = \"__2__\".__3__(words)",
+    "options": [
+      "split",
+      "join",
+      "\"_\"",
+      "\"-\"",
+      "replace",
+      "find"
+    ],
+    "answer": [
+      1,
+      3,
+      2
+    ]
+  },
+  {
+    "q_id": "15",
+    "type": "fill",
+    "title": "按单词首字母重新组合",
+    "text": "提取单词首字母并拼接成缩写。",
+    "explanation": "先用 split() 拆成单词，再用 \"\".join 拼成缩写。",
+    "example": "\"World Health Organization\" → \"WHO\"",
+    "hints": null,
+    "input": "name = \"United Nations Development Programme\"",
+    "output": "\"UNDP\"",
+    "raw_code": "parts = name.__1__()\nabbr = \"\" .__2__([p[0] for p in parts])",
+    "options": [
+      "split",
+      "join",
+      "upper",
+      "\"_\"",
+      "replace",
+      "find"
+    ],
+    "answer": [
+      1,
+      2
+    ]
+  }
+]

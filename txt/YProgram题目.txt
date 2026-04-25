@@ -1,0 +1,4155 @@
+阶段 1 — 入门（生活问题驱动，语法/变量/流程/列表/字典/函数/文件/简单 I/O）
+
+目标：用生活中的“故事问题”让学员学会基本语法与常用数据结构，能完成小脚本自动化日常任务。
+
+单元 1-1：超市省钱日记 — “一次没注意就浪费了 30 元” 🛒
+
+情景（扩写）：
+上周六你去超市，结账时发现买的四样东西比计划多出 30 元——你才想到：如果能在出门前自动整合购物清单、合并相同商品、并计算预算，会不会避免这种尴尬？你开始想象一个脚本：输入想买的菜与数量、读取家里已有食材（pantry），再按单价估算并提醒“超预算/可替代品”。学会这节课，你就能把“出门忘带优惠券/重复购买”问题用代码解决。
+
+题目（15）：
+
+【选择】Python 表示“文字”的类型是？ A) int B) str C) list D) dict
+
+【选择】price = 12.5 中 12.5 的类型是？ A) int B) float C) str D) bool
+
+【选择】以下变量名哪个不合法？ A) item_name B) 2ndItem C) _qty D) totalPrice
+
+【实操】写函数 add_item(cart, name, qty, price)：在 cart（dict）中加入或累加商品。
+
+Docker 可行性提示：只使用内存字典，stdin/stdout，禁止外网；运行时间 < 1s。
+
+【实操】写小脚本：从用户交互读取多条 name,qty,price（以 done 结束），输出购物总价。
+
+Docker 提示：允许多行 stdin；不要写入外部受限路径，写入当前工作目录的临时文件可行。
+
+【选择】要计算总价用哪条？ A) price * qty B) price + qty C) price // qty D) price % qty
+
+【选择】最适合用来存“商品名→数量”的结构是？ A) list B) set C) dict D) tuple
+
+【选择】遍历字典键和值正确写法是？ A) for k in d: B) for k,v in d.items(): C) while d: D) if d:
+
+【实操】给定 cart = {'apple':2,'milk':1}，写代码打印每项“apple: 2 件”。（要求一行一项）
+
+Docker 提示：纯 stdout 输出即可。
+
+【实操】写函数 total_cost(cart, price_map) 返回总价（price_map 为商品→单价）。处理缺失单价的情况（跳过并记录）。
+
+Docker 提示：避免网络调用，所有数据由测试用例注入。
+
+【选择】哪个表示真假类型？ A) int B) str C) bool D) None
+
+【选择】若 if qty > 0: 不满足会执行？ A) if 块 B) else C) elif D) for
+
+【选择】哪项是不可变类型？ A) list B) tuple C) dict D) set
+
+【实操】扩展题：加入 pantry（已拥有食材），脚本应在购物单中自动减少相应数量并打印“从库存使用 X 件”。
+
+Docker 提示：可用 JSON 文件作为 pantry 输入；在容器内读写当前目录文件允许。
+
+【实操】实战题：实现预算检测：用户输入预算，脚本输出是否超出以及超出金额或还剩余多少元。若超出，列出可移除的低优先级商品（按单价排序建议移除）。
+
+Docker 提示：计算与排序均本地进行，限制运行内存/时间。
+
+单元 1-2：家庭账单故事 — “月底总是惊讶账单” 🧾
+
+情景（扩写）：
+你每月月底都会被几笔小消费搞懵：外卖、地铁、订阅、零食……如果能把每一笔都记录并按类别汇总，就能知道钱都花到哪儿了。想象：把每天收据输入脚本，脚本自动归类、求和并生成“这个月支出最多的是____”。学完这单元，你能做出个人版“月度支出可视化摘要”。
+
+题目（15）：
+
+【选择】把字符串转为浮点数用哪个函数？ A) int() B) float() C) str() D) bool()
+
+【选择】保留两位小数常用写法？ A) round(a+b,2) B) (a+b)//2 C) a+b D) format()
+
+【选择】按日期排序记录推荐使用？ A) list B) sorted C) set D) dict
+
+【实操】record_expense(book, date, category, amount)：把条目加入 book（list of dicts）。
+
+Docker 提示：只需在内存或本地 JSON 文件操作。
+
+【实操】monthly_total(book, '2025-09')：返回当月总额。
+
+Docker 提示：避免时区复杂性，用 ISO 日期字符串比较。
+
+【选择】单条开销可用哪种结构表示？ A) tuple B) set C) int D) float
+
+【选择】统计每类开销总和最佳结构？ A) dict B) list C) tuple D) set
+
+【选择】计算长度用？ A) size() B) len() C) expenses.len D) count()
+
+【实操】从 book 中筛出类别为“餐饮”的项目并求和。
+
+Docker 提示：处理中文编码时确认文件为 UTF-8。
+
+【实操】读 CSV（date,category,amount）并生成按类别汇总的 JSON。
+
+Docker 提示：不要使用网络库；允许读取挂载到容器的文件。
+
+【选择】用哪个关键字做错误处理？ A) try/except B) if/else C) for/while D) with/as
+
+【选择】with open(...) as f: 的好处是？ A) 自动关闭文件 B) 更快 C) 网络安全 D) 更漂亮
+
+【选择】精确货币计算推荐库？ A) decimal B) math C) random D) datetime
+
+【实操】实现 top_category(book) 返回花费最多的类别（及金额）。
+
+Docker 提示：纯计算/字符串处理，容器安全。
+
+【实操】生成“本月开销报告.txt”，包含总额、前 3 类及每类占比。
+
+Docker 提示：写文件到工作目录，测试框架读取并断言内容。
+
+单元 1-3：做菜与换算 — “招待朋友时量错份量” 🍳
+
+情景（扩写）：
+你要请朋友吃饭，选了三道菜。菜单里的配方是 4 人份，可你只有 6 人。你不得不手动换算配料，遇到“1 1/2 杯”“半罐”的写法就懵了。学会这一单元，你可以写脚本自动把菜谱放大或缩小、合并购物清单并换算单位，避免煮出“太咸”或“食材不够”的尴尬。
+
+题目（15）：
+
+【选择】在 Python 3 中 3/2 结果是？ A) 1 B) 1.5 C) 2 D) 1.0
+
+【选择】整数除法符号是？ A) / B) // C) % D) **
+
+【选择】round(2.345,2) 得到？ A) 2.34 B) 2.35 C) 2.3 D) 2.345
+
+【实操】scale_recipe(ingredients, factor)：ingredients 为 [{name,qty,unit}]，返回缩放后配料。
+
+Docker 提示：只处理字符串/数值，避免依赖本地 cookbooks。
+
+【实操】实现解析混合分数字符串 '1 1/2' → 1.5。
+
+Docker 提示：正则与字符串解析，本地运算安全。
+
+【选择】要保留顺序应使用？ A) list B) set C) dict D) frozenset
+
+【选择】将 '1/2' 变成浮点数正确做法是？ A) 用解析（split）或 fractions.Fraction B) float('1/2') C) int('1/2') D) eval
+
+【选择】kg→g 的表达式是？ A) kg*1000 B) kg/1000 C) kg+1000 D) kg-1000
+
+【实操】实现“小数小于 0.01 显示为 '少量'” 的格式化函数。
+
+Docker 提示：纯文本输出。
+
+【实操】合并多道菜的购物清单（合并相同食材并统一单位）。
+
+Docker 提示：若需单位转换，确保实现内置单位表，不依赖外网。
+
+【选择】格式化两位小数的 f-string 是？ A) f"{amt:.2f}" B) format(amt) C) round D) str
+
+【选择】常用存单位的结构？ A) dict B) str C) tuple D) list
+
+【选择】若频繁查找食材单价，推荐？ A) dict B) list C) tuple D) set
+
+【实操】估算一道菜总价 estimate_cost(ingredients, price_map)。
+
+Docker 提示：价格由测试数据注入。
+
+【实操】扩展：给出多道菜与人数，输出最终合并购物单（文本形式）。
+
+Docker 提示：输出可写文件或 stdout，允许被 grader 读取。
+
+单元 1-4：闹钟与按需提醒 — “忘了吃药差一点出事” ⏰
+
+情景（扩写）：
+上个月你奶奶晚上忘记吃药，第二天身体不适。你决定写一个简易的日程提醒器：可设置多条提醒（一次或重复），支持“提醒窗口”和“已确认”状态，并能把即将发生的提醒导出成短信/邮件草稿（实际发送交给后端）。这单元教会你时间比较、重复规则和文件持久化。
+
+题目（15）：
+
+【选择】Python 处理时间常用库是？ A) datetime B) math C) os D) json
+
+【选择】datetime.now() 返回类型？ A) str B) datetime.datetime C) int D) list
+
+【选择】解析 '2025-09-01' 用哪个函数？ A) datetime.strptime B) int() C) float() D) split()
+
+【实操】is_past(date_str)：判断给定 ISO 日期是否已过。
+
+Docker 提示：容器内时间为 UTC 或主机时间，请用 datetime.now()；测试用例可注入 now 模拟时间。
+
+【实操】实现输入提醒时间并判断是否触发（打印“提醒：xxx”）。
+
+Docker 提示：避免长期 sleep；用模拟时间推进或依赖测试驱动。
+
+【选择】循环提醒（每天）通常用什么逻辑？ A) schedule 或 while+sleep（教学） B) random C) none D) int
+
+【选择】timedelta(days=1) 表示？ A) 一天 B) 一小时 C) 一分钟 D) 一秒
+
+【选择】格式化时间 HH:MM 用？ A) .strftime B) format C) round D) split
+
+【实操】给定提醒列表，输出接下来一周的提醒（按日期排序）。
+
+Docker 提示：所有数据均内存处理或读写小文件。
+
+【实操】next_alarm(alarms)：返回距现在最近的闹钟时间（返回 None 可用）。
+
+Docker 提示：注意时区与测试注入 now。
+
+【选择】保存日程推荐格式？ A) json B) bin C) exe D) dll
+
+【选择】json.dump() 用来？ A) 写入 JSON B) 计算 C) 打印 D) 读取
+
+【选择】输入时间格式错误时应？ A) 抛异常并提示 B) 忽略 C) 强制转换 D) 随机
+
+【实操】导出日程为 CSV YYYY-MM-DD,HH:MM,desc。
+
+Docker 提示：写到当前工作目录。
+
+【实操】实现“下一个工作日”计算（跳过周末与节假日，节假日用简单表）。
+
+Docker 提示：节假日由静态列表提供。
+
+单元 1-5：通讯录的重逢 — “多年未联系的朋友突然要聚会” 📇
+
+情景（扩写）：
+你准备组织同学会，但多年未联系，联系方式参差不齐：有些人手机换了、有些人只有微信昵称。你想写工具整理旧通讯录、合并重复联系人、标准化电话号码并导出邀请名单。学会这个单元，你能把凌乱的联系人数据处理成干净的 CSV。
+
+题目（15）：
+
+【选择】按姓氏排序联系人用？ A) sorted(key=...) B) len() C) sum() D) map()
+
+【选择】电话号码最好用哪种类型保存？ A) int B) str C) float D) bool
+
+【选择】dict.get('name','') 的作用是？ A) 安全取值 B) 删除 C) 修改 D) 写入
+
+【实操】add_contact(book, name, phone)：把联系人加入字典（phone 做 key）。处理重复。
+
+Docker 提示：无法访问系统联系人，使用提供的 CSV 输入。
+
+【实操】find_by_name(book, keyword)：模糊匹配返回候选。
+
+Docker 提示：纯文本处理，注意中文编码。
+
+【选择】防止重复以哪个字段做 key 更妥？ A) phone B) name C) email D) address
+
+【选择】文件编码推荐？ A) utf-8 B) ascii C) latin D) gbk
+
+【选择】批量导入 CSV 用哪个库？ A) csv B) math C) random D) sys
+
+【实操】从 contacts.csv 读取并输出标准化电话号码（+86...）。
+
+Docker 提示：写输出到 stdout 或文件。
+
+【实操】实现导出简化 vCard（文本格式）。
+
+Docker 提示：仅文本，不访问系统 API。
+
+【选择】若要加密密码用哪个库？ A) hashlib B) random C) time D) json
+
+【选择】去重可用哪种结构？ A) set B) list C) dict D) tuple
+
+【选择】电话号码是否敏感？ A) 是 B) 否 C) 不确定 D) 无所谓
+
+【实操】merge_contacts(a,b)：合并两个字典并解决冲突（保留最新）。
+
+Docker 提示：两个 JSON/CSV 输入由测试注入。
+
+【实操】按区号统计联系人数量并输出字典。
+
+Docker 提示：简单字符串处理。
+
+单元 1-6：天气日志与提醒 — “提前带伞还是不带” 🌦️
+
+情景（扩写）：
+你总是纠结出门要不要带伞。于是你想：每天手动记录天气（或从 API 拷贝数据），脚本帮你统计过去 30 天的下雨概率，并按“明天下雨概率高于 50%”提醒。这个单元教你 JSON/文件 I/O 与基本统计。
+
+题目（15）：
+
+【选择】解析 JSON 库是？ A) json B) os C) math D) sys
+
+【选择】json.loads(s) 输入是？ A) 字符串 B) 文件对象 C) 数字 D) 布尔
+
+【选择】字典取键安全写法？ A) d['t'] B) d.get('t') C) del d['t'] D) pop
+
+【实操】读取天气字典 {'temp':20,'desc':'晴'} 并打印“今天晴，20°C”。
+
+Docker 提示：stdin/文件输入，纯字符串输出。
+
+【实操】记录温度到 temps.txt（每行 YYYY-MM-DD temp）。
+
+Docker 提示：写在工作目录。
+
+【选择】频繁网络请求常用库？ A) requests B) turtle C) tkinter D) csv
+
+【选择】无数据常用值？ A) None B) 0 C) '' D) False
+
+【选择】平均温度计算为？ A) sum(lst)/len(lst) B) avg() C) mean() D) total()
+
+【实操】avg_temp(filename)：读取文件并返回平均温度（保两位小数）。
+
+Docker 提示：文件读写允许。
+
+【实操】根据温度打印建议（>30: 热，<5: 冷）。
+
+Docker 提示：纯逻辑。
+
+【选择】处理网络异常应捕获？ A) requests.exceptions B) IOError C) ValueError D) KeyError
+
+【选择】若 JSON 中 temp 是字符串，转换用？ A) int() B) len() C) split() D) round()
+
+【选择】无网络时优雅退化策略？ A) 使用缓存 B) 退出 C) 无响应 D) 抛错
+
+【实操】导出过去 7 天温度为 JSON（含日期）。
+
+Docker 提示：生成 JSON 文件供前端读取。
+
+【实操】用简单移动平均预测明日温度（过去 N 天平均）。
+
+Docker 提示：纯数值运算。
+
+单元 1-7：家庭电费小算盘 — “每月账单惊人” ⚡
+
+情景（扩写）：
+某个月你看到电费暴涨，怀疑是某台旧电器一直待机耗电。你想写脚本记录家里各电器的功率与每天使用小时，自动计算每月电费并给出“可换成更节能型号”建议。学会这单元你就能把电费优化成可量化的行动清单。
+
+题目（15）：
+
+【选择】power_kw = 0.1 表示？ A) 100W B) 0.1W C) 10W D) 1kW
+
+【选择】电费公式是？ A) kWh × 单价 B) 电压×电流 C) 温度+时间 D) 随机
+
+【选择】每天运行小时数不同建议结构？ A) list B) dict C) set D) tuple
+
+【实操】energy_consumed(watt, hours) 返回 kWh（watt 为瓦）。
+
+Docker 提示：数值计算。
+
+【实操】monthly_bill(devices, price_per_kwh)：devices 为 [{name,power_w,hours_per_day}]，返回月度总费。
+
+Docker 提示：静态数据输入。
+
+【选择】瓦转千瓦除以？ A) 1000 B) 100 C) 2 D) 10
+
+【选择】去除低用量设备逻辑可用？ A) if device['on'] B) for/else C) try/except D) import
+
+【选择】可视化推荐库？ A) matplotlib B) random C) os D) sys
+
+【实操】列出月度耗电排名前 3 的设备。
+
+Docker 提示：输出到 stdout。
+
+【实操】节能建议函数：若待机功率 > 5W 标为“建议替换”。
+
+Docker 提示：本地规则化计算。
+
+【选择】写 CSV 推荐哪个模块？ A) csv B) math C) re D) json
+
+【选择】round(x,3) 做什么？ A) 保留 3 位小数 B) 去尾 C) 截断 D) 返回整数
+
+【选择】设备信息字典键通常有哪些？ A) name/power/hours B) password C) picture D) video
+
+【实操】估算一年耗电并输出年度账单。
+
+Docker 提示：大数计算无外部依赖。
+
+【实操】按季节调整小时数并输出季度账单（示例：夏季 AC 时长默认 +2h）。
+
+Docker 提示：配置以 JSON 提供。
+
+单元 1-8：垃圾分类判定 — “不知道该扔到哪个桶” ♻️
+
+情景（扩写）：
+楼下邻居把塑料瓶当干垃圾丢，导致整栋楼被罚款。你决定写个小工具：输入物品名，返回垃圾分类并生成“投放说明”。情景还包括模糊匹配、同义词表以及手动修正功能（用户可教会程序）。
+
+题目（15）：
+
+【选择】忽略大小写比较用？ A) s.lower() B) s.upper() C) s.title() D) s.swapcase()
+
+【选择】"apple" in "pineapple" 结果？ A) True B) False C) Error D) None
+
+【选择】用规则映射物品到分类推荐结构？ A) dict B) list C) set D) tuple
+
+【实操】classify(item)：用内置映射与关键字规则返回分类。
+
+Docker 提示：用静态映射表 JSON，不调用网络。
+
+【实操】批量分类：输入列表输出 {分类: [items]}。
+
+Docker 提示：大量文本处理可在容器中运行。
+
+【选择】去重用哪个结构？ A) set B) list C) dict D) tuple
+
+【选择】strip() 用于？ A) 去掉首尾空格 B) 替换 C) 切片 D) 分割
+
+【选择】正则需哪个库？ A) re B) json C) os D) math
+
+【实操】关键字匹配示例：若包含“塑料”或“塑料瓶”判为“可回收”。
+
+Docker 提示：小文本算法，安全。
+
+【实操】实现交互模式：用户输入并可手动修正分类，修正保存到规则文件。
+
+Docker 提示：写到当前目录的 rules.json。
+
+【选择】中文字符编码注意为？ A) utf-8 B) ascii C) latin1 D) cp1252
+
+【选择】若规则不确定，改进策略？ A) 增加人工标注 B) 删除 C) 随机 D) none
+
+【选择】记录统计推荐？ A) dict 计数 B) list C) set D) tuple
+
+【实操】most_common_category(records) 返回出现最多的分类。
+
+Docker 提示：运行时间极短。
+
+【实操】扩展：保存用户修正历史并能导出为 CSV（供专家复核）。
+
+Docker 提示：写文件到工作目录。
+
+单元 1-9：家庭问卷与小调查 — “大家都喜欢吃辣吗？” 📋
+
+情景（扩写）：
+你想组织邻里聚餐，做了个小问卷：谁喜欢吃辣、谁能带菜、谁有椅子。你要把散乱答案整理、统计并输出“前三名最受欢迎菜”。这单元教你如何设计数据结构、统计频率并导出结果给组织者。
+
+题目（15）：
+
+【选择】多选答案适合用？ A) list B) int C) float D) dict
+
+【选择】统计频率第一步通常是？ A) 遍历并计数 B) 排序 C) 格式化 D) 显示
+
+【选择】计数器常用库？ A) collections.Counter B) math C) random D) os
+
+【实操】collect_answers(questions) 模拟收集并返回答案列表（可注入测试数据）。
+
+Docker 提示：stdin/json 输入，输出 JSON。
+
+【实操】top_n_answers(answers,n=3) 返回前三名。
+
+Docker 提示：纯计算。
+
+【选择】去重应用？ A) set B) list C) dict D) tuple
+
+【选择】保存中文文本文件用哪编码？ A) utf-8 B) ascii C) latin1 D) cp1252
+
+【选择】验证答案在允许范围常用？ A) if in choices B) try/except C) while D) import
+
+【实操】计算平均满意度（数值评分）。
+
+Docker 提示：数值运算安全。
+
+【实操】按年龄分层统计答案分布（示例分段）。
+
+Docker 提示：读入 CSV，输出 JSON。
+
+【选择】可视化库建议？ A) matplotlib B) pickle C) os D) sys
+
+【选择】合并问卷数据常用？ A) extend B) replace C) delete D) clear
+
+【选择】结构化保存推荐？ A) CSV/JSON B) 二进制 C) txt D) exe
+
+【实操】save_results_json(answers, filename) 将答案写入 JSON。
+
+Docker 提示：写当前目录。
+
+【实操】生成条形图数据（字典）供前端绘图（不实际绘图，仅生成数据）。
+
+Docker 提示：返回 JSON 数据。
+
+单元 1-10：日常文本日记与检索 — “想找那天的一句话” ✍️
+
+情景（扩写）：
+你在日记里记了很多琐碎，但当你想找“上次旅行写的餐馆名字”时却很难。你想写个程序：把日记条目保存成结构化文件，支持关键词搜索并输出匹配条目。学完后你会把“记不清某条日志在哪天”的问题变成一次快速检索。
+
+题目（15）：
+
+【选择】关键词检索前应做哪步预处理？ A) lower() B) upper() C) title() D) strip()
+
+【选择】永久保存建议用？ A) 文件 B) 临时变量 C) 仅 print D) 内存
+
+【选择】写文件时推荐用？ A) with open B) open+close C) raw D) eval
+
+【实操】write_entry(date,text)：把日记追加到 diary.txt（每条 JSON 一行或自定义格式）。
+
+Docker 提示：写当前目录文件即可。
+
+【实操】search_entries(keyword)：返回包含关键词的条目（支持大小写忽略）。
+
+Docker 提示：字符串搜索，文件可由测试注入。
+
+【选择】多行文本读取用？ A) read() B) int() C) float() D) eval()
+
+【选择】统计关键词出现用？ A) count B) len C) sum D) max
+
+【选择】隐藏敏感词可用？ A) replace B) split C) join D) strip
+
+【实操】按日期倒序显示最近 7 条日记。
+
+Docker 提示：只需排序字符串日期。
+
+【实操】导出为 Markdown（每条加标题）。
+
+Docker 提示：写出 .md 文件。
+
+【选择】备份做法？ A) 复制文件 B) 删除 C) 覆盖 D) 不保存
+
+【选择】读大文件时避免？ A) 一次性 read 到内存 B) 一行一行 C) with open D) generator
+
+【选择】分词简单做法？ A) split B) regex C) ML D) 随机
+
+【实操】daily_wordcount(date)：返回该日单词数。
+
+Docker 提示：纯文本处理。
+
+【实操】交互式标签打标（用户输入情绪并保存为字段）。
+
+Docker 提示：交互 stdin/stdout。
+
+阶段 2 — 基础进阶（函数深入、数据结构、模块、异常、文件、简单 OOP）
+
+目标：稳固函数、模块化、异常处理、文件持久化与面向对象基础。难度比阶段1明显上升但仍侧重生活场景实用。
+
+单元 2-1：厨房库存的保卫战 — “生鲜过期浪费严重” 📦
+
+情景（扩写）：
+某次做菜时发现冰箱里许多食材早已过期，白白浪费。你想写库存管理：用于记录入库/出库、保质期提醒（提前 7 天）、并能导出“需要优先吃掉”的清单。学会后你能把“买回来忘了吃”问题用程序提醒家人。
+
+题目（15）：
+
+【选择】保质期最合适类型？ A) datetime B) str C) int D) float
+
+【选择】检查物品存在常用？ A) in dict B) len C) count D) sum
+
+【选择】set 通常用于？ A) 去重 B) 排序 C) 保留顺序 D) 映射
+
+【实操】add_stock(stock,item,qty,expire)：向 stock（dict）中加入记录。
+
+Docker 提示：文件/JSON 本地持久化允许。
+
+【实操】consume(stock,item,qty)：扣减并处理不足（抛出或返回错误信息）。
+
+Docker 提示：输入由测试控制。
+
+【选择】按到期日排序用？ A) sorted(key=...) B) sum C) len D) map
+
+【选择】持久化建议？ A) SQLite 或 JSON B) print C) temp file D) exe
+
+【选择】比较日期应用？ A) datetime B) float C) int D) str
+
+【实操】列出 7 天内过期商品并输出提醒文本。
+
+Docker 提示：时间可注入，避免长 sleep。
+
+【实操】导出库存 CSV。
+
+Docker 提示：文件写入工作目录。
+
+【选择】商品名大小写不统一应？ A) 统一 lower() B) 随意 C) 删除 D) 忽略
+
+【选择】避免重复 key 推荐使用？ A) 标准化名称 B) 名称+价格 C) 随机 D) 时间戳
+
+【选择】多人并发编辑时应用？ A) 数据库 B) 纯文件 C) print D) none
+
+【实操】restock_alert(stock,threshold) 返回低于阈值商品。
+
+Docker 提示：阈值由配置传入。
+
+【实操】按类别统计库存总量并输出字典。
+
+Docker 提示：纯计算。
+
+单元 2-2：备忘录与标签系统 — “笔记越来越多找不到” 🏷️
+
+情景（扩写）：
+你写了很多备忘录，想按主题快速查找“和房屋装修有关”的笔记，但标签混乱。你要实现标签索引（tag→note ids），支持模糊检索、分页与持久化。学会后可把脑海凌乱事项变成可检索的知识库。
+
+题目（15）：
+
+【选择】多标签字段用？ A) list B) int C) float D) bool
+
+【选择】模糊匹配常用模块？ A) re B) math C) json D) random
+
+【选择】按标签筛选最快是？ A) 反向索引(tag→items) B) 全表扫 C) 排序 D) 随机
+
+【实操】add_note(notes,text,tags) 并维护索引（index dict）。
+
+Docker 提示：写索引到 JSON 文件。
+
+【实操】search_by_tag(index,tag) 返回匹配 note ids。
+
+Docker 提示：小文件读取安全。
+
+【选择】标签大小写差异应？ A) 统一 lower() B) 保持原样 C) 删除 D) 随机
+
+【选择】索引结构建议？ A) dict(tag→list) B) list C) set D) tuple
+
+【选择】数据多时检索慢因何？ A) 未建索引 B) IO C) CPU D) GPU
+
+【实操】remove_tag(notes,tag) 从所有笔记移除并更新索引。
+
+Docker 提示：原子更新文件（写 tmp 再替换）。
+
+【实操】分页显示搜索结果（每页 n 条）。
+
+Docker 提示：纯内存分页。
+
+【选择】保存索引推荐格式？ A) JSON 或 pickle B) txt C) exe D) dll
+
+【选择】pickle 风险？ A) 反序列化执行 B) 兼容好 C) 安全 D) 速度慢
+
+【选择】避免标签重复用？ A) set B) list C) dict D) tuple
+
+【实操】merge_tags(notes,old,new) 将旧标签合并为新标签并更新索引。
+
+Docker 提示：写文件事务性处理。
+
+【实操】按创建时间排序标签下笔记并返回前 N 条。
+
+Docker 提示：排序基于 ISO 日期字符串。
+
+单元 2-3：简单网页抓取（合规教学） 🌐
+
+情景（扩写）：
+你常在网上找菜谱或特价信息，手动复制很烦。你想写抓取器自动抓标题与链接，存到本地便于离线查看。但你同时关心合规：先看 robots.txt、遵守频率、优先用官方 API。学会后你能半自动地收集信息（教学环境不触网或只抓示例站点）。
+
+题目（15）：
+
+【选择】HTTP 请求常用库？ A) requests B) os C) math D) json
+
+【选择】解析 HTML 常用库？ A) BeautifulSoup B) csv C) random D) sys
+
+【选择】若网站禁止抓取应？ A) 遵守 robots.txt B) 强行抓取 C) 攻击 D) 复制
+
+【实操】fetch(url) 返回页面文本并处理超时/状态码。
+
+Docker 提示：在你的在线编程环境里禁外网，使用本地示例 HTML 文件作练习。
+
+【实操】用 BeautifulSoup 提取页面 <h2> 文本。
+
+Docker 提示：只解析本地 HTML 文件（无网络）。
+
+【选择】抓取过快可能导致？ A) 被封禁 B) 提升性能 C) 免费资源 D) 更准确
+
+【选择】处理编码常用？ A) r.encoding 或 response.apparent_encoding B) int() C) float() D) sum()
+
+【选择】复杂数据先保存为？ A) JSON B) txt C) bin D) exe
+
+【实操】抓取本地 HTML 拿到标题和链接并保存 JSON。
+
+Docker 提示：本地文件解析可行，避免 curl 外网请求。
+
+【实操】实现去重（按链接）。
+
+Docker 提示：纯字符串对比。
+
+【选择】避免被识别为爬虫常见 header 是？ A) User-Agent B) Cookie C) Host D) None
+
+【选择】动态渲染（JS）时直接 requests 能否拿到全部？ A) 有时不能 B) 总能 C) 从不 D) 随机
+
+【选择】抓取伦理应注意？ A) 尊重版权与频率 B) 无视 C) 随意 D) 抄袭
+
+【实操】实现 crawl_site(start, depth=1) 对本地示例文件做简单链接收集。
+
+Docker 提示：使用内置文件系统。
+
+【实操】实现失败重试机制（最多 3 次）。
+
+Docker 提示：短循环，不做长时间等待。
+
+单元 2-4：图书借阅系统（社区小图书馆） 📚
+
+情景（扩写）：
+你在社区组织一个小图书角，手写登记太乱。需要一个登记借还的脚本：记录借出人、借出时间、预计归还时间，并能统计最受欢迎书籍。学会本单元，你将能把纸质登记表电子化，减少重复管理成本。
+
+题目（15）：
+
+【选择】借阅记录用？ A) dict 列表 B) int C) set D) tuple
+
+【选择】计算逾期用？ A) datetime B) random C) math D) json
+
+【选择】按借阅率排序用？ A) sorted(key=...) B) sum C) len D) min
+
+【实操】checkout(library,user,book,date)：更新库存并记录借阅。
+
+Docker 提示：使用 SQLite 文件或 JSON 做示例数据存储。
+
+【实操】overdue_list(records,today)：返回逾期用户。
+
+Docker 提示：today 可注入测试。
+
+【选择】记录多副本用字段？ A) copy_id B) 名称 C) 价格 D) 颜色
+
+【选择】统计最受欢迎书籍可用？ A) Counter B) random C) os D) sys
+
+【选择】持久化推荐？ A) SQLite B) txt C) memory only D) random
+
+【实操】显示当前借出书及借阅人。
+
+Docker 提示：读取 SQLite 或 JSON 文件。
+
+【实操】归还并计算滞纳金（按天×单价）。
+
+Docker 提示：纯算法。
+
+【选择】并发冲突推荐？ A) 数据库事务 B) print C) file open D) random
+
+【选择】若图书名重复，应用？ A) ISBN 或 ID B) 名称 C) 颜色 D) 作者
+
+【选择】记录损坏用什么字段？ A) 状态 B) 价格 C) 日期 D) none
+
+【实操】导出月度借阅统计为 CSV。
+
+Docker 提示：写文件到工作目录。
+
+【实操】简单推荐：给用户推荐未读的热门书（基于热门列表）。
+
+Docker 提示：不依赖外网，基于本地数据。
+
+单元 2-5：习惯打卡与连续性 — “坚持 7 天后奇迹发生” ✅
+
+情景（扩写）：
+你想培养每天早起的习惯，但三天后就放弃。想写一个习惯打卡系统，记录每天是否完成并计算最长连续天数、当前连胜以及提醒“你离 7 天目标还差 X 天”。学会此单元即可实现打卡奖励与数据导出。
+
+题目（15）：
+
+【选择】记录连续天数用？ A) 包含日期的集合/列表 B) int C) float D) None
+
+【选择】判断连续比较什么？ A) 日期差 B) 名称 C) 大小 D) 颜色
+
+【选择】检查是否打卡用？ A) in set B) random C) map D) filter
+
+【实操】record_checkin(checkins,date)：加入并返回当前连续天数。
+
+Docker 提示：输入日期字符串，返回数字。
+
+【实操】streaks(checkins)：返回最长连续天数。
+
+Docker 提示：算法题。
+
+【选择】每天自动提醒可依赖？ A) cron 或 schedule B) random C) os D) json
+
+【选择】字符串转日期用？ A) datetime.strptime B) int() C) float() D) eval
+
+【选择】可视化推荐？ A) matplotlib B) os C) sys D) random
+
+【实操】输出过去 30 天打卡的 True/False 列表。
+
+Docker 提示：纯数据处理。
+
+【实操】导出日历热图需要的数据（日期→打卡）。
+
+Docker 提示：返回 JSON。
+
+【选择】防止重复打卡先检查？ A) 是否已存在 B) 直接覆盖 C) 删除 D) 随机
+
+【选择】要发送每日提醒用？ A) 邮件/推送 B) 本地文件 C) random D) none
+
+【选择】多人环境保存用？ A) 数据库 B) 本地 txt C) print D) memory
+
+【实操】按周统计打卡率（每周打卡天数/7）。
+
+Docker 提示：聚合计算。
+
+【实操】“连续打卡奖励”：到达 N 天触发特定文本输出（例如生成优惠券文本）。
+
+Docker 提示：不调用外网。
+
+单元 2-6：图片文件整理与去重 🖼️
+
+情景（扩写）：
+手机照片乱如鸟巢，你希望按日期、地点或标签整理并去重：把重复的照片找出、缩略图生成并把照片按年月日归档。学成后，节省磁盘、方便回忆。
+
+题目（15）：
+
+【选择】处理路径用？ A) os / pathlib B) math C) json D) random
+
+【选择】列目录用？ A) os.listdir B) int C) float D) sum
+
+【选择】创建目录用？ A) os.makedirs B) list() C) dict() D) open()
+
+【实操】group_by_date(folder)：按文件修改时间归档（模拟文件名时间）。
+
+Docker 提示：测试用例可提供样本文件；容器允许文件操作。
+
+【实操】move_files(src,dst)：安全移动并处理同名（加后缀）。
+
+Docker 提示：确保在允许路径下操作。
+
+【选择】读取 EXIF 用哪个库？ A) Pillow B) math C) random D) os
+
+【选择】判断是否图片可检查？ A) 后缀 B) 大小 C) 名称长度 D) 随机
+
+【选择】避免一次性读大量文件应？ A) 逐个处理 B) load all C) random D) generator
+
+【实操】统计各扩展名文件数量并输出字典。
+
+Docker 提示：文件系统操作。
+
+【实操】按文件名标签分类并输出文件夹结构（模拟，不移动）。
+
+Docker 提示：可先 dry-run。
+
+【选择】重命名前先做？ A) dry-run B) 直接改 C) 删除 D) 覆盖
+
+【选择】并行处理用哪个模块？ A) concurrent.futures B) math C) random D) os
+
+【选择】复制保留元数据用？ A) shutil.copy2 B) open C) os.rename D) os.remove
+
+【实操】检查重复文件（按哈希或大小）。
+
+Docker 提示：哈希计算 CPU 可控。
+
+【实操】按地点（若有 EXIF）归档或生成索引文件。
+
+Docker 提示：Pillow 可用，但不要联网。
+
+单元 2-7：简单推荐系统（基于标签） ❤️
+
+情景（扩写）：
+你做饭时总纠结“今晚吃啥”。把家里菜谱做成带标签的小数据库（蔬菜/肉/快手/合家欢），写推荐算法基于当前冰箱食材与历史偏好推荐 3 道菜。学会后你能把“选择困难症”自动化。
+
+题目（15）：
+
+【选择】相似度简单方法？ A) Jaccard B) random C) sum D) none
+
+【选择】集合相似度用？ A) set.intersection B) list.append C) dict.get D) sort
+
+【选择】若有评分数据可用？ A) 协同过滤或内容过滤 B) random C) os D) sys
+
+【实操】jaccard(a,b)：计算两个集合的 Jaccard 指数。
+
+Docker 提示：纯数学运算。
+
+【实操】recommend(item,others,k=3)：返回最相似 k 项（基于标签）。
+
+Docker 提示：输入数据无网络依赖。
+
+【选择】文本比较前应先？ A) 标准化 lower/strip B) 随机 C) none D) replace
+
+【选择】提高实时性的方法？ A) 预计算相似矩阵 B) 每次全表计算 C) 随机 D) none
+
+【选择】评估推荐常见指标？ A) 精准率/召回率 B) len C) sum D) avg
+
+【实操】给定菜谱列表，基于成分相似性推荐三道最相近菜。
+
+Docker 提示：本地数据操作。
+
+【实操】用户历史加权推荐（近期偏好更重）。
+
+Docker 提示：加权算法本地实现。
+
+【选择】标签稀疏时策略？ A) 增加 tag 或同义词表 B) 随机 C) none D) int
+
+【选择】若基于图片需要？ A) 计算机视觉 B) 文件操作 C) csv D) json
+
+【选择】展示推荐理由应输出？ A) 共有成分 B) None C) 大小 D) 随机
+
+【实操】实现“排除已看过”逻辑。
+
+Docker 提示：基于列表过滤。
+
+【实操】扩展：评分阈值过滤（只推荐评分≥4 的）。
+
+Docker 提示：纯逻辑。
+
+单元 2-8：小工具合集：计时器与自动化脚本 ⏳
+
+情景（扩写）：
+你常为煮饭计时、做番茄工作法、或夜间自动备份文件而写临时脚本。该单元教你写可靠的计时器、日志记录与简单 CLI，使小脚本从“一次性”变成可复用工具。
+
+题目（15）：
+
+【选择】暂停用？ A) time.sleep() B) os.sleep C) json.sleep D) none
+
+【选择】测量运行时间用？ A) time 或 timeit B) math C) sys D) os
+
+【选择】简单 GUI 可用？ A) tkinter B) requests C) random D) json
+
+【实操】countdown(seconds)：每秒打印剩余并在结束时打印“完成”。
+
+Docker 提示：避免长 sleeps，测试可用模拟 time。
+
+【实操】番茄钟实现（25/5 循环，次数参数化）。
+
+Docker 提示：使用短时模拟参数或 mock sleep。
+
+【选择】后台运行避免阻塞用？ A) threading/asyncio B) random C) os D) sys
+
+【选择】更精确计时使用？ A) time.perf_counter() B) time.sleep C) datetime.now D) int
+
+【选择】响应 Ctrl+C 捕获哪个异常？ A) KeyboardInterrupt B) ValueError C) EOFError D) IndexError
+
+【实操】实现秒表（start/stop/reset）。
+
+Docker 提示：交互有限，测试以函数调用形式验证。
+
+【实操】定时结束时播放提示（可用 print 代替系统声音）。
+
+Docker 提示：容器可能无声音设备，使用文本提示。
+
+【选择】调度任务常用？ A) schedule B) json C) os D) random
+
+【选择】避免 drift 用？ A) 精确计时参考而非 sleep 累加 B) sleep 累加 C) 随机 D) none
+
+【选择】打包为工具应提供？ A) CLI 菜单 B) GUI C) 随机 D) none
+
+【实操】CLI 菜单允许选择“番茄/倒数/秒表”。
+
+Docker 提示：交互通过 stdin/out。
+
+【实操】记录每次番茄完成时间到日志文件。
+
+Docker 提示：写文件到工作目录。
+
+单元 2-9：邮件模板与自动化（字符串处理） ✉️
+
+情景（扩写）：
+你要给志愿者发活动通知，但手工替换姓名太费力。你想写模板渲染脚本：从 CSV 读取姓名/邮箱/role，渲染带占位符的邮件并导出草稿。学成后能批量生成个性化内容（实际发送由后端或邮件服务处理）。
+
+题目（15）：
+
+【选择】现代字符串格式化为？ A) f-string B) % C) format() D) concat
+
+【选择】f"{name:^10}" 做什么？ A) 居中宽度 10 B) 反转 C) 转数字 D) None
+
+【选择】替换多个占位符用？ A) str.format 或 f-string B) int C) float D) list
+
+【实操】render_template(template,ctx)：用 ctx 字典渲染并返回字符串。
+
+Docker 提示：纯文本处理，输入 JSON 注入。
+
+【实操】批量渲染并保存为 drafts/ 下多个 txt 文件。
+
+Docker 提示：写工作目录。
+
+【选择】模板含敏感信息应如何处理？ A) 不暴露 B) 打印 C) 随机 D) 删除
+
+【选择】缺字段时应？ A) 提示或用默认 B) 抛错 C) 忽略 D) 空白
+
+【选择】生成 HTML 邮件要注意？ A) 防止注入 B) 转义 C) None D) random
+
+【实操】从 CSV 读取并为每行生成个性化欢迎信。
+
+Docker 提示：CSV 文件作为输入。
+
+【实操】实现 preview(template) 打印前 200 字示例。
+
+Docker 提示：stdout 输出。
+
+【选择】大批量发送前应先？ A) 发送测试 B) 直接发送 C) 随机 D) none
+
+【选择】插入当前日期常用格式？ A) YYYY-MM-DD B) epoch C) 秒数 D) 随意
+
+【选择】避免重复发送应保存？ A) 发送记录/ID B) 内容 C) 长度 D) 随机
+
+【实操】模板条件分支（如 premium → 显示额外段落）。
+
+Docker 提示：逻辑在代码中处理。
+
+【实操】批量生成后打包为 zip（或生成索引）。
+
+Docker 提示：zip 模块需在容器内可用。
+
+单元 2-10：面向对象：家电管理类 🏠
+
+情景（扩写）：
+家中设备增多你想统一管理开关、功率统计与远程连接状态。用类建模设备（Device）和设备管理器（DeviceManager），支持序列化和批量操作。学会后你能清晰组织设备相关逻辑与数据。
+
+题目（15）：
+
+【选择】定义类用关键字？ A) class B) def C) lambda D) import
+
+【选择】实例方法第一个参数？ A) self B) cls C) this D) that
+
+【选择】类变量 vs 实例变量区别？ A) 共享 vs 单独 B) 随机 C) none D) 无差别
+
+【实操】定义 Device，属性 name/power/is_on，方法 turn_on/turn_off。
+
+Docker 提示：纯 Python 类实现测试。
+
+【实操】DeviceManager 管理多个 Device（add/remove/list）。
+
+Docker 提示：在内存或 JSON 存储。
+
+【选择】重写字符串展示用？ A) str B) init C) repr D) del
+
+【选择】记录设备总数可用？ A) class-level counter B) instance attr C) local var D) random
+
+【选择】继承子类用关键字？ A) (Device) B) def C) lambda D) import
+
+【实操】SmartDevice 增加 wifi 属性并实现 connect()（仅改变状态）。
+
+Docker 提示：不访问网络，模拟连接。
+
+【实操】列出所有开启设备并返回总功率。
+
+Docker 提示：纯计算。
+
+【选择】私有属性前缀通常？ A) _ 或 __ B) $ C) # D) %
+
+【选择】用 property 防止直接改属性？ A) 是 B) 否 C) 随机 D) none
+
+【选择】序列化推荐格式？ A) JSON / pickle B) exe C) bin D) html
+
+【实操】实现 to_dict() 方法以便 JSON 序列化。
+
+Docker 提示：写出 JSON 文件。
+
+【实操】实现定时开关（基于 datetime 检查并调用 turn_on/off）。
+
+Docker 提示：用模拟时间或配置时间点避免长 sleep。
+阶段 3 — 应用实践（真实问题自动化、算法入门、API、网络、数据处理）
+
+阶段目标：把 Python 用于真实日常问题自动化、初步数据处理、算法思维与 API 使用。每个单元以真实日常问题为情景，情景都是“小故事”式写法，题目由易到难交错：先是简单选择，夹杂实操（可在 Docker 容器中运行的设计说明）。
+
+单元 3-1：家庭购物比价助手 — “同一瓶酱油三家价格差 30%” 🏷️
+
+情景（长）：
+周末你去买酱油，发现超市 A、超市 B、网店 C 上同一品牌同规格价格相差很大。你希望以后出门或下单前能自动帮你比价：把不同来源的价格表标准化、去掉货币符号、处理千分位符号、合并同名但写法不同的商品并给出最低价与差价百分比。你还想在价格低于历史均价时收到“降价提醒”。实现这个工具，可以帮你每天省钱。
+
+题目（15）：
+
+【选择】比价前应该先做哪一步？
+A) 规范化商品名（去空格/小写/同义词）
+B) 直接比较字符串是否一致
+C) 只比较价格的第一位数字
+D) 随机选择最便宜项
+
+【选择】将 “￥1,234.50” 转为浮点数正确操作是？
+A) 把逗号去掉再 float()
+B) 直接 float("￥1,234.50")
+C) int("1,234")
+D) split(",") 后求和
+
+【选择】若不同来源用不同币种，首先要做什么？
+A) 统一到同一货币（基准）
+B) 用字符串比较
+C) 只用本地价格
+D) 随机选择一家
+
+【实操】写函数 normalize_price(s: str) -> float：接受 "$12.50", "12,50元", "￥1,234.50" 等格式，返回浮点价格（单位：元）。处理异常输入（抛 ValueError 或返回 None）。
+
+Docker 可行性提示：仅字符串处理，不依赖网络；为防万一包括一个内置货币符号表；测试用例通过 stdin/文件注入样本字符串并断言返回值。
+
+【选择】模糊匹配商品名时推荐使用哪个模块/方法？
+A) difflib 的 SequenceMatcher 或 ratio
+B) 直接 == 比较
+C) 使用 random
+D) 用 eval
+
+【选择】对比价格时要提醒“低于历史均价”，需先计算什么？
+A) 历史平均价或中位数
+B) 当前最低价
+C) 最大价格
+D) 名称长度
+
+【实操】实现 find_best(prices: Dict[str,float]) -> Tuple[str,float]：给定字典 {"shopA":12.5,"shopB":11.9} 返回(店名, 价格)。
+
+Docker 提示：纯计算；测试通过 JSON 文件注入价格字典并断言输出。
+
+【选择】若两家价格相同，应如何显示？
+A) 显示多个最低来源（并列）
+B) 随意选一个
+C) 报错
+D) 隐藏
+
+【选择】对大量商品比价时，为了效率常用什么策略？
+A) 缓存历史价格与增量更新
+B) 每次全量重新抓取并比较
+C) 随机扫描一部分数据
+D) 用 Excel 手动比对
+
+【实操】写程序：读取本地 prices.json（结构：[{ "shop":"A","sku":"soy-500ml","price":"¥12.5" }, ...]），标准化价格、按 sku 分组并输出每个 sku 的最低店铺与价格到 best.csv（列：sku,best_shop,best_price,delta_percent_vs_avg）。
+
+Docker 提示：读取工作目录文件、写入工作目录文件；不要联网；处理文件读写异常。
+
+【选择】当来自不同商家的商品命名差异很大时，哪种策略更可靠？
+A) 基于关键字段（品牌+容量）提取并匹配
+B) 只用完全匹配
+C) 使用索引顺序匹配
+D) 随机匹配
+
+【选择】若想定期提醒“某商品低于历史价”，可以采用什么方法？
+A) 把历史均价存入本地缓存并比对当前价格
+B) 每次都以最低价为历史值
+C) 只在人工检查时触发
+D) 随机提醒
+
+【实操】实现 normalize_sku_name(name: str) -> str：从商品标题中抽取“品牌 + 容量/重量/规格”的标准化表示（例如 “海天 生抽 500ml 瓶装” -> “海天|500ml”）。写几条常见正则或关键字规则并展示如何处理。
+
+Docker 提示：字符串与正则处理，不联网；测试用多条样本字符串验证输出。
+
+【实操】实现“降价报警”小脚本：读取 history/{sku}.json（历史价格数组）与 current_prices.json，当当前最低价低于历史均价的 10% 时，输出报警文本（供后端发通知）。并把报警记录 append 到 alerts.log（每条包含时间戳）。
+
+Docker 提示：写日志文件到工作目录；使用 ISO 时间字符串；避免使用真实邮件或外网通知。
+
+【实操（进阶）】实现一个简单的“比价报告”生成器：输入多家价格数据，输出 report.html（简单表格）并把最低价高亮，同时对可能的“同一商品但名差异”列出“候选匹配”供人工确认（输出到 CSV）。
+
+Docker 提示：生成静态 HTML 文件到工作目录；不要依赖外部 CSS/JS（内联样式即可）；前端人工确认由你的系统处理。
+
+单元 3-2：菜谱智能购物车 — “一周菜单，如何把食材合并成一张购物单？” 🧾🍅
+
+情景（长）：
+你要为下一周做 7 天菜单，手动合并每道菜的食材非常耗时，单位写法也不统一：有“200 g”、“0.2kg”、“1杯”、“1 1/2 杯”等。你希望写一个工具：解析食谱、统一单位、合并相同食材（处理同义词），并与 pantry（现有库存）比对输出最终购物清单。
+
+题目（15）：
+
+【选择】合并食材时第一步应做什么？
+A) 标准化名称与单位（同义词表 + 单位表）
+B) 直接相加字符串
+C) 随机合并
+D) 只保留第一个出现的项
+
+【选择】"1 1/2"（混合分数）解析为数值最稳妥的方法？
+A) 使用 fractions.Fraction 或自己解析 split
+B) float("1 1/2")
+C) int("1 1/2")
+D) eval("1 1/2")
+
+【选择】单位 kg→g、L→ml 的转换多用哪种存法？
+A) 维护一个单位换算字典并把所有量转换到最小单位
+B) 随意转换
+C) 不做转换
+D) 用字符串比较
+
+【实操】实现 parse_quantity(q_str: str) -> float：能识别 "1", "1.5", "1 1/2", "3/4" 等并返回浮点数（单位分开处理）。
+
+Docker 提示：纯字符串/正则处理；测试用若干示例保证边界条件。
+
+【实操】merge_ingredients(recipes: List[List[Dict]]) -> Dict[name -> {qty,unit}]：合并多道菜的食材并统一单位到常用基础单位（g/ml/pcs）。处理同义词（例如 “scallion” vs “green onion”）用内置同义词表。
+
+Docker 提示：同义词表作为本地 JSON；不联网。
+
+【选择】当同一食材以不同单位出现（“1kg” 与 “500g”），最佳做法是？
+A) 将都转换为同一基础单位再相加
+B) 保持原样并列出所有项
+C) 仅保留最大值
+D) 随机
+
+【选择】若食材缺失单位（写成“2 apples”或“2”），处理策略应是？
+A) 尝试推断或标注为需人工确认
+B) 默认 to grams
+C) 删除该项
+D) 随机猜测
+
+【实操】实现 format_shopping_list(merged_dict)：生成可打印的购物单（每行：食材 — 总量 — 单位 — 备注）。
+
+Docker 提示：输出写 stdout 或 shopping_list.txt。
+
+【实操】实现 subtract_pantry(merged, pantry)：根据 pantry 减去已有食材并返回“需要购买”的清单（若 pantry 中数量大于需买量，删除该项）。
+
+Docker 提示：pantry 与 merged 都由 JSON 文件提供。写入 to_buy.json。
+
+【选择】若单位转换涉及体积与重量（例如“1 cup sugar”与“200 g sugar”），可靠处理需要？
+A) 物料密度表（需人工提供）
+B) 自动联网查密度（不合适）
+C) 随机换算
+D) 忽略
+
+【实操】实现一个“近义词扩展”模块：给定词 pepper 返回可能的变体（black pepper、bell pepper）并对合并逻辑做演示。
+
+Docker 提示：同义词表 JSON；演示通过样例输入输出。
+
+【选择】合并购物清单并生成按类别分组（蔬菜/肉/调料）好处是？
+A) 更方便在超市按区域购物
+B) 更难理解
+C) 无意义
+D) 随机
+
+【实操】把购物清单输出为 CSV（columns: category, name, qty, unit, note）。
+
+Docker 提示：写到工作目录。
+
+【实操（进阶）】实现 optimize_shopping_list(to_buy, store_catalog)：给定商店商品目录（名称、包规：如 500g/袋、1kg/袋、单价），返回按包规尽量少买并最省钱的购买建议（考虑买整包装）。
+
+Docker 提示：这是一个小整数规划/贪心问题；可用穷举或贪心实现；计算量可控，测试用小数据集。
+
+【实操（可选）】生成“过敏/饮食偏好过滤”视图：若用户标注对某些食材过敏，自动把这些食材替换或标注为“需替代”。
+
+Docker 提示：替代表为静态 JSON；只做文本替换和提示。
+
+单元 3-3：家庭健身记录与趋势分析 — “手环数据让我看清自己的进步” 🏃‍♂️📈
+
+情景（长）：
+你戴了个手环，导出 CSV 后看到每天步数、运动时长、消耗卡路里。你想做个周报与趋势检测：检测是否达到目标、是否连续三周提升、生成前 5 项最常做运动以及画出每周总时长（前端绘图用 JSON 数据）。学完你可以把手环数据变成可视化的激励反馈。
+
+题目（15）：
+
+【选择】时间序列数据最合适的存储形式是？
+A) list of dicts 或 pandas DataFrame
+B) 单个字符串
+C) 随机
+D) 二进制
+
+【选择】计算移动平均用途是？
+A) 平滑波动以反映趋势
+B) 使数据更随机
+C) 替换原始数据
+D) 无意义
+
+【选择】当 CSV 某行缺失 duration 值时应如何处理？
+A) 填充 0 或用邻近值插补
+B) 删除整个文件
+C) 随机补全
+D) 抛异常退出
+
+【实操】read_exercise_csv(path)：读取 date,type,duration_minutes,calories CSV 并返回列表或 DataFrame（含基本类型转换与错误处理）。
+
+Docker 提示：读取工作目录文件；不联网；大文件使用 streaming/iterators。
+
+【实操】weekly_summary(logs)：按 ISO 周聚合，返回每周总时长、平均日时长与消耗总热量（JSON）。
+
+Docker 提示：返回 JSON 文件供前端绘图；注意日期解析。
+
+【选择】识别“进步”趋势一个简单办法是？
+A) 比较最近 3 周的平均时长是否呈上升
+B) 比较每日随机数
+C) 检查最大的单日值
+D) 随机
+
+【实操】top_exercises(logs, n=3)：返回出现次数最多的 n 个运动类型（及总时长）。
+
+Docker 提示：纯计算；输出 JSON。
+
+【选择】若要生成用于前端绘图的数据（折线图），X 轴通常用什么？
+A) 日期或周编号 B) 随机 C) 序号 D) None
+
+【实操】实现 moving_average(series, window=3)：对时序数据返回滑动平均数组（保边界处理）。
+
+Docker 提示：数值计算，避免依赖 heavy libs（可以用纯 Python 或 numpy）。
+
+【实操】实现简单趋势检测：若连续 3 周总时长逐周增长则输出 “进步”，否则输出“待努力”。
+
+Docker 提示：纯逻辑。
+
+【选择】若输出图表为图片，Docker 容器中应如何处理？
+A) 保存为文件（png）而不是 plt.show()
+B) 使用 show() 弹窗
+C) 直接打开图形界面
+D) 随机
+
+【选择】处理时区问题时应注意什么？
+A) 在解析时注明时区或统一为 UTC
+B) 忽略时区
+C) 随机
+D) None
+
+【实操】写函数 export_plot_data(weekly_summary)：生成适合前端的 JSON（labels:[], datasets:[]）。
+
+Docker 提示：仅生成 JSON，前端负责绘图。
+
+【实操（进阶）】实现异常检测：找出突然大幅降低或异常高的单天值并返回原因猜测（如“数据缺失、设备未戴/多次计步”）。
+
+Docker 提示：规则基于阈值或 z-score，纯本地计算。
+
+【实操】实现 export_report(logs)：生成一份文本周报（包含总时长、进步/退步判定、top3 运动、建议），保存为 weekly_report.txt。
+
+Docker 提示：写文件到工作目录。
+
+单元 3-4：密码与凭证小管家（安全教学演示）🔐
+
+情景（长）：
+你想做一个本地凭证管理器来管理网站账户（教学演示，不存明文）。你需要教会用户：为什么不存明文、什么是哈希与盐、如何使用安全的库（演示可用 hashlib + salt 或说明使用 cryptography）。该单元侧重“安全意识 + 简单实现”。
+
+题目（15）：
+
+【选择】明文存密码是否安全？ A) 否 B) 是 C) 不确定 D) 随机
+
+【选择】哈希函数的特性是？ A) 单向不可逆 B) 可逆 C) 随机 D) None
+
+【选择】若要可逆加密应用哪类库？ A) cryptography/fernet B) hashlib C) random D) os
+
+【实操】hash_password(pw: str) -> str：使用 hashlib.pbkdf2_hmac（或 sha256 + salt）返回 hex/hash（并返回使用的 salt）。给出示例。
+
+Docker 提示：纯计算，不访问网络；注意随机 salt 的生成（os.urandom）。
+
+【实操】check_password(stored_hash, salt, pw_try) -> bool：验证密码。
+
+Docker 提示：纯函数，测试注入存储值。
+
+【选择】防止暴力破解的好做法是？ A) 加盐并使用 PBKDF2/Bcrypt 等慢哈希 B) 直接 sha1 C) 明文保存 D) 随机
+
+【选择】存储凭证最安全的方式是什么？
+A) 使用系统 keyring 或 加密文件（示范）
+B) 直接写入 repo
+C) 放到公开云盘
+D) 随机
+
+【实操】实现 generate_password(length=12, use_symbols=True) 随机生成强密码（包含大小写/数字/符号）。
+
+Docker 提示：使用 secrets 模块而不是 random；无外网依赖。
+
+【选择】若要可逆加密（例如备份），应使用？ A) 对称加密（密钥保护） B) hash C) 随机 D) none
+
+【实操】写脚本：从 accounts.csv 读取 username/site，生成随机密码并输出 accounts_out.csv（不要把密码打印到日志）。
+
+Docker 提示：写文件到工作目录；演示环境不要公开该文件。
+
+【选择】为何不要把密钥/凭证放到源码仓库？
+A) 泄露风险高且难以撤回 B) 没问题 C) 好处很多 D) 随机
+
+【选择】若需要在测试中使用真实凭证，最佳做法是？
+A) 使用 mock 或 sandbox 提供的测试凭证 B) 用真实凭证 C) 随机 D) none
+
+【实操】实现一个“密码强度检测”函数：基于长度/字符集/常见弱口令表返回强度评分。
+
+Docker 提示：弱口令表为本地静态文件。
+
+【实操】展示一个“导出提示”功能：导出仅包含用户名与最后修改时间（不包含明文密码）的 CSV，供审计之用。
+
+Docker 提示：写工作目录文件。
+
+【实操（安全提示）】写一段简短的 README 段落说明在真实项目中应使用专业密码管理器/密钥管理服务，并指出示例实现的局限与安全风险（文本输出）。
+
+Docker 提示：仅保存 README.txt。
+
+单元 3-5：家庭票务/门票分配 — “家庭看电影如何分配座位？” 🎟️
+
+情景（长）：
+你在组织家庭观影：5 大 2 小，总共 8 张票，有连坐需求与老人优先。你需要一个座位分配工具：支持连坐查找、候补名单、退票并保证重入（idempotent）行为。学会后能轻松在家庭活动中分配座位。
+
+题目（15）：
+
+【选择】座位图最直观的数据结构是？
+A) 二维 list（matrix）或 dict (row->list)
+B) 单字符串
+C) 随机
+D) None
+
+【选择】判断两个座位区块是否连坐应检查？
+A) 是否有连续空位 B) 随机 C) None D) int
+
+【选择】实现连坐查找常用策略？
+A) 线性扫描寻找 k 连续空位 B) 随机选取 C) None D) int
+
+【实操】实现 assign_seat(seats: List[List[Optional[str]]], person_id: str) -> (row, col)：分配第一个空位并返回位置（标记占用）。
+
+Docker 提示：内存操作；示例输入为小矩阵；输出 JSON。
+
+【实操】实现 find_block(seats, k)：查找并返回 k 连续空位（同一行）。
+
+Docker 提示：边界测试要覆盖；返回 None 则表示无连续座位。
+
+【选择】若票已满应如何处理？
+A) 添加到候补名单并返回提示 B) 抛出异常 C) 随机 D) 忽略
+
+【选择】退票操作应做什么？
+A) 释放座位并检查候补名单以分配给下一个人 B) 不处理 C) 随机 D) None
+
+【实操】实现 cancel_ticket(seats, seat_id)：释放座位并把 seat_id 加入可用池。
+
+Docker 提示：更新内存或 JSON 文件，测试时读写工作目录文件。
+
+【实操】实现座位可视化导出：用 ASCII 打印座位图（X 表示占用，. 表示空位）。
+
+Docker 提示：stdout 输出供前端 screenshot。
+
+【选择】并发购票时应采用？
+A) 事务/锁或原子操作（数据库层） B) 随机 C) None D) int
+
+【实操】实现简单的公平分配：优先老人/儿童（基于 priority 字段），再按先到先得分配。
+
+Docker 提示：纯算法。
+
+【选择】当需要连坐但无足够连续空位时，可以采用哪种折中策略？
+A) 尽量把人分到相邻座位组（最小化最大距离） B) 随机分配 C) None D) int
+
+【实操】导出票据（text）：包含活动名、持票人、座位号、时间，写到 tickets/ 目录。
+
+Docker 提示：生成文件到工作目录 tickets/。
+
+【实操】实现 available_rate(seats) 返回空位百分比（供统计）。
+
+Docker 提示：纯计算。
+
+【实操（进阶）】实现“候补升级”逻辑：当有人退票时自动从候补名单按优先级分配并输出通知文本。
+
+Docker 提示：只生成文本通知，不发送网络请求。
+
+单元 3-6：智能家居规则引擎（简单 if-then 规则）🤖
+
+情景（长）：
+你家的智能灯、窗帘与空调需要一个小规则引擎：根据温度、光线、时间、在家状态等自动触发动作。你希望能以 JSON 定义规则（条件 + 动作），能加载并执行，解决“天黑后忘开灯/白天空调浪费”问题。
+
+题目（15）：
+
+【选择】规则引擎的基本单元通常是什么？
+A) 条件-动作对（if condition then action）
+B) 随机函数
+C) None
+D) int
+
+【选择】为避免规则冲突应采取何种策略？
+A) 优先级或顺序（规则排序） B) 随机 C) None D) int
+
+【选择】规则以 JSON 保存的优点？
+A) 易于修改 & 机器可读 B) 随机 C) None D) int
+
+【实操】实现 evaluate_rules(rules: List[Dict], sensors: Dict)：遍历规则并对满足条件的规则执行动作（打印动作描述）。规则格式示例：{"if": {"temp": {"lt": 18}}, "then": {"action": "turn_on", "device":"heater"}, "priority": 10}。
+
+Docker 提示：纯 JSON 与逻辑处理；不要调用实际设备 API，动作以打印替代。
+
+【实操】写规则：“若光照 < 50 且 时间在 18:00-23:00 则开灯”。规则和传感器样例演示。
+
+Docker 提示：时间可用 ISO 字符串，传感器输入由测试注入。
+
+【选择】若动作可能失败，应怎样处理？
+A) 捕获异常并记录失败信息 B) 忽略 C) 随机 D) None
+
+【选择】若规则频繁触发导致震荡，应使用哪种方法？
+A) 去抖动（debounce）或冷却期 B) 随机 C) none D) int
+
+【实操】实现规则编辑器：把 rules.json 读入并列出所有规则的 ID、条件摘要与优先级。
+
+Docker 提示：文件读写在工作目录，供人工编辑。
+
+【实操】模拟传感器输入并写测试用例，验证指定规则在给定传感器数据下会被触发。
+
+Docker 提示：所有传感器数据由测试样例注入，避免真实传感器接入。
+
+【选择】若多个规则触发同一动作，应如何防止重复执行？
+A) 在执行器侧记录并过滤重复动作（去重） B) 随机 C) none D) int
+
+【实操】实现日志记录每次规则触发（time,rule_id,condition,action）。日志写 rules.log。
+
+Docker 提示：写到工作目录文件。
+
+【选择】规则优先级低时会怎样？
+A) 仅在无更高优先级规则冲突时执行 B) 先执行 C) 随机 D) none
+
+【实操】实现“冷却期”机制：规则执行后进入 cooldown 时间段（例如 60s），在冷却期内不再触发。
+
+Docker 提示：在测试时使用短冷却（如 1s）模拟；避免长 sleep。
+
+【实操】写测试用例模拟“夜间门开报警”：若晚上且门开且无人则触发报警动作（打印）。
+
+Docker 提示：纯逻辑，打印替代实际报警。
+
+【实操（进阶）】实现规则冲突检测工具：给定规则集，找出可能互相矛盾（互相否定的规则对），并输出冲突列表。
+
+Docker 提示：静态分析规则条件与输出。
+
+单元 3-7：照片相册自动标签（EXIF 与文件名）📷
+
+情景（长）：
+放假拍了很多照片，想按日期/地点/事件自动标签。EXIF 提供了拍摄日期、GPS（有时缺失），文件名有时含关键词（如 “beach_party_2025-07-10.jpg”）。你需要一个脚本：提取 EXIF、按文件名关键词自动打标签、生成索引 JSON。
+
+题目（15）：
+
+【选择】读取 EXIF 常用库？ A) Pillow (PIL) B) json C) os D) random
+
+【选择】若 EXIF 无 GPS 信息可用什么补救？
+A) 从文件名或用户手动输入补全 B) 随机 C) None D) int
+
+【选择】标签存放推荐格式？ A) JSON 元数据 B) 二进制 C) exe D) random
+
+【实操】实现 extract_exif(path)：返回 {date, camera, gps}（gps 可为 None）。
+
+Docker 提示：Pillow 可在容器中安装；测试用小图片样本或模拟 EXIF 数据文件。
+
+【实操】实现 auto_tag_by_filename(filename)：基于常见关键词（beach, birthday, wedding）返回标签列表。
+
+Docker 提示：纯字符串处理。
+
+【选择】为避免重复标签应使用？ A) set B) list C) dict D) tuple
+
+【选择】若处理大量图片应优先考虑？ A) 分批或并行处理 B) 一次性全部读取 C) 随机 D) none
+
+【实操】实现 generate_index(dir)：扫描目录，提取 EXIF 或 filename 标签并生成 index.json（含 filepath, date, tags）。
+
+Docker 提示：文件系统访问在工作目录；注意处理非图片文件。
+
+【实操】写脚本统计并输出 top 10 标签及计数。
+
+Docker 提示：纯计算。
+
+【选择】生成缩略图推荐哪个库？ A) Pillow B) random C) os D) none
+
+【实操】实现生成缩略图并保存到 thumbs/ 目录（200x200，保留比例并居中裁剪）。
+
+Docker 提示：Pillow + 文件写入；注意容器文件权限。
+
+【选择】若要保留原图且生成缩略图，推荐？ A) 写入新目录并保留原路径 B) 覆盖原图 C) 删除 D) 随机
+
+【实操】实现 find_duplicates(dir)：通过文件大小+hash（md5）检测重复并输出列表。
+
+Docker 提示：哈希计算在容器内可运行，注意对大文件的内存处理（分块读取）。
+
+【实操】实现按日期生成简单 HTML 画廊（index.html），每张图片显示缩略图与标签（静态页面）。
+
+Docker 提示：写文件到工作目录，用相对路径。
+
+【实操（进阶）】实现“按人物标签过滤”功能：用户输入人物名返回匹配照片列表（基于手动或第三方标注）。
+
+Docker 提示：只处理本地标签数据，不调用人脸识别服务。
+
+单元 3-8：家庭日历冲突检测（时间区间合并）📆
+
+情景（长）：
+你和配偶的日程常冲突：你们都可能给孩子报名课、安排看病或家庭聚会。你需要脚本自动检测多个人的日程冲突、合并占用区间并建议可用空档（例如找出 60 分钟连续空档）。学会后你能避免重复预订与冲突烦恼。
+
+题目（15）：
+
+【选择】时间区段常用表示法是？
+A) (start_datetime, end_datetime) Tuple B) 单字符串 C) None D) int
+
+【选择】判断两区间是否重叠条件？
+A) start1 < end2 and start2 < end1 B) 随机 C) None D) int
+
+【选择】合并区间后查找空档的第一步是？
+A) 合并并排序已占用区间 B) 随机 C) None D) int
+
+【实操】实现 overlaps(a,b) 判断两个区间是否重叠（ISO 时间字符串输入）。
+
+Docker 提示：解析为 datetime，注意时区或统一 UTC；测试注入时间字符串。
+
+【实操】实现 merge_intervals(intervals)：合并重叠区间并返回非重叠列表（按时间升序）。
+
+Docker 提示：算法是标准的线性扫描；纯计算。
+
+【选择】时区不一致时应？
+A) 统一时区再比较 B) 随机 C) None D) int
+
+【选择】若一个事件跨午夜，注意点是？
+A) 正确处理日期边界与跨日逻辑 B) 随机 C) None D) int
+
+【实操】写 find_free_slot(busy_intervals, day, duration_minutes)：找出在指定 day（YYYY-MM-DD）内第一个满足 duration 的空档并返回起始时间。
+
+Docker 提示：返回 ISO 时间字符串；若无返回 None。
+
+【实操】实现冲突检测工具：给定多人的日程列表，输出所有冲突事件对（which events overlap）。
+
+Docker 提示：输出 JSON 列表供前端展示。
+
+【选择】处理重复/周期事件（每周/每月）常用做法是？
+A) 将周期事件展开为实际日期再合并处理 B) 随机 C) None D) int
+
+【实操】实现 suggest_alternative(intervals, duration)：在未来 7 天内找到下一个满足 duration 的时间（考虑工作时间窗口 09:00-18:00）。
+
+Docker 提示：配置可传入工作时间与排除日。
+
+【选择】若多人优先级不同，建议如何安排？
+A) 按优先级规则（重要/紧急优先） B) 随机 C) None D) int
+
+【实操】实现 pretty_print_schedule(intervals)：把某日的日程按时间段打印成时间轴文本。
+
+Docker 提示：stdout 输出。
+
+【实操】实现测试用例：若 A 有事件 10:00-11:00，B 有 10:30-11:30，应检测到冲突并建议替代（例如 11:30）。
+
+Docker 提示：时间字符串注入测试。
+
+【实操（进阶）】实现按多人日程找到一小时最大重叠人数的时间段（用于统计最繁忙时间点）。
+
+Docker 提示：纯计算。
+
+单元 3-9：社交活动 RSVP 管理 — “组织聚会时统计谁来谁不来” 🎉
+
+情景（长）：
+你在组织一个派对，需要管理邀请、回复（yes/no/maybe）、特殊饮食偏好、并生成确认名单与候补名单。你希望能从不同渠道合并 RSVP 数据、去重并导出最终名单与联系表。
+
+题目（15）：
+
+【选择】RSVP 状态最佳表示法？
+A) 'yes'/'no'/'maybe' 字符串 B) bool C) int D) None
+
+【选择】合并多渠道 RSVP 首先要做什么？
+A) 统一数据格式并去重（按联系方式） B) 随机 C) None D) int
+
+【选择】统计确认人数用哪种结构合适？
+A) Counter 或 dict 计数 B) list C) set D) None
+
+【实操】rsvp_update(rsvps, person, status)：更新 rsvps 数据结构并返回统计（yes/no/maybe counts）。
+
+Docker 提示：纯数据结构处理；写入 JSON 可选。
+
+【实操】guest_list(rsvps)：返回所有确认出席('yes')的名单（含联系信息）。
+
+Docker 提示：输出 JSON/CSV。
+
+【选择】若餐饮有限制应如何存储？
+A) 在记录中加入 diet 字段（例如 vegetarian） B) 忽略 C) 随机 D) None
+
+【选择】防止超额报名的做法？
+A) 设置 capacity 并自动转为候补 B) 随机 C) None D) int
+
+【实操】生成确认名单 CSV（name,contact,diet），并把过多的确认者按先到先得保留，其他加入候补。
+
+Docker 提示：读写工作目录文件。
+
+【实操】实现 export_confirmed_count(rsvps) 返回统计字典（yes/no/maybe）。
+
+Docker 提示：纯计算。
+
+【选择】若多人频繁变更 RSVP，应记录哪项信息？
+A) 修改时间 B) 随机 C) None D) int
+
+【实操】实现候补名单逻辑：当有空位出现时按候补顺序自动升级并输出通知文本。
+
+Docker 提示：只生成文本，不发送通知。
+
+【选择】派对到达当日签到功能应如何实现？
+A) 修改状态为 'arrived' 并记录时间 B) 随机 C) None D) int
+
+【实操】实现 capacity_check(rsvps, capacity)：返回超额人数与候补名单。
+
+Docker 提示：纯逻辑。
+
+【实操】实现 save_rsvps(rsvps, filename)：序列化为 CSV 与 JSON 两种格式。
+
+Docker 提示：写工作目录文件并保证 UTF-8 编码。
+
+【实操（进阶）】实现简单的邀请重发机制：对未回复者生成提醒草稿（文本），并把草稿保存到 reminders/。
+
+Docker 提示：不实际发送邮件，写文件模拟。
+
+单元 3-10：智能购物预算与优惠叠加 — “如何在结账时用券最划算？” 💸
+
+情景（长）：
+你常面对折扣券/优惠组合问题：满100减20、打折 10%、运费规则、部分券只能用于指定商品。你希望写个最优组合计算器：给出最省钱的券应用组合并考虑运费和门槛限制。
+
+题目（15）：
+
+【选择】计算最终价时必须考虑哪些因素？
+A) 商品价、折扣券规则、满减门槛、运费 B) 颜色 C) 随机 D) None
+
+【选择】一张券是“满 X 减 Y”还是“百分比折扣”，当两类券叠加时应？
+A) 明确规则并尝试合法组合（不可叠加时排除） B) 任意叠加 C) 随机 D) none
+
+【选择】穷举所有券组合在小规模下可行因为什么？
+A) 组合数有限且可枚举 B) 随机 C) none D) int
+
+【实操】实现 apply_coupon(total, coupon)：coupon 支持 {type:'percent',value:10} 或 {type:'fixed',value:20,threshold:100}，返回新价格或 None（若不满足门槛）。
+
+Docker 提示：纯计算。
+
+【实操】实现 best_price(prices:List[float], coupons:List[Dict]) -> Dict：穷举组合并返回最优方案（考虑折后价与运费）。
+
+Docker 提示：对组合数量做限制（例如最多 8 张券）以免爆炸；输入小样本测试。
+
+【选择】若优惠券只能用于指定商品，应如何建模？
+A) 把优惠绑定商品集合并在组合时检验 B) 随机 C) none D) int
+
+【选择】若运费由重量决定，应在模型中加入什么？
+A) 物流规则（按重量区间） B) 随机 C) none D) int
+
+【实操】实现 remaining_to_threshold(total, coupon) 返回还需多少元达到券门槛（用于界面提示）。
+
+Docker 提示：纯计算。
+
+【实操】实现“组合限制”处理：如果两张券同类不可叠加，穷举时应跳过这类组合。
+
+Docker 提示：逻辑判定。
+
+【选择】若优惠规则复杂，推荐先做什么？
+A) 把规则封装并单元测试 B) 直接上线 C) 随机 D) none
+
+【实操】生成每种组合的明细（适用券、折前价、折后价、运费、最终价）并输出 CSV。
+
+Docker 提示：输出文件到工作目录。
+
+【选择】若商品数很多，找最优组合更靠谱的方法是？
+A) 近似算法／启发式（贪心/动态规划） B) 穷举 C) 随机 D) none
+
+【实操】实现 simulate_checkout(cart, coupons, shipping_rules)：返回推荐方案（文本）并说明为什么（节省金额与最终金额）。
+
+Docker 提示：纯逻辑计算。
+
+【实操】实现 UI 辅助文本：“再买 X 元可达满减”功能（返回 X）。
+
+Docker 提示：返回数值或 JSON。
+
+【实操（进阶）】实现“按店铺/商品优先级”选择最优付款方案（考虑商品跨店无法合并券的情况）。
+
+Docker 提示：小规模样本测试。
+
+阶段 4 — 进阶与库（pandas / requests / matplotlib / 并发 / 测试 / CLI 等）
+
+目标：学习常用第三方库、数据分析与可视化、并发与异步、测试与工程化。实操题会强调在 Docker 容器中如何运行（例如：requests 在容器可能被禁网，要用本地 mock；matplotlib 要保存为文件；需要安装的库应在容器镜像里提前准备或使用纯 Python 版本）。
+
+单元 4-1：爬虫进阶与合规（登录、模拟表单、Mock）🔑
+
+情景（长）：
+你想把每天关注的网站（比如某个论坛板块）里面的新品/折扣数据自动保存下来，但又不知道如何合法合规地抓取登录后才可见的信息。你决定在本地环境做“模拟练习”：先学会如何模拟登录（POST 表单）、处理 cookies/session、解析页面、并用本地 mock 服务器或 HTML 文件做练习。目标是学会技术而避免违反网站规则。
+
+题目（16）：
+
+【选择】在做合规抓取前应先查看哪个文件？
+A) robots.txt B) README C) LICENSE D) sitemap.xml
+
+【选择】requests.session() 的用途是？
+A) 保持 cookies 与会话 B) 改变编码 C) 增加随机性 D) None
+
+【选择】模拟登录时常用 HTTP 方法？
+A) POST B) GET C) DELETE D) PUT
+
+【实操】写函数 mock_login(session, login_url, data)：对本地 mock HTML 模拟 POST 登录并返回状态（成功/失败）。
+
+Docker 可行性提示：不要联网；在容器中使用本地测试 HTML 文件和 flask/simple HTTP mock（或直接解析本地文件）来模拟登录响应；避免长连接和外部请求。
+
+【选择】解析 HTML 推荐库是？
+A) BeautifulSoup B) csv C) random D) os
+
+【选择】当网站用了 JS 渲染，requests 是否总能获取最终 DOM？
+A) 有时不能（需要渲染引擎或使用 API） B) 总能 C) 从不 D) 随机
+
+【实操】实现 fetch_titles(html_text)：使用 BeautifulSoup 抽取所有 <h2> 文本并返回列表。
+
+Docker 提示：解析本地 HTML，BeautifulSoup 在容器中常可 pip 安装；避免外网。
+
+【选择】处理频率限制最合规的方式是？
+A) 遵循 robots、加延时、使用缓存 B) 不做任何限制 C) 使用大量并发 D) 随机
+
+【选择】User-Agent 用于？
+A) 表示请求者身份（可自定义，但应如实） B) 造成错误 C) 增加速度 D) None
+
+【实操】实现 save_links(html_text, filename)：将所有 <a href> 保存到 JSON 文件（去重）。
+
+Docker 提示：写到工作目录；JSON 编码为 UTF-8。
+
+【选择】为避免重复抓取应采用？
+A) 去重与缓存（例如记录已抓取链接） B) 每次全量抓取 C) 随机 D) none
+
+【选择】若页面返回 429（Too Many Requests），常见做法？
+A) 尊重 Retry-After 头或回退并延迟重试 B) 继续请求 C) 攻击站点 D) 不处理
+
+【实操】用 requests 的 mock（或本地 stub）写小测试，用示例 HTML 验证 fetch_titles 正确提取。
+
+Docker 提示：在容器内用本地文件或 pytest + requests-mock；不依赖网络。
+
+【实操】实现简单 retry 机制：对请求失败（超时或 5xx）最多重试 3 次并记录日志。
+
+Docker 提示：重试要限制次数与延迟（短），避免长 sleep；日志写到工作目录。
+
+【选择】要抓取登录后页面但不想处理表单，另一路径是？
+A) 使用站点提供的官方 API（若有）或导出功能 B) 强行绕过登录 C) 随机 D) None
+
+【实操（进阶）】实现 crawl_local_site(start_file, depth=1)：在本地目录中递归解析 HTML 链接并生成站点地图（JSON）。
+
+Docker 提示：仅操作容器内文件系统；不要尝试访问外网；depth 可限制为 1-2。
+
+单元 4-2：pandas 数据分析入门（清洗、聚合、处理缺失）📊
+
+情景（长）：
+你拿到社区活动的签到 CSV（含姓名、签到时间、活动类型、评分），数据格式混乱：日期格式不统一、部分记录缺失、字段重复。你想学 pandas 来清洗、聚合与输出报告：按活动类型聚合人数、填补缺失、按日期分组并导出摘要 Excel/CSV。
+
+题目（16）：
+
+【选择】pandas 的核心数据结构是？
+A) DataFrame B) dict C) list D) set
+
+【选择】读取 CSV 的函数是？
+A) pd.read_csv B) open() C) csv.reader D) json.load
+
+【选择】填充缺失值可用的方法？
+A) fillna B) drop C) random D) none
+
+【实操】load_data(path)：用 pandas 读取 CSV，解析日期列并返回 DataFrame（做基本列类型转换）。
+
+Docker 提示：pandas 需在镜像安装（或使用轻量替代），读取工作目录 CSV；避免大文件。
+
+【实操】实现 clean_names(df)：去掉姓名前后空白、统一大小写、去重。
+
+Docker 提示：纯 DataFrame 操作。
+
+【选择】若日期格式混用 YYYY/MM/DD 与 DD-MM-YYYY，应如何处理？
+A) 使用 pd.to_datetime(..., dayfirst=...) 或指定格式并捕获异常 B) 随机 C) 忽略 D) None
+
+【选择】按列分组并求计数用？
+A) df.groupby('type').size() 或 .count() B) for loop C) random D) None
+
+【实操】实现 monthly_summary(df)：按月分组统计活动次数与平均评分，返回 DataFrame。
+
+Docker 提示：输出为 CSV/JSON 文件；避免内存峰值。
+
+【选择】删除重复行用？
+A) df.drop_duplicates() B) remove() C) delete() D) random
+
+【实操】export_summary(df, filename)：把分析结果保存为 summary.csv 与 summary.xlsx（若 pandas 支持）。
+
+Docker 提示：保存到工作目录；xlsx 需 openpyxl 等库，若无则只保存 CSV。
+
+【选择】缺失值比例很大时最佳策略？
+A) 评估影响并决定填充或丢弃 B) 直接填 0 C) 随机 D) none
+
+【选择】pandas 应避免的做法？
+A) 在大数据上频繁做 Python 层循环（应用向量化） B) 一切都使用 apply C) 随机 D) None
+
+【实操】实现 top_n_by_type(df, n=3)：对每种活动类型返回人数最多的前 n 条记录或子类别。
+
+Docker 提示：纯 DataFrame 逻辑。
+
+【实操（进阶）】实现用 pandas 对评分列做分位数计算并在报告中标注异常值（例如低于第 5 百分位视为异常）。
+
+Docker 提示：计算量小，写 JSON 报告到工作目录。
+
+【选择】在 Docker 里运行 pandas 数据任务时应注意？
+A) 容器内内存限制、依赖包与文件路径 B) 无需注意 C) 随机 D) None
+
+【实操】编写一个小脚本 cli_analyze.py --input data.csv --out report.csv，使用 argparse 接受参数并调用上面分析步骤。
+
+Docker 提示：CLI 在容器内正常运行，使用命令行参数测试；写输出到当前目录。
+
+单元 4-3：matplotlib 与可视化（保存图片供前端）📈
+
+情景（长）：
+你想把前面阶段得到的周报用图表呈现：折线图、柱状图、饼图。容器没有 GUI，因此你必须把图保存为 PNG/SVG 并提供 JSON 数据给前端。你还要学会把图表风格化、加注释与图例。
+
+题目（15）：
+
+【选择】在无显示环境（Docker）下画图应如何？
+A) 使用 plt.savefig('out.png') 而不是 plt.show() B) 用 show() C) 使用 GUI D) none
+
+【选择】画折线图常用函数是？
+A) plt.plot B) plt.bar C) plt.pie D) plt.scatter
+
+【选择】若希望图中显示中文，常见问题是？
+A) 字体缺失（需指定字体或安装） B) 无 B) 随机 D) none
+
+【实操】plot_weekly(weekly_summary, filename)：生成折线图并保存为 filename.png。
+
+Docker 提示：保存为文件；避免 show(); 若字体问题，使用英文字体或提供替代；文件写当前目录。
+
+【实操】bar_top_categories(data, filename)：画类别柱状图并保存为 SVG（便于 web 缩放）。
+
+Docker 提示：保存 SVG；确保 matplotlib 支持 SVG 后端。
+
+【选择】图表中加入误差条用哪个参数？
+A) yerr B) xerr C) color D) label
+
+【选择】如果 figure 太大渲染慢，可用什么？
+A) 减少 DPI 或数据点 B) 提高 DPI C) 随机 D) none
+
+【实操】生成一个含注释的图：在峰值点标注数值并保存。
+
+Docker 提示：文字注释无需图形界面；输出文件供前端展示。
+
+【选择】生成交互式图表供浏览器用哪个库常用？
+A) plotly / bokeh（注意与静态文件差异） B) matplotlib C) random D) none
+
+【实操】实现 plot_pie_distribution(series, filename)：饼图并保存为 PNG，若某类占比低于 1% 将其合并为 “其他”。
+
+Docker 提示：写文件到工作目录；处理标签重叠。
+
+【选择】图表导出到网页通常要注意？
+A) 使用合适分辨率与格式（SVG/PNG）并生成配套 JSON 数据 B) 直接嵌入 plt.show() 输出 C) None D) random
+
+【选择】若需要前端动态渲染，图表端应提供？
+A) JSON 数据 + 配置 B) PNG 只有 C) 随机 D) None
+
+【实操】生成图表数据的 JSON（labels/datasets），并另存图像文件。
+
+Docker 提示：生成两个文件：chart.png 与 chart.json，供前端使用。
+
+【实操（进阶）】实现脚本自动批量生成一个月的每日折线图并将所有图压缩到 charts.zip。
+
+Docker 提示：使用 zip 模块，将文件写到工作目录；注意容器磁盘限制。
+
+【选择】若 matplotlib 报错显示后端问题，应怎么做？
+A) 指定 Agg 后端（matplotlib.use('Agg')）或安装合适后端 B) 随机 C) none D) int
+
+单元 4-4：并发与 asyncio（提升 IO 密集任务性能）⚙️
+
+情景（长）：
+你有一批本地小文件要读取并调用（或模拟）“外部 API”去做内容解析，如果一个个顺序处理太慢，希望学会并发与异步：concurrent.futures 线程池/进程池与 asyncio。在在线容器练习时，网络会 mock 成本地文件读取以避免外网依赖。
+
+题目（15）：
+
+【选择】IO 密集型任务通常适合使用？
+A) 线程池（ThreadPoolExecutor） B) 仅进程池 C) 随机 D) None
+
+【选择】CPU 密集型任务一般使用？
+A) ProcessPoolExecutor B) ThreadPool C) asyncio D) None
+
+【选择】asyncio 主要用于？
+A) 协程并发处理 IO-bound 任务 B) CPU 密集型 C) 随机 D) None
+
+【实操】实现 parallel_read(file_list)：用 ThreadPoolExecutor 并发读取若干文本文件并返回内容列表。
+
+Docker 提示：容器内文件读取可并发；注意文件句柄关闭与线程数限制（不要过大）；测试以小文件集为主。
+
+【实操】实现简单 async_fetch_local(path)：用 asyncio 模拟异步 IO（例如 asyncio.sleep + 读取本地文件结果），并用 asyncio.gather 并发执行多个读取。
+
+Docker 提示：asyncio 在容器内可运行；不要进行真实网络请求；使用 small sleeps 模拟延迟。
+
+【选择】使用并发时需要注意的常见问题是？
+A) 竞态条件、锁与资源限制 B) None C) 随机 D) int
+
+【选择】在多线程中保护共享数据可用？
+A) threading.Lock B) os.lock C) random D) None
+
+【实操】实现 map_reduce(file_list, map_fn, reduce_fn, workers=4)：并发执行 map，再归并结果（示例：词频统计）。
+
+Docker 提示：使用线程池，reduce 在主线程进行；输出 JSON。
+
+【选择】在 Docker 容器里并发要考虑什么？
+A) 容器 CPU 限制、内存限制与并发数 B) None C) 随机 D) int
+
+【实操】实现一个限速器（rate limiter）：每秒最多执行 N 次某操作（基于令牌桶或时间窗口）。
+
+Docker 提示：用时间函数与计数实现；测试时把速率调高以便快速验证。
+
+【选择】如果任务会抛异常，应如何在并发环境中处理？
+A) 捕获并记录，避免整个队列崩溃 B) 不捕获 C) 随机 D) None
+
+【实操】编写示例展示在多线程中如何用 Lock 保护共享计数器并返回正确结果。
+
+Docker 提示：演示小规模计数，输出最终值供断言。
+
+【选择】asyncio 与多线程混用时要注意？
+A) event loop 只能运行在主线程，需谨慎跨线程调用 B) 随机 C) None D) int
+
+【实操（进阶）】实现并发文件哈希计算器：并发计算目录下所有文件的 SHA256（使用线程池），输出 hashes.json。
+
+Docker 提示：分块读取文件以免内存暴涨；写文件到工作目录。
+
+【实操】写一个小 benchmark 比较顺序 vs 并发处理若干本地 IO 任务的时间差（打印耗时）。
+
+Docker 提示：使用 small 文件集合以免耗时过久；输出耗时数值用于断言。
+
+单元 4-5：单元测试与 CI（unittest/pytest）🧪
+
+情景（长）：
+你不想上线后发现 bug，决定把之前写的实操题都加上单元测试：先学 unittest/pytest；学会写断言、fixture、mock I/O 与模拟外部依赖；并了解如何在 CI（如 GitHub Actions）里运行测试。目标是把小脚本做到可持续维护。
+
+题目（15）：
+
+【选择】测试框架中常用的断言写法assert a == b 属于哪个框架？
+A) pytest 风格 B) unittest only C) random D) None
+
+【选择】mock 外部请求常用库？
+A) requests-mock 或 unittest.mock B) math C) random D) None
+
+【选择】fixture 的主要用途是？
+A) 提供测试前置状态/资源 B) 随机化 C) None D) int
+
+【实操】为 normalize_price 写至少 5 个 pytest 测试用例（覆盖正常/异常输入）。
+
+Docker 提示：在容器内运行 pytest；不依赖网络；把测试文件放到工作目录并运行 pytest -q。
+
+【实操】用 unittest.mock 模拟 requests.get 返回固定 HTML，然后测试 fetch_titles。
+
+Docker 提示：mock 不需要外网；直接在测试中注入模拟 Response。
+
+【选择】测试中常见的 Best Practice 是？
+A) 小而单一的测试、隔离外部依赖、快速运行 B) 写很长系统测试 C) 随机 D) none
+
+【选择】如果函数与文件系统交互，测试时可用什么方法？
+A) use tmpdir/TemporaryDirectory 或 monkeypatch B) 真实修改生产文件 C) 随机 D) none
+
+【实操】写一个 fixture：创建一个临时 CSV 文件供分析函数读取，并在测试结束删除。
+
+Docker 提示：pytest 的 tmp_path/tmpdir 可用；写入容器临时目录。
+
+【选择】在 CI 中运行测试前通常会做什么？
+A) 安装依赖、运行格式化/静态检查、运行测试 B) 直接运行测试 C) 随机 D) none
+
+【实操】实现一个简单的 test coverage（使用 pytest-cov）示例脚本并输出 coverage report（文本）。
+
+Docker 提示：pytest-cov 需在镜像安装；产出为工作目录文件。
+
+【选择】持续集成（CI）的好处是？
+A) 自动化测试与构建，及时发现破坏性提交 B) 无意义 C) 随机 D) none
+
+【实操】写一个测试用例模拟并发错误（例如并发写同一文件）并断言程序能处理或记录错误。
+
+Docker 提示：多线程测试可在容器运行；注意测试可靠性。
+
+【选择】Mocking 的风险是什么？
+A) 过度 Mock 可能让测试脱离真实情况 B) 100% 安全 C) 随机 D) None
+
+【实操（进阶）】为 optimize_shopping_list 设计若干边界测试（例如只有大包可买/无解情况）并实现测试。
+
+Docker 提示：小数据集合，断言输出结构与值。
+
+【实操】写一个 run_tests.sh 脚本在容器内执行所有测试并收集结果（退出码合适传递）。
+
+Docker 提示：shell 脚本写到工作目录并可在容器内执行（保证可执行权限或 run via bash）。
+
+单元 4-6：CLI 工具与 argparse（把脚本做成好用工具）💻
+
+情景（长）：
+你要把若干实用脚本做成命令行工具：用户可输入参数、开关、子命令（如 shopping merge --recipes r1.json），并获得友好帮助信息。你还要实现日志级别、config 文件加载与子命令结构，让工具易于被非程序员使用。
+
+题目（14）：
+
+【选择】解析命令行参数常用库是？
+A) argparse B) input() C) random D) None
+
+【选择】实现子命令（如 git commit）在 argparse 中用？
+A) subparsers B) subcommands C) random D) None
+
+【选择】打印帮助信息常用方法是？
+A) parser.print_help() B) print('help') C) random D) None
+
+【实操】实现 cli_tool.py --input data.csv --output out.json 的基本 argparse 案例并打印解析后的参数。
+
+Docker 提示：在容器内命令行运行并传参；写输出到工作目录。
+
+【实操】实现子命令 shopping merge --recipes r1.json r2.json --out shopping.csv 并把参数传给合并函数。
+
+Docker 提示：文件放在工作目录；使用 argparse subparsers。
+
+【选择】要增加日志级别（DEBUG/INFO），可用哪个模块？
+A) logging B) print C) random D) None
+
+【选择】配置文件常用格式？
+A) YAML/JSON/TOML（可选） B) binary C) random D) none
+
+【实操】实现 --dry-run 开关：在 dry run 时程序只打印将做的操作但不写文件。
+
+Docker 提示：dry-run 很适合在容器中用来做自动化测试。
+
+【选择】为 CLI 提供自动补全（shell completion）常用做法是？
+A) 使用 argcomplete 或生成 completion 脚本 B) 随机 C) None D) int
+
+【实操】实现 --version 标志输出工具版本并退出。
+
+Docker 提示：打印到 stdout 即可。
+
+【选择】若 CLI 需要长运行任务，应如何给用户反馈？
+A) 打印进度或使用进度条（tqdm） B) 没有任何提示 C) 随机 D) None
+
+【实操】为常用命令写一个 help 示例并写入 README（文本）。
+
+Docker 提示：README 写当前目录，供人工查看。
+
+【选择】编写 CLI 时注意点包括？
+A) 参数验证、良好错误信息、帮助文档 B) 随机 C) none D) int
+
+【实操（进阶）】把一个脚本打包为可执行 entry point（示例 pyproject.toml 片段说明），并说明在容器里如何测试该 entry point（用 python -m 或直接运行）。
+
+Docker 提示：说明文档写到文件中；实际打包在 CI 里做（容器内可模拟安装到 venv）。
+
+单元 4-7：第三方 API 与鉴权（OAuth 思路，Mock）🔗
+
+情景（长）：
+你想把应用接入第三方服务（比如日历/邮件/地图），但在教学环境不能用真凭证。你需要学会鉴权流程（API key / OAuth2 的基本概念），并在本地用 mock/stub 模拟 API 行为进行开发和单元测试。
+
+题目（15）：
+
+【选择】OAuth2 的核心要素通常包括？
+A) client_id, client_secret, redirect_uri, access_token B) 随机 C) None D) int
+
+【选择】若只需读取公共数据，常用鉴权方式？
+A) API key B) OAuth2 C) None D) int
+
+【选择】凭证不应存放于？
+A) 源码仓库 B) 安全存储 C) 环境变量 D) secret manager
+
+【实操】写一个 mock API（使用 Flask 或简单 HTTP server）在容器里返回固定 JSON 响应用于测试。
+
+Docker 提示：若容器网络仅内网，mock server 可在同容器或同网络容器中运行；也可用本地文件模拟响应而不启 server。
+
+【实操】实现一个 call_api(url, api_key=None) 的包装函数：若无网络（或在测试模式）从本地 mocks/ 读取响应。
+
+Docker 提示：默认走本地文件；请求外网需在镜像允许下才行。
+
+【选择】在开发阶段使用 OAuth 流程，推荐做法是？
+A) 使用厂商提供的 sandbox/test app 并记录令牌生命周期 B) 使用真实用户凭证 C) 随机 D) none
+
+【选择】访问受保护 API 时最佳实践是？
+A) 安全存储凭证并最小权限原则 B) 随机 C) none D) int
+
+【实操】实现 refresh_token_if_needed(token_info)：若 access_token 即将过期则调用 mock 刷新接口并返回新 token。
+
+Docker 提示：token_info 为本地 JSON；不要联系真实 auth server。
+
+【选择】在 CI 环境中测试需要真实凭证时应？
+A) 使用 CI secret 或 mock B) 放在公开 repo C) 随机 D) none
+
+【实操】编写示例：从 CSV 读取要查询的地址列表，调用（mock）地图 API 获取“是否可达”并把结果保存。
+
+Docker 提示：地图响应用本地样本 JSON；写输出到工作目录。
+
+【选择】API 限制（rate limit）遇到时应如何处理？
+A) backoff、重试与尊重 Retry-After B) 不重试 C) 随机 D) none
+
+【实操】写一个 api_client 类，支持 base_url、api_key、get/post、错误处理与日志记录。
+
+Docker 提示：所有 requests 可路由到 local mock；日志写文件。
+
+【选择】存储 token 最安全的位置是？
+A) secret manager / environment variables B) 明文文件 C) repo D) random
+
+【实操（进阶）】实现一个示例 OAuth 流（仅伪流程）：引导到 mock 登录页面、接收 mock code、换取 token（全部在本地模拟）。生成流程文档 README。
+
+Docker 提示：local mock server 或文本模拟；不要尝试真实 OAuth 流。
+
+【实操】写测试模拟 token 过期并验证刷新函数行为（使用 pytest + monkeypatch）。
+
+Docker 提示：所有模拟在容器本地完成；不依赖网络。
+
+单元 4-8：Pillow 图像批处理（缩放、裁剪、加水印）🖼️
+
+情景（长）：
+你要给网站批量处理图片：生成缩略图、加上版权水印、在大图上做中心裁剪，最后生成一个索引 JSON。容器内可能没有图片库，需要在镜像中安装 Pillow，且注意文件读写权限。
+
+题目（15）：
+
+【选择】Pillow 中打开图片函数是？
+A) Image.open B) open() C) read() D) None
+
+【选择】生成缩略图常用方法是？
+A) image.thumbnail((w,h)) B) image.resize C) random D) none
+
+【选择】加水印要注意什么？
+A) 版权与透明度（alpha） B) 随机 C) none D) int
+
+【实操】实现 make_thumbnail(input_path, output_path, size=(200,200))：生成缩略图并保存。
+
+Docker 提示：Pillow 在镜像中安装；读写工作目录；注意处理非图片文件。
+
+【实操】实现 center_crop(input_path, output_path, target_size)：在中心裁剪并保存。
+
+Docker 提示：图像处理中使用分块缓冲可控内存。
+
+【选择】为避免失真resize时应保留什么？
+A) 纵横比（aspect ratio） B) 随机 C) none D) int
+
+【选择】若要批量处理大量图片，建议？
+A) 分批处理并监控内存与时间 B) 一次性全部加载 C) 随机 D) none
+
+【实操】实现 add_text_watermark(input_path, output_path, text, opacity=0.3)：在右下角加半透明水印。
+
+Docker 提示：在容器中文字渲染可能需字体文件，若缺失请使用系统默认或内置字体文件放入工作目录。
+
+【选择】要保留原图并输出，推荐保存到？
+A) 新目录（如 processed/） B) 覆盖原图 C) 随机 D) none
+
+【实操】写脚本扫描目录并对所有图片生成缩略图与水印版本，输出索引 images_index.json（包含原路径、thumb_path、tags:[]）。
+
+Docker 提示：确保处理失败时记录错误并继续（不要一次性抛出）。
+
+【选择】处理图片哈希检测重复可用？
+A) 使用感知哈希（pHash）或 md5 +大小 B) 随机 C) none D) int
+
+【实操】实现 resize_preserve_aspect(in_path, out_path, max_width)：按最大宽度缩放且保留纵横比。
+
+Docker 提示：运行时间短；写文件。
+
+【选择】Pillow 保存 PNG 与 JPG 的区别是什么？
+A) PNG 支持透明度，JPG 有损压缩 B) 一样 C) 随机 D) none
+
+【实操（进阶）】实现并行批处理（用 ThreadPoolExecutor）来加速图片处理并输出处理报告（成功/失败计数）。
+
+Docker 提示：并发数别设太大，注意 CPU/IO 限制；写报告文件。
+
+【实操】为生成的图片创建一个简单 HTML 画廊 gallery.html（引用 thumb），写入工作目录。
+
+Docker 提示：静态 HTML，路径为相对路径。
+
+单元 4-9：SQLite 入门（CRUD 与参数化查询）🗃️
+
+情景（长）：
+你希望把部分数据（联系人、库存、日志）存入轻量 DB：SQLite。你要学会建表、参数化查询（防 SQL 注入）、事务与索引。目标是把应用从 JSON 文件迁移到 DB，提高并发与一致性（小规模）。
+
+题目（15）：
+
+【选择】SQLite 是什么？
+A) 轻量级嵌入式数据库 B) 网络数据库 C) 随机 D) none
+
+【选择】防止 SQL 注入的正解是？
+A) 使用参数化查询（? 或 :name） B) 拼接字符串 C) 随机 D) none
+
+【选择】事务的好处是？
+A) 保证原子性与一致性 B) 提高随机性 C) none D) int
+
+【实操】写脚本 create_tables(db_path)：在 SQLite 中创建 contacts 与 inventory 表（示例字段），并确保索引在常查字段上。
+
+Docker 提示：SQLite 文件写到工作目录；避免并发写冲突（教学示例单进程）。
+
+【实操】实现 insert_contact(db_path, name, phone, email)：参数化插入并返回新 id。
+
+Docker 提示：使用 sqlite3 模块；写文件到当前目录。
+
+【选择】批量插入时推荐用？
+A) executemany 并使用事务 B) 每次 commit C) 随机 D) none
+
+【选择】创建索引的代价是什么？
+A) 写入时速度变慢，查询更快 B) 总是更好 C) 随机 D) none
+
+【实操】实现 search_contacts(db_path, keyword)：按 name 或 phone 模糊匹配返回结果。
+
+Docker 提示：使用 LIKE 并参数化输入；写结果到 stdout 或 JSON。
+
+【实操】实现 update_inventory(db_path, item_id, qty_delta)：在事务中更新库存并返回新数量（处理并发冲突示例）。
+
+Docker 提示：示例用单进程测试；事务写法清楚。
+
+【选择】备份 SQLite 文件最好做法？
+A) 使用 .backup() API 或复制文件（确保一致性） B) 随机复制 C) none D) int
+
+【实操】编写 export_table_to_csv(db_path, table, out_csv)：导出指定表到 CSV。
+
+Docker 提示：写到工作目录；编码 UTF-8。
+
+【选择】若希望多人修改 DB，应考虑？
+A) 用一台中央 DB server（例如 Postgres）而不是直接用 SQLite B) 继续用 SQLite C) 随机 D) none
+
+【实操（进阶）】实现示例：用 SQL 查询统计表中 top N 项并返回 JSON。
+
+Docker 提示：小数据集，写 JSON 文件。
+
+【实操】写脚本 init_db.py 在容器启动时初始化 DB（可 idempotent 地多次运行而不出错）。
+
+Docker 提示：确保脚本检测表是否存在并跳过或更新。
+
+【实操】加入基本的 DB migration 注释文件（记录 schema 变更）并写到 migrations/ 目录（文本）。
+
+Docker 提示：纯文本写入工作目录。
+
+单元 4-10：打包与发布（pyproject / entry points / 简单 CI）📦
+
+情景（长）：
+你要把常用 CLI 工具打包、做成可安装的包（可在虚拟环境或容器中 pip install），并在 GitHub Actions 做基本 CI：安装依赖、运行 lint、运行测试并生成 artifact。目标是学会项目结构与基本发布流程（教学版，不上 PyPI）。
+
+题目（14）：
+
+【选择】现代 Python 打包推荐使用哪个文件？
+A) pyproject.toml B) setup.py C) random D) None
+
+【选择】entry_points 的作用是？
+A) 定义可执行脚本命令（console_scripts） B) 定义依赖 C) 随机 D) none
+
+【选择】把包上传到 PyPI 前应做什么？
+A) 增加版本并测试、不要上传凭证 B) 随机 C) None D) int
+
+【实操】写一个最小 pyproject.toml 示例（含 name, version, dependencies, entry point 指定）。
+
+Docker 提示：写到项目根目录（工作目录），说明如何在容器里 pip install -e . 进行本地安装测试。
+
+【实操】实现一个简单的 setup CLI，安装后可用命令 mytool --help。
+
+Docker 提示：演示用 python -m pip install . 或 pip install -e . 在容器的 venv 中测试。
+
+【选择】在 CI 中运行 lint 工具常用的是？
+A) flake8 / black / isort B) random C) None D) int
+
+【选择】生成 wheel 的命令是？
+A) python -m build 或 pip wheel B) random C) none D) int
+
+【实操】写一个 GitHub Actions 简单工作流（YAML）示例：checkout、setup-python、pip install -r requirements.txt、pytest。写入 .github/workflows/ci.yml。
+
+Docker 提示：在本地只写文件；实际在 GitHub 上运行 CI；在容器内可用 act 等工具模拟。
+
+【选择】为保证包质量，常见发布前步骤包括？
+A) 测试、lint、构建、生成 changelog B) 随机 C) None D) int
+
+【实操】把 README.md 中写安装与使用示例（简短），保存到项目根目录。
+
+Docker 提示：文本文件生成，供用户查看。
+
+【选择】发布时不应包含什么？
+A) 密钥或凭证 B) 源码 C) license D) None
+
+【实操（进阶）】生成 release artifact（zip 包含源码与构建产物）的脚本 make_release.sh，写到项目根。
+
+Docker 提示：脚本在容器内可执行，输出 artifact 到工作目录 dist/。
+
+【选择】打包时依赖应如何声明？
+A) 在 pyproject.toml 或 requirements.txt 中明确列出 B) 随机 C) none D) int
+
+【实操】写一段短文本说明如何在容器里做“可重复的构建”（使用 dockerfile 示例片段说明），存为 CONTRIBUTING.md。
+
+Docker 提示：仅文本说明，不执行 docker build（实际构建在 CI）。
+
+阶段 5 — 高级专题（ML 入门、性能优化、工程化、部署与监控）
+
+目标：从工程角度把小工具升到可部署服务：模型与 EDA、API 服务（Flask / FastAPI）、任务队列、profiling、设计模式、容器化部署与监控。实操题强调在教学容器中怎样做（小数据、mock 服务、保存模型为文件、Dockerfile 示例、健康检查、日志到 stdout）。
+
+单元 5-1：EDA 与可视化进阶（统计洞察）🔍
+
+情景（长）：
+你要为家庭开支/健身数据做深入探索：分布、缺失、相关性、分箱、分组对比（如不同年龄段消费差异）。你要学会用 pandas + matplotlib/ seaborn（教学时用 matplotlib）做标准 EDA 流程并输出报告与关键图表。
+
+题目（16）：
+
+【选择】EDA 的第一步通常是？
+A) 查看数据概况（head、describe、info） B) 直接建模 C) 随机 D) None
+
+【选择】检查缺失值常用方法？
+A) df.isnull().sum() B) random C) None D) int
+
+【选择】若分布偏斜，常用变换是？
+A) log transform B) 随机 C) None D) int
+
+【实操】实现 data_overview(df)：输出行数、列数、每列缺失率、unique 值计数并写 JSON 报告。
+
+Docker 提示：pandas 需安装；输出到工作目录。
+
+【实操】实现 plot_histograms(df, cols, out_dir)：为若干列生成直方图并保存为 PNG。
+
+Docker 提示：保存为文件，确保使用 Agg 后端；写文件到工作目录。
+
+【选择】相关性矩阵常用计算是？
+A) df.corr() B) sum C) random D) None
+
+【选择】箱线图用于？
+A) 观察分布与异常值 B) 随机 C) None D) int
+
+【实操】实现 detect_outliers_zscore(series, threshold=3)：返回异常值索引（基于 z-score）。
+
+Docker 提示：数值计算，输出 JSON。
+
+【选择】分箱（binning）有助于？
+A) 把连续变量转成类别以便统计分析 B) 随机 C) None D) int
+
+【实操】写 group_compare(df, group_col, metric_col)：对分组比较 metric 的均值并输出 p-value（t-test）或简单差异说明。
+
+Docker 提示：如果不安装 scipy 可做简化比较（均值差与样本大小提示）；输出 JSON。
+
+【选择】报告中应包含哪些内容？
+A) 摘要统计、关键图表、缺失处理记录、异常检测结果 B) 随机 C) None D) int
+
+【实操】生成一个 HTML EDA 报告（文本+嵌入图片路径），写 eda_report.html。
+
+Docker 提示：静态文件写到工作目录；图片引用相对路径。
+
+【选择】用于可重复 EDA 的好习惯？
+A) 把步骤写成脚本/Notebook并做版本控制 B) 随意 C) None D) int
+
+【实操（进阶）】实现 correlation_heatmap(df, filename)：计算相关矩阵并保存热力图图片。
+
+Docker 提示：保存 PNG；大矩阵可能需 downsample。
+
+【选择】在 Docker 教学环境运行 EDA 需注意？
+A) 控制内存与数据大小 B) 不需注意 C) 随机 D) None
+
+【实操】把 EDA 输出的关键指示（如高相关列、缺失最多列）写入 insights.json。
+
+Docker 提示：写 JSON 文件到工作目录。
+
+单元 5-2：ML 入门（scikit-learn：特征工程与小模型）🔬
+
+情景（长）：
+你想做一个家庭小模型：根据过去购物记录预测某用户下次会买哪个类别（简化为多分类问题）。数据量小，教学目标是学会特征抽取、划分训练/测试、训练一个简单模型（例如 LogisticRegression 或 DecisionTree）、保存模型到磁盘（joblib）并做基本评估。
+
+题目（16）：
+
+【选择】机器学习流程第一步是？
+A) 准备数据与特征工程 B) 随机 C) None D) int
+
+【选择】train_test_split 的作用？
+A) 划分训练与测试集 B) 随机 C) None D) int
+
+【选择】文本特征常用方法？
+A) TF-IDF 或 CountVectorizer B) 随机 C) None D) int
+
+【实操】实现 prepare_features(df)：把类别、数值、文本列做基本编码（LabelEncoder / pd.get_dummies / 简单 TF）并返回 X, y。
+
+Docker 提示：避免使用大库的 heavy 模式；用 sklearn 的简单工具；写输出 shapes 到文件。
+
+【实操】实现 train_model(X,y)：划分数据并训练模型，返回训练好的模型对象并保存为 model.joblib。
+
+Docker 提示：训练应用小数据集以控制时间；保存文件到工作目录（joblib）。
+
+【选择】评价分类模型常用指标是？
+A) accuracy, precision, recall, f1 B) random C) None D) int
+
+【选择】若类别不平衡，应考虑？
+A) 重新采样或使用 class_weight B) 忽略 C) 随机 D) none
+
+【实操】实现 evaluate_model(model, X_test, y_test)：返回 accuracy 与混淆矩阵（可输出为 JSON）。
+
+Docker 提示：输出文件写到工作目录。
+
+【选择】保存模型常用格式？
+A) joblib / pickle（注意安全） B) random C) None D) int
+
+【实操】实现 predict_from_saved(model_path, sample)：加载模型并给出预测结果（示例 JSON 输入/输出）。
+
+Docker 提示：加载本地文件；不要 unpickle 来自不可信来源（注释说明）。
+
+【选择】在教学容器里训练模型要注意？
+A) 控制数据大小、限制迭代次数与随机状态 B) 随机 C) None D) int
+
+【实操】实现简单特征选择：计算每个数值特征与目标的相关系数并输出排名。
+
+Docker 提示：纯计算；写 JSON。
+
+【选择】当模型结果不理想时先做什么？
+A) 检查特征工程与数据质量 B) 直接换模型 C) 随机 D) none
+
+【实操（进阶）】实现一个小 Grid Search（手写或 sklearn.GridSearchCV）对简单参数做交叉验证并输出最佳参数（在小数据上）。
+
+Docker 提示：限制参数组合数以控制训练时间。
+
+【实操】写一段 README 说明模型局限（小数据、过拟合风险、隐私）。
+
+Docker 提示：文本文件写当前目录。
+
+【实操（附注）】注意模型安全：不要在不可信输入上直接反序列化模型；在 README 中提醒如何在生产中使用更安全的序列化管道。
+
+Docker 提示：写文档说明。
+
+单元 5-3：Web 服务打包（Flask / FastAPI：把脚本做成 API）🌐
+
+情景（长）：
+你的购物比价和购物清单工具需要被前端调用，于是你学习把脚本包装成 API：定义路由、输入验证、返回 JSON、以及把之前的功能（合并、比价、导出）变为可被调用的服务。为了教学安全，所有“外部调用”都被 mock 或受限为本地文件调用。
+
+题目（16）：
+
+【选择】轻量 API 框架常用哪两个？
+A) Flask 与 FastAPI B) Django/Pyramid C) random D) none
+
+【选择】返回 JSON 最好用？
+A) framework 的 JSON 返回工具（比如 jsonify 或 Response） B) print() C) random D) none
+
+【选择】要做输入校验，FastAPI 推荐用？
+A) Pydantic models B) random C) None D) int
+
+【实操】实现一个简单 Flask app：路由 /health 返回 {status:'ok'}。
+
+Docker 提示：Flask 在容器中可运行；在容器中监听 0.0.0.0 并用端口映射测试；避免外网依赖；在教学环境可只 run for short time 或 use test_client。
+
+【实操】实现 POST /merge_recipes 接受 JSON（recipes）并返回合并后的购物单 JSON（重用 merge_ingredients）。
+
+Docker 提示：限制请求体大小以防滥用；不用真实文件写入，直接返回 JSON。
+
+【选择】为服务加健康检查（healthcheck）有何好处？
+A) 容器 orchestrator 能检测服务状态并重启 B) 无意义 C) 随机 D) none
+
+【选择】若想提供自动文档（OpenAPI），用哪个框架更方便？
+A) FastAPI B) Flask C) random D) none
+
+【实操】实现简单的输入验证：若 POST 数据缺少必要字段返回 400 并说明缺失字段。
+
+Docker 提示：返回良好错误 JSON；在容器中可用 curl 测试。
+
+【选择】运行 web 服务时，日志最好输出到哪里？
+A) stdout/stderr（容器化友好） B) 本地 GUI C) 随机 D) None
+
+【实操】实现 /estimate_cost 路由：接受购物单并返回估算价格（调用 price_map）。
+
+Docker 提示：本地 price_map JSON 注入；避免外网价查询。
+
+【选择】若服务会耗时，建议？
+A) 返回任务 id 并异步处理（任务队列） B) 阻塞直到完成 C) 随机 D) none
+
+【实操（进阶）】实现 basic auth（示例）或 API key 简单校验（header 中校验 key），拒绝未授权请求返回 401。
+
+Docker 提示：不要在示例中硬编码真实 key；可用环境变量或 config 文件注入测试 key。
+
+【选择】在容器中运行 web 服务应注意哪个参数？
+A) host='0.0.0.0' 与端口映射 B) host='localhost' C) 随机 D) none
+
+【实操】写 Dockerfile 片段示例（教学）：基于 python:3.x，复制代码、安装依赖、暴露端口、运行 gunicorn 或 uvicorn。把该片段保存到 Dockerfile.example。
+
+Docker 提示：只是示例文件写入，不实际构建（除非你要）。
+
+【实操】实现 /metrics 路由（简单统计调用次数的 JSON），用于后续监控演示。
+
+Docker 提示：统计保存在内存或文件（教学示例），并提示非持久化特点。
+
+【实操（附注）】写 README 说明如何在本地容器中运行该服务和如何用 curl 测试主要端点（示例命令）。
+
+Docker 提示：文本说明写当前目录。
+
+单元 5-4：异步任务队列（任务拆分与后台执行）🧰
+
+情景（长）：
+某些操作（如大批量图片处理、模型训练、发送大量邮件）不能阻塞请求，需要后台执行。你要学习任务队列概念（producer/consumer）、用本地模拟队列或简单线程池实现异步任务处理并保存任务状态与结果。
+
+题目（15）：
+
+【选择】任务队列常见组件包括？
+A) Broker（如 Redis/RabbitMQ）、Worker、Result store B) 随机 C) None D) int
+
+【选择】若不使用外部 broker，可用什么替代教学用途？
+A) 本地队列（Queue）或 SQLite 存储任务状态 B) 随机 C) None D) int
+
+【选择】任务状态常见有？
+A) pending/running/success/failure B) random C) none D) int
+
+【实操】实现 enqueue_task(task_fn, args)：把任务放入 queue.Queue() 并返回 task_id。
+
+Docker 提示：在容器内单进程示例可用 queue 模块；不要依赖 Redis（除非你的环境支持）。
+
+【实操】实现 worker：从队列取任务执行并把结果写入 results/{task_id}.json（示例）。
+
+Docker 提示：避免无限循环，worker 演示运行有限任务数或在测试时用 sentinel 停止。
+
+【选择】若任务失败应如何设计？
+A) 捕获异常并写入失败信息，考虑重试策略 B) 随机 C) none D) int
+
+【选择】任务重试时要注意什么？
+A) 指数退避与最大重试次数 B) 随机 C) none D) int
+
+【实操】实现 task_status(task_id)：检查 results/ 是否有对应文件并返回状态与结果。
+
+Docker 提示：文件写到工作目录；注意并发读写一致性。
+
+【选择】任务队列在本地教学时应避免什么？
+A) 长期阻塞与无限守护进程 B) 随机 C) none D) int
+
+【实操】实现一个带优先级的队列（示例使用 queue.PriorityQueue），并演示高优先级任务先执行。
+
+Docker 提示：小规模示例。
+
+【选择】若任务会消耗大量资源，应如何处理？
+A) 限制并发 worker 数与资源（CPU/内存） B) 任其运行 C) 随机 D) none
+
+【实操】写任务超时机制：在 worker 执行任务超过 N 秒时视为超时并记录。
+
+Docker 提示：可以用 concurrent.futures 的 timeout 或子进程执行来强制超时；教学示例使用小超时值。
+
+【选择】任务结果持久化到哪里比较合适？
+A) 文件、数据库或结果store（取决场景） B) 随机 C) none D) int
+
+【实操（进阶）】实现简单 dashboard 脚本：列出所有 pending/running/success/failure 的 task_ids（基于文件系统）。
+
+Docker 提示：读取工作目录 results/ 文件列表并生成 JSON。
+
+【实操】写文档说明如何把本地队列替换为 Redis/RabbitMQ（概念性说明，不做真实集成）。
+
+Docker 提示：文本说明写文件。
+
+单元 5-5：性能剖析与 profiling（找慢点与热区）⚡
+
+情景（长）：
+你的某个脚本在真实数据上变慢了，你需要学会用 cProfile、timeit、line_profiler、memory_profiler 等工具定位瓶颈并进行优化（比如缓存、向量化、算法替换、并发）。教学环境中你会用小样本和受限工具做演示。
+
+题目（15）：
+
+【选择】最常用的 Python profiling 工具是？
+A) cProfile B) timeit C) random D) none
+
+【选择】要测函数平均运行时间可用？
+A) timeit.timeit B) random C) none D) int
+
+【选择】内存剖析工具包括？
+A) memory_profiler B) random C) none D) int
+
+【实操】在一个示例脚本中加入 cProfile 调用并将 profile 输出保存为 profile.stats。
+
+Docker 提示：写文件到工作目录；profile 文件可用 snakeviz 等工具本地查看（教学说明）。
+
+【实操】用 timeit 比较两种实现（如 list append vs list comprehension）并写比较结果到 perf.txt。
+
+Docker 提示：确保测试循环次数合理，以免耗时过长。
+
+【选择】若发现瓶颈在某个小循环里，下一步常见做法？
+A) 尝试向量化或用更高效的数据结构 B) 随机 C) none D) int
+
+【选择】减少 I/O 阻塞的一种方法是？
+A) 批量读写或异步 I/O B) 随机 C) none D) int
+
+【实操】使用 line_profiler（或在代码中手写装饰器）检测某函数内每行耗时并输出报告。
+
+Docker 提示：如果 line_profiler 不可用，可用时间戳打印方式模拟行级耗时；写报告文件。
+
+【选择】微优化（如局部变量绑定）通常收益如何？
+A) 只有在热路径才有明显收益 B) 大幅改变架构更重要 C) 随机 D) none
+
+【实操】实现缓存（memoization）装饰器并对递归函数做性能测试比较（有无缓存）。
+
+Docker 提示：测试输入要小到适合容器运行时间。
+
+【选择】IO bound 与 CPU bound 的优化策略主要差别？
+A) IO-bound 用异步/并发，CPU-bound 用并行/算法优化 B) 无差别 C) 随机 D) none
+
+【实操（进阶）】写一个示例：发现排序大开销后替换为更合适的数据结构并对比时间。写对比结果到文件。
+
+Docker 提示：每次运行控制输入规模。
+
+【选择】在容器环境中做 profiling 时要注意？
+A) 容器资源限制（限制 CPU、内存）会影响结果 B) 无影响 C) 随机 D) none
+
+【实操】生成一个小报告 optimization_suggestions.txt：根据 profiling 输出给出 3 条优化建议（例如缓存、索引、并发）。
+
+Docker 提示：文本文件写到工作目录。
+
+【实操】把一次优化前后的 benchmark 数据汇总成 CSV（columns: test_name, before_ms, after_ms, improvement_pct）。
+
+Docker 提示：写到工作目录。
+
+单元 5-6：设计模式与工程化（单例/策略/工厂）🏗️
+
+情景（长）：
+你开始做更大的项目，想学习设计模式如何帮助代码可维护性：用工厂创建不同类型的通知器（短信/邮件/日志）、用策略模式决定打折策略、用单例管理全局配置。你要用简单例子理解模式并写测试验证行为。
+
+题目（14）：
+
+【选择】单例模式的用途是？
+A) 控制某类只有一个实例（如全局配置） B) 随机 C) none D) int
+
+【选择】策略模式用于？
+A) 在运行时替换算法或行为（例如多种排序） B) 随机 C) None D) int
+
+【选择】工厂模式的作用？
+A) 负责创建对象并隐藏创建细节 B) 随机 C) none D) int
+
+【实操】实现 Config 单例（简单实现或使用模块级变量），并展示获取配置的用法。
+
+Docker 提示：纯 Python 类/模块实现；测试为导入行为。
+
+【实操】实现通知器工厂 NotifierFactory.get('email') 返回 EmailNotifier 实例并实现 send(to, text)（示例只打印）。
+
+Docker 提示：不发真实邮件；日志写 stdout。
+
+【选择】使用依赖注入（DI）的好处是？
+A) 解耦与便于测试 B) 随机 C) None D) int
+
+【选择】在设计模式中应避免的误区？
+A) 过度工程（为简单问题过度抽象） B) 随机 C) none D) int
+
+【实操】实现策略模式示例：不同优惠计算函数（percent/fixed/threshold），并能在运行时选择策略。
+
+Docker 提示：纯逻辑，写测试。
+
+【选择】为了可测试性，类应该尽量？
+A) 小而单一职责（SRP） B) 大而全能 C) 随机 D) none
+
+【实操】为通知器写单元测试：用 mock 替换 send 方法并断言被调用。
+
+Docker 提示：使用 unittest.mock；测试在容器可运行。
+
+【选择】设计模式在小项目的实际价值在于？
+A) 提高可维护性但要避免过度设计 B) 总是必须 C) 随机 D) none
+
+【实操（进阶）】创建一个插件式架构示例：把不同处理器以 class 存放到 processors/ 目录，动态加载并运行（示例）。
+
+Docker 提示：动态导入在容器内正常；注意错误处理。
+
+【选择】代码审查中常查的设计问题是？
+A) 复杂度、重复代码、耦合度 B) 随机 C) none D) int
+
+【实操】把设计模式示例写入 README 并包含使用示例与测试命令。
+
+Docker 提示：文本文件写到工作目录。
+
+单元 5-7：基础安全检查（入门级实践）🔒
+
+情景（长）：
+你要把工具交给家人用，关心安全：敏感信息保护、输入验证、依赖安全、日志无敏感信息。你需要学会基本的安全检测：避免命令注入、限制上传文件类型、对用户输入做严格校验与最小权限。
+
+题目（15）：
+
+【选择】避免命令注入的首要做法？
+A) 不拼接 shell 字符串，使用 subprocess.run([...]) B) 任意拼接 C) 随机 D) none
+
+【选择】不要在日志中记录？
+A) 明文密码或敏感 token B) 随机 C) none D) int
+
+【选择】输入校验的基本原则是？
+A) 白名单优于黑名单 B) 随机 C) none D) int
+
+【实操】实现 safe_run(cmd_list)：用 subprocess.run 执行命令并避免 shell=True，捕获异常并记录安全日志。
+
+Docker 提示：在容器中仅运行受控命令；演示不执行不安全命令。
+
+【实操】实现文件上传检查 is_allowed_file(filename)：基于扩展名白名单并检测 MIME（可选）返回 True/False。
+
+Docker 提示：只做基于扩展名的示例；写测试。
+
+【选择】存储敏感数据时，哪种方式更安全？
+A) secret manager / 环境变量或加密文件 B) 直接写入源码 C) 随机 D) none
+
+【选择】依赖管理安全做法包括？
+A) 锁定依赖版本、检查已知漏洞（safety/OWASP) B) 随机 C) none D) int
+
+【实操】实现日志函数 log_info(msg, redact_keys=[])：在输出中把敏感字段替换成 ***（示例）。
+
+Docker 提示：写到 stdout 或文件；只做演示替换。
+
+【选择】Web 表单中防止 CSRF 常用方法是？
+A) CSRF token B) 随机 C) none D) int
+
+【实操】写示例 validate_email(email) 使用简单正则校验并返回布尔。
+
+Docker 提示：纯函数验证。
+
+【选择】当接受外部上传 ZIP 并解压时应注意什么？
+A) 路径遍历、文件类型与总大小限制 B) 随机 C) none D) int
+
+【实操】实现 safe_extract_zip(zip_path, out_dir)：防止路径穿越（检查绝对路径、..）并限制总解压文件数。
+
+Docker 提示：在容器内测试；不要解压来自不可信来源。
+
+【选择】日志中记录 IP 等信息时要注意？
+A) 遵守隐私与最小化原则 B) 随机 C) none D) int
+
+【实操（进阶）】写安全检查清单 security_checklist.txt：包含项目启动前应检查的 10 条项（依赖、凭证、日志、上传限制、输入校验等）。
+
+Docker 提示：写文件到工作目录。
+
+【实操】实现 sanitize_filename(name)：把文件名转换为安全形式（删除/替换特殊字符且限制长度）。
+
+Docker 提示：纯字符串处理函数测试。
+
+单元 5-8：部署与监控（Docker Compose / healthchecks / logging）🚀
+
+情景（长）：
+你希望把服务放到家用服务器或 VPS 上，学会用 Docker Compose 把 web 服务、worker、数据库（SQLite 或 Postgres）编排，并配置健康检查（HTTP /metrics）与日志（stdout）。你还要学会在容器环境中做简单监控（memory/cpu，或导出自定义 metrics）。
+
+题目（16）：
+
+【选择】Docker Compose 的主要作用是？
+A) 编排多个容器服务并定义依赖 B) 随机 C) none D) int
+
+【选择】容器化服务的健康检查常用方式？
+A) HTTP 健康端点或命令检查（HEALTHCHECK） B) 随机 C) None D) int
+
+【选择】日志输出到哪里容器化更友好？
+A) stdout/stderr（由容器 runtime 收集） B) GUI C) 随机 D) none
+
+【实操】写 docker-compose.yml 示例（web + worker + volume），保存为 docker-compose.example.yml（教学版，不实际部署）。
+
+Docker 提示：只写示例文件；说明如何在本地用 docker-compose up 启动（备注资源限制）。
+
+【实操】实现服务的 /health 路由并演示在 Dockerfile 中设置 HEALTHCHECK 指令（写示例片段）。
+
+Docker 提示：示例写入 Dockerfile 示例文件。
+
+【选择】监控指标常见包含？
+A) 请求率、错误率、响应时间、CPU/内存使用 B) 随机 C) none D) int
+
+【选择】日志级别不应在生产中设为？
+A) DEBUG（常改为 INFO/WARN/ERROR） B) 随机 C) none D) int
+
+【实操】实现简单日志配置：logging.basicConfig(level=...) 并在服务中输出请求开始/结束。
+
+Docker 提示：日志到 stdout；示例在容器运行时容易被收集。
+
+【选择】为保证容器可观测性，应用应输出什么？
+A) 结构化日志与 /metrics（若有） B) 随机 C) none D) int
+
+【实操】写 docker_health_check.sh 示例脚本用于探测服务健康并返回 0/1（写文件）。
+
+Docker 提示：示例脚本写入工作目录；不实际注册进 Docker 。
+
+【选择】当服务出现 OOM（OutOfMemory）时常见处理措施？
+A) 限制内存并优化内存使用或扩容 B) 随机 C) none D) int
+
+【实操（进阶）】写监控采集脚本 collect_metrics.py：收集进程 CPU/内存并写入 metrics.json（供 demo）。
+
+Docker 提示：使用 psutil（需安装）或读取 /proc；写 json 到工作目录。
+
+【选择】日志轮转的目的是什么？
+A) 避免日志无限增长、节省磁盘与便于归档 B) 随机 C) none D) int
+
+【实操】写 rotate_logs.py：当日志超过 N MB 时压缩并清理旧日志（示例实现）。
+
+Docker 提示：写文件到工作 dir 并压缩；注意磁盘限制。
+
+【实操】写部署文档段落 DEPLOY.md：包含 docker-compose 启动步骤、健康检查、日志查看命令。
+
+Docker 提示：文本文件生成。
+
+【实操（附注）】示例说明如何在 Compose 中限制资源（cpu/shares/mem）并写入示例 yaml 片段。
+
+Docker 提示：写示例文件说明。
+
+单元 5-9：实时通信基础（WebSocket 思路）🔄
+
+情景（长）：
+你想做简易的聊天室或实时通知（例如购物比价降价提醒），了解 WebSocket 或 Server-Sent Events（SSE）的基本概念与在 FastAPI/Flask 中实现的教学方法。教学环境用本地 mock client 与 server 进行演示，所有网络调用在本地容器内进行或用 test_client。
+
+题目（15）：
+
+【选择】WebSocket 与 HTTP 的区别是？
+A) WebSocket 是双向持久连接，HTTP 是无状态短连接 B) 随机 C) None D) int
+
+【选择】实时推送更轻量的单向选项？
+A) Server-Sent Events (SSE) B) WebSocket C) random D) none
+
+【选择】框架中常用的 WebSocket 库？
+A) websockets / FastAPI 的 WebSocket 支持 B) random C) none D) int
+
+【实操】在 FastAPI 示例中实现一个简单 WebSocket 端点 /ws，接受连接并 echo 收到的消息（示例代码文件）。
+
+Docker 提示：在容器内使用 uvicorn 启动并用本地 websocket 客户端测试（或 use test client）；avoid external network.
+
+【实操】写简单客户端脚本 ws_client.py 连接本地 server，发送 "ping" 并打印收到消息。
+
+Docker 提示：客户端可在另一个容器或同容器运行；演示本地连接。
+
+【选择】在生产中应注意 WebSocket 的什么？
+A) 连接数量、心跳、资源使用与认证 B) 随机 C) none D) int
+
+【选择】如果后端需要广播消息给所有连接，常用做法是？
+A) 管理连接池并循环发送 B) 随机 C) none D) int
+
+【实操】实现简单广播示例：server 保存连接集合并能向所有连接发送文本。
+
+Docker 提示：注意并发发送的异常处理；写日志记录广播成功/失败。
+
+【选择】SSE 的优缺点是？
+A) 单向、简单、适合事件流；不适合双向交互 B) 随机 C) none D) int
+
+【实操】实现 SSE 示例端点（返回 text/event-stream），并在 client 端解析事件（示例脚本）。
+
+Docker 提示：基于 FastAPI/Flask 的 generator；本地测试。
+
+【选择】在容器化部署时 WebSocket 需注意代理（如 nginx）配置：哪项重要？
+A) proxy_pass 与 upgrade 头以支持 websocket B) 随机 C) none D) int
+
+【实操（进阶）】写健康检查：若无心跳一定时间，断开连接并清理连接池。
+
+Docker 提示：心跳间隔短以便测试；避免长 sleep。
+
+【选择】若消息量大，扩展方式常用？
+A) 使用消息中间件（Redis pub/sub）进行跨实例广播 B) 随机 C) none D) int
+
+【实操】写测试脚本模拟多客户端连接并发送消息，记录延迟（简单测量）。
+
+Docker 提示：限制模拟客户端数量避免资源枯竭。
+
+【实操】写文档片段说明如何在本地容器中测试 WebSocket 服务（包含 curl/websocat 示例）。
+
+Docker 提示：文本文件输出。
+
+单元 5-10：项目收尾（README / CI / 发布流程 & 可维护性）✅
+
+情景（长）：
+项目快完成了，需要收尾：完善 README、LICENSE、贡献指南、CI 配置、版本与 changelog、打包与发布说明、基本的维护计划（issue/PR流程）。你要学习如何把项目做成可以被家人或社区轻松使用和维护的状态。
+
+题目（14）：
+
+【选择】README 中应包含哪些核心内容？
+A) 项目简介、安装、使用示例、测试方法、贡献指南 B) 随机 C) None D) int
+
+【选择】LICENSE 的作用是？
+A) 指明代码使用许可和限制 B) 随机 C) None D) int
+
+【选择】changelog 记录什么？
+A) 版本变化与重要变更 B) 随机 C) none D) int
+
+【实操】写一个简明 README.md（含安装、运行、示例命令、如何运行测试）。
+
+Docker 提示：文本文件写到项目根。
+
+【实操】写 CONTRIBUTING.md：包括如何提交 issue/PR、代码风格、分支策略、测试要求。
+
+Docker 提示：文本输出。
+
+【选择】发布前应做哪些检查？
+A) 测试、lint、依赖审查、移除凭证 B) 随机 C) none D) int
+
+【选择】如何处理敏感信息泄露的紧急响应？
+A) 立即撤销凭证、发布说明并修补代码库 B) 忽略 C) 随机 D) none
+
+【实操】生成 RELEASE_NOTES.txt（包含版本、发布日期、主要变更），写到 releases/。
+
+Docker 提示：文本写文件。
+
+【选择】长期维护项目的好习惯包括？
+A) 小步快走、CI 保证、文档齐全、依赖定期升级 B) 随机 C) none D) int
+
+【实操】写 .gitignore 示例（包含 venv、pycache、.env、dist/ 等）。
+
+Docker 提示：写文件到项目根。
+
+【选择】要让用户快速上手，哪个文件最重要？
+A) README B) random C) none D) int
+
+【实操（进阶）】生成一个 release checklist（10 项）并保存为 RELEASE_CHECKLIST.md。
+
+Docker 提示：文本文件写当前目录。
+
+【选择】对外发布前为什么需要“安全审计”？
+A) 防止秘密或敏感配置泄露、依赖已知漏洞 B) 随机 C) none D) int
+
+【实操】写一封示例“更新通知”邮件文本模板（含主要新特性与升级步骤），保存到 announcements/。
+
+Docker 提示：文本文件输出。
+
+
+
+
+阶段 1（单元可用课时点 = 2）
+
+单元 1.1
+
+新学习的知识点：1. 输出与打印（1/1 课时）
+
+会复习到的知识点：——
+
+单元 1.2
+
+新学习的知识点：2. 变量与数据类型（2/2 课时）
+
+会复习到的知识点：1. 输出与打印
+
+单元 1.3
+
+新学习的知识点：3. 输入 input（1/1 课时）；4. 运算符（1/2 课时，部分）
+
+会复习到的知识点：2. 变量与数据类型
+
+单元 1.4
+
+新学习的知识点：4. 运算符（部分，1/2 课时）
+
+会复习到的知识点：3. 输入 input；1. 输出与打印
+
+单元 1.5
+
+新学习的知识点：5. 注释与代码规范（1/1 课时）；6. if / elif / else（1/2 课时，部分）
+
+会复习到的知识点：2. 变量与数据类型
+
+单元 1.6
+
+新学习的知识点：6. if / elif / else（部分，1/2 课时）
+
+会复习到的知识点：5. 注释与代码规范；4. 运算符
+
+单元 1.7
+
+新学习的知识点：7. for 循环（2/2 课时）
+
+会复习到的知识点：6. if / elif / else
+
+单元 1.8
+
+新学习的知识点：8. while 循环（2/2 课时）
+
+会复习到的知识点：7. for 循环
+
+单元 1.9
+
+新学习的知识点：9. break / continue（2/2 课时）
+
+会复习到的知识点：8. while 循环；6. if / elif / else
+
+阶段 2（单元可用课时点 = 2）
+
+单元 2.1
+
+新学习的知识点：10. 综合练习（猜数字 / 乘法表）（2/3 课时，部分） ※ 示范型练习首段
+
+会复习到的知识点：7. for 循环；9. break / continue
+
+单元 2.2
+
+新学习的知识点：10. 综合练习（部分，1/3 课时）；11. 列表 list 基础（1/2 课时，部分）
+
+会复习到的知识点：8. while 循环；3. 输入 input
+
+单元 2.3
+
+新学习的知识点：11. 列表 list 基础（部分，1/2 课时）；12. 列表切片与方法（1/3 课时，部分）
+
+会复习到的知识点：10. 综合练习；2. 变量与数据类型
+
+单元 2.4
+
+新学习的知识点：12. 列表切片与方法（部分，2/3 课时）
+
+会复习到的知识点：11. 列表 list 基础
+
+单元 2.5
+
+新学习的知识点：13. 元组 tuple（1/1 课时）；14. 字典 dict 基础（1/2 课时，部分）
+
+会复习到的知识点：12. 列表切片与方法
+
+单元 2.6
+
+新学习的知识点：14. 字典 dict 基础（部分，1/2 课时）；15. 字典方法（1/2 课时，部分）
+
+会复习到的知识点：11. 列表 list 基础；13. 元组 tuple
+
+单元 2.7
+
+新学习的知识点：15. 字典方法（部分，1/2 课时）；16. 集合 set（1/1 课时）
+
+会复习到的知识点：14. 字典 dict 基础
+
+单元 2.8
+
+新学习的知识点：17. 字符串操作（2/3 课时，部分）
+
+会复习到的知识点：15. 字典方法；16. 集合 set
+
+单元 2.9
+
+新学习的知识点：17. 字符串操作（部分，1/3 课时）；18. 定义与调用函数（1/2 课时，部分）
+
+会复习到的知识点：12. 列表切片与方法
+
+阶段 3（单元可用课时点 = 3）
+
+单元 3.1
+
+新学习的知识点：18. 定义与调用函数（部分，1/2 课时）；19. 参数与返回值（2/3 课时，部分）
+
+会复习到的知识点：17. 字符串操作；10. 综合练习
+
+单元 3.2
+
+New: 19. 参数与返回值（部分，1/3 课时）；20. 默认参数 / 可变参数（2/3 课时，部分）
+
+复习：18. 定义与调用函数；11. 列表 list 基础
+
+单元 3.3
+
+New: 20. 默认参数 / 可变参数（部分，1/3 课时）；21. 作用域（局部 vs 全局）（1/2 课时，部分）；22. 匿名函数 lambda（1/3 课时，部分）
+
+复习：19. 参数与返回值；13. 元组 tuple
+
+单元 3.4
+
+New: 21. 作用域（部分，1/2 课时）；22. 匿名函数 lambda（部分，2/3 课时）
+
+复习：18. 定义与调用函数；16. 集合 set
+
+单元 3.5
+
+New: 23. 高阶函数（map / filter / reduce）（3/4 课时，部分）
+
+复习：20. 默认参数 / 可变参数；22. 匿名函数 lambda
+
+单元 3.6
+
+New: 23. 高阶函数（部分，1/4 课时）；24. 导入模块（2/2 课时）
+
+复习：21. 作用域；19. 参数与返回值
+
+阶段 4（单元可用课时点 = 3）
+
+单元 4.1
+
+新学习的知识点：25. 常用内置模块（3/3 课时）
+
+会复习到的知识点：24. 导入模块；11. 列表 list 基础
+
+单元 4.2
+
+新学习的知识点：26. 自定义模块（3/3 课时）
+
+会复习到的知识点：25. 常用内置模块；18. 定义与调用函数
+
+单元 4.3
+
+新学习的知识点：27. 类与对象（3/3 课时）
+
+会复习到的知识点：24. 导入模块；23. 高阶函数
+
+单元 4.4
+
+新学习的知识点：28. 属性与方法（3/3 课时）
+
+会复习到的知识点：27. 类与对象
+
+单元 4.5
+
+新学习的知识点：29. 构造方法 init（2/2 课时，全部）；30. 继承与 super（1/4 课时，部分）
+
+会复习到的知识点：28. 属性与方法
+
+单元 4.6
+
+新学习的知识点：30. 继承与 super（部分，3/4 课时）；31. 多态（0/4 课时，部分占用剩余） ※（继承/多态在后续单元继续）
+
+会复习到的知识点：29. 构造方法 init；27. 类与对象
+
+阶段 5（单元可用课时点 = 3）
+
+单元 5.1
+
+新学习的知识点：31. 多态（部分，3/4 课时）
+
+会复习到的知识点：30. 继承与 super；28. 属性与方法
+
+单元 5.2
+
+新学习的知识点：31. 多态（部分，1/4 课时）；32. 封装与私有属性（2/4 课时，部分）
+
+会复习到的知识点：27. 类与对象；29. 构造方法 init
+
+单元 5.3
+
+新学习的知识点：32. 封装与私有属性（部分，2/4 课时）；33. 特殊方法（str 等）（1/4 课时，部分）
+
+会复习到的知识点：31. 多态
+
+单元 5.4
+
+新学习的知识点：33. 特殊方法（部分，3/4 课时）
+
+会复习到的知识点：32. 封装与私有属性；28. 属性与方法
+
+单元 5.5
+
+新学习的知识点：34. 文件读写（文本）（3/3 课时）
+
+会复习到的知识点：33. 特殊方法
+
+单元 5.6
+
+新学习的知识点：35. 文件读写（二进制）（3/3 课时）
+
+会复习到的知识点：34. 文件读写（文本）
+
+阶段 6（单元可用课时点 = 3）
+
+单元 6.1
+
+新学习的知识点：36. 异常处理 try / except（3/3 课时）
+
+会复习到的知识点：35. 文件读写（二进制）；34. 文件读写（文本）
+
+单元 6.2
+
+新学习的知识点：37. finally 与自定义异常（3/4 课时，部分）
+
+会复习到的知识点：36. 异常处理
+
+单元 6.3
+
+新学习的知识点：37. finally 与自定义异常（部分，1/4 课时）；38. 迭代器（2/3 课时，部分）
+
+会复习到的知识点：33. 特殊方法；32. 封装与私有属性
+
+单元 6.4
+
+新学习的知识点：38. 迭代器（部分，1/3 课时）；39. 生成器 yield（2/4 课时，部分）
+
+会复习到的知识点：36. 异常处理；35. 文件读写（二进制）
+
+单元 6.5
+
+新学习的知识点：39. 生成器 yield（部分，2/4 课时）；40. 列表/字典推导式（1/3 课时）
+
+会复习到的知识点：38. 迭代器
+
+单元 6.6
+
+新学习的知识点：41. 装饰器（3/4 课时，部分）
+
+会复习到的知识点：39. 生成器 yield；40. 列表/字典推导式
+
+阶段 7（单元可用课时点 = 2，难度均衡）
+
+单元 7.1
+
+新学习的知识点：41. 装饰器（部分，1/4 课时）；42. 上下文管理器 with（1/4 课时，部分）
+
+会复习到的知识点：40. 列表/字典推导式；38. 迭代器
+
+单元 7.2
+
+新学习的知识点：42. 上下文管理器 with（部分，1/4 课时）；43. 类型注解（1/3 课时，部分）
+
+会复习到的知识点：41. 装饰器
+
+单元 7.3
+
+新学习的知识点：43. 类型注解（部分，2/3 课时）；44. collections（0/3 课时，部分）
+
+会复习到的知识点：42. 上下文管理器 with
+
+单元 7.4
+
+新学习的知识点：44. collections（2/3 课时，部分）
+
+会复习到的知识点：40. 列表/字典推导式；43. 类型注解
+
+单元 7.5
+
+新学习的知识点：44. collections（部分，1/3 课时）；45. itertools（1/4 课时，部分）
+
+会复习到的知识点：44. collections（已学部分）
+
+单元 7.6
+
+新学习的知识点：45. itertools（部分，1/4 课时）；46. functools（0/4 课时，部分）
+
+会复习到的知识点：44. collections；41. 装饰器
+
+单元 7.7
+
+新学习的知识点：46. functools（2/4 课时，部分）
+
+会复习到的知识点：45. itertools；43. 类型注解
+
+单元 7.8
+
+新学习的知识点：47. re 正则表达式（2/5 课时，部分）
+
+会复习到的知识点：46. functools；44. collections
+
+单元 7.9
+
+新学习的知识点：47. re 正则表达式（部分，0/5 课时，继续在后续单元） ※（正则为较长主题，分多单元）
+
+会复习到的知识点：45. itertools；46. functools
+
+阶段 8（单元可用课时点 = 2，难度均衡）
+
+单元 8.1
+
+新学习的知识点：47. re 正则表达式（继续，2/5 课时，部分）
+
+会复习到的知识点：46. functools；47. re（已学部分）
+
+单元 8.2
+
+新学习的知识点：47. re 正则表达式（继续，1/5 课时）；48. json / pickle（1/3 课时，部分）
+
+会复习到的知识点：44. collections；45. itertools
+
+单元 8.3
+
+新学习的知识点：48. json / pickle（部分，1/3 课时）；49. 调试（print/logging）（0/2 课时，部分）
+
+会复习到的知识点：34. 文件读写（文本）；36. 异常处理
+
+单元 8.4
+
+新学习的知识点：49. 调试（print/logging）（2/2 课时）
+
+会复习到的知识点：48. json / pickle
+
+单元 8.5
+
+新学习的知识点：50. 单元测试 unittest（2/3 课时，部分）
+
+会复习到的知识点：36. 异常处理；49. 调试
+
+单元 8.6
+
+新学习的知识点：50. 单元测试 unittest（部分，1/3 课时）；51. pytest（1/4 课时，部分）
+
+会复习到的知识点：50. 单元测试 unittest（已学部分）
+
+单元 8.7
+
+新学习的知识点：51. pytest（部分，3/4 课时）
+
+会复习到的知识点：50. 单元测试 unittest；52. 代码规范 PEP8（稍后）
+
+单元 8.8
+
+新学习的知识点：52. 代码规范 PEP8（2/2 课时）
+
+会复习到的知识点：49. 调试；51. pytest
+
+单元 8.9
+
+新学习的知识点：53. Web开发 Flask（2/4 课时，部分）
+
+会复习到的知识点：24. 导入模块；26. 自定义模块
+
+阶段 9（单元可用课时点 = 2，难度均衡）
+
+单元 9.1
+
+新学习的知识点：53. Web开发 Flask（部分，2/4 课时）；54. FastAPI（0/4 课时，部分）
+
+会复习到的知识点：25. 常用内置模块；52. 代码规范 PEP8
+
+单元 9.2
+
+新学习的知识点：54. FastAPI（2/4 课时，部分）
+
+会复习到的知识点：53. Flask（已学部分）
+
+单元 9.3
+
+新学习的知识点：55. Django（2/5 课时，部分）
+
+会复习到的知识点：53. Flask；54. FastAPI
+
+单元 9.4
+
+新学习的知识点：55. Django（部分，1/5 课时）；56. NumPy（1/3 课时，部分）
+
+会复习到的知识点：25. 常用内置模块；26. 自定义模块
+
+单元 9.5
+
+新学习的知识点：56. NumPy（部分，2/3 课时）；57. Pandas（0/4 课时，部分）
+
+会复习到的知识点：56. NumPy（已学部分）
+
+单元 9.6
+
+新学习的知识点：57. Pandas（2/4 课时，部分）
+
+会复习到的知识点：56. NumPy；48. json / pickle
+
+单元 9.7
+
+新学习的知识点：58. Matplotlib（2/3 课时，部分）
+
+会复习到的知识点：57. Pandas；56. NumPy
+
+单元 9.8
+
+新学习的知识点：58. Matplotlib（部分，1/3 课时）；59. 爬虫 requests+BS（1/3 课时，部分）
+
+会复习到的知识点：57. Pandas；53. Flask
+
+单元 9.9
+
+新学习的知识点：59. 爬虫 requests+BS（部分，2/3 课时）
+
+会复习到的知识点：58. Matplotlib；49. 调试
+
+阶段 10（单元可用课时点 = 2，难度均衡；遇到 4/5 课时点的知识点拆分为多个单元）
+
+单元 10.1
+
+新学习的知识点：60. Selenium（2/4 课时，部分）
+
+会复习到的知识点：59. 爬虫 requests+BS；56. NumPy
+
+单元 10.2
+
+新学习的知识点：60. Selenium（部分，2/4 课时）
+
+会复习到的知识点：59. 爬虫 requests+BS
+
+单元 10.3
+
+新学习的知识点：61. 并发（多线程/多进程）（2/4 课时，部分）
+
+会复习到的知识点：36. 异常处理；49. 调试
+
+单元 10.4
+
+新学习的知识点：61. 并发（部分，2/4 课时）
+
+会复习到的知识点：60. Selenium
+
+单元 10.5
+
+新学习的知识点：62. 异步 async/await（2/5 课时，部分）
+
+会复习到的知识点：61. 并发
+
+单元 10.6
+
+新学习的知识点：62. 异步 async/await（部分，2/5 课时）
+
+会复习到的知识点：51. pytest；50. 单元测试 unittest
+
+单元 10.7
+
+新学习的知识点：62. 异步 async/await（部分，1/5 课时）；63. CLI 工具（1/3 课时，部分）
+
+会复习到的知识点：52. 代码规范 PEP8；49. 调试
+
+单元 10.8
+
+新学习的知识点：63. CLI 工具（部分，2/3 课时）
+
+会复习到的知识点：64. Flask 博客系统（稍后）
+
+单元 10.9
+
+新学习的知识点：64. Flask 博客系统（2/4 课时，部分）
+
+会复习到的知识点：53. Flask；63. CLI 工具
+
+单元 10.10
+
+新学习的知识点：64. Flask 博客系统（部分，2/4 课时）
+
+会复习到的知识点：57. Pandas；58. Matplotlib
+
+单元 10.11
+
+新学习的知识点：65. 数据可视化仪表盘（2/4 课时，部分）
+
+会复习到的知识点：64. Flask 博客系统
+
+单元 10.12
+
+新学习的知识点：65. 数据可视化仪表盘（部分，2/4 课时）
+
+会复习到的知识点：58. Matplotlib；56. NumPy
+
+单元 10.13
+
+新学习的知识点：66. 小型机器学习项目（2/5 课时，部分）
+
+会复习到的知识点：57. Pandas；56. NumPy
+
+单元 10.14
+
+新学习的知识点：66. 小型机器学习项目（部分，2/5 课时）
+
+会复习到的知识点：65. 数据可视化仪表盘
+
+单元 10.15
+
+新学习的知识点：66. 小型机器学习项目（部分，1/5 课时） ※（收尾）
+
+会复习到的知识点：64. Flask 博客系统；62. 异步 async/await
+
+单元 10.16（扩展练习）
+
+新学习的知识点：回顾与整合（不引入新知识，集中实战练习）
+
+会复习到的知识点：可覆盖 50–66 等高级项（按项目需求自由选择）
+
+单元 10.17（扩展练习）
+
+新学习的知识点：回顾与整合（不引入新知识）
+
+会复习到的知识点：工程实践相关（测试、部署、调试）
+
+单元 10.18（扩展练习）
+
+新学习的知识点：回顾与整合 / 项目交付细节
+
+会复习到的知识点：全课目关键点回顾
+
+
+阶段 1（每单元容量 2 课时）
+单元 1.1
+
+情景：周末的早晨，你正泡着咖啡，桌上散着几张纸条：室友写的待办、邻居的便签和一个手写的生日祝福。你想做一件小事——用一个脚本把今天的心情、姓名和一句暖心问候格式化成一张“电子便签”，每天早上打印出来贴在冰箱上。你想让输出看起来像手写卡片，有换行、有表情，甚至根据心情输出不同的结尾语。这既是练习，也是给舍友的小惊喜。
+新学：1. 输出与打印 —— 本单元新学 1 课时（共 1 课时）；2. 变量与数据类型 —— 本单元新学 1 课时（共 2 课时，分段学习）
+复习：1. 输出与打印 —— 复习 1 课时
+
+单元 1.2
+
+情景：朋友临时来访忘带名片，你慌忙想把自己的信息以漂亮的格式临时打印出来。你决定写一个小工具：在命令行输入姓名、工号和部门，脚本立即输出一段规范的自我介绍文本。你希望这段输出既能在聊天里粘贴，也能直接打印在纸上。通过这个小任务，你体验变量与类型在真实输入场景中的差别和重要性。
+新学：2. 变量与数据类型 —— 本单元新学 1 课时（共 2 课时，分段学习）
+复习：2. 变量与数据类型 —— 复习 2 课时
+
+单元 1.3
+
+情景：吃饭时你和室友轮流结账，常常算错零头。今晚你决定写一个“AA 制”小脚本：从命令行读取总额和参与人数，自动计算每人应付金额并输出四舍五入的结果，还能显示“多付/少付”的提示。你想着如果能把小票截图与结果关联就更方便以后查账。这个场景逼着你把 input()、数学运算与字符串格式化结合起来。
+新学：3. 输入 input —— 本单元新学 1 课时（共 1 课时）；4. 运算符 —— 本单元新学 1 课时（共 2 课时，分段学习）
+复习：1. 输出与打印 —— 复习 1 课时；2. 变量与数据类型 —— 复习 2 课时
+
+单元 1.4
+
+情景：你在浏览电商做功课，看到一个打折商品，不确定是否划算。你想写个折扣计算器：输入原价与折扣、预算然后判断是否低于你的预算，并给出“买/不买/再等等”的建议。为保证正确，你还要处理边界情况（比如 0 折、100 折、负数输入），并输出诊断信息。这个任务让你把比较运算和算术运算组合成实用工具。
+新学：4. 运算符 —— 本单元新学 1 课时（共 2 课时，分段学习）
+复习：3. 输入 input —— 复习 1 课时；1. 输出与打印 —— 复习 1 课时
+
+单元 1.5
+
+情景：你准备把家传的一道菜写成“可运行的菜谱脚本”：每一步都注释清楚，函数说明写成注释段落。还想做一个小功能：给一道菜评分并根据分数输出“推荐/一般/不推荐”。在写代码的同时你学会如何用注释让未来的自己读懂逻辑，也体会到合理的分支写法能让程序更加健壮。
+新学：5. 注释与代码规范 —— 本单元新学 1 课时（共 1 课时）；6. if / elif / else —— 本单元新学 1 课时（共 2 课时，分段学习）
+复习：2. 变量与数据类型 —— 复习 2 课时
+
+单元 1.6
+
+情景：邻居组了个球赛，你要根据年龄把大家分成不同组别：儿童、青少年、成人、老年。分组规则要优先考虑安全与体验，你需要处理边界（例如 18 岁的分类），并输出友好的分组说明。你用 if/elif/else 写出清晰的规则并在注释里记录设计思路。这个场景让你思考条件分支的优先级与可读性。
+新学：6. if / elif / else —— 本单元新学 1 课时（共 2 课时，分段学习）
+复习：5. 注释与代码规范 —— 复习 1 课时；4. 运算符 —— 复习 2 课时
+
+单元 1.7
+
+情景：你在准备跑步小组的周计划，想自动打印每天的打卡任务：跑步距离、热身动作和小提示。用 for 循环把一周七天的条目生成出来，还能随机插入一句鼓励话语。结果会作为群里每日提醒，让大家更有动力坚持。你体会到循环如何把重复任务自动化，从而节省手动操作。
+新学：7. for 循环 —— 本单元新学 2 课时（共 2 课时）
+复习：6. if / elif / else —— 复习 2 课时
+
+单元 1.8
+
+情景：你想为烘焙定时：当烤箱倒计时结束提醒你，或者在咖啡冲泡时间到时响铃。写一个倒计时器，用 while 每秒更新剩余时间并在结束时打印“完成”。中间你也想加一个“取消”功能，模拟真实使用场景。这个小工具让你感受循环语句对状态驱动任务的必要性。
+新学：8. while 循环 —— 本单元新学 2 课时（共 2 课时）
+复习：7. for 循环 —— 复习 2 课时
+
+单元 1.9
+
+情景：家庭聚会上，你要组织一个抽奖环节。抽奖程序需要在名单中轮询、跳过不符合资格的人，并允许主持人随时停止抽奖。写脚本实现抽奖逻辑，还要在出现重复中奖时跳过并重新抽。你在实践 break/continue 的同时体验到用户交互细节。
+新学：9. break / continue —— 本单元新学 2 课时（共 2 课时）
+复习：8. while 循环 —— 复习 2 课时；6. if / elif / else —— 复习 2 课时
+
+单元 1.10
+
+情景：你和朋友在公园玩猜数字游戏，为了增加趣味性你决定把游戏做成一个小程序：包含提示机制、胜负判断、得分统计并能记录历史最佳成绩。程序要在循环中与用户交互、在适当的条件下退出并保存成绩。完成后你把程序分享到群里，大家都能在手机终端玩。这个综合练习把本阶段积累的知识串联成一个完整的小项目。
+新学：10. 综合练习（猜数字 / 乘法表） —— 本单元新学 2 课时（共 3 课时，分段学习）
+复习：7. for 循环 —— 复习 2 课时；9. break / continue —— 复习 2 课时
+
+阶段 2（每单元容量 2 课时）
+单元 2.1
+
+情景：你帮妈妈整理菜谱，她常重复手动输入购物清单。你写了一个“历史记录”功能：程序记录上次的购物条目并能一键回放或修改，再打印成清单。某次妈妈忘记写食材的分量，多亏了你的脚本回放功能，她顺利完成了晚餐。这个场景将“状态保存”和“列表”结合成真实的日常工具。
+新学：10. 综合练习（续） —— 本单元新学 1 课时（共 3 课时，分段学习）；11. 列表 list 基础 —— 本单元新学 1 课时（共 2 课时，分段学习）
+复习：8. while 循环 —— 复习 2 课时；3. 输入 input —— 复习 1 课时
+
+单元 2.2
+
+情景：你想把每天的代办事项电子化：同事需要一个脚本能添加任务、标记完成、删除已过期任务并按优先级排序。你用列表来实现增删查改，并写一段交互式脚本供家人使用。一次家庭聚会中，你的脚本帮忙分配了菜品，大家纷纷点赞。列表在日常生活中的价值瞬间显现。
+新学：11. 列表 list 基础 —— 本单元新学 1 课时（共 2 课时，分段学习）；12. 列表切片与方法 —— 本单元新学 1 课时（共 3 课时，分段学习）
+复习：10. 综合练习 —— 复习 3 课时；2. 变量与数据类型 —— 复习 2 课时
+
+单元 2.3
+
+情景：好友发来一组考试成绩，让你帮忙筛选前 3 名。你要对列表排序、切片并处理并列分数的情况。任务看似简单，但你要考虑稳定性和边界处理（空列表、长度不足）。这些细节让你学会了如何在真实数据上安全使用切片与排序。
+新学：12. 列表切片与方法 —— 本单元新学 1 课时（共 3 课时，分段学习）
+复习：11. 列表 list 基础 —— 复习 2 课时
+
+单元 2.4
+
+情景：你在整理聊天记录，需要把某位朋友的连续聊天截取出来发给他并把敏感词替换成“**”。这要求你熟练使用切片与替换方法来操作文本和列表。你还希望脚本能自动备份原始记录以防误改。这个情境让你理解切片在文本处理中的实用性。
+新学：12. 列表切片与方法 —— 本单元新学 1 课时（共 3 课时，分段学习）
+复习：11. 列表 list 基础 —— 复习 2 课时
+
+单元 2.5
+
+情景：你在配置一个家庭音乐播放器，固定的默认播放顺序不应被用户误改，于是把默认顺序放入元组；而用户自定义的播放列表存放在字典里，支持按歌手/专辑快速查询。一次亲友聚会中，这套配置让 DJ 更省心。通过这个场景你学会何时用元组、何时用字典。
+新学：13. 元组 tuple —— 本单元新学 1 课时（共 1 课时）；14. 字典 dict 基础 —— 本单元新学 1 课时（共 2 课时，分段学习）
+复习：12. 列表切片与方法 —— 复习 3 课时
+
+单元 2.6
+
+情景：你要实现一个“查用户资料”的小工具：输入工号返回姓名、部门与联系方式。你用字典做成简单数据库，并实现修改与删除功能。一次临时活动中，这个工具迅速帮你找到现场负责人的电话，问题很快解决。通过实践你体会字典在快速查找场景中的优势。
+新学：14. 字典 dict 基础 —— 本单元新学 1 课时（共 2 课时，分段学习）；15. 字典方法 —— 本单元新学 1 课时（共 2 课时，分段学习）
+复习：11. 列表 list 基础 —— 复习 2 课时；13. 元组 tuple —— 复習 1 课時
+
+单元 2.7
+
+情景：社区活动报名表里大家乱输入标签，有重复项。你需要统计每个标签的出现次数并去重，为志愿者分组提供清单。你用集合来去重，用字典方法统计频率，最后生成可供打印的分组名单。这个故事把集合与字典方法的组合使用讲得很明白。
+新学：15. 字典方法 —— 本单元新学 1 课时（共 2 课时，分段学习）；16. 集合 set —— 本单元新学 1 课时（共 2 课时）
+复习：14. 字典 dict 基础 —— 复习 2 课时
+
+单元 2.8
+
+情景：你要给新用户发送欢迎邮件，用模板填入姓名并清理多余空格，保证每封信看起来像人工撰写。你写脚本自动把用户名插入模板，同时处理称呼与敬语的细微差别。实际使用中，用户反馈邮件读起来更自然，这给了你继续改进脚本的动力。
+新学：17. 字符串操作与方法 —— 本单元新学 2 课时（共 3 课时，分段学习）
+复习：15. 字典方法 —— 复習 2 课時；16. 集合 set —— 复習 2 课時
+
+单元 2.9
+
+情景：你写了一个小工具：从一篇文章里提取标题并把它作为参数传给摘要函数。这个流程让你练习如何把处理过的字符串传入函数并得到返回结果。你希望函数能在遇到异常输入时返回安全默认值，保证整个流水线不崩溃。
+新学：17. 字符串操作与方法 —— 本单元新学 1 课時（共 3 课時，分段学习）
+复習：12. 列表切片與方法 —— 复習 3 课時
+
+单元 2.10
+
+情景：把常用的文本清理、邮箱校验和格式化封装成函数库，做成一个“小助手”。当你下次遇到混乱的输入时，只需调用这个工具就能把数据标准化，节省大量重复工作。朋友看到后也想把这套代码用到他们的项目里。
+新学：18. 定义与调用函数 —— 本単元新学 2 课時（共 2 课時）
+复習：17. 字符串操作與方法 —— 复習 3 课時；11. 列表 list 基础 —— 复習 2 课時
+
+阶段 3（每单元容量 3 课时）
+单元 3.1
+
+情景：产品经理要求把常用的文本处理函数做成 utils.py，团队其他工程师能直接 import 使用。你写了函数并在每个函数上写好了参数文档与示例，经理把它当成“团队小工具库”分享给新人。后来有人在 PR 中引用了你的函数并提出改进建议，你学会了如何通过参数与返回值约定接口的稳定性。
+新学：18. 定义与调用函数 —— 本単元新学 1 课時（共 2 课時，分段）；19. 参数与返回值 —— 本単元新学 2 课時（共 3 课時，分段）
+复習：17. 字符串操作與方法 —— 复習 3 课時；10. 综合练习 —— 复習 3 课時
+
+单元 3.2
+
+情景：在代码审查时，你的一个函数需要支持新需求：既能被老代码调用也能被新接口以关键字参数调用。你修改函数以支持默认参数与可变参数，并写了多个调用示例。通过这次改造，你理解了参数灵活性与向后兼容的重要性。
+新学：19. 参数与返回值 —— 本単元新学 1 课時（共 3 课時，分段）；20. 默认参数 / 可变参数 —— 本単元新学 2 课時（共 3 课時，分段）
+复習：18. 定义与调用函数 —— 复習 2 课時；11. 列表 list 基础 —— 复習 2 课時
+
+单元 3.3
+
+情景：你要实现一个聚合日志函数，能接受任意数量的标签（*args）和命名参数（**kwargs），并把它们格式化成一行日志写入文件。你会把一个列表或字典解包传给函数，观察不同传参方式的效果。这个小练习让你熟悉函数参数的各种姿势。
+新学：20. 默认参数 / 可变参数 —— 本単元新学 1 课時（共 3 课時，分段）；21. 作用域（局部 vs 全局） —— 本単元新学 1 课時（共 2 课時，分段）；22. 匿名函数 lambda —— 本単元新学 1 课時（共 3 课時，分段）
+复習：19. 参数与返回值 —— 复習 3 课時；13. 元组 tuple —— 复習 1 课時
+
+单元 3.4
+
+情景：你为同事演示闭包的用法：写一个计数器工厂函数，每次调用会返回增加的计数；同时你用 lambda 为排序写一个短小的 key 函数，让代码变得紧凑而优雅。课堂上有同事提出不同实现方式，你和大家一起讨论权衡，收获更多编程思路。
+新学：21. 作用域 —— 本単元新学 1 课時（共 2 课時，分段）；22. 匿名函数 lambda —— 本単元新学 2 课時（共 3 课時，分段）
+复習：18. 定义与调用函数 —— 复習 2 课時；16. 集合 set —— 复習 2 课時
+
+单元 3.5
+
+情景：你被分配做一段数据清洗流水线：先过滤无效记录，再映射成需要的字段，最后汇总成统计报表。你用 map、filter、reduce 把这三步表达得非常简洁，导师让你把原始实现改写成高阶函数风格以提高可读性。完成后，数据处理速度与代码简洁度都有明显提升。
+新学：23. 高阶函数（map / filter / reduce） —— 本単元新学 3 课時（共 4 课時，分段学习）
+复習：20. 默认参数 / 可变参数 —— 复習 3 课時；22. 匿名函数 lambda —— 复習 3 课時
+
+单元 3.6
+
+情景：你把常用工具拆成模块，并写了 __init__ 和 README，让团队新成员能很快上手。某天有人在群里问“怎么调用你的格式化函数”，你只需指向模块即可。写模块的过程让你理解如何暴露接口、管理依赖以及保持文档同步。
+新学：23. 高阶函数（续） —— 本単元新学 1 课時（共 4 课時，分段）；24. 导入模块 —— 本単元新学 2 课時（共 2 课時）
+复習：21. 作用域 —— 复習 2 课時；19. 参数与返回值 —— 复習 3 课時
+
+单元 3.7
+
+情景：产品经理想要一个“每小时抽奖”功能：你用 random 随机选择与 datetime 记录时间，再用 math 做一些统计。实现后，你部署到小工具上，大家每天都期待那个整点的抽奖。通过这个练习，你深入体会标准库能在很短时间内提供强大能力。
+新学：25. 常用内置模块（math, random, datetime） —— 本単元新学 3 课時（共 3 课時）
+复習：23. 高阶函数 —— 复習 4 课時；24. 导入模块 —— 复習 2 课時
+
+单元 3.8
+
+情景：你重构项目，把重复代码移动到 helpers.py，并把模块文档写得像小教程，新同事几分钟就能上手。一次代码回顾中，大家称赞你的模块化思维，并提出了扩展建议。模块化工作让项目更可维护，也让团队协作更顺畅。
+新学：26. 自定义模块 —— 本単元新学 3 课時（共 3 课時）
+复習：25. 常用内置模块 —— 复習 3 课時；18. 定义与调用函数 —— 复習 2 课時
+
+单元 3.9
+
+情景：你为一个小型社交功能建模：定义“用户”类，封装姓名、邮箱和登录方法，还做了一个小脚本模拟用户之间发消息。通过对象实例化，你感受到了把数据与行为打包在一起带来的设计清晰度。后来这套模型被团队用作原型继续扩展。
+新学：27. 类与对象 —— 本単元新学 3 课時（共 3 课時）
+复習：24. 导入模块 —— 复習 2 课時；23. 高阶函数 —— 复習 4 课時
+
+单元 3.10
+
+情景：在“用户”类上实现 send_message() 和 display_profile() 后，你写了一个小 demo：两个对象互发消息并打印对话。你为方法写好注释并思考边界情况（如空消息），同事把 demo 作为课堂示例引用。这个过程让 OOP 概念从抽象变得具体可用。
+新学：28. 属性与方法 —— 本単元新学 3 课時（共 3 课時）
+复習：27. 类与对象 —— 复習 3 课時
+
+阶段 4（每单元容量 3 课時）
+单元 4.1
+
+情景：你负责实现“会员”类的构造方法：接收注册时间、等级和到期日并做基本校验。一天产品需求变更，要求新增默认等级和兼容旧数据，你用 __init__ 写好默认与强制参数，再用 super 为子类留扩展点。构造函数像身份证，把对象初始化成可被信任的实体。
+新学：29. 构造方法 init —— 本单元新学 2 课時（共 2 课時）；30. 继承与 super() —— 本単元新学 1 课時（共 4 课時，分段学习）
+復習：28. 属性与方法 —— 复習 3 课時
+
+单元 4.2
+
+情景：产品线需要“VIP 会员”与普通会员不同的折扣策略，你实现了 VIP 类继承自会员类并覆盖某些方法。一次促销活动中，你还通过 super 调用父类初始化，保持原有逻辑不受影响。这个单元让你看到继承在代码复用与扩展上的价值。
+新学：30. 继承与 super() —— 本单元新学 2 课時（共 4 课時，分段学习）；31. 多态 —— 本单元新学 0 课時（将在后续单元继续）
+復習：29. 构造方法 init —— 复習 2 课時；27. 类与对象 —— 复習 3 课時
+
+单元 4.3
+
+情景：你要设计一个支付系统接口：定义统一的 pay() 方法，不同支付方式（卡/第三方）各自实现。经理要求在不改动调用代码的情况下新增支付方式，多态让这一切变得简单。通过实现抽象接口与多态，你把现实的支付场景抽象为可替换的组件。
+新学：31. 多态 —— 本単元新学 3 课時（共 4 课時，分段学习）
+復習：30. 继承与 super() —— 复習 4 课時；24. 导入模块 —— 复習 2 课時
+
+单元 4.4
+
+情景：用户数据中含有敏感字段（身份证、生日），你把这些字段设为私有并通过方法暴露有限信息（比如只显示出生年份）。团队客户安全审计后通过了你的设计，你意识到封装不仅是语法也是安全策略。实践让你理解私有属性在保护数据上的实际意义。
+新学：32. 封装与私有属性 —— 本单元新学 3 课時（共 4 课時，分段学习）
+復習：31. 多态 —— 复習 4 课時
+
+单元 4.5
+
+情景：为了调试与日志的可读性，你实现 __str__ 在打印对象时输出简洁信息，并实现 __len__ 以返回好友数。一次生产问题调查中，漂亮的 __str__ 帮你快速定位状态，节省了许多排查时间。特殊方法让对象更自然地与 Python 生态交互。
+新学：33. 特殊方法（str, len） —— 本単元新学 3 课時（共 4 课時，分段学习）
+復習：32. 封装与私有属性 —— 复習 4 课時
+
+单元 4.6
+
+情景：你需要实现一个每天写日志的脚本，把关键事件和错误写入文本文件作为审计记录。你实现了文件打开、写入与关闭的正确顺序，并在注释里记录为什么要这样做。某次服务器异常，日志成为快速恢复的关键证据。通过这个任务你体会到文件 IO 的基本但关键的工程价值。
+新学：34. 文件读写（文本） —— 本单元新学 3 课時（共 3 课時）
+復習：33. 特殊方法 —— 复習 4 课時；28. 属性与方法 —— 复習 3 课時
+
+单元 4.7
+
+情景：用户上传头像需要处理二进制数据：你实现读取上传流、保存为文件并在保存前对字节流做简单检查（例如判断文件头）。一次上传出错时，正确处理二进制读写避免了文件损坏。通过这次实践你能区分文本与二进制 IO 的差异。
+新学：35. 文件读写（二进制） —— 本单元新学 3 课時（共 3 课時）
+復習：34. 文件读写（文本） —— 复習 3 课時
+
+单元 4.8
+
+情景：备份脚本在复制时遇到路径权限问题，你用 try/except 捕获并记录异常，保证后续文件仍能被处理。错误日志提示让你快速定位问题根源并修复权限设置。这个练习强调异常处理在可靠脚本中的必要性。
+新学：36. 异常处理 try / except —— 本単元新学 3 课時（共 3 课時）
+復習：35. 文件读写（二進制） —— 复習 3 课時
+
+单元 4.9
+
+情景：在备份脚本中你加入 finally 做资源清理，并定义 BackupError 作为自定义异常，以便上层调用者能区分不同错误类型并采取不同策略。一次模拟故障后，你的脚本能够优雅退出并把错误信息上报。自定义异常让错误语义更清晰，也便于团队协作。
+新学：37. finally 与自定义异常 —— 本単元新学 3 课時（共 4 课時，分段学习）
+復習：36. 异常处理 try / except —— 复習 3 课時
+
+单元 4.10
+
+情景：你的日志文件越来越大，需要一个按行迭代的读取器。你实现了一个可迭代对象，能在 for 循环中逐行读出日志并做处理，避免一次性加载内存。这个功能在处理大文件或流式数据时非常实用。
+新学：38. 迭代器 —— 本単元新学 3 课時（共 3 课時）
+復習：33. 特殊方法 —— 复習 4 课時；36. 异常处理 —— 复習 3 课時
+
+阶段 5（每单元容量 3 课時）
+单元 5.1
+
+情景：你在处理超大日志时实现了生成器：按块读取文件、处理并 yield 结果给后续阶段消费。一次处理百万条日志的任务中，生成器让内存占用保持稳定，任务顺利完成。你感受到生成器在流式处理场景的巨大价值。
+新学：39. 生成器 yield —— 本単元新学 3 课時（共 4 课時，分段学习）
+復習：38. 迭代器 —— 复習 3 课時；37. finally 与自定义异常 —— 复習 4 课時
+
+单元 5.2
+
+情景：你要把用户姓名列映射为用户名和首字母缩写，使用列表/字典推导式一行生成所需结构，代码短小且直观。项目里同事称赞你的写法并把它作为模板。推导式让数据转换变得高效与易读。
+新学：40. 列表/字典推导式 —— 本単元新学 3 课時（共 3 课時）
+復習：39. 生成器 yield —— 复習 4 课時；38. 迭代器 —— 复習 3 课時
+
+单元 5.3
+
+情景：你需要在不改动函数内部的情况下给其增加功能（比如计时或权限检查），装饰器是最佳方案。你写了一个日志装饰器并套在多个函数上，观察到执行前后的差异并写了测试来验证行为。装饰器让横切关注点的复用变得非常优雅。
+新学：41. 装饰器 —— 本単元新学 3 课時（共 4 课時，分段学习）
+復習：40. 列表/字典推导式 —— 复習 3 课時
+
+单元 5.4
+
+情景：你实现了自定义上下文管理器，让数据库连接和文件句柄在 with 块结束时自动释放。一次出现异常时，上下文管理器确保资源一定被关闭，避免了连接泄露问题。这个练习让你理解 with 在资源管理中的力量。
+新学：42. 上下文管理器 with —— 本単元新学 3 课時（共 4 课時，分段学习）
+復習：41. 装饰器 —— 复習 4 课時；39. 生成器 yield —— 复習 4 课時
+
+单元 5.5
+
+情景：你把团队的公共 API 添加类型注解，随后 IDE 和 CI 提示出许多潜在类型错误，提前发现了几个边界 bug。给函数写注解不仅提高了可读性，也让协作更顺畅。通过这次实践，你认识到类型注解在团队项目中的实际价值。
+新学：43. 类型注解 —— 本単元新学 3 课時（共 3 课時）
+復習：40. 列表/字典推导式 —— 复習 3 课時
+
+单元 5.6
+
+情景：你用 Counter 统计社群发帖最多的用户，用 deque 做最近活跃窗口并用 defaultdict 分组统计。一次活动中，这套工具让你实时输出最活跃用户榜单并驱动奖励机制。collections 模块让这些工程需求变得轻松实现。
+新学：44. collections（Counter, defaultdict, deque） —— 本単元新学 3 课時（共 3 课時）
+復習：42. 上下文管理器 with —— 复習 4 课時
+
+单元 5.7
+
+情景：你负责生成所有可能的优惠方案，使用 itertools 的排列与组合快速生成候选集并筛选合适的活动组合。这个过程让你在短时间内得到可行的营销方案，并把复杂的穷举问题转为可控的代码任务。
+新学：45. itertools（排列/组合） —— 本単元新学 3 课時（共 4 课時，分段学习）
+復習：44. collections —— 复習 3 课時
+
+单元 5.8
+
+情景：你发现某个函数被高频调用且耗时，于是用 functools.lru_cache 做缓存，并用 partial 固定常用参数写出更简洁的调用接口。缓存显著提升了响应速度，监控指标也改善了。通过优化你学会衡量与验证性能改进。
+新学：46. functools（lru_cache, partial） —— 本単元新学 3 课時（共 4 课時，分段学习）
+復習：45. itertools —— 复習 4 课時
+
+单元 5.9
+
+情景：你收到一堆报名文本，需要从中提取手机号码与邮箱。正则可以一次搞定各种格式，你写出几条模式并测试在不同脏数据上的表现。经过迭代，你拿到了一组高召回、高精度的匹配规则。正则在文本抽取上的威力在此刻展现得淋漓尽致。
+新学：47. re 正则表达式 —— 本単元新学 3 课時（共 5 课時，分段学习）
+復習：46. functools —— 复習 4 课時；44. collections —— 复習 3 课時
+
+单元 5.10
+
+情景：你面对复杂日志格式，需要提取时间戳、IP 与请求路径，同时注意性能（预编译 pattern、非贪婪匹配）。在真实数据上测试后，你对正则的性能陷阱有了深刻认识，并记录下优化策略供团队参考。
+新学：47. re 正则表达式 —— 本単元新学 0 课時（分段继续，在后续阶段完成）
+復習：45. itertools —— 复習 4 课時；46. functools —— 复習 4 课時
+
+阶段 6（每单元容量 3 课時）
+单元 6.1
+
+情景：客户要一周报，要求从海量服务器日志中抽取错误信息并按类型汇总。你用正则匹配不同异常模式并生成可视化摘要，最终交付了一份结构化报告。这个项目考验你在复杂文本中稳定抽取信息的能力。
+新学：47. re 正则表达式 —— 本単元新学 3 课時（共 5 课時，分段学习）
+復習：46. functools —— 复習 4 课時；44. collections —— 复習 3 课時
+
+单元 6.2
+
+情景：爬取的数据需要被同事以 Excel 查看，你把数据导出为 JSON 并演示如何反序列化供分析使用；同时为长任务实现 pickle 保存中间态以便恢复。一次网络抖动后，pickle 帮助你从中断点继续任务，节省了大量时间。
+新学：48. json / pickle —— 本単元新学 3 课時（共 3 课時）
+復習：47. re 正则表达式 —— 复習 5 课時
+
+单元 6.3
+
+情景：线上突发问题，你从日志入手定位。把以前仅靠 print 的调试升级为 logging，配置不同日志级别并写入文件。问题被迅速定位和修复，团队把这套实践写进了运维指南。
+新学：49. 调试（print, logging） —— 本単元新学 3 课時（注：原总课时为 2，但在本単元用更多示例扩展）
+復習：34. 文件读写（文本） —— 复習 3 课時；36. 异常处理 —— 复習 3 课時
+
+单元 6.4
+
+情景：为关键函数写单元测试，保证未来重构不会破坏行为。你把常见边界写成测试并在本地运行，CI 在提交时自动跑这些测试，减少了回滚次数。测试让你对代码的正确性更有信心。
+新学：50. 单元测试 unittest —— 本単元新学 3 课時（共 3 课時）
+復習：49. 调试（print, logging） —— 复習 2 课時
+
+单元 6.5
+
+情景：把测试迁移到 pytest，使用 fixture 与参数化简化写法。通过参数化你能在一条测试中覆盖多种输入场景，显著降低重复代码。团队的 CI 也因此更快更可靠。
+新学：51. pytest —— 本単元新学 3 课時（共 4 课時，分段学习）
+復習：50. unittest —— 复習 3 课時；52. 代码规范 PEP8 —— 将在后续复習
+
+单元 6.6
+
+情景：你给项目接入 black 与 flake8，并设置 pre-commit 钩子，在提交前自动格式化与检查。提交质量上来了，代码差异也更清晰，团队协作更顺畅。你体验到了自动化工具带来的工程收益。
+新学：52. 代码规范 PEP8 —— 本単元新学 3 课時（共 2 课時，示例扩展）
+復習：51. pytest —— 复習 4 课時
+
+单元 6.7
+
+情景：你为同事快速搭了个 Flask 服务，能接收表单并返回 JSON；同事用 curl 调试并给出反馈，你根据反馈快速修复了接口。这个小项目把后端开发的完整流程展现出来，大家都乐于尝试上手。
+新学：53. Web 开发 Flask —— 本単元新学 3 课時（共 4 课時，分段学习）
+復習：24. 导入模块 —— 复習 2 课時；26. 自定义模块 —— 复習 3 课時
+
+单元 6.8
+
+情景：扩展服务，把表单数据写入 JSON 并在页面上显示，体验端到端的数据流。你学会了如何把前端提交的表单与后端处理连接起来，并写了简单的输入校验。真实数据让你注意到异常输入的各种奇怪样式。
+新学：53. Flask（续） —— 本単元新学 0 课時（继续在后续單元完成）
+復習：52. PEP8 —— 复習 2 课時；49. 调试 —— 复習 2 课時
+
+单元 6.9
+
+情景：在一个 PoC 中你实现同一 API 的 Flask（同步）版本与 FastAPI（异步）版本，测量在高并发下的响应差异。通过对比你能为项目选择合适框架并解释利弊。这个实践让你对现代 Python web 框架的取舍有了直观认识。
+新学：54. FastAPI —— 本単元新学 3 课時（共 4 课時，分段学习）
+復習：53. Flask —— 复習 4 课時
+
+单元 6.10
+
+情景：为 API 写测试并做基本性能检测：你用 pytest 写端点测试并运行简单的并发测试，查看在负载下接口是否稳健。这个闭环从开发到测试再到优化，是工程化开发的重要一环。
+新学：54. FastAPI（续） —— 本単元新学 0 课時（后续继续）；（56. NumPy 引入将在下一阶段）
+復習：53. Flask —— 复習 4 课時；51. pytest —— 复習 4 课時
+
+阶段 7（每单元容量 2 课時，难度均衡）
+单元 7.1
+
+情景：你负责在数据服务里返回统计数据：后端用 NumPy 计算平均值、标准差并格式化结果。一次上线后，产品经理满意地把结果嵌到仪表板里，用户体验明显提升。你体会到专门库在数值计算场景的高效与精确。
+新学：56. NumPy —— 本単元新学 2 课時（共 3 课時，分段学习）
+復習：54. FastAPI —— 复習 4 课時；53. Flask —— 复習 4 课時
+
+单元 7.2
+
+情景：销售团队把一周的 CSV 账单交给你处理：你用 Pandas 读入表格、做清洗并输出日报。老板要求你标注增长最快的产品，你用 groupby 与聚合函数给出答案。Pandas 让数据处理变得高效而直观。
+新学：57. Pandas —— 本単元新学 2 课時（共 4 课時，分段学习）
+復習：56. NumPy —— 复習 3 课時
+
+单元 7.3
+
+情景：把销售报表变成可读图形是你的任务：你用 Matplotlib 生成折线图和柱状图，并为图表添加注释与保存功能。某次会议上，图表帮助大家快速做出决策，你因此被邀请做下一个月报。
+新学：58. Matplotlib —— 本単元新学 2 课時（共 3 课時，分段学习）
+復習：57. Pandas —— 复習 4 课時
+
+单元 7.4
+
+情景：你把 Pandas 与 Matplotlib 结合：读取 CSV、清洗数据、绘图并生成一份自动化月报。这个端到端流程让你从数据源到可视化都能掌控，并能把报告自动发给老板邮箱。自动化工作流节省了大量手动制作时间。
+新学：57. Pandas（续）/58. Matplotlib（续） —— 本単元新学 0–2 课時（整合练习）
+復習：56. NumPy —— 复習 3 课時；48. json / pickle —— 复習 3 课時
+
+单元 7.5
+
+情景：社区活动报名信息分布在多页，你写脚本用 requests 抓取页面并用 BeautifulSoup 提取表格数据，最后生成志愿者名单。爬虫让你把重复工作自动化，志愿者分配也变得透明高效。
+新学：59. 爬虫 requests + BeautifulSoup —— 本单元新学 2 课時（共 3 课時，分段学习）
+復習：57. Pandas —— 复習 4 课時
+
+单元 7.6
+
+情景：面对需要登录并动态加载的页面，你用 Selenium 自动化登录并抓取动态加载的最新评论。通过模拟用户行为，你成功获取了需要的信息并处理了验证码的临时策略。自动化浏览器为复杂页面抓取提供了解决方案。
+新学：60. Selenium —— 本単元新学 2 课時（共 4 课時，分段学习）
+復習：59. 爬虫 requests + BeautifulSoup —— 复習 3 课時
+
+单元 7.7
+
+情景：促销期间你需快速抓取数百个产品页并比价，你用线程池/进程池并行抓取并把结果合并，显著缩短任务时间。并发让大规模抓取任务从“慢慢跑”变成“马上有结果”。你也学习如何处理并发下的异常与重试策略。
+新学：61. 并发（多线程/多进程） —— 本単元新学 2 课時（共 4 课時，分段学习）
+復習：36. 异常处理 —— 复習 3 课時；49. 调试 —— 复習 2 课時
+
+单元 7.8
+
+情景：你比较并实践了并发与异步：在 IO 密集任务（大量 HTTP 请求）下实现异步爬虫并对比吞吐量与资源使用。黑五当天，你的异步实现抓取速度领先很多，团队为你庆祝。这个单元让你认识到异步在实际场景的优势与适用条件。
+新学：62. 异步 async/await —— 本単元新学 2 课時（共 5 课時，分段学习）
+復習：61. 并发 —— 复習 4 课時；51. pytest —— 复習 4 课時
+
+单元 7.9
+
+情景：系统中有个频繁调用的函数，你尝试用 functools 的 lru_cache 做缓存再用 partial 包装常用参数，结果数据库查询次数明显减少。你记录了缓存策略与失效条件，方便后续维护。这个练习教你在工程上如何用简单工具提升效率。
+新学：46. functools（续） —— 本単元以练习/复習为主（无新课時）
+復習：46. functools —— 复習 4 课時；45. itertools —— 复習 4 课時
+
+单元 7.10
+
+情景：你从抓取的页面正文中用正则抽取地址与电话号码并把结果存成 CSV 给活动方。面对不同格式的电话号码你不断调优正则，直到匹配率令人满意。这个单元把爬虫与正则结合成真实生产问题的解决方案。
+新学：47. re 正则表达式（续） —— 本単元新学 2 课時（共 5 课時，分段学习）
+復習：45. itertools —— 复習 4 课時；44. collections —— 复習 3 课時
+
+阶段 8（每单元容量 2 课時）
+单元 8.1
+
+情景：你接到内容审查任务：从大量用户提交文本中抽取联系方式并处理半角/全角混合、编码乱码与异常符号。你写出复杂的正则并在测试集上验证，最终生成错误报告并列出需要人工复核的记录。这个工作虽然琐碎，但极具现实意义，确保了产品数据质量。
+新学：47. re 正则表达式 —— 本単元新学 2 课時（共 5 课時，分段学习）
+復習：46. functools —— 复習 4 课時；47. re（已学部分） —— 复習
+
+单元 8.2
+
+情景：你把抓取到的大表导出为 JSON 给同事，并演示如何用 pickle 保存中间状态以便长任务中断后恢复。一次服务器重启后，pickle 恢复让任务从上次中断点继续，团队欣喜若狂。数据序列化成为工程中不可或缺的技巧。
+新学：48. json / pickle —— 本単元新学 2 课時（共 3 课時，分段学习）
+復習：44. collections —— 复習 3 课時；45. itertools —— 复習 4 课時
+
+单元 8.3
+
+情景：你配置了 logging，把不同级别的日志写入文件并根据告警级别发送通知。一次线上抓取失败，日志帮助你迅速定位问题并回滚，节省了数小时排查时间。这个单元让你掌握从 print 到专业 logging 的升级路径。
+新学：49. 调试（print, logging） —— 本単元新学 2 课時（共 2 课時）
+復習：34. 文件读写（文本） —— 复習 3 课時；36. 异常处理 —— 复習 3 课時
+
+单元 8.4
+
+情景：你把关键函数写成可测模块并为其编写 unittest，CI 在每次提交时运行测试并阻止错误代码合并。通过写测试你发现了几个边界 bug 并及时修复，项目质量明显提升。测试让你对代码重构更有底气。
+新学：50. 单元测试 unittest —— 本単元新学 2 课時（共 3 课時，分段学习）
+復習：49. 调试 —— 复習 2 课時
+
+单元 8.5
+
+情景：你用 pytest 的 fixture 与参数化把测试做得更简洁并模拟数据库或网络调用的假数据。团队把这些模式写成模版，被多个项目复用。测试生态使得长期维护变成可能而非艰难任务。
+新学：51. pytest —— 本単元新学 2 课時（共 4 课時，分段学习）
+復習：50. unittest —— 复習 3 课時；52. PEP8 —— 复習 2 课時
+
+单元 8.6
+
+情景：你在项目中接入 black 与 flake8，并演示 pre-commit 钩子。提交前自动修复和检查让代码风格统一，代码审查也因此更关注业务逻辑而非格式问题。团队协作效率因此提升。
+新学：52. 代码规范 PEP8 —— 本単元新学 0 课時（以练习/展示为主）
+復習：51. pytest —— 复習 4 课時；49. 调试 —— 复習 2 课時
+
+单元 8.7
+
+情景：在 Flask 项目中实现登录页、会话管理与模板渲染，你要考虑 cookie 的安全与表单校验。一次小型演示中，前端同事用模板展示了登录状态切换，用户体验明显提升。此单元把后端基础与前端展示连接起来。
+新学：53. Flask —— 本単元新学 2 课時（共 4 课時，分段学习）
+復習：24. 导入模块 —— 复習 2 课時；26. 自定义模块 —— 复習 3 课時
+
+单元 8.8
+
+情景：用户上传 CSV 后后端用 Pandas 处理并用 Matplotlib 生成图像返回给用户，你把处理逻辑封装为接口并写好错误处理。用户看到可视化后惊呼“太好用了”，从而推动了产品小功能上线。
+新学：58. Matplotlib（续）/57. Pandas（续） —— 本單元新学 0–2 课時（整合练习）
+復習：57. Pandas —— 复習 4 课時；56. NumPy —— 复習 3 课時
+
+单元 8.9
+
+情景：你用 FastAPI 实现异步端点并自动生成 OpenAPI 文档，前端同事直接在文档页面试接口。自动 docs 减少了沟通成本，让接口联调更顺利。你从中体会到现代 API 开发的便捷性。
+新学：54. FastAPI —— 本単元新学 2 课時（共 4 课時，分段学习）
+復習：53. Flask —— 复習 4 课時；51. pytest —— 复習 4 课時
+
+单元 8.10
+
+情景：整合练习日：你需要用 Flask/FastAPI 写一个小服务，包含日志、测试与文档，把之前学到的调试、测试与规范串起来交付给导师。项目演示当天，你的服务稳定运行并通过审查。这个单元就是把零散技能组合成产品能力的里程碑。
+新学：无（整合练习）
+復習：49–54（按练习需要选择复習点）
+
+阶段 9（每单元容量 2 课時）
+单元 9.1
+
+情景：产品决定把原型扩展到复杂站点，团队选用 Django，你负责创建项目骨架并熟悉 apps、urls、settings 等约定式结构。你在迁移过程中记录了常见坑并写成迁移指南，帮助团队顺利过渡。Django 的“约定优于配置”理念在这里得到了实践。
+新学：55. Django —— 本單元新学 2 课時（共 5 课時，分段学习）
+復習：53. Flask —— 复習 4 课時；54. FastAPI —— 复習 4 课時
+
+单元 9.2
+
+情景：在 Django 中实现文章列表页：你写 model、view 与 template 并处理分页与查询参数。把以前 Flask 的博客功能迁移过来并优化了模板结构。通过迁移你学到了不同框架之间设计理念的差异。
+新学：55. Django —— 本單元新学 2 课時（共 5 课時，分段学习）
+復習：53. Flask —— 复習 4 课時
+
+单元 9.3
+
+情景：你要完成一个 ETL 任务：从多个 CSV 中抽取、清洗并合并数据，为分析师准备训练集。你用 NumPy 做数值预处理，用 Pandas 做表格合并与缺失值处理，确保数据可重复生成。这个单元强调数据工程的可复现性。
+新学：56. NumPy（续）/57. Pandas（续） —— 本單元新学 2 课時（分段）
+復習：55. Django —— 复習 5 课時
+
+单元 9.4
+
+情景：你用 Pandas 实现数据清洗流水线：缺失值填充、类型转换与异常值处理，最终输出干净的 CSV 供模型训练。你为流程写了单元测试并记录数据字典，方便后续追踪。这个单元让你把数据处理做到工程化。
+新学：57. Pandas —— 本單元新学 2 课時（共 4 课時，分段学习）
+復習：56. NumPy —— 复習 3 课時；48. json / pickle —— 复習 3 课時
+
+单元 9.5
+
+情景：你为月报设计复杂图表：多子图、样式配置与注释，确保导出图片符合品牌风格并能直接嵌入 PPT。你学习图表美化技巧并记录成模板供后续重复使用。精美的可视化让业务同仁更容易理解数据。
+新学：58. Matplotlib —— 本單元新学 2 课時（共 3 课時，分段学习）
+復習：57. Pandas —— 复習 4 课時
+
+单元 9.6
+
+情景：你实现更稳健的爬虫：保持会话、模拟用户行为并处理常见反爬策略（Headers、延时、代理），同时把抓到的数据管道化存入数据库。这个项目用于价格监控并在短时间内发现市场波动。
+新学：59. 爬虫 requests + BeautifulSoup（续）/60. Selenium（续） —— 本單元新学 2 课時（分段）
+復習：58. Matplotlib —— 复習 3 课時；53. Flask —— 复習 4 课時
+
+单元 9.7
+
+情景：你用 Selenium 做端到端自动化回归测试：自动填写表单、提交并检查结果页面，模拟真实用户路径。测试通过后，项目部署风险降低，QA 也更放心。浏览器自动化在这里承担了质量保障的重任。
+新学：60. Selenium —— 本單元新学 2 课時（共 4 课時，分段学习）
+復習：59. 爬虫 requests + BeautifulSoup —— 复習 3 课時
+
+单元 9.8
+
+情景：你需要并行抓取并清洗大量页面数据：用线程池/进程池并行抓取、解析并合并结果，最后把数据写入数据库。并发显著提高了数据产出率，但也带来更多错误处理和重试机制的设计题。这个单元让你把并发工程化处理起来。
+新学：61. 并发（多线程/多进程） —— 本單元新学 2 课時（共 4 课時，分段学习）
+復習：36. 异常处理 —— 复習 3 课時；49. 调试 —— 复習 2 课時
+
+单元 9.9
+
+情景：你实现了一个异步爬虫：用 asyncio 与 aiohttp 并发下载图片并观察延迟与吞吐变化。你把异步实现与线程实现做了对比测试并写成报告，供团队决策。这个单元帮助你把异步编程纳入工具箱。
+新学：62. 异步 async/await —— 本單元新学 2 课時（共 5 课時，分段学习）
+復習：61. 并发 —— 复習 4 课時；60. Selenium —— 复習 4 课時
+
+单元 9.10
+
+情景：你把抓取、清洗、入库与报表整合成一个可重复执行的任务，并在最后交付给产品经理一个完整的数据包与自动化脚本。项目顺利交付后，团队把你的脚本作为标准流水线使用。这个单元是对前面积累的完整检验。
+新学：无（整合为主）
+復習：50–62（按任务需要复習）
+
+阶段 10（每单元容量 2 课時；项目与高级整合）
+单元 10.1
+
+情景：你把常用脚本打包成命令行工具，添加 --help 与简单子命令并写了漂亮的使用说明。家人和同事都能在终端运行并完成常见任务，比如导出数据、跑本地检查或生成报表。CLI 的设计让小工具更像产品而非一次性脚本。
+新学：63. CLI 工具开发 —— 本單元新学 2 课時（共 3 课時，分段学习）
+復習：52. PEP8 —— 复習 2 课時；49. 调试 —— 复習 2 课時
+
+单元 10.2
+
+情景：你扩展 CLI 支持子命令（如 export / run）并实现从配置文件读取默认参数。同时你开始搭建个人博客骨架，把 CLI 的导出功能用于博客内容备份。一次家庭演示中，父母也能点击运行脚本，效果令人惊讶。
+新学：63. CLI 工具开发 —— 本単元新学 1 课時（完成分段）；64. Flask 博客系统 —— 本單元新学 1 课時（共 4 课時，分段学习）
+復習：63. CLI 工具 —— 复習 3 课時
+
+单元 10.3
+
+情景：你实现博客的文章模型与存储逻辑（用 JSON 模拟数据库），并提供 REST 接口供前端读取文章列表。你为博客写了简单的管理脚本，朋友也能很快发布第一篇文章。这个过程教会你如何把数据模型与接口契约结合起来。
+新学：64. Flask 博客系统 —— 本單元新学 2 课時（共 4 课時，分段学习）
+復習：53. Flask —— 复習 4 课時；57. Pandas（如用于数据展示） —— 复習 4 课時
+
+单元 10.4
+
+情景：为博客增加用户认证与评论功能，你需要处理权限、输入校验与内容审核。上线后用户能发表文章并收到评论，社区氛围开始形成。这个单元把小项目做成有实际用户体验的产品。
+新学：64. Flask 博客系统 —— 本單元新学 2 课時（续）
+復習：63. CLI 工具 —— 复習 3 课時
+
+单元 10.5
+
+情景：你为管理后台准备数据仪表盘：后端把 Pandas 的统计结果通过接口提供给前端，前端把数据可视化展示给产品经理。仪表盘上实时显示关键指标并支持导出，帮助决策。数据仪表盘把后端数据处理与前端展示连接成闭环。
+新学：65. 数据可视化仪表盘 —— 本単元新学 2 课時（共 4 课時，分段学习）
+復習：58. Matplotlib —— 复習 3 课時；56. NumPy —— 复習 3 课時
+
+单元 10.6
+
+情景：你实现仪表盘的交互筛选、刷新与导出功能，并确保后端接口在高并发下稳定。演示时产品经理能实时筛选数据并导出报告，大家纷纷点赞这套自动化流程。这个单元强调交互设计与后端稳定性的统一。
+新学：65. 数据可视化仪表盘 —— 本単元新学 2 课時（续）
+復習：64. Flask 博客系统 —— 复習 4 课時
+
+单元 10.7
+
+情景：你启动小型机器学习实验：用 Pandas 准备训练数据，调用简单模型训练并保存预测结果。你记录特征工程步骤与参数配置，方便复现实验。这个单元帮助你把数据处理能力延伸到建模流程。
+新学：66. 小型机器学习项目 —— 本單元新学 2 课時（共 5 课時，分段学习）
+復習：57. Pandas —— 复習 4 课時；56. NumPy —— 复習 3 课時
+
+单元 10.8
+
+情景：你评估模型性能并绘制混淆矩阵与学习曲线，把结果展示到仪表盘上，便于业务方理解模型的优劣。你根据评估结果调整参数并记录实验日志。这个单元是模型从训练到评估到展示的一次完整演练。
+新学：66. 小型机器学习项目 —— 本單元新学 2 课時（续）
+復習：65. 数据可视化仪表盘 —— 复習 4 课時
+
+单元 10.9
+
+情景：项目收尾：你把服务容器化、写好部署说明，并加入日志与简单监控。一次演示把部署过程复现并自动化，运维同事表示部署流程清晰可复现。这个单元是把作品推向“可运行环境”的里程碑。
+新学：66. 小型机器学习项目 —— 本單元新学 1 课時（完成分段）
+復習：64. Flask 博客系统 —— 复習 4 课時；62. 异步 async/await —— 复習 5 课時
+
+单元 10.10
+
+情景：终极展示日：学员们把博客、仪表盘、爬虫或小型 ML 项目带到课堂演示，并接受互评与导师点评。你站在台上讲解设计决策、遇到的问题与解决方案，证明你已经把知识点组合成可交付产品。毕业不是结束，而是把这些能力带回真实问题中继续成长。
+新学：无（交付与评审）
+復習：课程全覆盖（建议覆盖 50–66 等高级项）
+
+阶段 1：基础语法
+
+输出与打印 —— 1课时
+
+变量与数据类型 —— 2课时
+
+输入 input —— 1课时
+
+运算符 —— 2课时
+
+注释与代码规范 —— 1课时
+
+阶段 2：流程控制
+
+if / elif / else —— 2课时
+
+for 循环 —— 2课时
+
+while 循环 —— 2课时
+
+break / continue —— 2课时
+
+综合练习（猜数字 / 乘法表）—— 3课时
+
+阶段 3：数据结构
+
+列表 list 基础 —— 2课时
+
+列表切片与方法 —— 3课时
+
+元组 tuple —— 1课时
+
+字典 dict 基础 —— 2课时
+
+字典方法 —— 2课时
+
+集合 set —— 2课时
+
+字符串操作 —— 3课时
+
+阶段 4：函数与作用域
+
+定义与调用函数 —— 2课时
+
+参数与返回值 —— 3课时
+
+默认参数 / 可变参数 —— 3课时
+
+作用域（局部 vs 全局）—— 2课时
+
+匿名函数 lambda —— 3课时
+
+高阶函数（map / filter / reduce）—— 4课时
+
+阶段 5：模块与包
+
+导入模块 —— 2课时
+
+常用内置模块 —— 3课时
+
+自定义模块 —— 3课时
+
+阶段 6：面向对象编程 (OOP)
+
+类与对象 —— 3课时
+
+属性与方法 —— 3课时
+
+构造方法 init —— 2课时
+
+继承与 super —— 4课时
+
+多态 —— 4课时
+
+封装与私有属性 —— 4课时
+
+特殊方法（str 等）—— 4课时
+
+阶段 7：文件与异常处理
+
+文件读写（文本）—— 3课时
+
+文件读写（二进制）—— 3课时
+
+异常处理 try / except —— 3课时
+
+finally 与自定义异常 —— 4课时
+
+阶段 8：进阶语法
+
+迭代器 —— 3课时
+
+生成器 yield —— 4课时
+
+列表/字典推导式 —— 3课时
+
+装饰器 —— 4课时
+
+上下文管理器 with —— 4课时
+
+类型注解 —— 3课时
+
+阶段 9：常用标准库
+
+collections —— 3课时
+
+itertools —— 4课时
+
+functools —— 4课时
+
+re 正则表达式 —— 5课时
+
+json / pickle —— 3课时
+
+阶段 10：工程实践
+
+调试（print/logging）—— 2课时
+
+单元测试 unittest —— 3课时
+
+pytest —— 4课时
+
+代码规范 PEP8 —— 2课时
+
+阶段 11：实用开发方向
+
+Web开发 Flask —— 4课时
+
+FastAPI —— 4课时
+
+Django —— 5课时
+
+NumPy —— 3课时
+
+Pandas —— 4课时
+
+Matplotlib —— 3课时
+
+爬虫 requests+BS —— 3课时
+
+Selenium —— 4课时
+
+并发（多线程/多进程）—— 4课时
+
+异步 async/await —— 5课时
+
+阶段 12：综合项目
+
+CLI 工具 —— 3课时
+
+Flask 博客系统 —— 4课时
+
+数据可视化仪表盘 —— 4课时
+
+小型机器学习项目 —— 5课时

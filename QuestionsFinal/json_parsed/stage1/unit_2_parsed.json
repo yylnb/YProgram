@@ -1,0 +1,312 @@
+[
+  {
+    "id": 1,
+    "type": "choice",
+    "title": "单行注释的魔法",
+    "content": "小华想在自己的代码中添加一条注释，提醒自己这里是计算总价的。他应该使用什么符号开始注释？",
+    "options": {
+      "A": "//",
+      "B": "#",
+      "C": "--",
+      "D": "/*"
+    },
+    "answer": "B",
+    "hints": [
+      "在Python中，注释通常以一个特殊符号开头。",
+      "这个符号在键盘上很容易找到，位于数字键上方。",
+      "Python使用#来开始单行注释。"
+    ],
+    "explanation": "在Python中，单行注释以#开头，例如 # 计算总价。",
+    "example": "例如，你也可以写 # 这是一个注释"
+  },
+  {
+    "id": 2,
+    "type": "choice",
+    "title": "多行注释的宝盒",
+    "content": "丽丽需要写一段较长的注释，跨越三行，来解释她的函数。在Python中，她可以使用什么？",
+    "options": {
+      "A": "使用多个#符号",
+      "B": "使用三引号（\"\"\"或'''）",
+      "C": "使用/*和*/",
+      "D": "使用--和换行"
+    },
+    "answer": "B",
+    "hints": [
+      "Python没有专门的多行注释语法，但有一种常见做法。",
+      "三引号通常用于字符串，但也可以用作多行注释。",
+      "使用三对单引号或双引号来包裹多行文本。"
+    ],
+    "explanation": "虽然Python没有正式的多行注释语法，但使用三引号（\"\"\"或'''）可以创建多行字符串，常被用作多行注释。",
+    "example": "例如：\n\"\"\"\n这是一个多行注释\n可以写很多行\n\"\"\""
+  },
+  {
+    "id": 3,
+    "type": "choice",
+    "title": "代码的“对齐强迫症”",
+    "content": "在Python中，代码块是通过什么来定义的？比如在if语句中。",
+    "options": {
+      "A": "大括号 {}",
+      "B": "缩进（空格或制表符）",
+      "C": "关键字如begin和end",
+      "D": "分号 ;"
+    },
+    "answer": "B",
+    "hints": [
+      "Python以其独特的代码块定义方式而闻名。",
+      "它不使用像C语言那样的大括号。",
+      "缩进在Python中非常重要，它决定了代码的层次结构。"
+    ],
+    "explanation": "Python使用缩进来定义代码块，通常推荐使用4个空格进行缩进。",
+    "example": "例如：\nif x > 0:\n    print(\"正数\")  # 这4个空格是缩进"
+  },
+  {
+    "id": 4,
+    "type": "fill",
+    "title": "注释点缀代码",
+    "content": "补全下面的代码，在变量赋值后添加一个单行注释。",
+    "input": null,
+    "output": null,
+    "code_segment": "{\"segments\": [{\"type\": \"code_inline\", \"parts\": [{\"type\": \"code\", \"value\": \"price = 100 \"}, {\"type\": \"slot\", \"index\": 0}]}]}",
+    "options": [
+      "# 商品价格",
+      "# price",
+      "// 商品价格",
+      "# 这是价格",
+      "# cost"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "在Python中，单行注释以#开头，后跟注释文本，例如 # 商品价格。",
+    "example": "例如，你也可以写 age = 25  # 设置年龄"
+  },
+  {
+    "id": 5,
+    "type": "fill",
+    "title": "命名的艺术",
+    "content": "根据PEP 8，选择一个合适的变量名来存储用户年龄。",
+    "input": null,
+    "output": null,
+    "code_segment": "{\"segments\": [{\"type\": \"code_inline\", \"parts\": [{\"type\": \"code\", \"value\": \"\"}, {\"type\": \"slot\", \"index\": 0}, {\"type\": \"code\", \"value\": \" = 25  # 用户年龄\"}]}]}",
+    "options": [
+      "user_age",
+      "userAge",
+      "UserAge",
+      "age",
+      "Age",
+      "USERAGE"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "根据PEP 8，变量名应该使用小写字母，单词之间用下划线分隔，例如 user_age。",
+    "example": "例如，对于用户名，可以用 user_name。"
+  },
+  {
+    "id": 6,
+    "type": "choice",
+    "title": "函数的“自我介绍”",
+    "content": "在Python中，文档字符串（docstring）是用来做什么的？通常放在哪里？",
+    "options": {
+      "A": "用于多行注释，可以放在任何地方",
+      "B": "用于描述函数、类或模块，放在定义之后的第一行",
+      "C": "用于调试，放在代码末尾",
+      "D": "用于变量说明，放在赋值语句前"
+    },
+    "answer": "B",
+    "hints": [
+      "文档字符串是字符串字面量，用于文档化代码。",
+      "它通常紧跟在函数、类或模块的定义之后。",
+      "使用三引号包裹，并且是定义后的第一个语句。"
+    ],
+    "explanation": "文档字符串用于描述函数、类或模块的功能，通常放在定义后的第一行，用三引号包裹。",
+    "example": "例如：\ndef greet(name):\n    \"\"\"打印问候语\"\"\"\n    print(f\"Hello, {name}\")"
+  },
+  {
+    "id": 7,
+    "type": "choice",
+    "title": "代码的“瘦身计划”",
+    "content": "根据PEP 8，代码行的最大推荐长度是多少？",
+    "options": {
+      "A": "80字符",
+      "B": "100字符",
+      "C": "120字符",
+      "D": "79字符"
+    },
+    "answer": "D",
+    "hints": [
+      "PEP 8对代码行长度有具体建议。",
+      "这个数字是为了在标准终端上显示舒适。",
+      "它是79个字符。"
+    ],
+    "explanation": "PEP 8建议每行代码不超过79字符，以提高可读性。",
+    "example": "如果一行太长，可以使用括号、反斜杠或换行来分割。"
+  },
+  {
+    "id": 8,
+    "type": "choice",
+    "title": "注释的“隐身术”",
+    "content": "哪个选项展示了在代码后添加注释的正确语法？",
+    "options": {
+      "A": "x = 5 # 设置x为5",
+      "B": "# 设置x为5 x = 5",
+      "C": "x = 5 // 设置x为5",
+      "D": "x = 5  -- 设置x为5"
+    },
+    "answer": "A",
+    "hints": [
+      "注释应该以#开头。",
+      "在代码后添加注释时，#前需要有空格。",
+      "只有A选项使用#并正确放置。"
+    ],
+    "explanation": "正确语法是在代码后加空格，然后#和注释文本，如 x = 5 # 设置x为5。",
+    "example": "类似地，y = 10  # 初始化y"
+  },
+  {
+    "id": 9,
+    "type": "fill",
+    "title": "函数文档的补全",
+    "content": "补全下面的函数，添加一个文档字符串来描述函数功能。",
+    "input": null,
+    "output": null,
+    "code_segment": "{\"segments\": [{\"type\": \"code_inline\", \"parts\": [{\"type\": \"code\", \"value\": \"def calculate_area(radius):\\n    \"}, {\"type\": \"slot\", \"index\": 0}, {\"type\": \"code\", \"value\": \"\\n    return 3.14 * radius ** 2\"}]}]}",
+    "options": [
+      "\"\"\"计算圆的面积。\"\"\"",
+      "\"\"\"Calculate the area of a circle.\"\"\"",
+      "# 计算圆的面积",
+      "'''计算圆的面积。'''",
+      "// 计算圆的面积"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "文档字符串应该用三引号包裹，放在函数定义后的第一行，描述函数功能，例如 \"\"\"计算圆的面积。\"\"\"。",
+    "example": "例如：def greet(name):\n    \"\"\"打印问候语\"\"\"\n    print(f\"Hello, {name}\")"
+  },
+  {
+    "id": 10,
+    "type": "fill",
+    "title": "函数命名的准则",
+    "content": "根据PEP 8，补全下面的函数定义，使用合适的命名。",
+    "input": null,
+    "output": null,
+    "code_segment": "{\"segments\": [{\"type\": \"code_inline\", \"parts\": [{\"type\": \"code\", \"value\": \"def \"}, {\"type\": \"slot\", \"index\": 0}, {\"type\": \"code\", \"value\": \"(x, y):\\n    return x + y\"}]}]}",
+    "options": [
+      "add_numbers",
+      "addNumbers",
+      "AddNumbers",
+      "ADD_NUMBERS",
+      "add",
+      "Add"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "根据PEP 8，函数名应该使用小写字母，单词之间用下划线分隔，例如 add_numbers。",
+    "example": "类似地，一个计算平均值的函数可以命名为 calculate_average。"
+  },
+  {
+    "id": 11,
+    "type": "choice",
+    "title": "注释的“陷阱”",
+    "content": "以下哪种做法是不推荐的代码风格？",
+    "options": {
+      "A": "使用注释解释复杂的算法",
+      "B": "注释掉暂时不用的代码",
+      "C": "写过多的明显注释，如 x = 5 # 赋值x为5",
+      "D": "在函数前写文档字符串"
+    },
+    "answer": "C",
+    "hints": [
+      "注释应该增加价值，而不是重复代码。",
+      "明显的注释如“赋值x为5”通常不需要，因为代码本身清晰。",
+      "过度注释会降低代码可读性。"
+    ],
+    "explanation": "注释应该用于解释为什么这样做，而不是做什么。对于明显的代码，避免写冗余注释。",
+    "example": "例如，避免写 i += 1  # 增加i，因为代码已经自解释。"
+  },
+  {
+    "id": 12,
+    "type": "choice",
+    "title": "导入的“排队艺术”",
+    "content": "根据PEP 8，导入语句应该按什么顺序排列？",
+    "options": {
+      "A": "按字母顺序",
+      "B": "标准库导入、第三方库导入、本地导入",
+      "C": "随意排列",
+      "D": "根据使用频率"
+    },
+    "answer": "B",
+    "hints": [
+      "PEP 8对导入顺序有明确建议。",
+      "首先导入Python标准库的模块。",
+      "然后第三方库，最后是本地应用程序或库的导入。"
+    ],
+    "explanation": "PEP 8推荐导入顺序为：标准库导入、第三方库导入、本地导入，每组之间用空行分隔。",
+    "example": "例如：\nimport os\nimport sys\n\nimport requests\n\nfrom mymodule import myfunction"
+  },
+  {
+    "id": 13,
+    "type": "choice",
+    "title": "三引号的“双重身份”",
+    "content": "在Python中，三引号（\"\"\"或'''）通常用于什么？",
+    "options": {
+      "A": "只能用于多行字符串",
+      "B": "只能用于多行注释",
+      "C": "用于多行字符串和文档字符串",
+      "D": "用于单行注释"
+    },
+    "answer": "C",
+    "hints": [
+      "三引号可以创建多行字符串字面量。",
+      "文档字符串也是一种多行字符串。",
+      "它常被用作多行注释，但本质上是字符串。"
+    ],
+    "explanation": "三引号用于创建多行字符串，常用于文档字符串（docstring），也可以作为多行注释使用，但实际上是字符串对象。",
+    "example": "例如：\nmultiline_string = \"\"\"第一行\n第二行\"\"\"\n或作为文档字符串。"
+  },
+  {
+    "id": 14,
+    "type": "fill",
+    "title": "代码的“美容院”",
+    "content": "补全下面的代码，使用正确的缩进和空格。",
+    "input": null,
+    "output": null,
+    "code_segment": "{\"segments\": [{\"type\": \"code_inline\", \"parts\": [{\"type\": \"code\", \"value\": \"if x > 0:\\n\"}, {\"type\": \"slot\", \"index\": 0}, {\"type\": \"code\", \"value\": \"print(\\\"正数\\\")\"}]}]}",
+    "options": [
+      "    ",
+      "  ",
+      "\t",
+      " "
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "在Python中，推荐使用4个空格进行缩进，以定义代码块。",
+    "example": "类似地，在for循环中：\nfor i in range(5):\n    print(i)"
+  },
+  {
+    "id": 15,
+    "type": "fill",
+    "title": "完整的代码片段",
+    "content": "补全下面的代码片段，包括注释和变量命名。",
+    "input": null,
+    "output": null,
+    "code_segment": "{\"segments\": [{\"type\": \"code_inline\", \"parts\": [{\"type\": \"code\", \"value\": \"# 计算用户得分\\n\"}, {\"type\": \"slot\", \"index\": 0}, {\"type\": \"code\", \"value\": \" = 85  # 初始得分\\nprint(\"}, {\"type\": \"slot\", \"index\": 1}, {\"type\": \"code\", \"value\": \")\"}]}]}",
+    "options": [
+      "user_score",
+      "score",
+      "userScore",
+      "UserScore",
+      "\"得分：\", user_score",
+      "\"Score:\", score",
+      "\"结果\", score"
+    ],
+    "answer": [
+      0,
+      4
+    ],
+    "explanation": "变量名应使用小写字母和下划线，如 user_score。print语句中可以使用字符串和变量来输出信息。",
+    "example": "类似地，name = \"Alice\"; print(\"Hello,\", name)"
+  }
+]

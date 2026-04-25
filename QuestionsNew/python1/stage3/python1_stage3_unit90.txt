@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第90单元：阶段小结与综合复习（Unit61–89）',
+  'questions': [
+    {'id':1,'type':'choice','title':'复习要点','content':'学习循环与相关主题的核心要点包括？','options':{'A':'理解迭代、边界、复杂度与数据结构配合','B':'只记语法','C':'只用库函数','D':'抛弃循环'},'answer':'A','hints':['关注语义、性能与边界处理'], 'explanation':'掌握循环的语法同时要理解何时使用、边界与复杂度，以及如何与数据结构搭配使用。','example':'practice problems'},
+    {'id':2,'type':'choice','title':'debug 技巧','content':'循环出错调试时优先做什么？','options':{'A':'写小样例并打印中间状态','B':'直接重写全部代码','C':'增加大量注释','D':'忽略错误'},'answer':'A','hints':['小样例快速定位问题'], 'explanation':'通过最小可复现样例和中间输出能快速定位逻辑错误。','example':'print intermediate states'},
+    {'id':3,'type':'choice','title':'性能复查','content':'复习性能时要关注？','options':{'A':'时间复杂度与内存占用','B':'代码注释长度','C':'变量名长度','D':'文件名'},'answer':'A','hints':['关注大 O 与内存峰值'], 'explanation':'在复习性能时主要关注算法复杂度与运行时的内存占用。','example':'profile code'},
+    {'id':4,'type':'fill','title':'回顾 enumerate','content':'补全：用 enumerate 打印索引和值（从 1 开始）。','input':'a b','output':'1 a\n2 b','code':'for i,v in enumerate(input().split(),1):\n    print(i, v)','options':'示例已给出','answer':'1','explanation':'enumerate 支持指定起始索引，常用于编号输出。','example':'enumerate(lst,1)'},
+    {'id':5,'type':'fill','title':'回顾 join','content':'补全：把多行合并为一字符串输出。','input':'a\nb','output':'a\nb','code':'lines=[input() for _ in range(2)]\nprint("\n".join(lines))','options':'示例已给出','answer':'1','explanation':'join 用于高效合并多个字符串片段。','example':'"\n".join(lines)'},
+    {'id':6,'type':'choice','title':'复习正则','content':'正则复习应关注？','options':{'A':'常用模式、分组、转义与性能陷阱','B':'只学 match','C':'全部用 find','D':'忽略'},'answer':'A','hints':['掌握常用分组与转义并注意性能陷阱'], 'explanation':'复习正则时应掌握分组、转义以及避免回溯爆炸等性能陷阱。','example':'re.sub, re.finditer'},
+    {'id':7,'type':'choice','title':'复习数据结构','content':'复习时应把重点放在？','options':{'A':'何时使用 list/deque/heap/dict 等','B':'只记 API','C':'写入数据库','D':'纯理论'},'answer':'A','hints':['理解适用场景比记 API 更重要'], 'explanation':'复习数据结构时要理解每种结构的特性与适用场景。','example':'deque for queue'},
+    {'id':8,'type':'choice','title':'复习并发','content':'并发复习要关注什么？','options':{'A':'何时使用线程/进程/协程及共享数据的同步问题','B':'只用线程','C':'只用进程','D':'不需要复习'},'answer':'A','hints':['理解适用场景和同步成本'], 'explanation':'并发话题要理解不同模型的适用场景与同步通信代价。','example':'GIL effects'},
+    {'id':9,'type':'fill','title':'综合练习 1','content':'补全：输入数字，输出其因子个数（简单版）。','input':'6','output':'4','code':'n=int(input())\ncnt=0\nfor i in range(1,n+1):\n    if n%i==0:\n        cnt+=1\nprint(cnt)','options':'示例已给出','answer':'1','explanation':'枚举所有可能因子并计数。','example':'divisors loop'},
+    {'id':10,'type':'fill','title':'综合练习 2','content':'补全：统计字符串中元音字母数。','input':'hello','output':'2','code':'s=input().lower()\nprint(sum(1 for ch in s if ch in "aeiou"))','options':'示例已给出','answer':'1','explanation':'使用生成器表达式和 sum 可以简洁统计满足条件的元素。','example':'sum cond'},
+    {'id':11,'type':'choice','title':'复习策略','content':'高效复习编程题的策略包括？','options':{'A':'做题+总结模板+复盘错误','B':'只看题解','C':'只背答案','D':'不做练习'},'answer':'A','hints':['主动练习并总结提高最快'], 'explanation':'通过练习、总结及复盘能有效提升解题能力。','example':'maintain cheat-sheet'},
+    {'id':12,'type':'choice','title':'测试重要性','content':'编写测试用例在复习中重要么？','options':{'A':'重要，可覆盖边界和特殊情况','B':'无关紧要','C':'只在生产中做','D':'仅写单元测试'},'answer':'A','hints':['测试能帮助发现边界与异常情况'], 'explanation':'测试能提高代码健壮性并帮助验证各种边界与异常输入。','example':'create sample cases'},
+    {'id':13,'type':'choice','title':'刷题节奏','content':'刷题时建议节奏是？','options':{'A':'稳步持续，注重反思','B':'一口气刷大量不回看','C':'只刷易题','D':'每天不做'},'answer':'A','hints':['持续与反思比短期冲刺更有效'], 'explanation':'稳定的练习并及时复盘错误能带来持续进步。','example':'schedule practice'},
+    {'id':14,'type':'fill','title':'综合复现','content':'补全：实现一个简单的统计每个单词出现次数的小程序。','input':'a b a','output':'a 2\nb 1','code':'from collections import Counter\nprint(*Counter(input().split()).items())','options':'示例已给出','answer':'1','explanation':'Counter 提供快速统计功能，适合这种任务。','example':'Counter(words)'},
+    {'id':15,'type':'fill','title':'下一步学习建议','content':'补全：推荐的后续进阶方向（简短列举）。','input':'(none)','output':'(none)','code':'# 建议：算法与数据结构进阶、系统设计、并发与性能调优','options':'示例已给出','answer':'1','explanation':'掌握算法、系统与并发可提升到更高工程能力。','example':'study algorithms and systems'}
+  ]
+}
+
+```
+
+*** End Patch

@@ -1,0 +1,66 @@
+USE `questions`;
+
+CREATE TABLE IF NOT EXISTS `que_choice_py_1` (
+  `q_id` VARCHAR(255) NOT NULL,
+  `unit_id` INT NOT NULL,
+  `title` VARCHAR(255),
+  `text` TEXT,
+  `options` JSON,
+  `answer` INT,
+  `hints` JSON,
+  `explanation` TEXT,
+  `example` TEXT,
+  PRIMARY KEY (`q_id`, `unit_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `que_fill_py_1` (
+  `q_id` VARCHAR(255) NOT NULL,
+  `unit_id` INT NOT NULL,
+  `title` VARCHAR(255),
+  `text` TEXT,
+  `input` TEXT,
+  `output` JSON,
+  `code` JSON,
+  `options` JSON,
+  `answer` JSON,
+  `explanation` TEXT,
+  `example` TEXT,
+  PRIMARY KEY (`q_id`, `unit_id`)
+);
+
+-- ---------- 插入选择题 ----------
+INSERT INTO `que_choice_py_1` (`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`) VALUES
+  ('1', 9, '为什么 0.1 + 0.2 不等于 0.3？', '你在做折扣计算时写了0.1 + 0.2，结果居然不是0.3，这背后最核心的原因是什么？', JSON_OBJECT('A', 'Python算错了', 'B', '浮点数用二进制存储，无法精确表示某些小数', 'C', '程序被病毒篡改了', 'D', '加法运算默认四舍五入'), 2, JSON_ARRAY('这是所有语言都会遇到的经典问题。', '思考：0.1能否在二进制中被精确表示？', '注意：浮点数的底层是二进制近似值。'), NULL, 'print(0.1 + 0.2)  # 输出 0.30000000000000004');
+INSERT INTO `que_choice_py_1` (`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`) VALUES
+  ('2', 9, '整数除法陷阱', '为什么 5 / 2 得到的是 2.5 而不是传统数学除法中的“取整”？', JSON_OBJECT('A', '/ 在 Python 中是浮点除法', 'B', '/ 会自动向下取整', 'C', '/ 会根据输入自动选择整数或浮点', 'D', '/ 会把结果变成字符串'), 1, JSON_ARRAY('回忆：整数除法在 Python 是哪个符号？', '是不是应该使用 //？', 'Python 中 / 永远产生浮点数。'), NULL, 'print(5 / 2)  # 2.5
+print(5 // 2) # 2');
+INSERT INTO `que_choice_py_1` (`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`) VALUES
+  ('3', 9, '奇怪的取模结果', '为什么 -7 % 3 的结果是 2？', JSON_OBJECT('A', 'Python把负号忽略了', 'B', 'Python出错了', 'C', 'Python取模的结果符号与除数相同', 'D', '取模运算先对负数取反'), 3, JSON_ARRAY('Python 的模运算符有符号规则。', '思考：结果必须满足：被除数 = 除数 * 商 + 余数。', '余数的符号 = 除数的符号。'), NULL, 'print(-7 % 3)  # 2');
+INSERT INTO `que_choice_py_1` (`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`) VALUES
+  ('6', 9, '浮点累积误差', '以下哪一项最可能导致长期循环累计误差越来越明显？', JSON_OBJECT('A', '使用整数存储计数', 'B', '反复累加浮点小数', 'C', '使用 += 语句', 'D', '在循环里使用 print'), 2, JSON_ARRAY('浮点误差很小，但会累积。', '反复计算会放大误差。', '整数不会有这个问题。'), NULL, 'for _ in range(1000000): x += 0.1  # 误差累积明显');
+INSERT INTO `que_choice_py_1` (`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`) VALUES
+  ('7', 9, '除法产生意外浮点', '为什么 4/2 的结果是 2.0 而不是 2？', JSON_OBJECT('A', '因为 4 是偶数', 'B', 'Python 保留整数类型', 'C', 'Python 的除法结果永远为浮点', 'D', '因为写错了语法'), 3, JSON_ARRAY('关于 / 的规则记得吗？', '不论结果是否为整数，/ 都产生 float。', '4/2 结果数学上为整数，但类型依然是 float。'), NULL, 'print(type(4/2))  # float');
+INSERT INTO `que_choice_py_1` (`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`) VALUES
+  ('8', 9, '意外的字符串拼接', '为什么 ''5'' + 3 会报错？', JSON_OBJECT('A', 'Python 不支持加号', 'B', '不能把字符串和整数直接相加', 'C', 'Python 自动把3转成字符串', 'D', '字符串加法会做乘法'), 2, JSON_ARRAY('类型不一致。', '字符串加法只能连接字符串。', '可以使用 str() 或 int() 转换类型。'), NULL, 'print(''5'' + str(3))  # ''53''');
+INSERT INTO `que_choice_py_1` (`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`) VALUES
+  ('11', 9, '舍入行为理解', 'round(2.5) 的结果为什么是 2？', JSON_OBJECT('A', 'Python 向上取整', 'B', 'Python 向下取整', 'C', 'Python 的 round 使用“银行家舍入法”', 'D', 'Python 自动判断最接近的整数'), 3, JSON_ARRAY('round 的规则不是单纯四舍五入。', '遇到 .5 时，会舍入到偶数。', '这叫银行家舍入法。'), NULL, 'print(round(3.5), round(2.5))  # 4 2');
+INSERT INTO `que_choice_py_1` (`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`) VALUES
+  ('12', 9, '浮点比较的替代方案', '哪一种比较方式更适合用于浮点数等值判断？', JSON_OBJECT('A', '直接使用 ==', 'B', '打印出来肉眼比较', 'C', '比较两个值的差是否在容许误差范围内', 'D', '把浮点数改成字符串比较'), 3, JSON_ARRAY('误差不可避免。', '差值比较是最稳妥的方式。', '许多科学计算库都推荐此做法。'), NULL, 'abs(a-b) < 1e-9');
+INSERT INTO `que_choice_py_1` (`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`) VALUES
+  ('13', 9, '复合表达式中的隐式浮点', '表达式 3 + 2/2 的结果为什么是 4.0？', JSON_OBJECT('A', 'Python 自动把所有数字转换成字符串', 'B', '表达式含有 / 就会产生 float', 'C', '因为 3+1 必须是浮点数', 'D', 'Python 使用整数优先规则'), 2, JSON_ARRAY('/ 一出现，结果就是 float。', '再和整数相加结果也会变成 float。', '因此得到 4.0 而不是 4。'), NULL, 'print(3 + 2/2)  # 4.0');
+
+-- ---------- 插入填空题 ----------
+INSERT INTO `que_fill_py_1` (`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`) VALUES
+  ('4', 9, '浮点误差导致的判断失败', '请修复比较操作使其更可靠。', NULL, NULL, '{"segments": [{"type": "code_inline", "parts": [{"type": "code", "value": "a = 0.1 + 0.2\nif "}, {"type": "slot", "index": 0}, {"type": "code", "value": "_ == 0.3:\n    print(''相等'')\nelse:\n    print(''不相等'')"}]}]}', JSON_ARRAY('round(a', '1)', 'a', 'int(a)', 'str(a)', 'round(a', '2)', 'abs(a - 0.3) < 1e-9'), JSON_ARRAY(6), NULL, 'if abs((0.1+0.2) - 0.3) < 1e-9:
+    print(''相等'')');
+INSERT INTO `que_fill_py_1` (`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`) VALUES
+  ('5', 9, '整数除法与浮点除法混用', '修复表达式，使 total 保持整数类型。', NULL, NULL, '{"segments": [{"type": "code_inline", "parts": [{"type": "code", "value": "x = 17\ny = 5\ntotal = x "}, {"type": "slot", "index": 0}, {"type": "code", "value": "_ y\nprint(total)"}]}]}', JSON_ARRAY('/', '//', '%', '+', '*', '**'), JSON_ARRAY(2), NULL, 'print(17 // 5)  # 输出 3');
+INSERT INTO `que_fill_py_1` (`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`) VALUES
+  ('9', 9, '修复数值类型混乱', '修复代码，使结果变成整数加整数。', NULL, NULL, '{"segments": [{"type": "code_inline", "parts": [{"type": "code", "value": "a = ''7''\nb = 3\nc = int(a) "}, {"type": "slot", "index": 0}, {"type": "code", "value": "_ b\nprint(c)"}]}]}', JSON_ARRAY('+', '-', '*', '/', '//', '%'), JSON_ARRAY(1), NULL, 'print(int(''7'') + 3)  # 10');
+INSERT INTO `que_fill_py_1` (`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`) VALUES
+  ('10', 9, '取模陷阱修复', '填空使得结果为 1，而不是负数。', NULL, NULL, '{"segments": [{"type": "code_inline", "parts": [{"type": "code", "value": "x = -10\ny = 3\nr = x "}, {"type": "slot", "index": 0}, {"type": "code", "value": "_ y\nprint(r)"}]}]}', JSON_ARRAY('%', '//', '/', '+', '*', '**'), JSON_ARRAY(1), NULL, 'print(-10 % 3)  # 2');
+INSERT INTO `que_fill_py_1` (`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`) VALUES
+  ('14', 9, '避免累积误差的计数方式', '修复代码，使累加保持精准整数。', NULL, NULL, '{"segments": [{"type": "code_inline", "parts": [{"type": "code", "value": "total = 0.0\nfor i in range(5):\n    total = total "}, {"type": "slot", "index": 0}, {"type": "code", "value": "_ 1\nprint(total)"}]}]}', JSON_ARRAY('+', '+ 1.0', '+ 0.1', '-', '*', '//', '+ int(1)'), JSON_ARRAY(7), NULL, 'total = 0
+for i in range(5): total += 1');
+INSERT INTO `que_fill_py_1` (`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`) VALUES
+  ('15', 9, '避免浮点结构比较失败', '修复以下代码，使 if 判断为 True。', NULL, NULL, '{"segments": [{"type": "code_inline", "parts": [{"type": "code", "value": "x = 0.3\nif abs(x - (0.1 + 0.2)) "}, {"type": "slot", "index": 0}, {"type": "code", "value": "_ 1e-9:\n    print(''通过'')"}]}]}', JSON_ARRAY('<', '>', '<=', '>=', '==', '!='), JSON_ARRAY(1), NULL, 'if abs(0.3 - (0.1+0.2)) < 1e-9: print(''ok'')');

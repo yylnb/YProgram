@@ -1,0 +1,274 @@
+[
+  {
+    'id': 1,
+    'type': 'choice',
+    'title': '布尔基本类型',
+    'content': '下面哪个是 Python 的布尔字面量？',
+    'options': {
+      'A': 'True',
+      'B': 'true',
+      'C': 'TRUE',
+      'D': '1'
+    },
+    'answer': 'A',
+    'hints': [
+      'Python 中布尔字面量区分大小写。',
+      '只有首字母大写的写法是正确的。',
+      '数字 1 虽然在布尔上下文可当 True，但不是布尔字面量。'
+    ],
+    'explanation': 'Python 的布尔字面量是 True 和 False（首字母大写）。',
+    'example': '例如 if True: print("yes")'
+  },
+
+  {
+    'id': 2,
+    'type': 'choice',
+    'title': '比较表达式返回类型',
+    'content': '表达式 3 > 2 的结果是什么类型？',
+    'options': {
+      'A': 'int',
+      'B': 'str',
+      'C': 'bool',
+      'D': 'float'
+    },
+    'answer': 'C',
+    'hints': [
+      '比较运算的结果是判断对错。',
+      '对的用 True 表示，错的用 False。',
+      '因此类型是布尔型。'
+    ],
+    'explanation': '比较运算（>, <, == 等）返回布尔值 True/False。',
+    'example': '5 == 5 → True，类型是 bool。'
+  },
+
+  {
+    'id': 3,
+    'type': 'choice',
+    'title': '布尔运算 and',
+    'content': '表达式 True and False 的值是？',
+    'options': {
+      'A': 'True',
+      'B': 'False',
+      'C': 'None',
+      'D': '0'
+    },
+    'answer': 'B',
+    'hints': [
+      'and 只有在两个操作数都为 True 时才为 True。',
+      '这里有一个 False，结果应为 False。',
+      '不是 None 或 0，答案就是 False。'
+    ],
+    'explanation': 'True and False → False，因为两侧必须都为 True 才返回 True。',
+    'example': 'True and True → True；False and True → False。'
+  },
+
+  {
+    'id': 4,
+    'type': 'fill',
+    'title': 'bool() 的基本用法',
+    'content': '补全代码：判断值是否为真值。',
+    'input': 'val = ""',
+    'output': 'False',
+    'code': 'print(___(val))',
+    'options': 'bool, int, str, True, False, len',
+    'answer': '1',
+    'explanation': 'bool(val) 可以将任意值转换为布尔值；空字符串为 False。',
+    'example': 'bool("abc") → True；bool("") → False。'
+  },
+
+  {
+    'id': 5,
+    'type': 'fill',
+    'title': '空容器的真值性',
+    'content': '补全代码：判断空列表是否为假值。',
+    'input': 'lst = []',
+    'output': 'False',
+    'code': 'print(___(lst))',
+    'options': 'bool, len, list, 0, not, any',
+    'answer': '1',
+    'explanation': '空列表在布尔上下文中为 False，bool(lst) 返回 False。',
+    'example': 'bool([]) → False；bool([1]) → True。'
+  },
+
+  {
+    'id': 6,
+    'type': 'choice',
+    'title': '短路行为（and）',
+    'content': '表达式 0 and (1/0) 会发生什么？',
+    'options': {
+      'A': '抛出 ZeroDivisionError',
+      'B': '返回 0 并不抛错（短路）',
+      'C': '返回 True',
+      'D': '返回 None'
+    },
+    'answer': 'B',
+    'hints': [
+      'and 是短路运算符，左侧为 False 时不会计算右侧。',
+      '0 在布尔上下文中为 False。',
+      '所以不会执行 1/0 的除法。'
+    ],
+    'explanation': '0 在布尔上下文为 False，and 短路返回左值 0，不会计算右侧表达式，因此不报错。',
+    'example': '"" and unknown_func() 不会调用 unknown_func()。'
+  },
+
+  {
+    'id': 7,
+    'type': 'choice',
+    'title': '短路行为（or）',
+    'content': '表达式 "" or "default" 的结果是？',
+    'options': {
+      'A': '""',
+      'B': '"default"',
+      'C': 'False',
+      'D': 'None'
+    },
+    'answer': 'B',
+    'hints': [
+      'or 会在左侧为真时返回左侧，否则返回右侧。',
+      '空字符串为假值，因此返回右侧。',
+      '结果为 "default"。'
+    ],
+    'explanation': '"" or "default" 返回 "default"，常用于提供默认值。',
+    'example': 'name = input() or "Guest"。'
+  },
+
+  {
+    'id': 8,
+    'type': 'choice',
+    'title': '比较链（chaining）',
+    'content': '表达式 1 < 2 < 3 的结果是？',
+    'options': {
+      'A': 'True',
+      'B': 'False',
+      'C': '抛错',
+      'D': '1'
+    },
+    'answer': 'A',
+    'hints': [
+      'Python 支持比较链，会同时判断 1 < 2 和 2 < 3。',
+      '只有两边都为真时整体为真。',
+      '这里两个关系都成立。'
+    ],
+    'explanation': '1 < 2 < 3 等同于 (1 < 2) and (2 < 3)，结果为 True。',
+    'example': '2 <= 3 < 5 → True'
+  },
+
+  {
+    'id': 9,
+    'type': 'fill',
+    'title': '身份运算 is vs ==',
+    'content': '补全代码：判断两个变量是否引用同一个对象。',
+    'input': 'a = 1000\nb = 1000',
+    'output': 'False 或 True（取决实现）',
+    'code': 'print(a ___ b)\nprint(a == b)',
+    'options': 'is, ==, !=, is not, =, ===',
+    'answer': '1',
+    'explanation': 'is 用于判断身份（是否为同一对象），== 用于值比较。对于大整数小整数缓存机制会影响 is 的结果，所以 is 不可靠用于数值相等判断。',
+    'example': 's1 = "hi"; s2 = "hi"; s1 is s2 结果常为 True（实现相关）。'
+  },
+
+  {
+    'id': 10,
+    'type': 'fill',
+    'title': 'not 运算符',
+    'content': '补全代码：取反操作。',
+    'input': 'flag = True',
+    'output': 'False',
+    'code': 'print(___ flag)',
+    'options': 'not, !, ~, -',
+    'answer': '1',
+    'explanation': 'Python 使用 not 做布尔取反，! 不是 Python 的布尔运算符。',
+    'example': 'not False → True'
+  },
+
+  {
+    'id': 11,
+    'type': 'choice',
+    'title': '布尔与整型的相互关系',
+    'content': '在 Python 中，True 等价于哪个整数？',
+    'options': {
+      'A': '0',
+      'B': '1',
+      'C': '-1',
+      'D': '无法比较'
+    },
+    'answer': 'B',
+    'hints': [
+      '布尔在数学运算中有对应的整数值。',
+      'True 在加法中表现为 1。',
+      '例如 True + True = 2。'
+    ],
+    'explanation': 'Python 中 True 的整数值为 1，False 为 0。',
+    'example': 'True + 1 → 2'
+  },
+
+  {
+    'id': 12,
+    'type': 'choice',
+    'title': '真值判断的常见陷阱',
+    'content': '下面哪个对象在布尔上下文中被认为是 False？',
+    'options': {
+      'A': '[0]',
+      'B': '0',
+      'C': '"0"',
+      'D': '[None]'
+    },
+    'answer': 'B',
+    'hints': [
+      '空容器为 False，但包含元素的容器为 True。',
+      '数字 0 在布尔上下文中为 False。',
+      '"0" 是非空字符串，为 True。'
+    ],
+    'explanation': '0 为假值；而 "[0]" 与 "[None]" 是非空列表，布尔值为 True。',
+    'example': 'bool(0) → False；bool("0") → True'
+  },
+
+  {
+    'id': 13,
+    'type': 'choice',
+    'title': '逻辑运算的返回值（非布尔）',
+    'content': '表达式 None or "ok" 的返回结果是？',
+    'options': {
+      'A': 'True',
+      'B': 'False',
+      'C': 'None',
+      'D': '"ok"'
+    },
+    'answer': 'D',
+    'hints': [
+      'or 会返回第一个真值或最后一个假值。',
+      'None 在布尔上下文视为假。',
+      '因此返回右边的 "ok"。'
+    ],
+    'explanation': 'None or "ok" 会返回 "ok"，常用于默认值逻辑。',
+    'example': 'x = user_input or "default"'
+  },
+
+  {
+    'id': 14,
+    'type': 'fill',
+    'title': '复杂条件判断',
+    'content': '补全代码：当 age 在 18 到 65 之间且 is_member 为 True 时允许访问。',
+    'input': 'age = 30\nis_member = True',
+    'output': 'Access granted',
+    'code': 'if ___ and ___ and ___:\n    print("Access granted")',
+    'options': '18 <= age, age <= 65, is_member, age > 18, age < 65, True',
+    'answer': '1,2,3',
+    'explanation': '需要同时满足 18 <= age，age <= 65 并且 is_member 为 True。',
+    'example': 'if 0 <= x <= 10 and valid: ...'
+  },
+
+  {
+    'id': 15,
+    'type': 'fill',
+    'title': '使用 any/all 做聚合判断',
+    'content': '补全代码：如果任一检查通过则输出 OK（使用 any）。',
+    'input': 'checks = [False, False, True]',
+    'output': 'OK',
+    'code': 'if ___(___):\n    print("OK")',
+    'options': 'any, all, checks, True, False, len',
+    'answer': '1,3',
+    'explanation': 'any(checks) 在列表中任一元素为真时返回 True；all 则要求全为真。',
+    'example': 'any([0, "", None, "x"]) → True'
+  }
+]

@@ -1,0 +1,205 @@
+```plaintext
+{
+  'unit': '第150单元：包管理与虚拟环境',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '虚拟环境',
+      'content': '创建隔离 Python 环境常用哪个工具？',
+      'options': {'A': 'venv', 'B': 'pip', 'C': 'virtualenvwrapper', 'D': 'easy_install'},
+      'answer': 'A',
+      'hints': ['提示1：venv 是标准库提供', '提示2：virtualenv 也是常用工具'],
+      'explanation': 'venv 可创建项目级别虚拟环境以隔离依赖。',
+      'example': 'python -m venv venv'
+    },
+
+    {
+      'id': 2,
+      'type': 'fill',
+      'title': '安装包（填空）',
+      'content': '使用 pip 安装依赖的命令为 pip __1__ package_name。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': 'install, remove, update, list',
+      'answer': '1',
+      'explanation': 'pip install 用于安装包。',
+      'example': ''
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': 'pip freeze',
+      'content': 'pip freeze 的典型用途是？',
+      'options': {'A': '生成当前环境依赖清单', 'B': '卸载包', 'C': '搜索包', 'D': '升级 pip'},
+      'answer': 'A',
+      'hints': ['提示1：常与 requirements.txt 配合使用'],
+      'explanation': 'pip freeze 列出已安装包及版本，常写入 requirements.txt。',
+      'example': 'pip freeze > requirements.txt'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': 'requirements（填空）',
+      'content': '常用文件 __1__ 用来记录项目依赖以便重现环境。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': 'requirements.txt, Pipfile, pyproject.toml, setup.cfg',
+      'answer': '1',
+      'explanation': 'requirements.txt 是传统的依赖清单文件。',
+      'example': ''
+    },
+
+    {
+      'id': 5,
+      'type': 'choice',
+      'title': '隔离原因',
+      'content': '为什么使用虚拟环境？',
+      'options': {'A': '避免不同项目依赖冲突', 'B': '提高代码速度', 'C': '安全备份', 'D': '更好打印日志'},
+      'answer': 'A',
+      'hints': ['提示1：每个项目有独立依赖版本'],
+      'explanation': '虚拟环境确保项目依赖互不干扰，便于管理和部署。',
+      'example': ''
+    },
+
+    {
+      'id': 6,
+      'type': 'fill',
+      'title': '本地安装（填空）',
+      'content': '使用 pip install -r __1__ 可按文件安装全部依赖。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': 'requirements.txt, Pipfile, setup.py, pyproject.toml',
+      'answer': '1',
+      'explanation': 'pip install -r requirements.txt 会逐行安装依赖。',
+      'example': ''
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': 'pyproject.toml',
+      'content': 'pyproject.toml 的作用是？',
+      'options': {'A': '声明构建系统和项目元数据', 'B': '运行测试', 'C': '发布 Docker 镜像', 'D': '管理数据库'},
+      'answer': 'A',
+      'hints': ['提示1：PEP 518 定义该文件用途'],
+      'explanation': 'pyproject.toml 用于描述构建依赖、打包与项目元数据，逐渐成为标准。',
+      'example': ''
+    },
+
+    {
+      'id': 8,
+      'type': 'fill',
+      'title': '本地安装用户目录（填空）',
+      'content': 'pip install --user 会把包安装到用户的 __1__ 目录。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': 'site-packages, temp, etc, bin',
+      'answer': '1',
+      'explanation': '安装到用户级别的 site-packages 而不是全局环境。',
+      'example': ''
+    },
+
+    {
+      'id': 9,
+      'type': 'choice',
+      'title': '版本约束',
+      'content': '在 requirements.txt 中使用 == 表示什么？',
+      'options': {'A': '精确版本匹配', 'B': '最低版本', 'C': '排除版本', 'D': '任意版本'},
+      'answer': 'A',
+      'hints': ['提示1：推荐对部署使用精确版本或锁文件'],
+      'explanation': '== 表示需要精确某个版本号。',
+      'example': ''
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '升级 pip（填空）',
+      'content': '升级 pip 常用命令 python -m pip __1__ pip. ',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': 'install --upgrade, uninstall, list, show',
+      'answer': '1',
+      'explanation': 'python -m pip install --upgrade pip 用于升级 pip 工具。',
+      'example': ''
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '锁文件',
+      'content': 'lock 文件（如 Pipfile.lock 或 poetry.lock）用于？',
+      'options': {'A': '锁定确切依赖版本以保证可重复安装', 'B': '记录项目许可证', 'C': '运行单元测试', 'D': '生成文档'},
+      'answer': 'A',
+      'hints': ['提示1：锁文件有助于在不同环境重现依赖树'],
+      'explanation': '锁文件记录确切版本，保证不同环境中安装一致。',
+      'example': ''
+    },
+
+    {
+      'id': 12,
+      'type': 'fill',
+      'title': '卸载包（填空）',
+      'content': '卸载包使用 pip __1__ package_name.',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': 'uninstall, remove, delete, purge',
+      'answer': '1',
+      'explanation': 'pip uninstall 用于移除已安装的包。',
+      'example': ''
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '镜像源',
+      'content': '在中国大陆环境，常用哪个方式加速 pip 安装？',
+      'options': {'A': '使用镜像源（如清华/阿里）', 'B': '关闭网络', 'C': '使用 FTP', 'D': '编译 pip'},
+      'answer': 'A',
+      'hints': ['提示1：镜像源能显著加速下载'],
+      'explanation': '使用国内镜像源可提高下载速度和稳定性。',
+      'example': ''
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '打包分发（填空）',
+      'content': '现代 Python 打包常用工具包括 setuptools 和 __1__.',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': 'poetry, pipenv, virtualenv, distutils',
+      'answer': '1',
+      'explanation': 'poetry 提供依赖管理与打包发布一体化的现代工具链。',
+      'example': ''
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '总结（填空）',
+      'content': '使用虚拟环境可以避免 __1__ 并保证依赖可控。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': '冲突, 速度, 存储, 权限',
+      'answer': '1',
+      'explanation': '虚拟环境主要用于隔离依赖，避免不同项目间版本冲突。',
+      'example': ''
+    }
+
+  ]
+}
+
+```

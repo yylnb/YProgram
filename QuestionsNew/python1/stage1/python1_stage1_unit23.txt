@@ -1,0 +1,274 @@
+[
+  {
+    'id': 1,
+    'type': 'choice',
+    'title': 'f-string 的基本写法',
+    'content': '小明想快速把变量 name 的内容嵌入到字符串里，他应该使用哪种写法？',
+    'options': {
+      'A': '"Hello {name}"',
+      'B': 'f"Hello {name}"',
+      'C': 'format("Hello {}", name)',
+      'D': '"Hello " + name'
+    },
+    'answer': 'B',
+    'hints': [
+      '思考一下 f-string 的语法开头是什么。',
+      '只有一种写法必须以 f 开头。',
+      '看哪个选项同时含 f 和 {}。'
+    ],
+    'explanation': 'f-string 以 f 开头，并在 {} 中放变量，因此 f"Hello {name}" 才是标准写法。',
+    'example': '例如 f"Welcome {username}" 可以直接把变量插入字串。'
+  },
+
+  {
+    'id': 2,
+    'type': 'choice',
+    'title': 'f-string 的本质',
+    'content': '为什么 f-string 通常比传统拼接字符串更方便？',
+    'options': {
+      'A': '因为 f-string 会自动加空格',
+      'B': '因为 f-string 会自动转成整型',
+      'C': '因为 f-string 可以在 {} 中直接写变量或表达式',
+      'D': '因为 f-string 执行速度比 CPU 更快'
+    },
+    'answer': 'C',
+    'hints': [
+      '想想 f-string 的核心能力是什么。',
+      '它最大的特点与 {} 有关。',
+      '它能把表达式直接写进去，不需要额外处理。'
+    },
+    'explanation': 'f-string 可以在 {} 中直接放变量或表达式，让代码更短更清晰。',
+    'example': '例如 f"{a + b} 分钟后到达" 会直接显示计算结果。'
+  },
+
+  {
+    'id': 3,
+    'type': 'choice',
+    'title': 'f-string 与表达式',
+    'content': '使用 f-string 时，以下哪一种写法是合法的？',
+    'options': {
+      'A': 'f"2 + 3 = {2 + 3}"',
+      'B': 'f"2 + 3 = {2 + 3;}"',
+      'C': 'f"2 + 3 = {2 + 3:}"',
+      'D': 'f"2 + 3 = 2 + 3"'
+    },
+    'answer': 'A',
+    'hints': [
+      '表达式必须在 {} 里。',
+      '不能在表达式后面加分号。',
+      '只有一个选项的语法完全正确。'
+    ],
+    'explanation': 'f"2 + 3 = {2 + 3}" 会直接把表达式的结果嵌入字符串中。',
+    'example': '例如 f"价格含税：{price * 1.1}" 可以做简单运算。'
+  },
+
+  {
+    'id': 4,
+    'type': 'fill',
+    'title': '插入变量',
+    'content': '补全 f-string，将变量正确插入字串。',
+    'input': 'user = "Kevin"',
+    'output': 'Hello Kevin',
+    'code': 'msg = ___"Hello {___}"\nprint(msg)',
+    'options': 'f, F, user, "f", format, name',
+    'answer': '1,3',
+    'explanation': 'f-string 必须以 f 开头，并在 {} 内放变量名 user。',
+    'example': '例如 f"Hi {username}" 也能实现相同效果。'
+  },
+
+  {
+    'id': 5,
+    'type': 'fill',
+    'title': '计算表达式',
+    'content': '使用 f-string 完成计算并插入结果。',
+    'input': 'a = 4\nb = 6',
+    'output': 'Total: 10',
+    'code': 'print(___"Total: {___ + ___}" )',
+    'options': 'f, a, b, A, F, total, sum',
+    'answer': '1,2,3',
+    'explanation': '使用 f-string 包含表达式 {a + b} 即可插入计算结果。',
+    'example': '例如 f"Result = {x * y}" 也能输出运算值。'
+  },
+
+  {
+    'id': 6,
+    'type': 'choice',
+    'title': 'f-string 与引号',
+    'content': '以下关于 f-string 的引号叙述，哪个是正确的？',
+    'options': {
+      'A': 'f-string 只能用双引号',
+      'B': 'f-string 只能用单引号',
+      'C': 'f-string 单双引号都可以',
+      'D': 'f-string 不需要引号'
+    },
+    'answer': 'C',
+    'hints': [
+      '普通字符串可以用单引号或双引号。',
+      'f-string 只是普通字符串的扩展。',
+      '因此 f-string 也能使用两种引号。'
+    ],
+    'explanation': 'f-string 与普通字符串一样，可以使用单引号或双引号。',
+    'example': '例如 f\'Hello {name}\' 也可以正常使用。'
+  },
+
+  {
+    'id': 7,
+    'type': 'choice',
+    'title': '表达式的限制',
+    'content': '在 f-string 的 {} 中可以放入什么？',
+    'options': {
+      'A': '只能放变量名',
+      'B': '只能放整数',
+      'C': '可以放任何合法表达式',
+      'D': '只能放字符串'
+    },
+    'answer': 'C',
+    'hints': [
+      '想想 {a + b} 是否能用？',
+      'f-string 中表达式非常灵活。',
+      '只要是合法 Python 表达式即可。'
+    ],
+    'explanation': 'f-string 支持任意合法表达式，包含变量、运算等。',
+    'example': '例如 f"{x**2 + y**2}" 完全没问题。'
+  },
+
+  {
+    'id': 8,
+    'type': 'choice',
+    'title': 'f-string 中的花括号',
+    'content': '如果你希望在 f-string 中显示真正的花括号 { 或 }，应该怎么做？',
+    'options': {
+      'A': '写 "\\" 来转义',
+      'B': '不能输出花括号',
+      'C': '写两个 {{ 或 }}',
+      'D': '只能用 format'
+    },
+    'answer': 'C',
+    'hints': [
+      '想想花括号本身是 f-string 的语法符号。',
+      '直接写会被当作变量插入点。',
+      '必须用成对方式 {{ 与 }} 才能输出。'
+    ],
+    'explanation': '在 f-string 中输出花括号需要写成 {{ 或 }}。',
+    'example': '例如 f"Result: {{value}}" 会输出 {value}。'
+  },
+
+  {
+    'id': 9,
+    'type': 'fill',
+    'title': '组合文本',
+    'content': '完成 f-string，将三个变量组合成一句话。',
+    'input': 'a = "Python"\nb = "is"\nc = "fun"',
+    'output': 'Python is fun',
+    'code': 'sentence = ___"{___} {___} {___}"\nprint(sentence)',
+    'options': 'f, F, a, b, c, A, C, text',
+    'answer': '1,3,4,5',
+    'explanation': '按顺序放入变量 a b c，即可正确组合字串。',
+    'example': '例如 f"{first} {second}" 也能拼成一句话。'
+  },
+
+  {
+    'id': 10,
+    'type': 'fill',
+    'title': '换算插值',
+    'content': '完成 f-string，将分钟换算成秒后输出。',
+    'input': 'm = 3',
+    'output': '180 秒',
+    'code': 'print(___"{___ * 60} 秒")',
+    'options': 'f, m, minutes, 60, sec, F',
+    'answer': '1,2',
+    'explanation': '{m * 60} 即可完成分钟换算秒。',
+    'example': '例如 f"{hour * 3600} 秒" 也能换算时间。'
+  },
+
+  {
+    'id': 11,
+    'type': 'choice',
+    'title': '为什么选择 f-string',
+    'content': '以下哪一个原因最符合 f-string 的设计目的？',
+    'options': {
+      'A': '让代码看起来更“高科技”',
+      'B': '减少字符串拼接，提高可读性',
+      'C': '让 CPU 运行更快',
+      'D': '让字符串变成数组'
+    },
+    'answer': 'B',
+    'hints': [
+      '想想程序员最常做的事：组合文本。',
+      'f-string 让组合文本更直观。',
+      '它的核心是简化与可读性，而不是性能奇迹。'
+    ],
+    'explanation': 'f-string 的主要目的是让嵌入变量更直观、减少拼接。',
+    'example': '例如 f"User: {name}, Age: {age}" 写法非常清晰。'
+  },
+
+  {
+    'id': 12,
+    'type': 'choice',
+    'title': '使用 f-string 的时机',
+    'content': '如果要在输出中嵌入多个变量，优先推荐哪种方式？',
+    'options': {
+      'A': '使用 + 不停拼接',
+      'B': '使用逗号分隔多个参数',
+      'C': '使用 f-string 直接嵌入',
+      'D': '使用 print 但不写内容'
+    },
+    'answer': 'C',
+    'hints': [
+      '哪种方式最简洁？',
+      '哪种方式最适合带多个变量？',
+      'f-string 就是为这个场景诞生的。'
+    ],
+    'explanation': 'f-string 能让多变量输出更清晰、可阅读性高。',
+    'example': '例如 f"{x} + {y} = {x+y}"。'
+  },
+
+  {
+    'id': 13,
+    'type': 'choice',
+    'title': '格式化灵活度',
+    'content': 'f-string 在格式化数字或文字时，支持什么？',
+    'options': {
+      'A': '支持格式说明符，例如 .2f',
+      'B': '只能输出原始值，不支持格式化',
+      'C': '只能格式化整数',
+      'D': '必须配合第三方库使用'
+    },
+    'answer': 'A',
+    'hints': [
+      'f-string 的语法中可以加入 :',
+      '例如 {value:.2f} 是什么？',
+      '它能格式化数字。'
+    ],
+    'explanation': 'f-string 支持格式说明，如保留小数位等。',
+    'example': '例如 f"{pi:.3f}" 会四舍五入成三位小数。'
+  },
+
+  {
+    'id': 14,
+    'type': 'fill',
+    'title': '保留小数',
+    'content': '使用 f-string，补全代码并保留两位小数。',
+    'input': 'price = 3.14159',
+    'output': '3.14',
+    'code': 'print(___"{___:.2f}")',
+    'options': 'f, price, p, 2f, ".2f", format',
+    'answer': '1,2',
+    'explanation': '{price:.2f} 即可格式化为两位小数。',
+    'example': '例如 f"{value:.1f}" 可保留一位小数。'
+  },
+
+  {
+    'id': 15,
+    'type': 'fill',
+    'title': '数字宽度控制',
+    'content': '完成 f-string，将数字以宽度 5 显示（右对齐）。',
+    'input': 'n = 42',
+    'output': '   42',
+    'code': 'print(___"{___:>5}")',
+    'options': 'f, n, N, ">5", 42, format',
+    'answer': '1,2',
+    'explanation': '格式 {n:>5} 会让数字在 5 字符宽度内右对齐。',
+    'example': '例如 f"{x:>8}" 会让数字在宽度 8 内右对齐。'
+  }
+]

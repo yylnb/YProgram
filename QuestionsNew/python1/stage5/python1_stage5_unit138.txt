@@ -1,0 +1,37 @@
+```plaintext
+{
+  'unit': '第138单元：网络编程入门',
+  'questions': [
+    {'id':1,'type':'choice','title':'socket 基本','content':'在 Python 中进行低级网络通信常用哪个模块？','options':{'A':'socket','B':'http','C':'os','D':'json'},'answer':'A','hints':['提示1: socket 提供 TCP/UDP 接口','提示2: 需要理解地址与端口','提示3: 适合自定义协议'],'explanation':'socket 模块提供底层网络通信能力。','example':''},
+
+    {'id':2,'type':'choice','title':'TCP vs UDP','content':'TCP 与 UDP 的主要区别是？','options':{'A':'TCP 面向连接且可靠，UDP 无连接且不保证可靠性','B':'UDP 更适合文件传输','C':'TCP 无序传输','D':'两者相同'},'answer':'A','hints':['提示1: TCP 提供重传与顺序保证','提示2: UDP 更轻量适合实时应用','提示3: 选择取决于场景需求'],'explanation':'TCP 提供可靠传输，UDP 速度更快但不保证交付顺序或可靠性。','example':''},
+
+    {'id':3,'type':'choice','title':'requests 用途','content':'对于 HTTP 客户端请求，哪个第三方库常用且更高层？','options':{'A':'requests','B':'socket','C':'asyncio','D':'xml'},'answer':'A','hints':['提示1: requests 简化 HTTP 请求','提示2: 支持会话、重试、证书等','提示3: 适用于同步 HTTP 客户端'],'explanation':'requests 是常用的同步 HTTP 客户端库，封装复杂度低。','example':''},
+
+    {'id':4,'type':'fill','title':'绑定监听（填空）','content':'创建 TCP 服务器通常要先 s.bind((host, port)) 然后 __1__ 进入监听状态。','input':'','output':'','code':'import socket\ns = socket.socket()\ns.bind(("0.0.0.0", 8000))\ns.__1__()','options':'listen, accept, connect, send','answer':'1','explanation':'调用 listen 将套接字设为监听，以接受连接。','example':''},
+
+    {'id':5,'type':'fill','title':'接受连接（填空）','content':'监听套接字上等待客户端连接的方法是 __1__，返回 (conn, addr)。','input':'','output':'','code':'conn, addr = s.__1__()','options':'accept, recv, send, bind','answer':'1','explanation':'accept 接受一个客户端连接并返回新的连接套接字与地址。','example':''},
+
+    {'id':6,'type':'choice','title':'非阻塞模式','content':'将 socket 设为非阻塞会怎样？','options':{'A':'操作在没有数据时会抛出异常而不是阻塞','B':'自动转为异步协程','C':'增加可靠性','D':'禁止发送数据'},'answer':'A','hints':['提示1: 非阻塞模式需轮询或使用 select','提示2: 与事件循环结合可实现高性能 I/O','提示3: 需处理异常 EWOULDBLOCK'],'explanation':'非阻塞 socket 在无数据情况下会立即返回或抛出异常，适合事件驱动模型。','example':''},
+
+    {'id':7,'type':'choice','title':'http.server 用途','content':'要快速启动一个本地静态文件 HTTP 服务器，可使用哪个模块？','options':{'A':'http.server','B':'socketserver', 'C':'requests', 'D':'xmlrpc'},'answer':'A','hints':['提示1: python -m http.server 方便调试静态文件','提示2: 仅用于开发环境','提示3: 不适合生产'], 'explanation':'http.server 可快速启动简易 HTTP 服务用于调试与开发。','example':''},
+
+    {'id':8,'type':'choice','title':'TLS/SSL','content':'要在 socket 上启用加密通信应使用哪个模块包装套接字？','options':{'A':'ssl','B':'crypt', 'C':'hashlib', 'D':'sslsocket'},'answer':'A','hints':['提示1: ssl.wrap_socket 或 SSLContext','提示2: 需证书与密钥','提示3: 推荐使用高层库处理 HTTPS'], 'explanation':'ssl 模块提供 TLS 支持，可对 socket 进行加密通信。','example':''},
+
+    {'id':9,'type':'fill','title':'请求超时（填空）','content':'使用 requests.get 时设置超时参数写为 requests.get(url, __1__=5)。','input':'','output':'','code':'import requests\nrequests.get("http://example.com", __1__=5)', 'options':'timeout, wait, delay, sleep','answer':'1','explanation':'timeout 参数用于控制请求超时，避免长时间阻塞。','example':''},
+
+    {'id':10,'type':'fill','title':'发送数据（填空）','content':'TCP 连接上发送字节数据常用 conn.__1__(b"data")。','input':'','output':'','code':'conn.__1__(b"hi")', 'options':'send, sendall, write, writeall','answer':'2','explanation':'sendall 会尽力发送全部字节，常用于确保完整发送。','example':''},
+
+    {'id':11,'type':'choice','title':'REST 客户端','content':'使用 requests.post 发送 JSON 数据应如何传参？','options':{'A':'使用 json= 参数','B':'使用 data= 参数','C':'写在 URL 中','D':'必须手工序列化并放在 headers'},'answer':'A','hints':['提示1: requests 会自动设置 Content-Type','提示2: 简化使用方式','提示3: data 可用于表单'],'explanation':'使用 json= 参数会自动把对象序列化并设置合适头部。','example':''},
+
+    {'id':12,'type':'choice','title':'高层异步 HTTP','content':'进行异步 HTTP 请求常用哪个库？','options':{'A':'aiohttp','B':'requests-async','C':'http.client','D':'urllib'},'answer':'A','hints':['提示1: aiohttp 基于 asyncio','提示2: 适合大量并发 HTTP 请求','提示3: 需在事件循环中使用'],'explanation':'aiohttp 是常用的异步 HTTP 客户端/服务器库，配合 asyncio 使用。','example':''},
+
+    {'id':13,'type':'fill','title':'端口范围（填空）','content':'非特权端口通常大于 __1__。','input':'','output':'','code':'','options':'1024, 80, 0, 65535','answer':'1','explanation':'端口号 <1024 为特权端口，通常需管理员权限；常用非特权端口从 1024 开始。','example':''},
+
+    {'id':14,'type':'fill','title':'绑定地址（填空）','content':'0.0.0.0 常用于绑定到 __1__ 地址以接受任意网络接口的连接。','input':'','output':'','code':'s.bind(("0.0.0.0", 8000))', 'options':'所有, 本地, 外部, 私有','answer':'1','explanation':'0.0.0.0 表示绑定到所有可用网络接口。','example':''},
+
+    {'id':15,'type':'fill','title':'总结（填空）','content':'低级网络用 __1__，高层 HTTP 推荐 __2__ 或 __3__。','input':'','output':'','code':'','options':'socket, requests, aiohttp, json','answer':'1,2,3','explanation':'socket 用于底层网络，高层 HTTP 可用 requests（同步）或 aiohttp（异步）。','example':''}
+  ]
+}
+
+```

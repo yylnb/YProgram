@@ -1,0 +1,177 @@
+[
+  {
+    "q_id": "8",
+    "type": "choice",
+    "title": "print 输出数字",
+    "text": "想输出 3 + 4 的结果，正确写法是哪种？",
+    "explanation": "3 + 4 是表达式，会被计算为 7。",
+    "example": "print(10 * 5) 会输出 50",
+    "hints": [
+      "字符串不会自动计算表达式。",
+      "print 可以输出表达式的结果。",
+      "数字之间运算无需加引号。"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "print(\"3 + 4\")",
+      "B": "print(3 + 4)",
+      "C": "print(\"3\" + 4)",
+      "D": "print(3, +, 4)"
+    },
+    "answer": "B"
+  },
+  {
+    "q_id": "9",
+    "type": "fill",
+    "title": "输出表达式结果",
+    "text": "补全代码，使其输出计算结果。",
+    "explanation": "print 输出内容；3 * 4 等于 12。",
+    "example": "你也可以 print(6 * 7)",
+    "hints": null,
+    "input": "",
+    "output": "12",
+    "raw_code": "__1__(3 * __2__)",
+    "options": [
+      "print",
+      "4",
+      "\"4\"",
+      "echo"
+    ],
+    "answer": [
+      1,
+      2
+    ]
+  },
+  {
+    "q_id": "10",
+    "type": "fill",
+    "title": "控制换行",
+    "text": "用 end 参数让两个输出写在同一行。",
+    "explanation": "end 控制输出末尾行为；end=\"\" 表示不换行。",
+    "example": "print(\"A\", end=\"\"); print(\"B\")",
+    "hints": null,
+    "input": "",
+    "output": "HelloWorld",
+    "raw_code": "print(\"Hello\", __1__=\"\")\nprint(\"World\")",
+    "options": [
+      "end",
+      "sep",
+      "finish",
+      "stop"
+    ],
+    "answer": [
+      1
+    ]
+  },
+  {
+    "q_id": "11",
+    "type": "choice",
+    "title": "sep 的作用",
+    "text": "print(\"A\", \"B\", sep=\"-\") 会输出什么？",
+    "explanation": "sep=\"-\" 会在多个参数之间使用短横线。",
+    "example": "print(\"year\", \"2025\", sep=\":\") → year:2025",
+    "hints": [
+      "sep 是分隔符。",
+      "默认是空格，这里被改成了 “-”。",
+      "看起来像 A 和 B 之间加了一个连字符。"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "A-B",
+      "B": "A B",
+      "C": "A--B",
+      "D": "AB"
+    },
+    "answer": "A"
+  },
+  {
+    "q_id": "12",
+    "type": "choice",
+    "title": "print 输出中文",
+    "text": "想输出中文“你好”，应该怎么写？",
+    "explanation": "print(\"你好\") 是正确写法。",
+    "example": "print(\"我正在学习 Python\")",
+    "hints": [
+      "中文也是字符串。",
+      "字符串必须加引号。",
+      "Python 完全支持中文字符。"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "print(你好)",
+      "B": "print(\"你好\")",
+      "C": "print('你好\")",
+      "D": "print(hello)"
+    },
+    "answer": "B"
+  },
+  {
+    "q_id": "13",
+    "type": "choice",
+    "title": "打印转义字符",
+    "text": "print(\"A\\nB\") 会输出什么？",
+    "explanation": "字符串中的 \\n 会产生换行。",
+    "example": "print(\"Hello\\nWorld\")",
+    "hints": [
+      "\\n 在字符串中表示换行。",
+      "不是两个字符，而是一个“换行符号”。",
+      "注意题目是打印效果，而不是字面内容。"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "A n B",
+      "B": "A\\nB",
+      "C": "A 换行 B",
+      "D": "AB"
+    },
+    "answer": "C"
+  },
+  {
+    "q_id": "14",
+    "type": "fill",
+    "title": "组合文本与表达式",
+    "text": "补全代码，使其输出：Result: 9",
+    "explanation": "4 + 5 等于 9；不能用字符串 \"4\" 和 \"5\" 做加法。",
+    "example": "print(\"Sum:\", 10 + 2)",
+    "hints": null,
+    "input": "",
+    "output": "Result: 9",
+    "raw_code": "print(\"Result:\", __1__ + __2__)",
+    "options": [
+      "4",
+      "5",
+      "\"4\"",
+      "print",
+      "\"5\""
+    ],
+    "answer": [
+      1,
+      2
+    ]
+  },
+  {
+    "q_id": "15",
+    "type": "fill",
+    "title": "print 的多参数与 sep",
+    "text": "补全代码，使其输出 A|B|C",
+    "explanation": "sep 指定多个参数之间的分隔符。",
+    "example": "print(\"x\", \"y\", \"z\", sep=\":\")",
+    "hints": null,
+    "input": "",
+    "output": "A|B|C",
+    "raw_code": "print(\"A\", \"B\", \"C\", __1__=\"|\")",
+    "options": [
+      "sep",
+      "end",
+      "join",
+      "cut"
+    ],
+    "answer": [
+      1
+    ]
+  }
+]

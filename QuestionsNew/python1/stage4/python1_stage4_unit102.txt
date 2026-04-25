@@ -1,0 +1,282 @@
+```plaintext
+{
+  'unit': '第102单元：列表推导与生成式',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '推导语法',
+      'content': '下面哪个是生成平方数列表的列表推导？',
+      'options': {
+        'A': '[x*x for x in range(5)]',
+        'B': '(x*x for x in range(5))',
+        'C': 'for x in range(5): x*x',
+        'D': 'map(lambda x:x*x, range(5))'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：方括号表示列表推导',
+        '提示2：圆括号是生成器表达式',
+        '提示3：map 返回可迭代对象'
+      ],
+      'explanation': '列表推导使用方括号并返回列表，例如 [x*x for x in range(5)]。',
+      'example': '[i*i for i in range(5)]'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '带条件的推导',
+      'content': '如何写出只包含偶数的平方的列表推导？',
+      'options': {
+        'A': '[x*x for x in range(10) if x%2==0]',
+        'B': '[x for x in range(10) if x%2==0]',
+        'C': '[x*x for x in range(10) unless x%2]',
+        'D': 'filter(lambda x: x%2==0, x*x)'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：if 可以出现在推导末尾',
+        '提示2：语法应为表达式 for 变量 in 可迭代 if 条件',
+        '提示3：filter 也可实现但语法不同'
+      ],
+      'explanation': '使用 [x*x for x in range(10) if x%2==0] 能生成偶数的平方列表。',
+      'example': '[x*x for x in range(10) if x%2==0]'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '生成器表达式',
+      'content': '下面哪个表达式返回生成器而非列表？',
+      'options': {
+        'A': '(x for x in range(5))',
+        'B': '[x for x in range(5)]',
+        'C': '{x for x in range(5)}',
+        'D': 'list(x for x in range(5))'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：圆括号表示生成器表达式',
+        '提示2：花括号是集合推导',
+        '提示3：list(...) 会把生成器转换为列表'
+      ],
+      'explanation': '圆括号形式返回生成器对象，可逐个生成值而不一次性创建列表。',
+      'example': 'gen = (i for i in range(3))'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '推导求和（填空）',
+      'content': '用列表推导生成 1..n 的平方并打印总和。',
+      'input': '3',
+      'output': '14',
+      'code': 'n = int(input())\nprint(sum([__1__ for x in range(1, n+1)]))',
+      'options': 'x*x, x, x+1, x**3',
+      'answer': '1',
+      'explanation': '用 x*x 生成平方并求和。',
+      'example': 'sum([i*i for i in range(1,4)]) == 14'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '过滤推导（填空）',
+      'content': '生成大于 5 的数并打印个数。',
+      'input': '1 6 7 2',
+      'output': '2',
+      'code': 'lst = list(map(int, input().split()))\nprint(len([x for x in lst if __1__]))',
+      'options': 'x>5, x<5, x==5, x!=5',
+      'answer': '1',
+      'explanation': '通过 if 条件过滤出大于 5 的元素并计数。',
+      'example': 'len([x for x in lst if x>5])'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '推导效率',
+      'content': '列表推导相比等价的 for 循环通常如何？',
+      'options': {
+        'A': '更简洁且通常更快',
+        'B': '更慢',
+        'C': '功能不同无法比较',
+        'D': '只能用于整数'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：推导在 C 层面实现更高效',
+        '提示2：代码更简洁易读',
+        '提示3：同等逻辑下推导常优于循环'
+      ],
+      'explanation': '列表推导通常在性能和可读性上优于等价的显式 for 循环。',
+      'example': '[x*2 for x in lst]'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '嵌套推导',
+      'content': '下面哪个是生成乘法表的嵌套推导？',
+      'options': {
+        'A': '[(i,j,i*j) for i in range(1,4) for j in range(1,4)]',
+        'B': '[i*j for i in range(1,4)]',
+        'C': 'for i in range(1,4): for j in range(1,4): i*j',
+        'D': 'map(lambda i,j: i*j, range(1,4), range(1,4))'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：嵌套 for 可在推导中串联',
+        '提示2：输出可以是元组形式',
+        '提示3：选项 B 只有单循环'
+      ],
+      'explanation': '嵌套 for 可在单个推导中生成多维结果，例如乘法表的元组表示。',
+      'example': '[(i,j,i*j) for i in range(1,4) for j in range(1,4)]'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '生成器内存',
+      'content': '生成器表达式相比列表推导的优点是？',
+      'options': {
+        'A': '占用更少内存，按需生成',
+        'B': '执行更快',
+        'C': '语法更复杂',
+        'D': '必须转换为列表'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：生成器不一次性创建全部元素',
+        '提示2：适合大数据或流式处理',
+        '提示3：可与 next() 配合使用'
+      ],
+      'explanation': '生成器按需生成元素，节省内存，适用于大规模数据处理。',
+      'example': 'sum(x*x for x in range(1000000))'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '推导生成平方和（填空）',
+      'content': '输入一行数字，输出其平方的列表。',
+      'input': '1 2 3',
+      'output': '1 4 9',
+      'code': 'lst = list(map(int, input().split()))\nprint([__1__ for x in lst])',
+      'options': 'x*x, x+1, x**3, x',
+      'answer': '1',
+      'explanation': '使用 x*x 或 x**2 生成平方列表。',
+      'example': '[x*x for x in lst]'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '条件映射（填空）',
+      'content': '把奇数映成 True，偶数映成 False 并打印。',
+      'input': '1 2 3',
+      'output': 'True False True',
+      'code': 'lst = list(map(int, input().split()))\nprint([__1__ for x in lst])',
+      'options': 'x%2==1, x%2==0, x>0, bool(x)',
+      'answer': '1',
+      'explanation': '条件表达式 x%2==1 可判断奇数。',
+      'example': '[x%2==1 for x in lst]'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '推导中 if-else',
+      'content': '在推导里使用条件表达式时正确写法是？',
+      'options': {
+        'A': '[x if cond else y for x in lst]',
+        'B': '[x for x in lst if cond else y]',
+        'C': '[if cond x else y for x in lst]',
+        'D': '[x if cond for x in lst else y]'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：条件表达式位置在 for 之前',
+        '提示2：if 放在末尾表示过滤',
+        '提示3：用法区分输出表达式和过滤条件'
+      ],
+      'explanation': '三元表达式需放在 for 之前，过滤条件放在末尾。',
+      'example': "['even' if x%2==0 else 'odd' for x in lst]"
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '推导与可读性',
+      'content': '复杂嵌套推导在可读性上应如何处理？',
+      'options': {
+        'A': '必要时改用显式循环以提高可读性',
+        'B': '尽量一行写完所有逻辑',
+        'C': '避免使用循环',
+        'D': '使用 map 代替'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：可读性优先',
+        '提示2：过于复杂的推导难以维护',
+        '提示3：显式代码更直观'
+      ],
+      'explanation': '当推导过于复杂时，改用显式循环或拆分逻辑以提高可读性。',
+      'example': '使用循环代替长嵌套推导'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '推导与内存',
+      'content': '对大数据集应优先考虑哪种方式？',
+      'options': {
+        'A': '生成器表达式',
+        'B': '列表推导',
+        'C': '立刻转换为列表',
+        'D': '把数据读入内存后再处理'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：生成器按需生成节省内存',
+        '提示2：列表推导会一次性创建全部元素',
+        '提示3：适用于流式处理场景'
+      ],
+      'explanation': '生成器表达式能按需生成元素，适合处理大数据以节省内存。',
+      'example': 'sum(x for x in huge_iterable)'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '生成器与 next（填空）',
+      'content': '创建生成器并用 next 取第一个元素。',
+      'input': '',
+      'output': '0',
+      'code': 'g = (__1__ for x in range(10))\nprint(next(g))',
+      'options': 'x for x in range(10), x*x for x in range(10), x+1 for x in range(10)',
+      'answer': '1',
+      'explanation': '生成器表达式可与 next() 配合取出下一个值。',
+      'example': 'g = (i for i in range(3)); next(g)  # 0'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '推导结果打印（填空）',
+      'content': '把输入数字各自平方组成列表并打印。',
+      'input': '2 3',
+      'output': '4 9',
+      'code': 'lst = list(map(int, input().split()))\nprint(*[__1__ for x in lst])',
+      'options': 'x*x, x+1, x*2',
+      'answer': '1',
+      'explanation': '使用 x*x 生成平方。',
+      'example': '[x*x for x in lst]'
+    }
+
+  ]
+}
+
+```

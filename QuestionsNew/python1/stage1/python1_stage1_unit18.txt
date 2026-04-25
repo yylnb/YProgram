@@ -1,0 +1,274 @@
+[
+  {
+    'id': 1,
+    'type': 'choice',
+    'title': 'split 的基本功能',
+    'content': '小李正在整理一句用空格分隔的英文句子，他想把句子拆成单词列表，应使用哪个方法？',
+    'options': {
+      'A': 'sentence.break()',
+      'B': 'sentence.split()',
+      'C': 'sentence.cut(" ")',
+      'D': 'sentence.divide()'
+    },
+    'answer': 'B',
+    'hints': [
+      'Python 中用于拆分字符串的方法是固定的。',
+      '默认按空格拆分。',
+      '最常见的“切割字符串”方法就是 split。'
+    ],
+    'explanation': 'split() 会将字符串按空格拆成列表，是最常用的分割方法。',
+    'example': '例如："a b c".split() 结果为 ["a", "b", "c"]'
+  },
+
+  {
+    'id': 2,
+    'type': 'choice',
+    'title': 'join 的用途',
+    'content': '小明有一个列表 ["a","b","c"]，他想把它变成 "a-b-c"，应如何做？',
+    'options': {
+      'A': '"-".merge(["a","b","c"])',
+      'B': 'join(["a","b","c"], "-")',
+      'C': '"-".join(["a","b","c"])',
+      'D': '["a","b","c"].join("-")'
+    },
+    'answer': 'C',
+    'hints': [
+      '注意 join 的调用者是谁。',
+      'join 是“分隔符”.join(列表)。',
+      '哪个选项里分隔符在前面？'
+    ],
+    'explanation': 'join 的正确结构是 "分隔符".join(list)。',
+    'example': '例如：",".join(["x","y"]) → "x,y"'
+  },
+
+  {
+    'id': 3,
+    'type': 'choice',
+    'title': 'split 的分隔符',
+    'content': '下面哪段代码会把字符串按逗号分割？',
+    'options': {
+      'A': '"a,b,c".split()',
+      'B': '"a,b,c".split(",")',
+      'C': '"a,b,c".cut(",")',
+      'D': '"a,b,c".join(",")'
+    },
+    'answer': 'B',
+    'hints': [
+      'split 默认按空格。',
+      '如果想按指定符号拆分，需要传入该字符。',
+      '只有一个选项使用 split(",")。'
+    ],
+    'explanation': 'split(",") 会按照逗号拆分字符串。',
+    'example': '例如："1|2|3".split("|") → ["1","2","3"]'
+  },
+
+  {
+    'id': 4,
+    'type': 'fill',
+    'title': '用 split 拆分 CSV 数据',
+    'content': '把一行用逗号分隔的字符串拆成列表。',
+    'input': 'row = "Tom,20,Student"',
+    'output': "['Tom','20','Student']",
+    'code': 'result = row.___(",")',
+    'options': 'split, join, replace, find, upper, lower',
+    'answer': '1',
+    'explanation': 'split(",") 能将字符串按逗号拆分成列表。',
+    'example': '例如："a,b,c".split(",") → ["a","b","c"]'
+  },
+
+  {
+    'id': 5,
+    'type': 'fill',
+    'title': '使用 join 组装路径',
+    'content': '把路径片段列表组合成 URL。',
+    'input': 'parts = ["api","v1","users"]',
+    'output': '"api/v1/users"',
+    'code': 'url = ___ .___(parts)',
+    'options': '"/", join, split, "-", replace, find',
+    'answer': '1,2',
+    'explanation': '"/".join(parts) 会使用 / 拼出路径字符串。',
+    'example': '例如："-".join(["2024","01","01"]) → "2024-01-01"'
+  },
+
+  {
+    'id': 6,
+    'type': 'choice',
+    'title': '复习 find：查找位置',
+    'content': '在字符串 "hello python" 中查找 "py"，应得到什么？',
+    'options': {
+      'A': 'True',
+      'B': 'False',
+      'C': '6',
+      'D': '-1'
+    },
+    'answer': 'C',
+    'hints': [
+      'find 返回“位置”，不是布尔值。',
+      '从 0 开始计数。',
+      'h e l l o _ p → p 在第 6 位。'
+    ],
+    'explanation': 'find("py") 会返回起始索引 6。',
+    'example': '"abc".find("b") → 1'
+  },
+
+  {
+    'id': 7,
+    'type': 'choice',
+    'title': '复习 replace：替换文本',
+    'content': '执行 "I love tea".replace("tea","coffee") 的结果是什么？',
+    'options': {
+      'A': '"I love tea coffee"',
+      'B': '"I love coffee"',
+      'C': '"I love"',
+      'D': '"I love Tea"'
+    },
+    'answer': 'B',
+    'hints': [
+      'replace 会直接替换旧字符串为新字符串。',
+      '不会自动重复附加。',
+      '注意大小写敏感。'
+    ],
+    'explanation': 'replace("tea","coffee") → "I love coffee"。',
+    'example': '"hello".replace("l","*") → "he**o"'
+  },
+
+  {
+    'id': 8,
+    'type': 'choice',
+    'title': '复习 find：找不到情况',
+    'content': '"python".find("Java") 的返回值是什么？',
+    'options': {
+      'A': '0',
+      'B': 'None',
+      'C': '-1',
+      'D': 'TypeError'
+    },
+    'answer': 'C',
+    'hints': [
+      '找不到时不会报错。',
+      '也不会返回 None。',
+      '找不到 → -1。'
+    ],
+    'explanation': 'find() 未找到时返回 -1。',
+    'example': '"abc".find("z") → -1'
+  },
+
+  {
+    'id': 9,
+    'type': 'fill',
+    'title': '复习 replace：替换敏感词',
+    'content': '把评论中的 "bad" 替换为 "***"。',
+    'input': 'text = "This is bad behavior!"',
+    'output': '"This is *** behavior!"',
+    'code': 'cleaned = text.___("bad", ___)',
+    'options': 'find, replace, "***", split, join, "bad behavior"',
+    'answer': '2,3',
+    'explanation': 'replace("bad","***") 即可替换敏感词。',
+    'example': '"oh no".replace("no","yes") → "oh yes"'
+  },
+
+  {
+    'id': 10,
+    'type': 'fill',
+    'title': '复习 find：判断内容是否出现',
+    'content': '判断字符串里是否出现关键字。',
+    'input': 'msg = "Error: network timeout"',
+    'output': 'True',
+    'code': 'has_error = msg.___("Error") != ___',
+    'options': 'find, replace, -1, 0, split',
+    'answer': '1,3',
+    'explanation': 'find("Error") 若找到不会返回 -1，因此 != -1 表示出现。',
+    'example': '"abc".find("a") != -1 → True'
+  },
+
+  {
+    'id': 11,
+    'type': 'choice',
+    'title': 'split 的结果类型',
+    'content': '"a b c".split() 的结果是什么类型？',
+    'options': {
+      'A': '字符串',
+      'B': '元组',
+      'C': '列表',
+      'D': '整数'
+    },
+    'answer': 'C',
+    'hints': [
+      'split 的目标是把字符串拆成多个片段的集合。',
+      '集合的形式是什么？',
+      'split 返回 list。'
+    ],
+    'explanation': 'split() 永远返回列表。',
+    'example': '"x y".split() → ["x","y"]'
+  },
+
+  {
+    'id': 12,
+    'type': 'choice',
+    'title': 'join 的限制',
+    'content': '下面哪个列表不能直接使用 ",".join()？',
+    'options': {
+      'A': '["a","b"]',
+      'B': '["1","2","3"]',
+      'C': '["hello","world"]',
+      'D': '[1,2,3]'
+    },
+    'answer': 'D',
+    'hints': [
+      'join 要求所有元素必须是字符串。',
+      '列表里的类型很关键。',
+      '数字不能直接 join。'
+    ],
+    'explanation': 'join 要求列表中所有元素均为 str。',
+    'example': '正确方法：",".join(map(str,[1,2,3]))'
+  },
+
+  {
+    'id': 13,
+    'type': 'choice',
+    'title': 'split 的最大拆分数',
+    'content': '"a-b-c-d".split("-", 2) 的结果是什么？',
+    'options': {
+      'A': '["a","b","c","d"]',
+      'B': '["a","b","c-d"]',
+      'C': '["a-b","c","d"]',
+      'D': '["a","b-c-d"]'
+    },
+    'answer': 'B',
+    'hints': [
+      '第二个参数是最多拆分几次。',
+      '拆两次后剩下的部分整体作为最后一项。',
+      '按顺序拆两次即可。'
+    ],
+    'explanation': '拆两次得到 ["a","b","c-d"]。',
+    'example': '"1-2-3-4".split("-",1) → ["1","2-3-4"]'
+  },
+
+  {
+    'id': 14,
+    'type': 'fill',
+    'title': '混合使用 split 和 join',
+    'content': '把句子拆成单词，再重新用下划线连接。',
+    'input': 'text = "Python is fun"',
+    'output': '"Python_is_fun"',
+    'code': 'words = text.___()\nresult = "___".___(words)',
+    'options': 'split, join, "_", "-", replace, find',
+    'answer': '1,3,2',
+    'explanation': 'words = text.split()；"_" .join(words) → "Python_is_fun"。',
+    'example': '"a b c".split() → ["a","b","c"] 再用 "-".join → "a-b-c"'
+  },
+
+  {
+    'id': 15,
+    'type': 'fill',
+    'title': '按单词首字母重新组合',
+    'content': '提取单词首字母并拼接成缩写。',
+    'input': 'name = "United Nations Development Programme"',
+    'output': '"UNDP"',
+    'code': 'parts = name.___()\nabbr = "" .___([p[0] for p in parts])',
+    'options': 'split, join, upper, "_", replace, find',
+    'answer': '1,2',
+    'explanation': '先用 split() 拆成单词，再用 "".join 拼成缩写。',
+    'example': '"World Health Organization" → "WHO"'
+  }
+]

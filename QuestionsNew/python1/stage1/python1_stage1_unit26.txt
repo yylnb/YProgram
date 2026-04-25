@@ -1,0 +1,281 @@
+```plaintext
+{
+  'unit': '第26单元：比较运算符（==, !=, >, <）',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '相等运算符的含义',
+      'content': '在 Python 中，表达式 a == b 表示什么？',
+      'options': {
+        'A': '把 a 赋值给 b',
+        'B': '比较 a 和 b 是否相等，返回布尔值',
+        'C': '判断 a 是否大于 b',
+        'D': '交换 a 与 b 的值'
+      },
+      'answer': 'B',
+      'hints': [
+        '== 常用于比较。',
+        '结果通常是 True 或 False。',
+        '不是赋值运算符。'
+      ],
+      'explanation': '== 用于判断两个值是否相等，返回布尔值。',
+      'example': '3 == 3 会得到 True，而 3 == 4 会得到 False。'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '不等于运算符',
+      'content': '下面哪个表示“不等于”？',
+      'options': {
+        'A': '!=',
+        'B': '=',
+        'C': '<>',
+        'D': '==!'
+      },
+      'answer': 'A',
+      'hints': [
+        'Python 中“不等于”用两字符表示。',
+        '不是单个等号。',
+        '注意与 SQL 某些方言的写法区别。'
+      ],
+      'explanation': '在 Python 中使用 != 来表示不等于。',
+      'example': '5 != 3 会得到 True。'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '比较运算符的返回类型',
+      'content': '表达式 2 > 1 的结果是什么类型？',
+      'options': {
+        'A': 'int',
+        'B': 'str',
+        'C': 'bool',
+        'D': 'float'
+      },
+      'answer': 'C',
+      'hints': [
+        '比较运算返回真或假。',
+        'Python 有专门的布尔类型。',
+        'True/False 是关键字。'
+      ],
+      'explanation': '比较表达式返回布尔值（True 或 False）。',
+      'example': '0 < 1 会返回 True。'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '补全比较表达式',
+      'content': '补全使下面的 if 判断为真。',
+      'input': '',
+      'output': '条件成立',
+      'code': 'x = 10\nif x __ 5:\n    print("条件成立")',
+      'options': '>, <, ==, !=, >=, <=',
+      'answer': '1',
+      'explanation': '10 > 5 为 True，因此会打印。',
+      'example': '如果 x = 3，表达式 x > 5 则为 False。'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '数字与字符串比较',
+      'content': '补全，避免类型错误并判断相等。',
+      'input': 'a = "3"\nb = 3',
+      'output': 'False',
+      'code': 'print(a ___ b)',
+      'options': '==, !=, >, <, is',
+      'answer': '1',
+      'explanation': '字符串 "3" 与数字 3 不相等，使用 == 会输出 False。',
+      'example': '"3" == 3 返回 False，而 int("3") == 3 返回 True。'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '链式比较',
+      'content': '表达式 1 < 2 < 3 在 Python 中表示什么？',
+      'options': {
+        'A': '先比较 1 < 2，再比较 2 < 3，并且两者都要为真',
+        'B': '等价于 (1 < 2) < 3，这会报错',
+        'C': '等价于 1 < (2 < 3)',
+        'D': '在 Python 中不支持链式比较'
+      },
+      'answer': 'A',
+      'hints': [
+        'Python 支持链式比较。',
+        '链式比较会同时判断多个关系。',
+        '相比之下某些语言需要用 and 连接。'
+      ],
+      'explanation': '1 < 2 < 3 会同时判断 1 < 2 和 2 < 3 两个条件，只有都为 True 才为 True。',
+      'example': '2 < 3 < 5 等价于 (2 < 3) and (3 < 5)。'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': 'is 与 == 的区别',
+      'content': '下面哪项描述是正确的？',
+      'options': {
+        'A': 'is 用于比较值是否相等，== 用于比较对象标识',
+        'B': 'is 比较对象标识（是否为同一对象），== 比较值是否相等',
+        'C': 'is 与 == 完全等价',
+        'D': '== 只能用于数字比较'
+      },
+      'answer': 'B',
+      'hints': [
+        'is 关注对象身份(identity)。',
+        '== 关注值相等性。',
+        '小整数缓存可能导致 is 看起来也为真。'
+      ],
+      'explanation': 'is 比较对象引用是否相同；== 比较值是否相等。',
+      'example': 'a = [1]; b = [1]; a == b 为 True，但 a is b 为 False。'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '字符串比较',
+      'content': '在 Python 中，"apple" < "banana" 的结果是？',
+      'options': {
+        'A': 'True（按字典序比较）',
+        'B': 'False（无法比较字符串）',
+        'C': '报错（类型不匹配）',
+        'D': '结果取决于系统语言设置'
+      },
+      'answer': 'A',
+      'hints': [
+        '字符串可以按字典顺序比较。',
+        '比较基于字符的 Unicode 编码。',
+        'a 在 b 之前。'
+      ],
+      'explanation': 'Python 使用字典序（基于字符编码）比较字符串，因此 "apple" < "banana" 为 True。',
+      'example': '"cat" > "car" 为 True。'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '补全比较并输出 True',
+      'content': '使表达式结果为 True。',
+      'input': 'a = 7\nb = 7',
+      'output': 'True',
+      'code': 'print(a ___ b)',
+      'options': '==, !=, >, <, is',
+      'answer': '1',
+      'explanation': 'a 与 b 相等，使用 == 会输出 True。',
+      'example': '如果 a = 5, b = 6，则 a != b 为 True。'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '比较与类型转换',
+      'content': '补全代码，先转换后比较。',
+      'input': 's = "10"\nn = 10',
+      'output': 'True',
+      'code': 'print(int(s) ___ n)',
+      'options': '==, !=, >, <',
+      'answer': '1',
+      'explanation': '将字符串转换为整数后与数字比较，int("10") == 10 为 True。',
+      'example': 'int("3") < 5 会得到 True。'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '比较浮点数的小心点',
+      'content': '下面哪个说法正确？',
+      'options': {
+        'A': '浮点数比较总是准确的',
+        'B': '浮点数比较可能因精度问题不精确',
+        'C': '浮点数不能用于比较运算',
+        'D': 'Python 自动把浮点数转为分数后比较'
+      },
+      'answer': 'B',
+      'hints': [
+        '浮点数有表示误差。',
+        '经常用近似比较。',
+        '避免直接用 == 比较复杂计算结果。'
+      ],
+      'explanation': '浮点数有精度限制，比较时要小心，常用 abs(a-b) < epsilon 来判断近似相等。',
+      'example': 'abs(0.1 + 0.2 - 0.3) < 1e-9 通常用于判断近似相等。'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '比较运算的优先级',
+      'content': '下列关于比较运算优先级的说法，哪项正确？',
+      'options': {
+        'A': '比较运算优先于加减乘除',
+        'B': '比较运算的优先级低于算术运算',
+        'C': '比较运算与赋值运算优先级相同',
+        'D': 'Python 没有运算符优先级'
+      },
+      'answer': 'B',
+      'hints': [
+        '先算术，再比较。',
+        '例如 3 + 2 > 4 意味着先计算 3+2。',
+        '算术优先级高于比较。'
+      ],
+      'explanation': '算术运算先执行，比较運算在算术结果之上进行。',
+      'example': '3 + 2 > 4 等价于 (3 + 2) > 4。'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '比较运算与布尔上下文',
+      'content': '在 if 语句中使用比较运算会返回什么？',
+      'options': {
+        'A': '整数 0 或 1',
+        'B': '字符串 "True" 或 "False"',
+        'C': '布尔值 True 或 False',
+        'D': 'None'
+      },
+      'answer': 'C',
+      'hints': [
+        '比较表达式本身就是布尔类型。',
+        'if 需要一个布尔上下文。',
+        'True/False 是关键字。'
+      ],
+      'explanation': '比较表达式在 if 中直接使用，会被当作布尔值判断。',
+      'example': 'if a == b: ... 中的 a == b 会返回 True 或 False。'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '综合填空：年龄判断',
+      'content': '根据用户输入的年龄判断是否成年人并输出。',
+      'input': 'age = 18',
+      'output': '成年人',
+      'code': 'age = ___\nif age ___ 18:\n    print("成年人")\nelse:\n    print("未成年人")',
+      'options': 'int(input()), input(), >=, >, ==',
+      'answer': '1,3',
+      'explanation': '需要将输入转换为整数，并判断 age >= 18 来判断是否成年人。',
+      'example': 'age = int(input())\nif age >= 18: print("成年人")'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '补全链式比较',
+      'content': '补全使表达式判断 x 在 1 到 10 之间（包含端点）。',
+      'input': 'x = 5',
+      'output': 'True',
+      'code': 'print(1 ___ x ___ 10)',
+      'options': '<, <=, >, >=, ==',
+      'answer': '2,4',
+      'explanation': '使用链式比较 1 <= x <= 10 可以判断 x 在闭区间 [1,10]。',
+      'example': '1 <= 3 <= 10 为 True。'
+    }
+
+  ]
+}
+```

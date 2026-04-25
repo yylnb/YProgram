@@ -1,0 +1,601 @@
+{
+    "choice_questions": [
+        {
+            "id": 1,
+            "title": "break 的基本作用",
+            "content": "在循环中使用 break 会？",
+            "answer": "A",
+            "hints": [
+                "强制终止循环",
+                "跳到循环外继续执行"
+            ],
+            "explanation": "break 会立即退出最近的循环并继续执行循环后面的代码。",
+            "example": "for i in range(5):\n    if cond: break",
+            "options": {
+                "A": "立即退出循环",
+                "B": "跳过本次迭代",
+                "C": "结束程序",
+                "D": "重置变量"
+            }
+        },
+        {
+            "id": 2,
+            "title": "break 所在层级",
+            "content": "当循环嵌套时，break 会退出哪一层？",
+            "answer": "A",
+            "hints": [
+                "局部退出",
+                "配合标志变量可退出外层"
+            ],
+            "explanation": "break 只退出包含它的最内层循环。",
+            "example": "use flag to exit outer loop",
+            "options": {
+                "A": "最近的那一层循环",
+                "B": "最外层循环",
+                "C": "所有循环",
+                "D": "不会退出任何循环"
+            }
+        },
+        {
+            "id": 3,
+            "title": "break vs return",
+            "content": "在函数内循环中，break 与 return 区别？",
+            "answer": "A",
+            "hints": [
+                "return 结束整个函数",
+                "break 只结束循环"
+            ],
+            "explanation": "return 会结束函数执行并返回值，而 break 仅跳出循环。",
+            "example": "return vs break",
+            "options": {
+                "A": "break 退出循环，return 返回函数",
+                "B": "两者相同",
+                "C": "break 返回值",
+                "D": "return 只跳过一轮"
+            }
+        },
+        {
+            "id": 6,
+            "title": "break 的常见用途",
+            "content": "下面哪个是 break 常见用途？",
+            "answer": "A",
+            "hints": [
+                "搜索类算法常用",
+                "效率考虑"
+            ],
+            "explanation": "在遍历中一旦找到匹配项常用 break 提高效率。",
+            "example": "find and break",
+            "options": {
+                "A": "在找到结果后停止搜索",
+                "B": "强制重启程序",
+                "C": "跳过循环体第一行",
+                "D": "用于定义函数"
+            }
+        },
+        {
+            "id": 7,
+            "title": "与 else 一起使用",
+            "content": "for/while 的 else 块在何种情况下执行？",
+            "answer": "A",
+            "hints": [
+                "else 是循环完成后的补充",
+                "被 break 则不执行"
+            ],
+            "explanation": "循环正常结束时（未被 break）会执行 else 语句块。",
+            "example": "for x in seq: ... else: ...",
+            "options": {
+                "A": "循环未被 break 打断时执行",
+                "B": "循环每次都执行",
+                "C": "循环被 break 时执行",
+                "D": "无意义"
+            }
+        },
+        {
+            "id": 8,
+            "title": "性能影响",
+            "content": "频繁使用 break 会如何影响性能？",
+            "answer": "A",
+            "hints": [
+                "快速退出避免不必要迭代",
+                "但过度复杂的跳转影响可读性"
+            ],
+            "explanation": "break 可减少不必要的迭代，从性能角度可能有好处，但影响代码可读性要权衡。",
+            "example": "break early",
+            "options": {
+                "A": "通常有利于性能但要确保逻辑正确",
+                "B": "总是降低性能",
+                "C": "提升内存",
+                "D": "无影响"
+            }
+        },
+        {
+            "id": 11,
+            "title": "不当使用风险",
+            "content": "在循环中随处使用 break 可能导致？",
+            "answer": "A",
+            "hints": [
+                "跳转太多使逻辑难懂",
+                "应控制使用场景"
+            ],
+            "explanation": "频繁使用 break 会使控制流跳转复杂，影响可读性。",
+            "example": "limit break usage",
+            "options": {
+                "A": "降低可读性",
+                "B": "自动并行",
+                "C": "提升稳定性",
+                "D": "语法错误"
+            }
+        },
+        {
+            "id": 12,
+            "title": "替代方案",
+            "content": "如果不想用 break，常用替代是？",
+            "answer": "A",
+            "hints": [
+                "使用布尔变量或修改条件"
+            ],
+            "explanation": "通过布尔变量改变循环条件可代替 break，代码更显式。",
+            "example": "running=False",
+            "options": {
+                "A": "用条件变量控制循环",
+                "B": "删除循环",
+                "C": "无限循环",
+                "D": "用 goto"
+            }
+        },
+        {
+            "id": 13,
+            "title": "break 在 while 的位置",
+            "content": "将 break 放在循环体中靠近检测点有什么好处？",
+            "answer": "A",
+            "hints": [
+                "靠近检测点便于理解",
+                "减少状态传播"
+            ],
+            "explanation": "把 break 放在检测点能使退出意图更清晰。",
+            "example": "if found: break",
+            "options": {
+                "A": "更直观并减少额外代码",
+                "B": "没有区别",
+                "C": "不推荐",
+                "D": "会报错"
+            }
+        }
+    ],
+    "fill_questions": [
+        {
+            "id": 4,
+            "title": "用 break 退出",
+            "content": "补全：找到目标值时退出循环。",
+            "explanation": "遇到目标立即使用 break 退出循环。",
+            "example": "break on match",
+            "input": "3",
+            "output": [
+                "found"
+            ],
+            "options": [
+                "示例已给出"
+            ],
+            "answer": [
+                "1"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "i=0"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "while True:"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "    i+=1"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "    if i==3:"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "        print(\"found\")"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "        "
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 5,
+            "title": "嵌套中用 break",
+            "content": "补全：内层 break 不会退出外层。",
+            "explanation": "内层 break 只终止内层循环。",
+            "example": "需要 flag 退出外层",
+            "input": null,
+            "output": [],
+            "options": [
+                "示例已给出"
+            ],
+            "answer": [
+                "1"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "for i in range(2):"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "    for j in range(3):"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "        "
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 9,
+            "title": "在循环中查找元素",
+            "content": "补全：找到元素后退出并打印索引。",
+            "explanation": "找到目标后打印索引并 break。",
+            "example": "enumerate + break",
+            "input": null,
+            "output": [
+                "2"
+            ],
+            "options": [
+                "示例已给出"
+            ],
+            "answer": [
+                "1"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "arr=[1,2,3]"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "for i,v in enumerate(arr):"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "    if v==3:"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "        print(i)"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "        "
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 10,
+            "title": "标志退出外层",
+            "content": "补全：用 flag 在内层触发退出外层。",
+            "explanation": "通过 flag 在内层触发后检查以退出外层循环。",
+            "example": "flag pattern",
+            "input": null,
+            "output": [],
+            "options": [
+                "示例已给出"
+            ],
+            "answer": [
+                "1"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "done=False"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "for i in range(5):"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "    for j in range(5):"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "        if cond:"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "            done=True"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "            "
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "    if done:"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "        "
+                            },
+                            {
+                                "type": "slot",
+                                "index": 1
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 14,
+            "title": "在 user input 中退出",
+            "content": "补全：当输入 \"q\" 时退出。",
+            "explanation": "基于用户输入的 sentinel 值可立即退出循环。",
+            "example": "sentinel input",
+            "input": "q",
+            "output": [],
+            "options": [
+                "示例已给出"
+            ],
+            "answer": [
+                "1"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "while True:"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "    s=input()"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "    if s==\"q\":"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "        "
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 15,
+            "title": "结合异常使用 break",
+            "content": "补全：遇异常打印并 break。",
+            "explanation": "在异常情形下可以记录并使用 break 优雅退出循环。",
+            "example": "handle exception then break",
+            "input": null,
+            "output": [],
+            "options": [
+                "示例已给出"
+            ],
+            "answer": [
+                "1"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "while True:"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "    try:"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "        do()"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "    except Exception as e:"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "        print(e)"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "        "
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}

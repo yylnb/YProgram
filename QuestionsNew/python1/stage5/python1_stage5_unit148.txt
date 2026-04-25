@@ -1,0 +1,203 @@
+```plaintext
+{
+  'unit': '第148单元：异步编程与 asyncio',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': 'async/await',
+      'content': '在 Python 中声明异步函数使用哪个关键字？',
+      'options': {'A': 'async def', 'B': 'def async', 'C': 'await def', 'D': 'async function'},
+      'answer': 'A',
+      'hints': ['提示1：async def 定义协程函数', '提示2：await 在协程中等待'] ,
+      'explanation': '使用 async def 定义协程，内部可使用 await 等待异步操作。',
+      'example': ''
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '事件循环',
+      'content': 'asyncio 的核心组件是？',
+      'options': {'A': '事件循环 (event loop)', 'B': '线程池', 'C': '进程池', 'D': '消息队列'},
+      'answer': 'A',
+      'hints': ['提示1：事件循环调度协程执行'],
+      'explanation': '事件循环负责调度协程、处理 I/O 与回调。',
+      'example': ''
+    },
+
+    {
+      'id': 3,
+      'type': 'fill',
+      'title': '运行协程（填空）',
+      'content': '在脚本中运行顶层协程常用 asyncio.__1__() 方法。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': 'run, start, execute, loop',
+      'answer': '1',
+      'explanation': 'asyncio.run(coro()) 用于执行顶层协程并管理事件循环。',
+      'example': ''
+    },
+
+    {
+      'id': 4,
+      'type': 'choice',
+      'title': '并发任务',
+      'content': '并行运行多个协程并等待所有完成可使用哪个函数？',
+      'options': {'A': 'asyncio.gather', 'B': 'asyncio.wait_for', 'C': 'asyncio.sleep', 'D': 'asyncio.open'},
+      'answer': 'A',
+      'hints': ['提示1：gather 聚合多个协程', '提示2：wait 提供超时控制'],
+      'explanation': 'asyncio.gather 可并发运行传入的协程并返回聚合结果。',
+      'example': ''
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': 'IO 阻塞（填空）',
+      'content': '在异步环境中要避免调用会阻塞事件循环的函数，可通过 __1__ 在线程池中运行阻塞代码。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': 'loop.run_in_executor, threading.Thread, multiprocessing.Process, subprocess.run',
+      'answer': '1',
+      'explanation': 'loop.run_in_executor 可以把阻塞调用委托到线程池或进程池中，避免阻塞事件循环。',
+      'example': ''
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '异步上下文管理',
+      'content': '支持异步上下文管理的语法是什么？',
+      'options': {'A': 'async with', 'B': 'with async', 'C': 'await with', 'D': 'with await'},
+      'answer': 'A',
+      'hints': ['提示1：async with 可用于异步资源管理'],
+      'explanation': '使用 async with 管理需异步进入/退出的资源。',
+      'example': ''
+    },
+
+    {
+      'id': 7,
+      'type': 'fill',
+      'title': '超时控制（填空）',
+      'content': 'asyncio.wait_for 可用于给协程设置 __1__。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': '超时, 并发, 重试, 优先级',
+      'answer': '1',
+      'explanation': 'wait_for 可在指定秒数内等待协程完成，超时则抛出异常。',
+      'example': ''
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '异步 HTTP',
+      'content': '常用的异步 HTTP 客户端库是？',
+      'options': {'A': 'aiohttp', 'B': 'requests', 'C': 'urllib', 'D': 'http.client'},
+      'answer': 'A',
+      'hints': ['提示1：aiohttp 支持异步会话和服务端'],
+      'explanation': 'aiohttp 提供客户端和服务端的异步 HTTP 支持。',
+      'example': ''
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '取消任务（填空）',
+      'content': '可以调用 task.__1__() 来取消一个正在运行的任务对象。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': 'cancel, stop, terminate, kill',
+      'answer': '1',
+      'explanation': 'task.cancel() 请求取消任务，任务需处理 CancelledError',
+      'example': ''
+    },
+
+    {
+      'id': 10,
+      'type': 'choice',
+      'title': '协程与生成器',
+      'content': '协程与生成器的一个关键区别是协程可以使用哪个关键字暂停等待结果？',
+      'options': {'A': 'await', 'B': 'yield', 'C': 'yield from', 'D': 'send'},
+      'answer': 'A',
+      'hints': ['提示1：await 在协程内使用', '提示2：yield 用于生成器'],
+      'explanation': 'await 用于等待异步操作的结果，yield 是生成器产出值的机制。',
+      'example': ''
+    },
+
+    {
+      'id': 11,
+      'type': 'fill',
+      'title': '并发限制（填空）',
+      'content': '可以使用 asyncio.__1__ 控制同时运行的协程数量（信号量）。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': 'Semaphore, Lock, Event, Queue',
+      'answer': '1',
+      'explanation': 'Semaphore 可用于限制并发协程数量以控制资源消耗。',
+      'example': ''
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '回调与协程',
+      'content': '在 asyncio 中，回调通常通过哪个机制调度？',
+      'options': {'A': '事件循环的 call_soon/call_later', 'B': '线程池直接调用', 'C': '操作系统中断', 'D': 'multiprocessing'},
+      'answer': 'A',
+      'hints': ['提示1：call_soon 在下一个循环迭代调度回调'],
+      'explanation': '事件循环提供 call_soon/call_later 等接口调度回调函数。',
+      'example': ''
+    },
+
+    {
+      'id': 13,
+      'type': 'fill',
+      'title': '阻塞检测（填空）',
+      'content': '若协程中有阻塞操作会导致 __1__，应替换为异步或移到线程池。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': '事件循环阻塞, 并行, 加速, 内存泄漏',
+      'answer': '1',
+      'explanation': '阻塞操作会阻塞事件循环，影响其他协程执行。',
+      'example': ''
+    },
+
+    {
+      'id': 14,
+      'type': 'choice',
+      'title': '适用场景',
+      'content': '异步编程更适合哪类任务？',
+      'options': {'A': '大量 I/O 操作且单线程可处理', 'B': 'CPU 密集型计算', 'C': '需要进程隔离', 'D': '必须使用数据库事务'},
+      'answer': 'A',
+      'hints': ['提示1：异步适合高并发 I/O'],
+      'explanation': '异步适合处理大量并发 I/O，如网络请求、文件 I/O（若支持异步）等。',
+      'example': ''
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '总结（填空）',
+      'content': '使用 asyncio 时应尽量避免阻塞，并合理使用 __1__ 与线程池执行阻塞代码。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': 'run_in_executor, join, sleep, yield',
+      'answer': '1',
+      'explanation': 'run_in_executor 可将阻塞调用委托到线程/进程池，保护事件循环。',
+      'example': ''
+    }
+
+  ]
+}
+
+```

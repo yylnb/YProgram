@@ -1,0 +1,199 @@
+```plaintext
+{
+  'unit': '第126单元：作用域与闭包',
+  'questions': [
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '局部与全局作用域',
+      'content': '下列关于局部变量和全局变量的说法，正确的是？',
+      'options': {'A':'局部变量在函数内部有效，全局变量在模块级有效','B':'局部变量在模块内共享','C':'全局变量在函数内部默认不可读','D':'没有作用域概念'},
+      'answer': 'A',
+      'hints': ['提示1：函数内部定义的是局部变量','提示2：global 可引用模块级变量','提示3：注意命名冲突'],
+      'explanation': '局部变量仅在函数作用域内可见，全局变量在模块范围内可见。',
+      'example': ''
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': 'global 关键字',
+      'content': '使用 global 的主要目的是？',
+      'options': {'A':'在函数内声明引用模块级变量以便赋值','B':'定义全局函数','C':'创建新的模块变量','D':'删除全局变量'},
+      'answer': 'A',
+      'hints': ['提示1：没有 global 不能赋值给全局变量','提示2：读取全局变量通常不需要 global','提示3：慎用以减少副作用'],
+      'explanation': 'global 允许在函数中对模块级变量进行赋值。',
+      'example': 'x=0\ndef f():\n    global x\n    x=1'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '闭包定义',
+      'content': '闭包（closure）通常指什么？',
+      'options': {'A':'函数与其相关环境变量的组合','B':'仅指匿名函数','C':'一种类','D':'模块变量'},
+      'answer': 'A',
+      'hints': ['提示1：闭包可捕获外层作用域变量','提示2：常见于工厂函数','提示3：可用于封装状态'],
+      'explanation': '闭包是包含函数及其词法环境的对象，函数可访问外层变量。',
+      'example': 'def outer():\n    x=1\n    def inner():\n        return x\n    return inner'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': 'nonlocal（填空）',
+      'content': '在嵌套函数中若要修改外层（非全局）变量，应使用 __1__。',
+      'input': '',
+      'output': '',
+      'code': 'def outer():\n    x=0\n    def inner():\n        __1__\n        x+=1\n    return inner',
+      'options': 'nonlocal x, global x, local x, del x',
+      'answer': '1',
+      'explanation': 'nonlocal 用于声明外层（但非全局）变量以便赋值。',
+      'example': ''
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '闭包保存状态（填空）',
+      'content': '闭包可以保存外层变量的值，若要返回一个函数对象，应使用 __1__。',
+      'input': '',
+      'output': '',
+      'code': 'def counter():\n    n=0\n    def inc():\n        nonlocal n\n        n += 1\n        return n\n    __1__',
+      'options': 'return inc, return inc(), print(inc)',
+      'answer': '1',
+      'explanation': '返回函数对象 inc，本身是一个闭包，保存 n 的状态。',
+      'example': ''
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '闭包与内存',
+      'content': '闭包会如何影响被捕获变量的生命周期？',
+      'options': {'A':'被捕获变量会被保留直到闭包被垃圾回收','B':'变量在函数返回后立即销毁','C':'闭包不会影响生命周期','D':'变量会复制一份到栈'},
+      'answer': 'A',
+      'hints': ['提示1：闭包保存引用','提示2：垃圾回收会决定何时释放','提示3：注意内存泄漏风险'],
+      'explanation': '闭包持有对外层变量的引用，从而延长这些变量的生命周期。',
+      'example': ''
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '闭包常见用途',
+      'content': '下面哪个不是闭包常见用途？',
+      'options': {'A':'封装私有状态','B':'实现装饰器','C':'创建类的替代语法','D':'延迟计算'},
+      'answer': 'C',
+      'hints': ['提示1：闭包常用于装饰器','提示2：类用于更复杂的状态封装','提示3：闭包可做轻量级对象'],
+      'explanation': '闭包可用于私有状态和装饰器，但并不替代类的全部功能。',
+      'example': ''
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '闭包与多次调用',
+      'content': '每次调用工厂函数返回闭包时，捕获的变量是怎样的？',
+      'options': {'A':'每次返回独立的闭包实例及其环境','B':'所有闭包共享同一环境','C':'只返回同一个函数对象','D':'捕获变量为全局变量'},
+      'answer': 'A',
+      'hints': ['提示1：每次调用都会创建新的外层作用域','提示2：因此状态独立','提示3：示例可验证'],
+      'explanation': '每次调用工厂函数会创建新的闭包和独立的环境。',
+      'example': ''
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '闭包示例（填空）',
+      'content': '在下列代码中，outer 返回的是什么？',
+      'input': '',
+      'output': '',
+      'code': 'def outer():\n    x=5\n    def inner():\n        return x\n    __1__\n\n# outer() 返回什么？',
+      'options': 'inner, inner(), None, x',
+      'answer': '1',
+      'explanation': 'outer 返回函数对象 inner，即闭包。',
+      'example': ''
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '闭包与可变捕获（填空）',
+      'content': '若捕获的是可变对象，闭包内修改会反映到外层对象；示例用法写 return __1__。',
+      'input': '',
+      'output': '',
+      'code': 'def outer():\n    l=[]\n    def inner():\n        l.append(1)\n        return l\n    __1__',
+      'options': 'inner, inner(), l, []',
+      'answer': '1',
+      'explanation': '返回 inner，闭包可修改并保持对可变对象的引用。',
+      'example': ''
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '闭包与线程安全',
+      'content': '在多线程中使用闭包保存状态时应注意？',
+      'options': {'A':'需要同步以避免竞争条件','B':'闭包本身自动线程安全','C':'不能在多线程中使用闭包','D':'闭包会被复制到每个线程'},
+      'answer': 'A',
+      'hints': ['提示1：共享可变状态需要锁','提示2：考虑使用线程安全的数据结构','提示3：避免隐式共享状态'],
+      'explanation': '闭包保存的可变状态在多线程场景下可能产生竞争，需同步控制。',
+      'example': ''
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '闭包调试',
+      'content': '要查看闭包捕获了哪些变量，可以使用哪种方式？',
+      'options': {'A':'查看函数的 __closure__ 属性','B':'查看 __globals__','C':'无法查看','D':'使用 print 语句只能'},
+      'answer': 'A',
+      'hints': ['提示1：函数对象有 __closure__ 属性','提示2：其中包含被捕获变量的 cell','提示3：可结合 inspect 模块使用'],
+      'explanation': '通过函数对象的 __closure__ 可以访问被捕获变量的引用信息。',
+      'example': ''
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '避免闭包常见错误',
+      'content': '在循环中创建闭包捕获循环变量时常见错误是？',
+      'options': {'A':'所有闭包共享最终的循环变量值','B':'每个闭包按预期保存当时值','C':'闭包无法捕获循环变量','D':'代码会报错'},
+      'answer': 'A',
+      'hints': ['提示1：典型错误是 lambda i: i 直接捕获 i','提示2：可用默认参数避免问题','提示3：示例：[lambda: i for i in range(3)]'],
+      'explanation': '闭包在循环中直接捕获变量会导致所有闭包看到最后的值，解决方法是例如使用默认参数绑定当时的值。',
+      'example': ''
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '绑定当前值（填空）',
+      'content': '在循环中创建闭包并绑定当时的 i，常用技巧： lambda i=i: i ，其中等号左侧是 __1__。',
+      'input': '',
+      'output': '',
+      'code': 'funcs = [lambda i=i: i for i in range(3)]\nprint(funcs[0]())  # 0',
+      'options': '默认参数, 全局参数, 非本地参数, 注解',
+      'answer': '1',
+      'explanation': '通过将循环变量作为默认参数传入，可以在闭包中绑定当时的值。',
+      'example': ''
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '总结（填空）',
+      'content': '闭包是 __1__ 与 __2__ 的组合。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': '函数, 其词法环境, 类, 模块',
+      'answer': '1,2',
+      'explanation': '闭包由函数和它所捕获的词法环境共同组成。',
+      'example': ''
+    }
+  ]
+}
+
+```

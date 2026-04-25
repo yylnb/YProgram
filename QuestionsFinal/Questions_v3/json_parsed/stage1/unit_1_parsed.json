@@ -1,0 +1,555 @@
+[
+  {
+    "id": 1,
+    "type": "choice",
+    "title": "点餐的正确姿势",
+    "content": "阿珍想用Python在控制台点一份‘炸鸡’，下面哪种写法是正确的呢？",
+    "options": [
+      "print(炸鸡)",
+      "print(\"炸鸡\")",
+      "print(‘炸鸡’)",
+      "print炸鸡"
+    ],
+    "answer": "B",
+    "hints": [
+      "字符串必须被引号包围。",
+      "引号必须是英文半角的。",
+      "print是函数，调用时需要括号。"
+    ],
+    "explanation": "print是一个函数，用于输出内容。要输出文本（字符串），必须用引号（单引号'或双引号\"均可）将其包裹起来，且引号必须是英文半角符号。选项A缺少引号；选项C使用了中文全角单引号；选项D缺少调用函数的括号。",
+    "example": "正确用法：print(\"Hello World\") 或 print('Hello World')。"
+  },
+  {
+    "id": 2,
+    "type": "choice",
+    "title": "引号的较量",
+    "content": "小华想输出“苹果”两个字，但总是报错。哪个选项使用了正确引号且不会报错？",
+    "options": [
+      "print(“苹果”)",
+      "print('苹果')",
+      "print(’苹果‘)",
+      "print(苹果)"
+    ],
+    "answer": "B",
+    "hints": [
+      "Python不认识中文引号。",
+      "字符串必须由英文符号包裹。",
+      "单引号和双引号都可以。"
+    ],
+    "explanation": "在Python中，字符串必须由英文半角的单引号（'）或双引号（\"）包裹。选项A使用了中文双引号；选项C混合了中文引号；选项D完全没有引号，会被当作变量名。只有选项B使用了正确的英文单引号。",
+    "example": "类似场景：print(\"香蕉\") 或 print('香蕉') 都能正确输出。"
+  },
+  {
+    "id": 3,
+    "type": "choice",
+    "title": "数字与文本的分别",
+    "content": "数学课上，李老师让小明用Python输出“100分”。哪个选项能正确输出这句话，而不是计算100分？",
+    "options": [
+      "print(100分)",
+      "print(100 分)",
+      "print(\"100分\")",
+      "print(100,分)"
+    ],
+    "answer": "C",
+    "explanation": "print(100分) 会把“100分”当成一个变量名，但变量名不能以数字开头且包含中文字符，会报错。print(\"100分\") 将整个“100分”作为一个字符串输出，这正是我们想要的结果。",
+    "hints": [
+      "想要原样输出文本，需要引号。",
+      "引号内是什么，就会输出什么。",
+      "没有引号的数字会被当作数值。"
+    ],
+    "example": "print(\"我的分数是：95\") 会输出‘我的分数是：95’，而 print(95) 只会输出数字 95。"
+  },
+  {
+    "id": 4,
+    "type": "fill",
+    "title": "问候语填空",
+    "content": "小机器人有点紧张，第一次见面，请帮它补全打招呼的代码！",
+    "input": null,
+    "output": [
+      "你好，世界！"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "print(\""
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "\")"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "你好，世界！",
+      "Hello, world!",
+      "你好世界",
+      "你好， 世界！"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "print函数内的字符串内容需要与期望的输出严格一致。代码中已经提供了双引号，我们只需将目标输出内容‘你好，世界！’填入即可。",
+    "example": "print(\"早上好\") 会输出：早上好"
+  },
+  {
+    "id": 5,
+    "type": "fill",
+    "title": "竖版菜单",
+    "content": "餐馆老板想用代码打印一个简单的竖版菜单，每道菜名占一行。请帮他填空完成代码。",
+    "input": null,
+    "output": [
+      "鱼香肉丝",
+      "宫保鸡丁",
+      "麻婆豆腐"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "dish1 = \"鱼香肉丝\""
+            },
+            {
+              "type": "code_line",
+              "value": "dish2 = \"宫保鸡丁\""
+            },
+            {
+              "type": "code_line",
+              "value": "dish3 = \"麻婆豆腐\""
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "print(dish1, "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": ", dish3)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "dish2",
+      "\"dish2\"",
+      "dish2\n",
+      "sep=\"\\n\""
+    ],
+    "answer": [
+      3
+    ],
+    "explanation": "默认情况下，print用空格分隔多个参数。要达到每个菜名独占一行的效果，需要修改分隔符为换行符‘\\n’。因此，应该使用 sep=\"\\n\" 这个关键字参数。",
+    "example": "print(\"A\", \"B\", \"C\", sep=\"-\") 会输出：A-B-C"
+  },
+  {
+    "id": 6,
+    "type": "choice",
+    "title": "代码的悄悄话",
+    "content": "小王写了一段代码，并希望在某行代码旁给自己加个备注‘这是一行测试代码’。以下哪种方式是正确的？",
+    "options": [
+      "# 这是一行测试代码",
+      "// 这是一行测试代码",
+      "‘ 这是一行测试代码’",
+      "这是一行测试代码"
+    ],
+    "answer": "A",
+    "hints": [
+      "Python有自己的注释标记符号。",
+      "这个符号通常用来屏蔽代码。",
+      "想想看C或Java的注释符号是什么？"
+    ],
+    "explanation": "在Python中，单行注释使用井号 (#) 开头。从#开始直到行尾的所有内容都会被Python解释器忽略，因此它非常适合用来写备注。",
+    "example": "# 获取用户输入 \n name = input(\"请输入名字：\")"
+  },
+  {
+    "id": 7,
+    "type": "choice",
+    "title": "分隔符的秘密",
+    "content": "小美想让 print(\"A\", \"B\", \"C\") 输出成‘A-B-C’。她应该怎么做？",
+    "options": [
+      "print(\"A\", \"B\", \"C\", join=\"-\")",
+      "print(\"A\", \"B\", \"C\", sep=\"-\")",
+      "print(\"A-\"+\"B-\"+\"C\")",
+      "print(\"A\", \"B\", \"C\").replace(\" \", \"-\")"
+    ],
+    "answer": "B",
+    "hints": [
+      "print函数有专门控制分隔方式的参数。",
+      "这个参数名很短，只有三个字母。",
+      "默认的分隔符是一个空格。"
+    ],
+    "explanation": "print函数有一个名为sep的参数，它定义了在输出多个值时，值之间的分隔字符串。默认sep是空格，将其修改为减号‘-’即可实现目标输出。",
+    "example": "print(2024, 8, 1, sep=\"/\") 会输出：2024/8/1"
+  },
+  {
+    "id": 8,
+    "type": "choice",
+    "title": "黏在一起的输出",
+    "content": "阿强写了一个倒计时程序，但print总是自动换行，导致输出是竖排的。怎么让‘3 2 1’在同一行显示？",
+    "options": [
+      "print(\"3\", \"2\", \"1\", sep=\"\")",
+      "print(\"3\", \"2\", \"1\", end=\"\")",
+      "print(\"3\", \"2\", \"1\", line=\"no\")",
+      "print(\"3 2 1\")"
+    ],
+    "answer": "D",
+    "hints": [
+      "题目要求输出‘3 2 1’，字符串本身带空格。",
+      "最简单的方法往往最有效。",
+      "检查每个选项的实际输出结果。"
+    ],
+    "explanation": "最直接的方法就是将‘3 2 1’作为一个完整的字符串输出，print(\"3 2 1\") 即可完美实现。其他选项或改变了空格，或未能正确解决问题。",
+    "example": "想要输出连续数字‘123’，可以写 print(\"123\") 或 print(\"1\", \"2\", \"3\", sep=\"\")。"
+  },
+  {
+    "id": 9,
+    "type": "fill",
+    "title": "自我介绍",
+    "content": "请帮小明完成这段自我介绍代码，将姓名和年龄用一句话输出。",
+    "input": null,
+    "output": [
+      "我的名字是：小明，今年10岁了。"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "name = \"小明\""
+            },
+            {
+              "type": "code_line",
+              "value": "age = 10"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "print(\"我的名字是：\" + name + \"，今年\" + "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "(age) + \"岁了。\")"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "str",
+      "int",
+      "print",
+      "age",
+      "\"age\""
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "在拼接字符串时，所有的部分都必须是字符串类型。变量age是整数类型，不能直接与字符串相加。需要使用str()函数将其转换为字符串。",
+    "example": "height = 180; print(\"我的身高是：\" + str(height) + \"cm\")"
+  },
+  {
+    "id": 10,
+    "type": "fill",
+    "title": "超市结账",
+    "content": "这是超市收银系统的核心计算代码，请填空让它正确计算并输出总价。",
+    "input": null,
+    "output": [
+      "总价是： 85"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "price = 50"
+            },
+            {
+              "type": "code_line",
+              "value": "quantity = 2"
+            },
+            {
+              "type": "code_line",
+              "value": "discount = 15"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "total = price * quantity - "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": ""
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "print(\"总价是：\", "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": ")"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "discount",
+      "total",
+      "price",
+      "quantity"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "第一空需要减去折扣金额，变量名为discount。第二空需要输出计算得到的总价，变量名为total。填空的顺序对应着代码中slot出现的顺序。",
+    "example": "cost = 20 - 5\nprint(\"费用：\", cost) # 输出：费用： 15"
+  },
+  {
+    "id": 11,
+    "type": "choice",
+    "title": "多行诗的诞生",
+    "content": "诗人想用Python输出一首两行短诗：‘床前明月光，疑是地上霜。’，且每句独立成行。哪种方式最合适？",
+    "options": [
+      "print('床前明月光，疑是地上霜。')",
+      "print('床前明月光，' + '疑是地上霜。')",
+      "print('''床前明月光，疑是地上霜。''')",
+      "print('''床前明月光，\\n疑是地上霜。''')"
+    ],
+    "answer": "D",
+    "hints": [
+      "一行字符串无法自动换行。",
+      "需要手动告诉Python在哪里换行。",
+      "三引号字符串可以包含换行符。"
+    ],
+    "explanation": "三引号（''' 或 \"\"\"）可以用来定义包含换行符的多行字符串。在字符串内部使用‘\\n’转义字符明确指定换行位置，即可实现两行输出。",
+    "example": "print('''第一行\\n第二行''') 会输出两行文本。"
+  },
+  {
+    "id": 12,
+    "type": "choice",
+    "title": "路径的困惑",
+    "content": "程序员小李想在屏幕上显示一个Windows文件路径‘C:\\new\\file.txt’。直接print会出问题，哪个选项能正确显示？",
+    "options": [
+      "print('C:\\new\\file.txt')",
+      "print('C:\\\\new\\\\file.txt')",
+      "print('C:/new/file.txt')",
+      "print('C:\\new\\file.txt')"
+    ],
+    "answer": "B",
+    "hints": [
+      "反斜杠在Python字符串中有特殊含义。",
+      "想输出一个真正的反斜杠，需要转义。",
+      "转义的方法是再加一个反斜杠。"
+    ],
+    "explanation": "在字符串中，单个反斜杠（\\）是转义字符的开头，如\\n代表换行。要输出一个真正的反斜杠，需要使用两个连续的反斜杠（\\\\）进行转义。",
+    "example": "print(\"这是一个反斜杠：\\\\\") 会输出：这是一个反斜杠：\\"
+  },
+  {
+    "id": 13,
+    "type": "choice",
+    "title": "默认的默契",
+    "content": "执行 print(2024, \"年\", 8, \"月\", 1, \"日\") 会输出什么？",
+    "options": [
+      "2024年8月1日",
+      "2024 年 8 月 1 日",
+      "2024,年,8,月,1,日",
+      "2024年 8月 1日"
+    ],
+    "answer": "B",
+    "hints": [
+      "print默认如何处理多个参数？",
+      "回想一下sep参数的默认值。",
+      "默认分隔符是空格，不是逗号也不是空字符。"
+    ],
+    "explanation": "print函数在输出多个参数时，默认使用一个空格作为分隔符（sep=\" \"）。因此，所有参数会按顺序被一个空格隔开输出。",
+    "example": "print(\"Hello\", \"Mr.\", \"Smith\") 默认输出：Hello Mr. Smith"
+  },
+  {
+    "id": 14,
+    "type": "fill",
+    "title": "复杂的消息组装",
+    "content": "天气预报程序需要组装一条消息，请填空完成代码。注意字符串和数字的混合处理。",
+    "input": null,
+    "output": [
+      "今日天气：晴，最高温度：28度"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "weather = \"晴\""
+            },
+            {
+              "type": "code_line",
+              "value": "temp_high = 28"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "message = \"今日天气：\" + weather + \"，最高温度：\" + "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " + \"度\""
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": ""
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": "(message)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "temp_high",
+      "str(temp_high)",
+      "print",
+      "weather",
+      "message"
+    ],
+    "answer": [
+      1,
+      2
+    ],
+    "explanation": "第一空：需要将整数温度值转换为字符串才能与其他字符串相加，因此填入str(temp_high)。第二空：需要调用print函数来输出组装好的message。",
+    "example": "info = \"状态：\" + str(1); print(info) # 输出：状态：1"
+  },
+  {
+    "id": 15,
+    "type": "fill",
+    "title": "动态欢迎程序",
+    "content": "这是一个交互式欢迎程序，需要接收用户输入的名字，然后热情地打招呼。请填空让它动起来！",
+    "input": [
+      "阿祖"
+    ],
+    "output": [
+      "热烈欢迎阿祖的到来！"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "visitor_name = "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "(\"请输入您的名字：\")"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "print(\"热烈欢迎\" + "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " + \"的到来！\")"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "input",
+      "visitor_name",
+      "print",
+      "\"visitor_name\"",
+      "str(visitor_name)"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "第一空：需要使用input()函数来获取用户的键盘输入。第二空：需要将存储了用户输入内容的变量visitor_name（已经是字符串）与其他字符串拼接。",
+    "example": "user = input(\"名字？\"); print(\"你好，\" + user)"
+  }
+]

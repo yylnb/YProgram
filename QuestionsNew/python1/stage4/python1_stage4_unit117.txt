@@ -1,0 +1,282 @@
+```plaintext
+{
+  'unit': '第117单元：异步 IO（asyncio）性能',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': 'asyncio 优势',
+      'content': '在大量并发 I/O 请求场景下，asyncio 相对于线程的主要优势是？',
+      'options': {
+        'A': '内存占用低且上下文切换开销小',
+        'B': '自动并行 CPU 运算',
+        'C': '无需异步库支持',
+        'D': '不用考虑回调'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：事件循环在单线程中管理大量任务',
+        '提示2': 无需为每个任务创建线程堆栈',
+        '提示3': 上下文切换为协程切换开销低'
+      ],
+      'explanation': 'asyncio 使用协程与事件循环，能在单线程中高效调度大量并发 I/O，节省内存与切换开销。',
+      'example': 'async def fetch(): await aiohttp.get(url)'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '阻塞调用问题',
+      'content': '在 asyncio 中直接运行阻塞函数会导致？',
+      'options': {
+        'A': '阻塞事件循环，影响所有协程',
+        'B': '提升并发性',
+        'C': '自动转为异步',
+        'D': '无影响'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：事件循环在同一线程执行协程',
+        '提示2': 阻塞调用会阻塞整个循环',
+        '提示3': 使用 run_in_executor 将阻塞函数移到线程池'
+      ],
+      'explanation': '阻塞调用会阻塞事件循环，应使用异步库或把阻塞任务放到线程/进程池中执行。',
+      'example': "await loop.run_in_executor(None, blocking_func)"
+    },
+
+    {
+      'id': 3,
+      'type': 'fill',
+      'title': '并发吞吐（填空）',
+      'content': 'asyncio 在大量短时 I/O 任务下通常能提高吞吐，因为？',
+      'input': '',
+      'output': '',
+      'code': 'print("协程切换比线程切换更轻量")',
+      'options': '',
+      'answer': '',
+      'explanation': '协程切换开销小，避免线程栈和操作系统上下文切换，从而提升短时 I/O 任务吞吐。',
+      'example': ''
+    },
+
+    {
+      'id': 4,
+      'type': 'choice',
+      'title': '限流与并发控制',
+      'content': '在 asyncio 中控制并发数量常用的做法是？',
+      'options': {
+        'A': '使用 asyncio.Semaphore 限制并发',
+        'B': '随意启动无限协程',
+        'C': '用 sleep 延迟所有任务',
+        'D': '不需要控制'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：Semaphore 控制同时运行协程数量',
+        '提示2': 防止资源耗尽',
+        '提示3': 结合 gather 使用'
+      ],
+      'explanation': '使用信号量或限速器可以限制并发协程数量，避免过度占用资源导致失败。',
+      'example': 'sem = asyncio.Semaphore(100)'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '事件循环成本（填空）',
+      'content': '事件循环调度成百上千协程的主要开销通常是？',
+      'input': '',
+      'output': '',
+      'code': 'print("调度与上下文切换的常数开销")',
+      'options': '',
+      'answer': '',
+      'explanation': '主要开销为调度与协程状态保存/恢复，I/O 本身仍可能是瓶颈。',
+      'example': ''
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '第三方库兼容',
+      'content': '在 asyncio 项目中使用第三方阻塞库应如何处理？',
+      'options': {
+        'A': '用 executor 执行或寻找异步替代库',
+        'B': '直接调用阻塞库',
+        'C': '直接将其转换为协程',
+        'D': '不可能一起使用'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：run_in_executor 可将阻塞调用转到线程池',
+        '提示2': 异步版本通常更高效',
+        '提示3': 尽量减少阻塞点'
+      ],
+      'explanation': '对阻塞库可使用 executor 或换用异步实现以避免阻塞事件循环。',
+      'example': "await loop.run_in_executor(None, blocking_func)"
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': 'asyncio.gather',
+      'content': '使用 asyncio.gather 并发等待多个协程时需注意？',
+      'options': {
+        'A': 'gather 会同时调度所有协程，可能导致资源峰值',
+        'B': 'gather 会顺序执行协程',
+        'C': 'gather 会限制为单协程',
+        'D': 'gather 不能与 Semaphore 一起用'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：一次性调度大量协程会占用并发资源',
+        '提示2': 结合 Semaphore 控制并发量',
+        '提示3': 使用批次化运行'
+      ],
+      'explanation': 'gather 会立即调度参数中的所有协程，若数量巨大会造成瞬时资源耗尽，应采用限流或分批。',
+      'example': ''
+    },
+
+    {
+      'id': 8,
+      'type': 'fill',
+      'title': '超时处理（填空）',
+      'content': '为避免单个协程阻塞整个流程，通常使用什么机制设置超时？',
+      'input': '',
+      'output': '',
+      'code': 'print("asyncio.wait_for 或超时包装")',
+      'options': '',
+      'answer': '',
+      'explanation': '使用 asyncio.wait_for 为协程设置超时，或在应用层实现限时逻辑以保证可恢复性。',
+      'example': ''
+    },
+
+    {
+      'id': 9,
+      'type': 'choice',
+      'title': '阻塞 I/O 在 asyncio 中',
+      'content': '直接在协程内进行阻塞 I/O 会导致什么？',
+      'options': {
+        'A': '阻塞整个事件循环，影响其他协程',
+        'B': '只阻塞当前协程',
+        'C': '自动并发执行',
+        'D': '提高性能'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：事件循环在单线程运行',
+        '提示2': 阻塞操作必须移到 executor',
+        '提示3': 使用异步库替代'
+      ],
+      'explanation': '阻塞 I/O 会阻塞事件循环，导致所有协程无法运行，应避免在协程中直接执行阻塞调用。',
+      'example': ''
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '性能测量（填空）',
+      'content': '评估 asyncio 性能时应关注哪些指标？',
+      'input': '',
+      'output': '',
+      'code': 'print("吞吐量、延迟、事件循环延迟、内存占用")',
+      'options': '',
+      'answer': '',
+      'explanation': '关注吞吐、响应延迟、事件循环延迟（loop lag）以及内存/句柄使用情况。',
+      'example': ''
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '事件循环延迟',
+      'content': '事件循环延迟（loop lag）通常由什么引起？',
+      'options': {
+        'A': '某个协程长时间运行或阻塞',
+        'B': '协程过短',
+        'C': '内存太小',
+        'D': 'CPU 超频'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：长时间同步计算或阻塞 I/O 会阻塞循环',
+        '提示2': 检测 loop delay 有助定位问题',
+        '提示3': 使用工具监控'
+      ],
+      'explanation': '长时间执行的任务会占用事件循环时间片，导致延迟升高，应拆分或放到 executor。',
+      'example': ''
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '异步数据库驱动',
+      'content': '使用异步数据库驱动（如 asyncpg）相对于同步驱动的主要好处是？',
+      'options': {
+        'A': '避免阻塞事件循环，可提高并发连接数',
+        'B': '自动加速查询',
+        'C': '降低数据库负载',
+        'D': '不需要连接池'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：异步驱动在等待 I/O 时不会阻塞事件循环',
+        '提示2': 需要配合连接池使用',
+        '提示3': 有助于高并发场景'
+      ],
+      'explanation': '异步驱动在等待数据库响应时不会阻塞事件循环，可提升单进程的并发能力。',
+      'example': ''
+    },
+
+    {
+      'id': 13,
+      'type': 'fill',
+      'title': '回收任务（填空）',
+      'content': '未取消或未回收的协程任务会导致什么问题？',
+      'input': '',
+      'output': '',
+      'code': 'print("资源泄露或内存持续增长")',
+      'options': '',
+      'answer': '',
+      'explanation': '未取消的任务或未处理的异常会导致资源泄露，应显式取消并处理异常。',
+      'example': ''
+    },
+
+    {
+      'id': 14,
+      'type': 'choice',
+      'title': '最佳实践',
+      'content': '在设计高并发 asyncio 服务时，优先考虑的设计点是？',
+      'options': {
+        'A': '限流、超时、资源隔离与监控',
+        'B': '尽量不加限流',
+        'C': '忽略超时',
+        'D': '把所有阻塞都放在协程内'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：控制并发量防止资源枯竭',
+        '提示2': 超时防止单个请求拖垮系统',
+        '提示3': 监控事件循环与任务'
+      ],
+      'explanation': '限流、超时、隔离与监控是保证 asyncio 服务稳定性的关键要素。',
+      'example': ''
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '总结（填空）',
+      'content': 'asyncio 最适合解决哪类问题？',
+      'input': '',
+      'output': '',
+      'code': 'print("大量并发 I/O、短时任务与低内存占用场景")',
+      'options': '',
+      'answer': '',
+      'explanation': 'asyncio 适合大量并发 I/O 操作和流式处理场景，但需避免阻塞调用。',
+      'example': ''
+    }
+
+  ]
+}
+
+```

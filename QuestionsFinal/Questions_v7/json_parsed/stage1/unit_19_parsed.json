@@ -1,0 +1,769 @@
+[
+  {
+    "id": 1,
+    "type": "choice",
+    "title": "密码比较",
+    "content": "阿强设计了一个简单的密码校验：用户输入字符串 my_input，他想判断输入是否等于正确密码 '123456'。哪个条件表达式能实现这个判断？",
+    "options": [
+      "my_input = '123456'",
+      "my_input == '123456'",
+      "my_input in '123456'",
+      "my_input is '123456'"
+    ],
+    "answer": "B",
+    "hints": [
+      "赋值和判断相等，用的是同一个符号吗？",
+      "判断两个值是否相等，应该使用双等号。",
+      "'in'是检查一个字符串是否包含于另一个，而非完全相等。"
+    ],
+    "explanation": "在Python中，比较两个值是否相等应使用关系运算符'=='。'='是赋值运算符，'in'是成员运算符，'is'是身份运算符（比较对象id）。",
+    "example": "例如：name = 'Mike'; print(name == 'Mike')  # 输出True"
+  },
+  {
+    "id": 2,
+    "type": "choice",
+    "title": "食材搜查官",
+    "content": "小美的食谱字符串是 recipe = '番茄,鸡蛋,米饭'。她想检查是否包含'鸡蛋'，以下哪种写法是正确的？",
+    "options": [
+      "'鸡蛋' == recipe",
+      "'鸡蛋' != recipe",
+      "'鸡蛋' in recipe",
+      "'鸡蛋' not recipe"
+    ],
+    "answer": "C",
+    "hints": [
+      "这题是想检查包含关系，还是完全相等？",
+      "检查一个字符串是否在另一个字符串中出现，用什么运算符？",
+      "回忆一下'member operator'，是'in'还是'not'？"
+    ],
+    "explanation": "检查一个字符串（子串）是否存在于另一个字符串中，应使用成员运算符'in'。'=='是比较是否完全相等，'!='是比较是否不相等。",
+    "example": "例如：print('a' in 'abc')  # 输出 True"
+  },
+  {
+    "id": 3,
+    "type": "choice",
+    "title": "排除清单",
+    "content": "小黑有一个禁止词列表 banned = '脏话,广告,敏感词'。他想判断用户发言 content 里是否没有'广告'，应该用哪个表达式？",
+    "options": [
+      "'广告' != banned",
+      "'广告' not in content",
+      "not '广告' in content",
+      "both B and C are correct"
+    ],
+    "answer": "D",
+    "hints": [
+      "目标是判断'不存在'，用什么运算符？",
+      "有直接表示'不在里面'的运算符吗？",
+      "Python中，'not in'是一个整体运算符，也可以用'not'和'in'组合。"
+    ],
+    "explanation": "判断一个字符串不包含于另一个字符串，可以直接使用'not in'运算符，也可以使用'not'加'in'的组合。两者功能相同。",
+    "example": "例如：print('x' not in 'abc') 和 print(not 'x' in 'abc') 都输出True。"
+  },
+  {
+    "id": 4,
+    "type": "fill",
+    "title": "VIP验证",
+    "content": "帮客服机器人补全代码，检查用户ID是否在VIP名单中，是则打印欢迎信息。",
+    "input": null,
+    "output": [
+      "欢迎VIP用户 Alice 光临！"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "vip_list = 'Alice,Bob,Carol'"
+            },
+            {
+              "type": "code_line",
+              "value": "user_id = 'Alice'"
+            },
+            {
+              "type": "code_line",
+              "value": "if user_id "
+            },
+            {
+              "type": "code_inline",
+              "parts": [
+                {
+                  "type": "code",
+                  "value": ""
+                },
+                {
+                  "type": "slot",
+                  "index": 0
+                },
+                {
+                  "type": "code",
+                  "value": " vip_list:"
+                }
+              ]
+            },
+            {
+              "type": "code_line",
+              "value": "    print(f'欢迎VIP用户 {user_id} 光临！')"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "==",
+      "!=",
+      "in",
+      "not in",
+      ">",
+      "<"
+    ],
+    "answer": [
+      3
+    ],
+    "explanation": "此处需要判断用户ID是否存在于VIP名单字符串中，应使用成员运算符'in'。'=='用于完全相等判断，在此上下文中不适用。",
+    "example": "类似场景：检查某商品名是否在库存清单字符串中：if item_name in inventory_list。"
+  },
+  {
+    "id": 5,
+    "type": "fill",
+    "title": "安全访问检查",
+    "content": "网站后台路径需要检查是否包含危险目录字符串。补全代码，若安全则放行。",
+    "input": null,
+    "output": [
+      "路径安全，允许访问。"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "danger_path = 'admin/backup'"
+            },
+            {
+              "type": "code_line",
+              "value": "request_path = 'user/profile'"
+            },
+            {
+              "type": "code_line",
+              "value": "if danger_path "
+            },
+            {
+              "type": "code_inline",
+              "parts": [
+                {
+                  "type": "code",
+                  "value": ""
+                },
+                {
+                  "type": "slot",
+                  "index": 0
+                },
+                {
+                  "type": "code",
+                  "value": " request_path:"
+                }
+              ]
+            },
+            {
+              "type": "code_line",
+              "value": "    print('路径安全，允许访问。')"
+            },
+            {
+              "type": "code_line",
+              "value": "else:"
+            },
+            {
+              "type": "code_line",
+              "value": "    print('危险路径，拒绝访问！')"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "==",
+      "!=",
+      "in",
+      "not in",
+      ">=",
+      "<="
+    ],
+    "answer": [
+      4
+    ],
+    "explanation": "根据上下文逻辑和输出，当危险路径'不在'请求路径中时，才打印安全信息。因此应使用'not in'运算符。",
+    "example": "类似场景：if forbidden_word not in user_comment: print('评论通过审核')。"
+  },
+  {
+    "id": 6,
+    "type": "choice",
+    "title": "字典序大比拼",
+    "content": "Python比较字符串'Apple'和'Banana'，结果是 'Apple' < 'Banana'，这主要是依据什么？",
+    "options": [
+      "字符串的长度",
+      "第一个字符的ASCII码顺序",
+      "哪个单词在现实中更常见",
+      "字符串中元音字母的数量"
+    ],
+    "answer": "B",
+    "hints": [
+      "回想一下字符串比较的规则名称？",
+      "计算机中，字符其实对应着数字编码。",
+      "比较是从左到右逐个字符比对这些编码值。"
+    ],
+    "explanation": "字符串比较基于字典序（lexicographical order），实质上是逐个比较字符的Unicode码点（对于ASCII字符即ASCII码）。'A'(65) < 'B'(66)，所以'Apple' < 'Banana'。",
+    "example": "'Cat'(67) > 'Banana'(66) 也为True，因为'C'的ASCII码大于'B'。"
+  },
+  {
+    "id": 7,
+    "type": "choice",
+    "title": "大小写敏感搜查",
+    "content": "执行代码：word = 'Python'; print('p' in word)。控制台会输出什么？",
+    "options": [
+      "True",
+      "False",
+      "报错",
+      "P"
+    ],
+    "answer": "B",
+    "explanation": "字符串成员判断'in'是大小写敏感的。'Python'中包含大写'P'，但不包含小写'p'，因此结果为False。",
+    "hints": [
+      "注意看，要查找的字母是哪个？",
+      "'Python'这个单词里，第一个字母是大写还是小写？",
+      "在默认情况下，Python的字符串比较和判断区分大小写。"
+    ],
+    "example": "例如：'A' in 'apple' 返回 False，而'a' in 'apple' 返回 True。"
+  },
+  {
+    "id": 8,
+    "type": "choice",
+    "title": "复合条件判断",
+    "content": "宠物店规定，领养狗狗的名字不能叫'Lucky'或'Max'。变量 dog_name 中存有狗狗名，哪个条件能正确执行此规定？",
+    "options": [
+      "dog_name == 'Lucky' and dog_name == 'Max'",
+      "dog_name in 'Lucky' or dog_name in 'Max'",
+      "dog_name != 'Lucky' and dog_name != 'Max'",
+      "dog_name not in ['Lucky', 'Max']"
+    ],
+    "answer": "C",
+    "hints": [
+      "规定是'不能叫A'也'不能叫B'，逻辑关系是'与'还是'或'？",
+      "'不能叫A' 用代码怎么表示？想想不等号。",
+      "选项D虽然逻辑对，但使用了列表（高级结构），题目要求避免。"
+    ],
+    "explanation": "规定要求名字既不能是'Lucky'也不能是'Max'，这是一个'并且'的关系。应使用'!='（不等于）和'and'组合。选项D逻辑正确，但使用了列表，不符合题目'不随意使用高级知识'的要求。",
+    "example": "类似场景：age != 18 and age != 21 表示年龄既不是18也不是21。"
+  },
+  {
+    "id": 9,
+    "type": "fill",
+    "title": "成绩评级器",
+    "content": "补全以下成绩评级程序。根据分数score输出等级：90以上为A，60-89为B，60以下为C。",
+    "input": [
+      "95"
+    ],
+    "output": [
+      "你的等级是： A"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "score = 95"
+            },
+            {
+              "type": "code_line",
+              "value": "if score >= 90:"
+            },
+            {
+              "type": "code_line",
+              "value": "    grade = 'A'"
+            },
+            {
+              "type": "code_line",
+              "value": "elif score "
+            },
+            {
+              "type": "code_inline",
+              "parts": [
+                {
+                  "type": "code",
+                  "value": ""
+                },
+                {
+                  "type": "slot",
+                  "index": 0
+                },
+                {
+                  "type": "code",
+                  "value": " 60"
+                }
+              ]
+            },
+            {
+              "type": "code_line",
+              "value": "    grade = 'B'"
+            },
+            {
+              "type": "code_line",
+              "value": "else:"
+            },
+            {
+              "type": "code_inline",
+              "parts": [
+                {
+                  "type": "code",
+                  "value": "    grade = '"
+                },
+                {
+                  "type": "slot",
+                  "index": 1
+                },
+                {
+                  "type": "code",
+                  "value": "'"
+                }
+              ]
+            },
+            {
+              "type": "code_line",
+              "value": "print(f'你的等级是： {grade}')"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "<=",
+      ">=",
+      "in",
+      "!=",
+      "B",
+      "C",
+      "D",
+      "A"
+    ],
+    "answer": [
+      2,
+      6
+    ],
+    "explanation": "第一个空：分数在60-89之间为B，条件应为'score >= 60'，注意由于前面的if已处理了>=90的情况，所以此处隐含了score<90。第二个空：不满足前两个条件（即score<60）时为C等。",
+    "example": "类似逻辑：if temp >= 30: feeling='hot' elif temp >= 10: feeling='comfortable' else: feeling='cold'。"
+  },
+  {
+    "id": 10,
+    "type": "fill",
+    "title": "消息过滤器",
+    "content": "补全代码，过滤消息中的不良词汇列表（以逗号分隔）。如果发现任何不良词，则标记消息。",
+    "input": null,
+    "output": [
+      "消息包含不良词汇！"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "bad_words = '傻,笨,蠢'"
+            },
+            {
+              "type": "code_line",
+              "value": "message = '你真是个聪明的孩子！'"
+            },
+            {
+              "type": "code_line",
+              "value": "# 检查每个不良词是否出现在消息中"
+            },
+            {
+              "type": "code_inline",
+              "parts": [
+                {
+                  "type": "code",
+                  "value": "for word in bad_words."
+                },
+                {
+                  "type": "slot",
+                  "index": 0
+                },
+                {
+                  "type": "code",
+                  "value": "('')"
+                }
+              ]
+            },
+            {
+              "type": "code_line",
+              "value": "    if word "
+            },
+            {
+              "type": "code_inline",
+              "parts": [
+                {
+                  "type": "code",
+                  "value": ""
+                },
+                {
+                  "type": "slot",
+                  "index": 1
+                },
+                {
+                  "type": "code",
+                  "value": " message:"
+                }
+              ]
+            },
+            {
+              "type": "code_line",
+              "value": "        print('消息包含不良词汇！')"
+            },
+            {
+              "type": "code_line",
+              "value": "        break"
+            },
+            {
+              "type": "code_line",
+              "value": "else:"
+            },
+            {
+              "type": "code_line",
+              "value": "    print('消息通过检查。')"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "split",
+      "join",
+      "find",
+      "==",
+      "!=",
+      "in",
+      "not in",
+      ",",
+      "。"
+    ],
+    "answer": [
+      1,
+      6
+    ],
+    "explanation": "第一个空：需要将逗号分隔的字符串拆分成单词列表进行遍历，应使用字符串的split(',')方法。第二个空：需要判断拆分出的每个不良词word是否存在于消息message中，应使用成员运算符'in'。",
+    "example": "类似遍历：for color in 'red,green,blue'.split(','): print(color) 会依次输出三个颜色。"
+  },
+  {
+    "id": 11,
+    "type": "choice",
+    "title": "运算符连连看",
+    "content": "运行代码：a, b = '10', '2'; print(a > b)。会输出什么？为什么？",
+    "options": [
+      "True，因为10比2大",
+      "False，因为'10'比'2'短",
+      "False，因为字符串不能比较大小",
+      "True，因为比较的是字符串，'1'的ASCII码(49) > '2'的ASCII码(50)为假，但...等等"
+    ],
+    "answer": "B",
+    "hints": [
+      "注意，a和b是字符串'10'和'2'，不是数字10和2。",
+      "字符串比较是从第一个字符开始比ASCII码。",
+      "'1'的ASCII码是49，'2'的是50，所以'1'<'2'。"
+    ],
+    "explanation": "a='10', b='2'。字符串比较时，先比较第一个字符：'1'(49) 和 '2'(50)。由于'1'<'2'，所以整个字符串'10' < '2'，因此a>b为False。并非比较数值大小或字符串长度。",
+    "example": "同理，'9'(57) > '10'(49)，因为第一个字符'9' > '1'，所以字符串'9' > '10'为True。"
+  },
+  {
+    "id": 12,
+    "type": "choice",
+    "title": "双重否定搜查",
+    "content": "以下哪个表达式与 'cat' not in 'category' 的结果相反（即逻辑非）？",
+    "options": [
+      "not 'cat' in 'category'",
+      "'cat' != 'category'",
+      "'cat' in 'category'",
+      "'cat' is 'category'"
+    ],
+    "answer": "C",
+    "hints": [
+      "'not in' 表示'不在里面'。它的反面是什么？",
+      "对布尔值取反，可以用'not'运算符。",
+      "或者，直接写出'not in'的反义词也可以。"
+    ],
+    "explanation": "'cat' not in 'category' 检查'cat'是否不包含于'category'。其逻辑相反（即取非）的结果就是'cat' in 'category'，检查'cat'是否包含于'category'。'not 'cat' in 'category'' 实际上等同于原表达式。",
+    "example": "例如：is_absent = 'Tom' not in class_list; 它的反面 is_present = 'Tom' in class_list。"
+  },
+  {
+    "id": 13,
+    "type": "choice",
+    "title": "有效的邮箱格式",
+    "content": "程序员小陈写了一个简单的邮箱格式检查：必须包含'@'且不能以'@'开头。对于邮箱变量 email，哪个判断条件最合适？",
+    "options": [
+      "'@' in email and email[0] != '@'",
+      "'@' != email[0]",
+      "'@' not in email[1:]",
+      "'@' in email or email[0] != '@'"
+    ],
+    "answer": "A",
+    "hints": [
+      "条件有两个：必须包含'@'；第一个字符不能是'@'。",
+      "两个条件需要同时满足，用什么逻辑运算符连接？",
+      "检查第一个字符，可以用索引 email[0]。"
+    ],
+    "explanation": "条件1：'@' in email 确保字符串中包含'@'符号。条件2：email[0] != '@' 确保首字符不是'@'。两者需同时满足，故用'and'连接。选项C和D逻辑错误，选项B缺少对'@'是否存在的检查。",
+    "example": "类似检查：检查文件名是否以'.txt'结尾：filename.endswith('.txt')。"
+  },
+  {
+    "id": 14,
+    "type": "fill",
+    "title": "口令复杂度检查",
+    "content": "补全代码，实现一个简单的口令检查：长度至少6位，且必须同时包含大写字母和小写字母。",
+    "input": null,
+    "output": [
+      "口令强度：弱"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "password = 'Hello1'"
+            },
+            {
+              "type": "code_line",
+              "value": "has_upper = False"
+            },
+            {
+              "type": "code_line",
+              "value": "has_lower = False"
+            },
+            {
+              "type": "code_line",
+              "value": "for ch in password:"
+            },
+            {
+              "type": "code_line",
+              "value": "    if 'A' <= ch <= 'Z':"
+            },
+            {
+              "type": "code_line",
+              "value": "        has_upper = True"
+            },
+            {
+              "type": "code_inline",
+              "parts": [
+                {
+                  "type": "code",
+                  "value": "    if 'a' "
+                },
+                {
+                  "type": "slot",
+                  "index": 0
+                },
+                {
+                  "type": "code",
+                  "value": " ch "
+                },
+                {
+                  "type": "slot",
+                  "index": 1
+                },
+                {
+                  "type": "code",
+                  "value": " 'z':"
+                }
+              ]
+            },
+            {
+              "type": "code_line",
+              "value": "        has_lower = True"
+            },
+            {
+              "type": "code_line",
+              "value": "# 最终判断"
+            },
+            {
+              "type": "code_inline",
+              "parts": [
+                {
+                  "type": "code",
+                  "value": "if "
+                },
+                {
+                  "type": "slot",
+                  "index": 2
+                },
+                {
+                  "type": "code",
+                  "value": "(password) >= 6 and has_upper and has_lower:"
+                }
+              ]
+            },
+            {
+              "type": "code_line",
+              "value": "    print('口令强度：强')"
+            },
+            {
+              "type": "code_line",
+              "value": "else:"
+            },
+            {
+              "type": "code_line",
+              "value": "    print('口令强度：弱')"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "<=",
+      ">=",
+      "in",
+      "==",
+      "len",
+      "type",
+      "not",
+      "and",
+      "or"
+    ],
+    "answer": [
+      1,
+      1,
+      6
+    ],
+    "explanation": "第一、二空：判断字符ch是否为小写字母，条件应为 'a' <= ch <= 'z'，即ch在'a'和'z'的ASCII码之间。第三空：需要获取密码字符串的长度，应使用内置函数 len()。",
+    "example": "类似判断：if len(username) > 0 and '@' in email: 表示用户名非空且邮箱包含@符号。"
+  },
+  {
+    "id": 15,
+    "type": "fill",
+    "title": "智能聊天关键词匹配",
+    "content": "补全聊天机器人代码，根据用户输入的关键词（以空格分隔）进行回复。注意处理大小写。",
+    "input": [
+      "hello weather"
+    ],
+    "output": [
+      "你好！",
+      "今天天气不错呢！"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "user_input = 'hello weather'.lower()  # 统一转为小写"
+            },
+            {
+              "type": "code_line",
+              "value": "keywords = user_input.split()"
+            },
+            {
+              "type": "code_line",
+              "value": "responses = []"
+            },
+            {
+              "type": "code_line",
+              "value": "if 'hello' "
+            },
+            {
+              "type": "code_inline",
+              "parts": [
+                {
+                  "type": "code",
+                  "value": ""
+                },
+                {
+                  "type": "slot",
+                  "index": 0
+                },
+                {
+                  "type": "code",
+                  "value": " keywords:"
+                }
+              ]
+            },
+            {
+              "type": "code_line",
+              "value": "    responses.append('你好！')"
+            },
+            {
+              "type": "code_line",
+              "value": "if 'weather' in keywords or 'sunny' in keywords:"
+            },
+            {
+              "type": "code_line",
+              "value": "    responses.append('今天天气不错呢！')"
+            },
+            {
+              "type": "code_line",
+              "value": "# 如果用户提到了宠物但没有提到具体种类，进行追问"
+            },
+            {
+              "type": "code_inline",
+              "parts": [
+                {
+                  "type": "code",
+                  "value": "if "
+                },
+                {
+                  "type": "slot",
+                  "index": 1
+                },
+                {
+                  "type": "code",
+                  "value": " in user_input and not ('dog' in keywords "
+                },
+                {
+                  "type": "slot",
+                  "index": 2
+                },
+                {
+                  "type": "code",
+                  "value": " 'cat' in keywords):"
+                }
+              ]
+            },
+            {
+              "type": "code_line",
+              "value": "    responses.append('你养的是什么宠物呀？')"
+            },
+            {
+              "type": "code_line",
+              "value": "for r in responses:"
+            },
+            {
+              "type": "code_line",
+              "value": "    print(r)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "in",
+      "not in",
+      "==",
+      "pet",
+      "dog",
+      "or",
+      "and",
+      "pet's"
+    ],
+    "answer": [
+      1,
+      4,
+      7
+    ],
+    "explanation": "第一个空：判断字符串'hello'是否在关键词列表keywords中，应使用'in'。第二个空：根据上下文，需要检查用户输入中是否包含'宠物'相关的词，选项'pet'符合语义。第三个空：逻辑是，如果用户提到了宠物('pet')，但('没有提到狗' 且 '没有提到猫')，则追问。'没有提到A且没有提到B'等价于'not (A in ... or B in ...)'，或者'(not A in ...) and (not B in ...)'。这里用的是后者结构，所以空内应为'and'。",
+    "example": "类似逻辑：if 'error' in log and not ('warning' in log or 'info' in log): print('只有错误日志')。"
+  }
+]

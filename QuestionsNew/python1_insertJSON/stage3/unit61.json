@@ -1,0 +1,437 @@
+{
+    "choice_questions": [
+        {
+            "id": 1,
+            "title": "while 的基本功能",
+            "content": "while 循环通常用于？",
+            "answer": "A",
+            "hints": [
+                "循环依赖条件",
+                "常用于未知次数重复",
+                "条件为假则不执行"
+            ],
+            "explanation": "while 根据条件判断是否继续执行循环体。",
+            "example": "while i<5: i+=1",
+            "options": {
+                "A": "在条件为真时重复执行",
+                "B": "只执行一次",
+                "C": "用来定义函数",
+                "D": "声明变量"
+            }
+        },
+        {
+            "id": 2,
+            "title": "条件求值时机",
+            "content": "while 在每次迭代什么时候判断条件？",
+            "answer": "A",
+            "hints": [
+                "每次开始前检查条件",
+                "类似门控",
+                "迭代前求值"
+            ],
+            "explanation": "每次迭代前都会先判断条件是否仍为真。",
+            "example": "while cond: ...",
+            "options": {
+                "A": "进入迭代前判断",
+                "B": "执行后判断",
+                "C": "只判断一次",
+                "D": "不判断"
+            }
+        },
+        {
+            "id": 3,
+            "title": "空循环体",
+            "content": "如果 while 条件初始为 False，循环体会怎样？",
+            "answer": "A",
+            "hints": [
+                "条件为假不会进入循环体",
+                "空循环不会执行",
+                "迭代为零次"
+            ],
+            "explanation": "若条件初始为 False 则循环体一次也不执行。",
+            "example": "while False: print(1)",
+            "options": {
+                "A": "一次也不执行",
+                "B": "执行一次",
+                "C": "无限执行",
+                "D": "抛出异常"
+            }
+        },
+        {
+            "id": 6,
+            "title": "初始化重要性",
+            "content": "循环变量应在何处初始化？",
+            "answer": "A",
+            "hints": [
+                "外部初始化才能被循环体使用并更新",
+                "避免每次重置",
+                "变量需在循环外定义"
+            ],
+            "explanation": "循环变量通常在循环外初始化，以便在循环中更新状态。",
+            "example": "i = 0\nwhile i<3: ...",
+            "options": {
+                "A": "循环外部初始化",
+                "B": "循环内部每次初始化",
+                "C": "不需要初始化",
+                "D": "用函数返回"
+            }
+        },
+        {
+            "id": 7,
+            "title": "while 用例",
+            "content": "哪种情形更适合用 while？",
+            "answer": "A",
+            "hints": [
+                "例如等待输入达到某条件",
+                "或等待外部事件",
+                "适合条件驱动循环"
+            ],
+            "explanation": "while 适合未知次数迭代，直到某个条件满足才停止。",
+            "example": "while not done: ...",
+            "options": {
+                "A": "未知迭代次数、基于条件停止",
+                "B": "已知固定次数",
+                "C": "只执行一次任务",
+                "D": "不需要循环"
+            }
+        },
+        {
+            "id": 8,
+            "title": "资源消耗风险",
+            "content": "无条件 while 循环可能导致？",
+            "answer": "A",
+            "hints": [
+                "无限循环会持续消耗资源",
+                "需注意退出条件",
+                "避免 busy-waiting"
+            ],
+            "explanation": "未妥善设置退出条件的 while 可能导致程序无法终止并消耗资源。",
+            "example": "while True: pass",
+            "options": {
+                "A": "CPU 占用过高或冻结",
+                "B": "自动退出",
+                "C": "降低内存",
+                "D": "提高安全"
+            }
+        },
+        {
+            "id": 11,
+            "title": "循环退出方式",
+            "content": "除了条件变为 False 外，还可用什么退出 while？",
+            "answer": "A",
+            "hints": [
+                "break 强制退出循环",
+                "常用于中间终止",
+                "跳出循环并继续后续代码"
+            ],
+            "explanation": "break 可立即退出循环体并跳到循环外。",
+            "example": "if found: break",
+            "options": {
+                "A": "使用 break",
+                "B": "只有条件能退出",
+                "C": "使用 continue",
+                "D": "无法退出"
+            }
+        },
+        {
+            "id": 12,
+            "title": "continue 的作用",
+            "content": "在 while 中使用 continue 会怎样？",
+            "answer": "A",
+            "hints": [
+                "跳过后续语句",
+                "直接重新判断条件",
+                "用于略过当前迭代"
+            ],
+            "explanation": "continue 会立即开始下一次循环判断，跳过本次后续语句。",
+            "example": "if bad: continue",
+            "options": {
+                "A": "跳过本次余下语句并进入下一次判断",
+                "B": "退出循环",
+                "C": "终止程序",
+                "D": "回到函数开头"
+            }
+        },
+        {
+            "id": 13,
+            "title": "while 与 for 对比",
+            "content": "下面关于 while vs for 的说法正确的是？",
+            "answer": "A",
+            "hints": [
+                "用途侧重点不同",
+                "选择语义更清晰的一种",
+                "遍历用 for，条件用 while"
+            ],
+            "explanation": "一般用 while 做条件循环，用 for 遍历序列。",
+            "example": "while cond vs for x in seq",
+            "options": {
+                "A": "while 适合未知次数循环，for 适合遍历序列",
+                "B": "for 只能用在列表上",
+                "C": "while 更简洁遍历序列",
+                "D": "两者完全相同"
+            }
+        }
+    ],
+    "fill_questions": [
+        {
+            "id": 4,
+            "title": "写出最简单的 while",
+            "content": "补全：打印 1 到 3。",
+            "explanation": "使用计数器控制循环次数。",
+            "example": "i=0; while i<3: ...",
+            "input": null,
+            "output": [
+                "1",
+                "2",
+                "3"
+            ],
+            "options": [
+                "示例已给出"
+            ],
+            "answer": [
+                "1"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "i = 1"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "while i <= 3:"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "    print(i)"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "    i += 1"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 5,
+            "title": "改变循环变量",
+            "content": "补全：若不改变 i 会怎样？",
+            "explanation": "未改变循环变量会导致无限循环。",
+            "example": "确保循环变量更新",
+            "input": null,
+            "output": [],
+            "options": [
+                "示例已给出"
+            ],
+            "answer": [
+                "1"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "i = 0"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "while i < 3:"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "    print(i)"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "    # missing i += 1"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 9,
+            "title": "等待输入示例",
+            "content": "补全：循环直到用户输入 quit。",
+            "explanation": "通过判断输入并 break 退出循环。",
+            "example": "if s==\"q\": break",
+            "input": "quit",
+            "output": [],
+            "options": [
+                "示例已给出"
+            ],
+            "answer": [
+                "1"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "while True:"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "    s = input()"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "    if s == \"quit\":"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "        break"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 10,
+            "title": "防止无限循环",
+            "content": "补全：在循环中加入安全计数。",
+            "explanation": "安全计数可防止意外的长期运行。",
+            "example": "max_iters guard",
+            "input": null,
+            "output": [],
+            "options": [
+                "示例已给出"
+            ],
+            "answer": [
+                "1"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "i = 0"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "while cond:"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "    do_work()"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "    i += 1"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "    if i > 1000:"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "        break"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 14,
+            "title": "循环内打印计数",
+            "content": "补全：在循环中打印每次 i 的值。",
+            "explanation": "打印计数器并在每次迭代更新。",
+            "example": "i iter example",
+            "input": null,
+            "output": [
+                "0",
+                "1",
+                "2"
+            ],
+            "options": [
+                "示例已给出"
+            ],
+            "answer": [
+                "1"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "i = 0"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "while i < 3:"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "    print(i)"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "    i += 1"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 15,
+            "title": "循环与布尔变量",
+            "content": "补全：使用 flag 控制循环。",
+            "explanation": "用布尔变量控制循环状态是常见模式。",
+            "example": "use flag to stop loop",
+            "input": null,
+            "output": [],
+            "options": [
+                "示例已给出"
+            ],
+            "answer": [
+                "1"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "running = True"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "while running:"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "    cmd = input()"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "    if cmd == \"exit\":"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "        running = False"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}

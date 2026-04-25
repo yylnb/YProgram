@@ -1,0 +1,26 @@
+```plaintext
+{
+  'unit': '第71单元：for 循环基础结构',
+  'questions': [
+    {'id':1,'type':'choice','title':'for 的用途','content':'for 循环通常用于？','options':{'A':'遍历序列或可迭代对象','B':'基于条件无限循环','C':'定义类','D':'处理异常'},'answer':'A','hints':['遍历列表、字符串等','已知元素集合时使用'],'explanation':'for 用于遍历序列或任何可迭代对象。','example':'for x in lst: ...'},
+    {'id':2,'type':'choice','title':'迭代次数','content':'for 循环的迭代次数由什么决定？','options':{'A':'可迭代对象长度','B':'while 条件','C':'用户输入','D':'系统时间'},'answer':'A','hints':['由序列长度决定','遍历到末尾停止'],'explanation':'for 遍历序列直到耗尽元素。','example':'for i in range(3): ...'},
+    {'id':3,'type':'choice','title':'循环变量','content':'for 中的循环变量作用是什么？','options':{'A':'接收当前元素值','B':'定义函数','C':'作为计数器必须为整数','D':'存储配置'},'answer':'A','hints':['变量代表序列的每个项','可重用变量名'],'explanation':'循环变量在每次迭代中绑定到当前元素值。','example':'for item in items: print(item)'},
+    {'id':4,'type':'fill','title':'遍历列表','content':'补全：遍历并打印列表元素。','input':'','output':'a\nb','code':'for x in ["a","b"]:\n    print(x)','options':'示例已给出','answer':'1','explanation':'直接遍历列表并打印元素。','example':'basic for'},
+    {'id':5,'type':'fill','title':'遍历字符串','content':'补全：打印字符串每个字符。','input':'abc','output':'a\nb\nc','code':'for ch in "abc":\n    print(ch)','options':'示例已给出','answer':'1','explanation':'字符串也是可迭代对象，可以逐字符遍历。','example':'for ch in s'},
+    {'id':6,'type':'choice','title':'for vs while','content':'何时优先使用 for 而不是 while？','options':{'A':'已知集合或次数时使用 for','B':'未知次数时使用 for','C':'永远用 while','D':'两者无差'},'answer':'A','hints':['遍历容器更自然用 for','for 更简洁清晰'],'explanation':'当需要遍历集合或按固定次数迭代时，for 更简洁。','example':'for i in range(n)'},
+    {'id':7,'type':'choice','title':'迭代器协议','content':'for 在背后使用什么机制遍历对象？','options':{'A':'迭代器协议（__iter__/__next__）','B':'索引访问','C':'反射','D':'进程间通信'},'answer':'A','hints':['iter() 和 next()','适配各种可迭代对象'],'explanation':'for 循环使用迭代器协议来遍历可迭代对象。','example':'iter(obj) -> next()'},
+    {'id':8,'type':'choice','title':'循环提前退出','content':'在 for 中使用 break 会怎样？','options':{'A':'立即退出循环','B':'跳到下一次迭代','C':'抛出异常','D':'无影响'},'answer':'A','hints':['与 while 相同语义','用于找到目标后停止'], 'explanation':'break 在 for 中同样用于立即退出循环。','example':'for x in seq: if cond: break'},
+    {'id':9,'type':'fill','title':'索引与元素','content':'补全：同时获取索引和值。','input':'','output':'0 a','code':'for i, v in enumerate(["a"]):\n    print(i, v)','options':'示例已给出','answer':'1','explanation':'使用 enumerate 可以同时获取索引和值。','example':'for i, v in enumerate(lst)'},
+    {'id':10,'type':'fill','title':'遍历 range','content':'补全：打印 0,1,2。','input':'','output':'0\n1\n2','code':'for i in range(3):\n    print(i)','options':'示例已给出','answer':'1','explanation':'range(n) 生成从 0 到 n-1 的整数序列。','example':'for i in range(n)'},
+    {'id':11,'type':'choice','title':'可迭代对象','content':'下列哪个不是可迭代对象？','options':{'A':'int','B':'list','C':'str','D':'tuple'},'answer':'A','hints':['int 不是序列','list/str/tuple 都可迭代'],'explanation':'整数不可迭代，不能直接用于 for 循环。','example':'for x in 3: -> TypeError'},
+    {'id':12,'type':'choice','title':'嵌套 for','content':'嵌套 for 常用于？','options':{'A':'处理二维数据或组合','B':'减少代码','C':'替代函数','D':'并行处理'},'answer':'A','hints':['矩阵遍历','双重嵌套用于组合'], 'explanation':'嵌套 for 常用于遍历二维结构或产生笛卡儿积。','example':'for i in range(n): for j in range(m): ...'},
+    {'id':13,'type':'choice','title':'for 循环变量范围','content':'for i in range(3): i 的取值为？','options':{'A':'0,1,2','B':'1,2,3','C':'0..3 包括 3','D':'随机'},'answer':'A','hints':['range 的结束不包含','常见 off-by-one 错误'], 'explanation':'range(3) 生成 0,1,2 三个值。','example':'for i in range(3): print(i)'},
+    {'id':14,'type':'fill','title':'遍历字典键','content':'补全：遍历字典默认遍历什么？','input':'','output':'a\nb','code':'d={"a":1,"b":2}\nfor k in d:\n    print(k)','options':'示例已给出','answer':'1','explanation':'默认遍历字典时会迭代键。','example':'for k in dict'},
+    {'id':15,'type':'fill','title':'通过列表生成次数','content':'补全：执行某动作 n 次。','input':'','output':'','code':'n=3\nfor _ in range(n):\n    do()',
+      'options':'示例已给出','answer':'1','explanation':'用 for _ in range(n) 表示重复 n 次且忽略索引值。','example':'repeat action n times'}
+  ]
+}
+
+```
+
+*** End Patch

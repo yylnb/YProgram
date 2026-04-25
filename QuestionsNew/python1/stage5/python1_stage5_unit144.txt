@@ -1,0 +1,203 @@
+```plaintext
+{
+  'unit': '第144单元：文件与流处理',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '打开文件模式',
+      'content': '在 open() 中使用 "r" 表示什么？',
+      'options': {'A': '只读模式', 'B': '写入模式', 'C': '追加模式', 'D': '二进制模式'},
+      'answer': 'A',
+      'hints': ['提示1：默认是文本模式只读', '提示2：写入为 w', '提示3：追加为 a'],
+      'explanation': '"r" 表示以只读模式打开文件。',
+      'example': ''
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '上下文管理',
+      'content': '使用 with open(...) as f 的优点是？',
+      'options': {'A': '自动关闭文件并处理异常', 'B': '提高写入速度', 'C': '加密文件', 'D': '延迟打开'},
+      'answer': 'A',
+      'hints': ['提示1：确保资源释放', '提示2：with 是上下文管理', '提示3：常用于文件读写'],
+      'explanation': 'with 上下文可在块结束时自动关闭文件，避免资源泄露。',
+      'example': ''
+    },
+
+    {
+      'id': 3,
+      'type': 'fill',
+      'title': '读取整文件（填空）',
+      'content': '要读取整个文件内容可使用 f.__1__()',
+      'input': '',
+      'output': '',
+      'code': 'with open("a.txt") as f:\n    data = f.__1__()',
+      'options': 'read, readline, readlines, iter',
+      'answer': '1',
+      'explanation': 'f.read() 返回整个文件的内容字符串。',
+      'example': ''
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '逐行迭代（填空）',
+      'content': '在文件对象上直接使用 for line in f 将按 __1__ 读取行。',
+      'input': '',
+      'output': '',
+      'code': 'with open("a.txt") as f:\n    for line in f:\n        print(line)',
+      'options': '逐行, 整体, 二进制, 固定块',
+      'answer': '1',
+      'explanation': '文件对象是可迭代的，按行返回，适合大文件流式处理。',
+      'example': ''
+    },
+
+    {
+      'id': 5,
+      'type': 'choice',
+      'title': '写入文本',
+      'content': '要写入文本到文件应使用哪种模式？',
+      'options': {'A': 'w 或 a', 'B': 'r', 'C': 'rb', 'D': 'rt'},
+      'answer': 'A',
+      'hints': ['提示1：w 会覆盖原文件', '提示2：a 追加内容', '提示3：二进制使用 b'],
+      'explanation': '写入使用 w（覆盖）或 a（追加），可结合 b 指定二进制。',
+      'example': ''
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': 'seek 与 tell',
+      'content': '文件对象的 tell() 用于？',
+      'options': {'A': '返回当前文件指针位置', 'B': '移动文件指针', 'C': '关闭文件', 'D': '读取下一行'},
+      'answer': 'A',
+      'hints': ['提示1：seek 用于移动', '提示2：tell 返回偏移量', '提示3：常与 seek 配合使用'],
+      'explanation': 'tell 返回当前字节偏移位置，seek 用于移动指针。',
+      'example': ''
+    },
+
+    {
+      'id': 7,
+      'type': 'fill',
+      'title': '二进制模式（填空）',
+      'content': '打开二进制文件需在模式中包含 __1__ 字母，如 "rb" 或 "wb"。',
+      'input': '',
+      'output': '',
+      'code': 'with open("a.bin", "__1__") as f:\n    b = f.read()',
+      'options': 'b, t, r, w',
+      'answer': '1',
+      'explanation': 'b 表示二进制模式，t 表示文本（默认）。',
+      'example': ''
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '临时文件',
+      'content': '创建临时文件常用哪个模块？',
+      'options': {'A': 'tempfile', 'B': 'os', 'C': 'shutil', 'D': 'glob'},
+      'answer': 'A',
+      'hints': ['提示1：tempfile.NamedTemporaryFile', '提示2：提供安全临时文件', '提示3：适合测试用例'],
+      'explanation': 'tempfile 模块用于创建安全的临时文件和临时目录。',
+      'example': ''
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '文件编码（填空）',
+      'content': '打开文本文件时常用参数 encoding="__1__" 指定编码。',
+      'input': '',
+      'output': '',
+      'code': 'with open("a.txt","r", encoding="__1__") as f:\n    data = f.read()',
+      'options': 'utf-8, gbk, ascii, latin-1',
+      'answer': '1',
+      'explanation': 'utf-8 是常用的文本编码，跨平台兼容性好。',
+      'example': ''
+    },
+
+    {
+      'id': 10,
+      'type': 'choice',
+      'title': '大文件处理',
+      'content': '处理大文件时推荐的做法是？',
+      'options': {'A': '逐行处理或按块读取以节省内存', 'B': '一次性读入内存', 'C': '把文件拆成单个字符处理', 'D': '使用 eval 解析'},
+      'answer': 'A',
+      'hints': ['提示1：流式处理可降低内存', '提示2：使用 for line in f', '提示3：可用 read(size) 分块读'],
+      'explanation': '对于大文件，应使用迭代或分块读取避免 OOM。',
+      'example': ''
+    },
+
+    {
+      'id': 11,
+      'type': 'fill',
+      'title': '写入并刷新（填空）',
+      'content': '写入后若需立刻把缓冲区内容写入磁盘可调用 f.__1__().',
+      'input': '',
+      'output': '',
+      'code': 'f.write("a")\nf.__1__()',
+      'options': 'flush, close, sync, commit',
+      'answer': '1',
+      'explanation': 'f.flush() 会把缓冲区内容刷新到底层文件描述符，但并不保证同步到物理磁盘。',
+      'example': ''
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '二进制读写',
+      'content': '读取图片或二进制文件应使用哪种模式？',
+      'options': {'A': 'rb', 'B': 'r', 'C': 'rt', 'D': 'w'},
+      'answer': 'A',
+      'hints': ['提示1：二进制模式避免字符解码', '提示2：写入二进制使用 wb', '提示3：文本模式可能导致数据损坏'],
+      'explanation': '二进制文件需使用 rb/wb 模式以免编码转换。',
+      'example': ''
+    },
+
+    {
+      'id': 13,
+      'type': 'fill',
+      'title': 'shutil 复制（填空）',
+      'content': '复制文件可以使用 shutil.__1__(src, dst)。',
+      'input': '',
+      'output': '',
+      'code': 'import shutil\nshutil.__1__("a.txt","b.txt")',
+      'options': 'copy, move, rmtree, copytree',
+      'answer': '1',
+      'explanation': 'shutil.copy 可以把文件从 src 复制到 dst。',
+      'example': ''
+    },
+
+    {
+      'id': 14,
+      'type': 'choice',
+      'title': '临时目录',
+      'content': '创建临时目录可使用哪个函数？',
+      'options': {'A': 'tempfile.mkdtemp', 'B': 'os.mkdir', 'C': 'shutil.rmtree', 'D': 'open'},
+      'answer': 'A',
+      'hints': ['提示1：mkdtemp 返回目录路径', '提示2：适合需要临时目录的场景', '提示3：需要手动清理'],
+      'explanation': 'tempfile.mkdtemp 创建唯一的临时目录，返回路径。',
+      'example': ''
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '总结（填空）',
+      'content': '处理文件时要注意 __1__、编码和资源释放。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': '异常处理, 速度, 颜色, 样式',
+      'answer': '1',
+      'explanation': '异常处理、指定编码与正确关闭文件是文件 I/O 的关键。',
+      'example': ''
+    }
+
+  ]
+}
+
+```

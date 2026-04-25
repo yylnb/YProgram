@@ -1,0 +1,201 @@
+```plaintext
+{
+  'unit': '第22单元：简单登录验证',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '登录验证顺序',
+      'content': '进行登录验证时，通常先检查什么？',
+      'options': {'A':'输入是否为空','B':'密码是否正确','C':'用户是否存在于数据库','D':'权限等级'},
+      'answer': 'A',
+      'hints': ['先做输入校验','避免无意义的数据库查询'],
+      'explanation': '先验证输入完整性可以快速拒绝明显错误请求。',
+      'example': 'if not username: error()'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '错误信息安全',
+      'content': '返回错误时应避免透露？',
+      'options': {'A':'用户名是否存在的细节','B':'通用错误信息','C':'提示重试','D':'记录日志'},
+      'answer': 'A',
+      'hints': ['避免泄露可用于枚举的信息'],
+      'explanation': '不要明确指示用户名是否存在以免被利用进行用户枚举攻击。',
+      'example': '返回 "用户名或密码错误"'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '密码校验',
+      'content': '比较密码时应使用？',
+      'options': {'A':'哈希比对而非明文比对','B':'明文直接比对','C':'发送回客户端比对','D':'只比较前几位'},
+      'answer': 'A',
+      'hints': ['存储哈希','使用安全哈希函数'],
+      'explanation': '应把密码哈希后存储并对比哈希值，避免明文存储泄露风险。',
+      'example': 'check_password_hash(stored, input)'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '输入非空校验',
+      'content': '补全：若 username 为空则返回错误。',
+      'input': 'username=""',
+      'output': 'error',
+      'code': 'username = input().strip()\nif not username:\n    print("error")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '先去除空白并判断是否为空字符串。',
+      'example': 'if not s: print("empty")'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '简单密码判断',
+      'content': '补全：判断密码长度至少为 6。',
+      'input': 'p="abc123"',
+      'output': 'ok',
+      'code': 'p = input()\nif len(p) >= 6:\n    print("ok")\nelse:\n    print("short")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '基本密码策略要求最低长度，作为初级校验。',
+      'example': 'if len(p)<6: ...'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '错误次数限制',
+      'content': '为了防止暴力破解，应如何处理多次错误登录？',
+      'options': {'A':'限制尝试次数并临时封锁','B':'不限制','C':'每次都提示密码格式','D':'返回详细错误'},
+      'answer': 'A',
+      'hints': ['保护账户安全','实现速率限制或锁定机制'],
+      'explanation': '通过限制尝试次数并临时封锁可以有效降低暴力破解风险。',
+      'example': 'if attempts>5: lock_account()'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '验证码的使用',
+      'content': '什么时候加入验证码更合适？',
+      'options': {'A':'在检测到异常登录尝试时','B':'每次登录都强制','C':'从不使用','D':'仅在管理员登录时'},
+      'answer': 'A',
+      'hints': ['只在必要时增加用户负担','用于防机器攻击'],
+      'explanation': '在异常行为出现时动态加入验证码平衡安全与用户体验。',
+      'example': 'if suspicious: show_captcha()'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '返回信息处理',
+      'content': '登录成功后不应包含什么？',
+      'options': {'A':'明文密码回传','B':'会话令牌','C':'用户 ID','D':'登录时间'},
+      'answer': 'A',
+      'hints': ['不要回传敏感信息','返回必要会话信息即可'],
+      'explanation': '登录响应不应包含明文密码等敏感信息，应该发放会话令牌用于后续认证。',
+      'example': 'return {"token": token}'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '模拟登录函数',
+      'content': '补全：若用户名为 admin 且密码为 123456 则登录成功。',
+      'input': 'u=admin p=123456',
+      'output': 'success',
+      'code': 'u = input().strip()\np = input().strip()\nif u=="admin" and p=="123456":\n    print("success")\nelse:\n    print("fail")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '简单明文示例用于练习逻辑判断（生产环境不可如此）。',
+      'example': 'if u==user and check(p): ...'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '防止空格问题',
+      'content': '补全：输入去除首尾空格后再比对。',
+      'input': 's=" admin "',
+      'output': 'admin',
+      'code': 's = input()\nprint(s.strip())',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '使用 strip 去除首尾空白避免因空格导致匹配失败。',
+      'example': 'username = username.strip()'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '敏感信息存储',
+      'content': '密码应当如何存储？',
+      'options': {'A':'哈希并加盐存储','B':'明文存储在数据库','C':'存到日志文件','D':'放在客户端'},
+      'answer': 'A',
+      'hints': ['使用安全哈希算法','每个密码不同盐值'],
+      'explanation': '哈希并加盐可以降低密码被泄露时的风险。',
+      'example': 'hashed = hash_password(p)'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '会话管理',
+      'content': '登录后保持登录状态通常使用？',
+      'options': {'A':'使用会话令牌或 cookie','B':'每次都要求重新登录','C':'把密码存在本地文件','D':'通过邮件验证每次请求'},
+      'answer': 'A',
+      'hints': ['令牌管理会话','注意过期与刷新机制'],
+      'explanation': '使用令牌或安全 cookie 可以维持会话并支持过期与刷新策略。',
+      'example': 'set_cookie("token", token)'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '多因素认证',
+      'content': '提升登录安全的有效方式是？',
+      'options': {'A':'启用多因素认证（MFA）','B':'只用更长密码','C':'隐藏登录按钮','D':'限制用户名长度'},
+      'answer': 'A',
+      'hints': ['第二因素增强安全','常见为短信或 TOTP'],
+      'explanation': '多因素认证在密码被泄露时仍能保护账户安全。',
+      'example': 'send_otp(phone)'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '登录成功返回',
+      'content': '补全：登录成功后返回 token。',
+      'input': '',
+      'output': '',
+      'code': 'if check(u,p):\n    print("token_123")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '示例中直接打印 token，演示思路。',
+      'example': '返回 JSON 包含 token'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '安全提示词',
+      'content': '补全：不要在错误信息中返回敏感细节。',
+      'input': '',
+      'output': '',
+      'code': 'print("用户名或密码错误")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '使用通用错误信息可以避免信息泄露。',
+      'example': '不要返回 "密码错误" 或 "用户不存在" 的区分性提示'
+    }
+
+  ]
+}
+
+```

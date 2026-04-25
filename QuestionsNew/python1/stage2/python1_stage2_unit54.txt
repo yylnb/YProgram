@@ -1,0 +1,201 @@
+```plaintext
+{
+  'unit': '第24单元：菜单选择与用户交互',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '显示菜单的基本步骤',
+      'content': '实现命令行菜单通常需要先做什么？',
+      'options': {'A':'打印选项并读取用户输入','B':'直接执行默认操作','C':'等待网络请求','D':'关闭程序'},
+      'answer': 'A',
+      'hints': ['展示选项','获取用户选择'],
+      'explanation': '先展示选项并读取输入，然后根据选择分支处理。',
+      'example': 'print("1. A\n2. B")\nchoice = input()'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '输入校验',
+      'content': '读取菜单选择后应当做什么？',
+      'options': {'A':'校验输入是否在合法范围内','B':'忽略输入直接继续','C':'只接受文本输入','D':'每次重启程序'},
+      'answer': 'A',
+      'hints': ['避免无效选项','提示用户重试'],
+      'explanation': '需要校验输入以避免非法分支并提示用户重新输入。',
+      'example': 'if choice not in ("1","2"): ...'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '循环菜单',
+      'content': '要让用户反复选择应使用？',
+      'options': {'A':'循环 (while) 展示菜单','B':'只展示一次','C':'用递归不断调用','D':'退出程序'},
+      'answer': 'A',
+      'hints': ['使用 while True','提供退出选项'],
+      'explanation': '循环展示菜单并在合适时退出可以提高用户体验。',
+      'example': 'while True: show_menu() if choice=="q": break'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '实现简单菜单',
+      'content': '补全：显示 1/2/3 选项并读取选择。',
+      'input': '2',
+      'output': 'selected 2',
+      'code': 'print("1. a\n2. b\n3. c")\nch = input()\nprint("selected", ch)',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '打印菜单并读取用户输入后处理选择。',
+      'example': 'if ch=="1": ...'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '处理无效输入',
+      'content': '补全：若输入不在选项中提示错误。',
+      'input': '9',
+      'output': 'invalid',
+      'code': 'ch = input()\nif ch not in ("1","2","3"):\n    print("invalid")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '校验输入并及时反馈不合法选择。',
+      'example': 'print("请选择 1-3")'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '退出处理',
+      'content': '菜单中加入退出选项的常见符号是？',
+      'options': {'A':'q 或 0','B':'无退出','C':'-1','D':'空格'},
+      'answer': 'A',
+      'hints': ['常用 q 或 0 为退出标记'],
+      'explanation': '常用 q 或 0 作为退出命令，便于用户识别。',
+      'example': 'if ch=="q": break'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '命令映射',
+      'content': '将命令映射到函数的好处是？',
+      'options': {'A':'代码更简洁且易扩展','B':'减慢程序速度','C':'难以维护','D':'无法测试'},
+      'answer': 'A',
+      'hints': ['使用字典把选项映射到函数'],
+      'explanation': '映射函数便于新增或修改命令并使代码更清晰。',
+      'example': 'actions = {"1": func1, "2": func2}\nactions[ch]()'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '友好提示',
+      'content': '当用户输入无效时应如何处理？',
+      'options': {'A':'提示并允许重试','B':'直接崩溃','C':'忽略并继续','D':'清除屏幕'},
+      'answer': 'A',
+      'hints': ['友好提示提升体验','允许用户纠正错误'],
+      'explanation': '给出友好错误提示并允许重试是良好交互设计。',
+      'example': 'print("无效输入，请重试")'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '循环菜单实现',
+      'content': '补全：用 while 循环实现可重复菜单。',
+      'input': '',
+      'output': '',
+      'code': 'while True:\n    print("1. a\nq. quit")\n    ch = input()\n    if ch == "q":\n        break',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '用循环不断显示菜单并在 q 时退出。',
+      'example': 'while True: ...'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '函数映射示例',
+      'content': '补全：把选项映射到函数并调用。',
+      'input': '',
+      'output': '',
+      'code': 'def a():\n    print("A")\ndef b():\n    print("B")\nmap = {"1": a, "2": b}\nch = input()\nmap.get(ch, lambda: print("invalid"))()',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '使用字典映射可以直接根据输入调用对应函数。',
+      'example': 'actions[ch]()'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '提示信息',
+      'content': '菜单提示应简洁且包含什么？',
+      'options': {'A':'可选项与退出提示','B':'详细实现代码','C':'日志内容','D':'用户密码'},
+      'answer': 'A',
+      'hints': ['告诉用户如何退出和选择'],
+      'explanation': '提示应清楚列出选项及如何退出或返回上级菜单。',
+      'example': 'print("输入 q 退出")'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '避免死循环',
+      'content': '循环菜单时防止死循环的方式是？',
+      'options': {'A':'提供退出条件并正确处理输入','B':'无限循环不处理','C':'关闭程序线程','D':'让用户等待很久'},
+      'answer': 'A',
+      'hints': ['正确判断退出','处理异常中断'],
+      'explanation': '提供明确的退出条件并处理异常可以避免程序无法结束。',
+      'example': 'try: ... except KeyboardInterrupt: break'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '菜单层级',
+      'content': '设计多级菜单时应如何组织？',
+      'options': {'A':'每个子菜单有返回上级选项','B':'跳转没有返回','C':'所有选项写在一起','D':'用递归但不提供返回'},
+      'answer': 'A',
+      'hints': ['用户可返回上级','清晰层级结构更友好'],
+      'explanation': '多级菜单应允许用户方便地返回上级并导航。',
+      'example': '在子菜单加入 "b: back"'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '显示带序号的列表',
+      'content': '补全：根据 items 列表打印序号菜单。',
+      'input': 'items=["a","b"]',
+      'output': '1. a\n2. b',
+      'code': 'items = ["a","b"]\nfor i, it in enumerate(items, 1):\n    print(f"{i}. {it}")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '使用 enumerate 可以便捷打印带序号的列表。',
+      'example': 'for i,v in enumerate(lst,1): print(i,v)'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '读取数字选择并转换',
+      'content': '补全：将输入转换为整数并处理异常。',
+      'input': 'ch="2"',
+      'output': '2',
+      'code': 'try:\n    n = int(input())\n    print(n)\nexcept ValueError:\n    print("invalid")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '转换前做异常捕获以防止程序崩溃。',
+      'example': 'try: n=int(s) except: ...'
+    }
+
+  ]
+}
+
+```

@@ -1,0 +1,183 @@
+-- Generated SQL for global_unit=21 (stage=1 unit_local=21 unit_id=21)
+INSERT INTO `que_choice_py_1` (`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`) VALUES
+
+(
+  301,
+  21,
+  '输入大门的钥匙',
+  '猫猫程序员想让程序从用户那里获取一个名字，以下哪个工具是专门做这个的？',
+  '["scanf", "input", "get", "read"]',
+  2,
+  '["想想看，Python里哪个内置函数的名字就叫‘输入’？", "它的英文单词是input，意思是输入。", "其他选项可能来自其他语言或不是获取控制台输入的标准函数。"]',
+  '在Python中，input()函数用于从标准输入（通常是键盘）读取一行文本，并将其作为字符串返回。它是实现这一功能的内置函数。',
+  '例如，使用 `name = input()` 可以等待用户输入一个名字。'
+),
+(
+  302,
+  21,
+  '友好的提示',
+  '你想要在用户输入前，显示一句‘请输入你的年龄：’作为友好提示，应该怎么做？',
+  '["input(\\\"请输入你的年龄：\\\")", "print(\\\"请输入你的年龄：\\\") input()", "input(请输入你的年龄：)", "input(''请输入你的年龄：'', )"]',
+  1,
+  '[]',
+  'input()函数可以接收一个字符串参数，这个参数会作为提示信息显示在输入区域之前。选项C缺少了字符串的引号，B分了两步，D多了不必要的逗号。',
+  '正确用法：`age = input("你多大了？")` 会先显示提示信息再等待输入。'
+),
+(
+  303,
+  21,
+  '数据类型侦探',
+  '运行 `result = input("请输入一个数字：")` 后，用户输入了 `18`。此时变量 `result` 的数据类型是什么？',
+  '["整数 (int)", "字符串 (str)", "浮点数 (float)", "列表 (list)"]',
+  2,
+  '["input函数会把所有输入都当成什么来看待？", "回忆一下，无论你输入的是数字还是文字，input都一视同仁。", "它返回的是一个文本类型，在Python里叫字符串。"]',
+  'input()函数总是将用户的输入（即使是数字）作为字符串（str）返回。如果需要数字进行计算，必须使用int()或float()进行类型转换。',
+  '用户输入`"18"`，类型是str。需要`int("18")`才能得到数值18。'
+),
+(
+  306,
+  21,
+  '程序暂停点',
+  '当Python解释器执行到 `color = input("你最喜欢的颜色？")` 这行代码时，会发生什么？',
+  '["立即将字符串 \\\"你最喜欢的颜色？\\\" 赋值给变量 color。", "打印出 \\\"你最喜欢的颜色？\\\"，然后程序结束。", "在屏幕上显示 \\\"你最喜欢的颜色？\\\"，然后程序暂停，等待用户在键盘上输入一些内容并按回车。", "发生语法错误，因为input不能有参数。"]',
+  3,
+  '["input函数的作用是‘获取’输入，而不是直接‘给出’值。", "想想看，它显示提示信息后，是不是在等我们做点什么？", "程序会等待，直到用户输入完毕并按下回车键，才会继续向下执行。"]',
+  'input函数首先会输出其参数作为提示信息，然后使程序暂停，等待用户在控制台输入一串字符并按回车键。输入的内容（作为字符串）才会被返回并赋值给变量。',
+  '执行`x = input("请输入:")`，你会看到“请输入:”，然后可以打字，回车后输入的内容存入x。'
+),
+(
+  307,
+  21,
+  '狡猾的加法',
+  '运行以下代码：`a = input("A:"); b = input("B:"); print(a + b)`。用户先后输入 `10` 和 `20`。输出会是什么？',
+  '["30", "1020", "报错", "10+20"]',
+  2,
+  '["还记得input返回的是什么类型吗？", "两个‘字符串’用加号`+`连接，会得到什么？", "试试在脑子里把 \\\"10\\\" 和 \\\"20\\\" 拼在一起。"]',
+  'input()返回的是字符串（str）。`a`和`b`分别是字符串"10"和"20"。在Python中，字符串的`+`操作是拼接（连接），所以`"10" + "20"`的结果是字符串"1020"。',
+  '`"Hello" + "World"` 的结果是 `"HelloWorld"`，同理可得。'
+),
+(
+  308,
+  21,
+  '表达式中的input',
+  '分析这段代码：`total = int(input("输入数量:")) * 5`。如果用户输入 `4`，变量 `total` 的值将是？',
+  '["\\\"4\\\" * 5 (即 \\\"44444\\\")", "20", "\\\"20\\\"", "程序会报错"]',
+  2,
+  '["先看最内层的`input(\\\"输入数量:\\\")`，用户输入`4`，它会返回什么？", "然后`int()`函数对这个返回值做了什么？", "最后，转换后的数字`4`乘以`5`等于多少？"]',
+  '执行顺序为：input获取字符串"4"，int()将其转换为整数4，然后与5相乘得到整数20。这是一个将输入、类型转换和计算合并在一行表达式内的例子。',
+  '类似地，`price = float(input("价格:"))` 可以直接将输入转换为浮点数用于计算。'
+),
+(
+  311,
+  21,
+  '空白的输入',
+  '当用户运行 `response = input("你的反馈：")` 后，如果什么都不输入直接按回车键，变量 `response` 的值会是什么？',
+  '["一个空格字符", "空字符串 \\\"\\\"", "None", "程序会报错"]',
+  2,
+  '["input函数会把我们‘输入’的内容作为字符串返回。", "如果我们什么都没输入，就等于输入了一个‘空’的内容。", "在字符串的世界里，‘什么都没有’怎么表示？"]',
+  'input函数将用户输入的所有字符（包括没有字符，即直接回车）作为字符串返回。不输入任何字符直接回车，得到的是一个长度为0的字符串，即空字符串""。',
+  '这可以用来判断用户是否跳过问题：`if response == "": print("您未输入任何内容。")`。'
+),
+(
+  312,
+  21,
+  '当输入不是数字',
+  '执行 `num = int(input("输入数字："))`，用户调皮地输入了 `abc`。会发生什么？',
+  '["num的值变成字符串 \\\"abc\\\"。", "num的值变成0。", "程序引发 ValueError 异常。", "程序正常，num得到一个特殊值。"]',
+  3,
+  '["`int()`函数试图把输入的字符串变成整数。", "字符串`\\\"abc\\\"`能变成一个整数吗？", "当转换不可能完成时，Python会‘生气’地抛出错误。"]',
+  '`int()`函数只能将符合整数格式的字符串（如"123"）转换为整数。对于"abc"这样的非数字字符串，转换会失败，Python会抛出`ValueError`异常，程序可能因此中断。',
+  '更健壮的代码可以使用try-except处理：`try: num = int(input(...)) except ValueError: ...`。'
+),
+(
+  313,
+  21,
+  '链式反应',
+  '以下哪段代码可以正确地从一行输入中读取两个用空格分开的整数，并赋值给a和b？（例如输入：`10 20`）',
+  '["a, b = input().split()", "a, b = int(input()).split()", "a, b = map(int, input().split())", "a = input(); b = input()"]',
+  3,
+  '[]',
+  '`input()`读入一行字符串，`split()`默认按空格分割字符串得到一个字符串列表，`map(int, ...)`将列表中的每个字符串元素转换为整数，最后通过序列解包赋值给a和b。选项A得到的是两个字符串，选项B语法错误，选项D需要分两行输入。',
+  '输入`"3 4 5"`，`list(map(int, input().split()))` 得到 `[3, 4, 5]`。'
+);
+
+INSERT INTO `que_fill_py_1` (`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`) VALUES
+
+(
+  304,
+  21,
+  '初次见面',
+  '帮这个害羞的程序员补全代码，让它能向用户问好并记住用户的名字。',
+  '["Alice"]',
+  '["你好，Alice！很高兴认识你。"]',
+  '{"segments": [{"type": "code_inline", "parts": [{"type": "code", "value": "name = "}, {"type": "slot", "index": 0}, {"type": "code", "value": "(\\\"请问你的名字是？\\\")"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "print(\\\"你好，\\\" + name + \\\"！很高兴认识你。\\\")"}]}]}',
+  '["input", "get", "read", "scan", "print", "name", "\\\"Alice\\\""]',
+  '[1]',
+  '空位需要填入用于获取用户输入的函数名，即`input`。程序首先用input获取名字存入变量name，然后用print语句进行问候。',
+  '类似地，`city = input("你来自哪个城市？")` 可以获取并存储城市信息。'
+),
+(
+  305,
+  21,
+  '数字求和器',
+  '下面这个简单的加法器程序缺少几个关键零件，快来修好它！',
+  '["5", "3"]',
+  '["5 + 3 = 8"]',
+  '{"segments": [{"type": "code_inline", "parts": [{"type": "code", "value": "num1_str = "}, {"type": "slot", "index": 0}, {"type": "code", "value": "(\\\"输入第一个数字：\\\")"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "num2_str = input(\\\"输入第二个数字：\\\")"}, {"type": "slot", "index": 1}, {"type": "slot", "index": 2}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "num1 = "}, {"type": "slot", "index": 3}, {"type": "code", "value": "(num1_str)"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "num2 = int(num2_str)"}, {"type": "slot", "index": 4}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "print(num1_str + \\\" + \\\" + num2_str + \\\" = \\\" + str(num1 + num2))"}]}]}',
+  '["input", "int", "str", "float", "print", "num1", "num2", "#", "=", "+"]',
+  '[1, 10, 9, 2, 9]',
+  '填空顺序为：1.函数`input`用于获取输入。2.赋值操作符`=`。3.行末不需要内容，但格式要求是列表，这里用一个占位符。4.类型转换函数`int`。5.另一个赋值操作符`=`。程序展示了获取字符串输入后转换为整数进行计算的过程。',
+  '将字符串"10"转换为整数：`int("10")`。'
+),
+(
+  309,
+  21,
+  '口令验证',
+  '补全这个简单的密码检查程序，只有当用户输入‘芝麻开门’时才显示欢迎信息。',
+  '["芝麻开门"]',
+  '["口令正确！宝藏的大门为你敞开。"]',
+  '{"segments": [{"type": "code_inline", "parts": [{"type": "code", "value": "password = "}, {"type": "slot", "index": 0}, {"type": "code", "value": "(\\\"请输入口令：\\\")"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": " "}, {"type": "slot", "index": 1}, {"type": "code", "value": " password "}, {"type": "slot", "index": 2}, {"type": "code", "value": " \\\"芝麻开门\\\":"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "    print(\\\"口令正确！宝藏的大门为你敞开。\\\")"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "else:"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "    print(\\\"口令错误。\\\")"}]}]}',
+  '["input", "if", "==", "=", "!=", ">", "print", "else", "password", "\\\"芝麻开门\\\""]',
+  '[1, 2, 3]',
+  '填空顺序为：1.`input`获取口令。2.`if`开始条件判断。3.`==`是比较运算符，用于判断输入的口令是否等于预设值。程序展示了如何根据input的输入内容进行条件分支。',
+  '判断年龄是否成年：`if int(input("年龄:")) >= 18:`。'
+),
+(
+  310,
+  21,
+  '循环收集者',
+  '这个程序想连续询问3次，收集3个爱好。请填补空白让它运转起来。',
+  '["编程", "游戏", "音乐"]',
+  '["你的爱好有：编程 游戏 音乐"]',
+  '{"segments": [{"type": "code_inline", "parts": [{"type": "code", "value": "hobbies = \\\"\\\""}, {"type": "slot", "index": 0}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "for i in "}, {"type": "slot", "index": 1}, {"type": "code", "value": "(3):"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "    hobby = "}, {"type": "slot", "index": 2}, {"type": "code", "value": "(\\\"请输入爱好（第\\\" + str(i+1) + \\\"个）：\\\")"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "    hobbies = hobbies + hobby + \\\" \\\""}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "print(\\\"你的爱好有：\\\" + hobbies)"}]}]}',
+  '["input", "range", "print", "hobby", "hobbies", "for", "in", "i", "# 初始化", ":"]',
+  '[9, 2, 1]',
+  '填空顺序为：1.空行，表示变量初始化和循环开始之间有个空行（逻辑分隔），用一个占位符表示。2.`range`函数用于生成循环次数序列。3.`input`函数在循环内部反复调用，以收集多次输入。程序演示了如何在循环结构中集成input来收集多项数据。',
+  '用循环收集5个名字：`for i in range(5): name = input()`。'
+),
+(
+  314,
+  21,
+  '年龄计算器',
+  '这个程序想计算你的出生年份。它需要你的年龄和当前年份，然后算出结果。请填空。',
+  '["18", "2023"]',
+  '["你出生于2005年。"]',
+  '{"segments": [{"type": "code_inline", "parts": [{"type": "code", "value": "age_str = input(\\\"你今年多大？\\\")"}, {"type": "slot", "index": 0}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "current_year_str = "}, {"type": "slot", "index": 1}, {"type": "code", "value": "(\\\"当前是哪一年？\\\")"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "age = int(age_str)"}, {"type": "slot", "index": 2}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "current_year = "}, {"type": "slot", "index": 3}, {"type": "code", "value": "(current_year_str)"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "birth_year = "}, {"type": "slot", "index": 4}, {"type": "slot", "index": 5}, {"type": "slot", "index": 6}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "print(\\\"你出生于\\\" + str(birth_year) + \\\"年。\\\")"}]}]}',
+  '["input", "int", "current_year", "age", "-", "+", "*", "/", "=", "current_year_str", "# 类型转换", "birth_year"]',
+  '[10, 1, 10, 2, 3, 5, 4]',
+  '填空顺序：1.空行（逻辑分隔）。2.`input`获取当前年份（字符串）。3.空行（逻辑分隔）。4.`int`将当前年份字符串转换为整数。5.变量`current_year`（已转换的整数年份）。6.减号`-`用于计算出生年份。7.变量`age`（已转换的整数年龄）。程序综合运用了多个input、类型转换和算术运算。',
+  '计算明年年龄：`next_year_age = int(input("当前年龄:")) + 1`。'
+),
+(
+  315,
+  21,
+  '迷你问答游戏',
+  '完成这个简单的知识问答程序，让它能判断用户对首都问题的回答是否正确。',
+  '["巴黎"]',
+  '["回答正确！"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "print(\\\"欢迎来到地理小测验！\\\")"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "answer = input(\\\"法国的首都是？\\\")"}, {"type": "slot", "index": 0}]}, {"type": "code_inline", "parts": [{"type": "code", "value": " "}, {"type": "slot", "index": 1}, {"type": "code", "value": " answer.lower() "}, {"type": "slot", "index": 2}, {"type": "code", "value": " \\\"paris\\\":"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "    print(\\\"回答正确！\\\")"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "else:"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "    print(\\\"回答错误。正确答案是巴黎(Paris)。\\\")"}]}]}',
+  '["if", "==", "=", "!=", "input", "print", "answer", "# 判断", "lower()", "upper()"]',
+  '[7, 1, 2]',
+  '填空顺序：1.空行（逻辑分隔）。2.`if`开始条件判断。3.`==`比较运算符，判断处理后的用户答案是否等于"paris"。`.lower()`将用户输入转为小写，使判断不区分大小写（如‘巴黎’输入‘Paris’或‘paris’都能匹配）。',
+  '判断是否同意：`if input("同意吗？(y/n)").lower() == ''y'':`。'
+);

@@ -1,0 +1,200 @@
+```plaintext
+{
+  'unit': '第11单元：嵌套条件进阶与状态机思维',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '嵌套 if 的用途',
+      'content': '嵌套 if 常用于哪类问题？',
+      'options': {'A':'分步骤判断多个相关条件','B':'替代函数定义','C':'作为循环的替代','D':'提升性能的手段'},
+      'answer': 'A',
+      'hints': ['逐层判断不同条件','按状态判断更清晰','用于复杂决策树'],
+      'explanation': '嵌套 if 常用于按阶段或状态层级判断不同条件的场景。',
+      'example': 'if logged_in:\n    if is_admin: ...'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '避免深层嵌套',
+      'content': '当嵌套层次过深时应如何改进？',
+      'options': {'A':'用早退/guard clause 减少嵌套','B':'增加更多嵌套保持逻辑','C':'把所有逻辑放在一行','D':'使用全局变量'},
+      'answer': 'A',
+      'hints': ['早退降低缩进','提高可读性','把异常或边界条件先处理掉'],
+      'explanation': '使用 guard clause（早退）可以减少嵌套深度并提升可读性。',
+      'example': 'if not cond: return\n# then main logic'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '状态机思维',
+      'content': '把复杂条件看成状态机有什么好处？',
+      'options': {'A':'便于分离状态和行为','B':'使程序更慢','C':'减少测试覆盖','D':'避免使用函数'},
+      'answer': 'A',
+      'hints': ['状态驱动逻辑更清晰','易于单元测试','便于维护和扩展'],
+      'explanation': '状态机把状态与状态转换清晰分离，利于设计复杂逻辑。',
+      'example': 'state = "idle"\nif state == "run": ...'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '嵌套条件改写为早退',
+      'content': '补全：把嵌套 if 改为早退风格。',
+      'input': '',
+      'output': '',
+      'code': 'def f(x):\n    if x is None:\n        return\n    if x < 0:\n        return\n    # 处理有效 x\n    print(x)',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '通过先处理异常/边界条件来减少后续嵌套。',
+      'example': '参见代码'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '分支逻辑抽函数',
+      'content': '补全：把分支逻辑抽成函数以简化主流程。',
+      'input': '',
+      'output': '',
+      'code': 'def handle_admin():\n    pass\n\ndef main(user):\n    if user.is_admin():\n        handle_admin()\n    else:\n        ___',
+      'options': 'handle_user(), return, pass, raise',
+      'answer': '1',
+      'explanation': '把分支动作抽成函数能使主流程清晰。',
+      'example': '分离不同角色的处理函数'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '可测试性',
+      'content': '如何提高嵌套条件代码的可测试性？',
+      'options': {'A':'把复杂逻辑拆成小函数并单元测试','B':'把逻辑写在一个大函数中','C':'不写测试','D':'仅用打印调试'},
+      'answer': 'A',
+      'hints': ['小函数易于隔离测试','降低耦合提高复用','保持接口简单'],
+      'explanation': '拆成小函数便于单元测试和维护。',
+      'example': 'def validate(x): ...\ndef process(x): ...'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '状态变量命名',
+      'content': '关于状态变量命名，下列建议哪项较好？',
+      'options': {'A':'使用描述性名称如 is_ready 或 state','B':'用单字母 a/b','C':'使用数字 1/2','D':'使用随机字符串'},
+      'answer': 'A',
+      'hints': ['描述性名称提高可读性','便于团队理解','避免歧义'],
+      'explanation': '使用描述性名称让状态含义清楚，利于维护。',
+      'example': 'is_authenticated = True'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '用字典替代多重 if',
+      'content': '当根据键选择处理函数时，建议使用？',
+      'options': {'A':'字典映射到处理函数','B':'长 if/elif 链','C':'多重嵌套 if','D':'使用全局变量串联'},
+      'answer': 'A',
+      'hints': ['字典映射更清晰','易于扩展','避免长链判断'],
+      'explanation': '字典把键映射到函数，处理分派更简洁。',
+      'example': 'handlers = {"a": h_a, "b": h_b}\nhandlers.get(k, default)()'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '状态转换写法',
+      'content': '补全：定义状态转换字典并调用。',
+      'input': '',
+      'output': '',
+      'code': 'trans = {"start": "run", "run": "stop"}\nstate = "start"\nstate = trans.get(state, ___)',
+      'options': 'state, None, "start", "done"',
+      'answer': '2',
+      'explanation': '当找不到时返回 None 或默认状态以避免 KeyError。',
+      'example': 'state = transitions.get(state, None)'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '分支重构练习',
+      'content': '补全：把复杂判断提取为函数。',
+      'input': '',
+      'output': '',
+      'code': 'def check(x):\n    return x>0 and x%2==0\n\nif check(a):\n    ___',
+      'options': 'print("OK"), return, pass, raise',
+      'answer': '1',
+      'explanation': '提取判断后直接使用函数结果可提高可读性。',
+      'example': 'if is_valid(user): handle(user)'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '分离副作用与判断',
+      'content': '为何要把副作用（如打印、写文件）从判断逻辑中分离？',
+      'options': {'A':'便于测试并减少耦合','B':'让程序更慢','C':'避免使用函数','D':'增加全局变量'},
+      'answer': 'A',
+      'hints': ['分离关注点','便于模拟副作用','逻辑更纯粹易测试'],
+      'explanation': '把副作用抽离使核心逻辑易测试且更稳定。',
+      'example': 'result = compute(x)\nlog(result)'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '可维护性的技巧',
+      'content': '哪种做法能提升复杂条件的可维护性？',
+      'options': {'A':'添加注释与示例','B':'故意省略注释','C':'把所有逻辑合并成一行','D':'用魔法数字'},
+      'answer': 'A',
+      'hints': ['注释和示例帮助阅读','清晰的命名也重要','测试覆盖很关键'],
+      'explanation': '在复杂逻辑处添加注释和示例能帮助未来维护。',
+      'example': '# 如果用户是 admin，则...'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '设计决策记录',
+      'content': '记录为何选择某种分支实现有何好处？',
+      'options': {'A':'有利于代码审查与后续维护','B':'增加文件大小','C':'让代码运行更慢','D':'无实际意义'},
+      'answer': 'A',
+      'hints': ['文档帮助团队理解原因','便于未来改动时评估影响','能减少误改'],
+      'explanation': '记录设计决策有助于团队理解并减少误操作。',
+      'example': '在注释或 PR 描述中说明理由'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '用字典实现分派',
+      'content': '补全：使用 dict 分派到不同函数处理。',
+      'input': '',
+      'output': '',
+      'code': 'handlers = {"a":handle_a, "b":handle_b}\ncmd = input()\nhandlers.get(cmd, ___)()',
+      'options': 'lambda:None, None, default, print',
+      'answer': '1',
+      'explanation': '使用默认 lambda 函数避免 NoneType 调用错误。',
+      'example': 'handlers.get(k, lambda: print("unknown"))()'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '实践：状态驱动流程',
+      'content': '补全：根据 state 执行不同动作。',
+      'input': 'state="run"',
+      'output': 'running',
+      'code': 'if state == "start":\n    print("starting")\nelif state == "run":\n    print("running")\nelse:\n    print("stopped")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '直接用分支处理不同状态，代码简单明了。',
+      'example': 'state machines 常见写法'
+    }
+
+  ]
+}
+```

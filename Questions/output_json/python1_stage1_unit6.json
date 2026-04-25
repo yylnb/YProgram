@@ -1,0 +1,257 @@
+[
+  {
+    "q_id": "1",
+    "type": "choice",
+    "title": "加法运算的作用",
+    "text": "",
+    "explanation": "+ 可以用于数值相加，也可以用于字符串拼接。",
+    "example": "示例：'Hello ' + 'World' → 'Hello World'",
+    "hints": [
+      "注意：+ 不仅能算数学。",
+      "想想字符串之间的 + 会发生什么。",
+      "Python 是多才多艺的语言。"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "只用于数字相加",
+      "B": "用于多种类型之间的加法，如数字相加或字符串拼接",
+      "C": "用于比较两个数字",
+      "D": "只能用于整数之间"
+    },
+    "answer": "B",
+    "_warnings": [
+      "unknown type 'mcq', defaulted to choice"
+    ]
+  },
+  {
+    "q_id": "2",
+    "type": "choice",
+    "title": "减法的基础",
+    "text": "",
+    "explanation": "10 - 4 = 6。",
+    "example": "示例：20 - 5 → 15",
+    "hints": [
+      "简单的数学题。",
+      "10 减去 4。",
+      "你一定做过很多次这种计算。"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "6",
+      "B": "7",
+      "C": "14",
+      "D": "20"
+    },
+    "answer": "A",
+    "_warnings": [
+      "unknown type 'mcq', defaulted to choice"
+    ]
+  },
+  {
+    "q_id": "3",
+    "type": "choice",
+    "title": "加法的自动类型提升",
+    "text": "",
+    "explanation": "整数与浮点运算时，整数会被提升为 float。",
+    "example": "示例：3 + 0.2 → 3.2",
+    "hints": [
+      "想想浮点数和整数混合运算的规则。",
+      "浮点数可以表示更广的范围。",
+      "Python 会“向上兼容”。"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "整数",
+      "B": "字符串",
+      "C": "浮点数",
+      "D": "布尔值"
+    },
+    "answer": "C",
+    "_warnings": [
+      "unknown type 'mcq', defaulted to choice"
+    ]
+  },
+  {
+    "q_id": "4",
+    "type": "fill",
+    "title": "加法练习",
+    "text": "",
+    "explanation": "9 + 6 = 15。",
+    "example": "示例：2 + 3 → 5",
+    "hints": null,
+    "input": null,
+    "output": "15",
+    "raw_code": "a = 9\nb = 6\nprint(a __1____ b)",
+    "options": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "//",
+      "%",
+      "**",
+      "and",
+      "or"
+    ],
+    "answer": [
+      1
+    ]
+  },
+  {
+    "q_id": "5",
+    "type": "fill",
+    "title": "减法练习",
+    "text": "",
+    "explanation": "3 - 5 = -2。",
+    "example": "示例：10 - 13 → -3",
+    "hints": null,
+    "input": null,
+    "output": "-2",
+    "raw_code": "x = 3\ny = 5\nz = x __1____ y\nprint(z)",
+    "options": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "//",
+      "%",
+      "**",
+      "and",
+      "or"
+    ],
+    "answer": [
+      2
+    ]
+  },
+  {
+    "q_id": "7",
+    "type": "choice",
+    "title": "减法的类型要求",
+    "text": "",
+    "explanation": "字符串减法无意义，Python 会报错。",
+    "example": "示例：不能执行 'abc' - 'a'",
+    "hints": [
+      "想想字符串能做什么。",
+      "它们可以拼接但不能相减。",
+      "这和数学运算不一样。"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "Python 不支持数字运算",
+      "B": "字符串不能直接进行减法运算",
+      "C": "10 和 2 不是数字",
+      "D": "Python 不支持减法"
+    },
+    "answer": "B",
+    "_warnings": [
+      "unknown type 'mcq', defaulted to choice"
+    ]
+  },
+  {
+    "q_id": "8",
+    "type": "choice",
+    "title": "加法的运算顺序",
+    "text": "",
+    "explanation": "加法是左结合，即从左向右计算。",
+    "example": "示例：(10 + 2) + 5 → 17",
+    "hints": [
+      "加法是左结合运算。",
+      "先左后右的顺序。",
+      "Python 和大多数语言一样。"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "(1 + 2) + 3",
+      "B": "1 + (2 + 3)",
+      "C": "完全随机",
+      "D": "由 Python 版本决定"
+    },
+    "answer": "A",
+    "_warnings": [
+      "unknown type 'mcq', defaulted to choice"
+    ]
+  },
+  {
+    "q_id": "9",
+    "type": "fill",
+    "title": "字符串拼接错误修复",
+    "text": "",
+    "explanation": "需要将整数转换为字符串。",
+    "example": "示例：'Score: ' + str(100)",
+    "hints": null,
+    "input": null,
+    "output": "Total: 30",
+    "raw_code": "num = 30\ntext = 'Total: ' __1____ num\nprint(text)",
+    "options": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "str(num)",
+      "int(num)",
+      "'30'",
+      "'",
+      "'",
+      "'%s'",
+      "'.'"
+    ],
+    "answer": [
+      5
+    ]
+  },
+  {
+    "q_id": "10",
+    "type": "fill",
+    "title": "加法连算",
+    "text": "",
+    "explanation": "5 + 7 + 6 = 18。",
+    "example": "示例：1 + 2 + 3 → 6",
+    "hints": null,
+    "input": null,
+    "output": "18",
+    "raw_code": "a = 5\nb = 7\nc = 6\ntotal = a + b __1____ c\nprint(total)",
+    "options": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "and",
+      "or",
+      "//",
+      "%"
+    ],
+    "answer": [
+      1
+    ]
+  },
+  {
+    "q_id": "11",
+    "type": "choice",
+    "title": "正负号的结合",
+    "text": "",
+    "explanation": "5 + (-3) = 2。",
+    "example": "示例：10 + -7 → 3",
+    "hints": [
+      "注意 -3 是负数。",
+      "5 加上一个负的 3。",
+      "相当于 5 - 3。"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "-8",
+      "B": "2",
+      "C": "8",
+      "D": "5"
+    },
+    "answer": "B",
+    "_warnings": [
+      "unknown type 'mcq', defaulted to choice"
+    ]
+  }
+]

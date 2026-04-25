@@ -1,0 +1,670 @@
+[
+  {
+    "id": 1,
+    "type": "choice",
+    "title": "点餐变量",
+    "content": "阿强想用Python记录他点的‘汉堡套餐’，下面哪个可以作为合法的变量名？",
+    "options": [
+      "1st_order",
+      "order-1",
+      "order_1",
+      "class"
+    ],
+    "answer": "C",
+    "hints": [
+      "Python变量名不能以数字开头哦。",
+      "连接符‘-’是用于减法的，不能用在名字里。",
+      "Python有一些保留字（关键字）是不能用作变量名的。"
+    ],
+    "explanation": "变量名可以包含字母、数字和下划线，但不能以数字开头。连接符‘-’会与减法运算符冲突，而‘class’是Python的关键字，不能用作变量名。",
+    "example": "合法的变量名：my_order、order123、_temp_value。"
+  },
+  {
+    "id": 2,
+    "type": "choice",
+    "title": "游戏得分",
+    "content": "小美在写游戏代码，想用一个变量记录最终得分，她应该选择哪个更符合命名规范？",
+    "options": [
+      "FinalScore",
+      "finalScore",
+      "final_score",
+      "FINALSCORE"
+    ],
+    "answer": "C",
+    "hints": [
+      "想想看，哪种写法在Python社区里最常见？",
+      "Python的官方风格指南推荐了命名惯例。",
+      "对于变量名，通常使用‘蛇形命名法’（小写字母加下划线）。"
+    ],
+    "explanation": "根据Python官方的PEP8风格指南，变量名、函数名通常使用蛇形命名法（snake_case），即全小写字母，单词之间用下划线连接。",
+    "example": "好的变量名：user_name、item_price、total_count。"
+  },
+  {
+    "id": 3,
+    "type": "choice",
+    "title": "年龄变量",
+    "content": "小刚的代码里有一行‘age = 18’。如果他想把age改名为‘for’，可以直接改吗？",
+    "options": [
+      "可以，‘for’是个好名字。",
+      "不可以，因为‘for’是数字。",
+      "不可以，因为‘for’是内置函数名。",
+      "不可以，因为‘for’是Python保留字。"
+    ],
+    "answer": "D",
+    "hints": [
+      "‘for’这个词在Python里是不是有特殊用途？",
+      "尝试在Python解释器里输入‘for = 5’看看。",
+      "Python有一些词汇被定义为语言本身的关键字。"
+    ],
+    "explanation": "‘for’是Python的保留字（或称关键字），用于循环结构。保留字有特殊的语法含义，不能用作变量名、函数名等标识符。",
+    "example": "其他保留字包括：if, while, def, import, True, None等。"
+  },
+  {
+    "id": 4,
+    "type": "fill",
+    "title": "填空购物车",
+    "content": "帮阿珍完成购物车代码，计算两个商品的总价。",
+    "input": null,
+    "output": [
+      "35"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "price_apple = "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " "
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "price_banana = 15"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "total = price_apple "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " price_banana"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(total)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "+",
+      "-",
+      "*",
+      "10",
+      "15",
+      "20",
+      "price_apple",
+      "total"
+    ],
+    "answer": [
+      3,
+      0
+    ],
+    "explanation": "第一个空需要为苹果价格赋值一个数字，代码输出总价为35，香蕉价格是15，所以苹果价格应为20。第二个空是计算总和，应使用加号‘+’。",
+    "example": "若 price_apple = 30， total = price_apple + price_banana，则 total 为 45。"
+  },
+  {
+    "id": 5,
+    "type": "fill",
+    "title": "名片生成器",
+    "content": "下面的代码想生成一张名片，但变量名有点乱，请帮忙纠正。",
+    "input": null,
+    "output": [
+      "我叫Python，今年30岁。"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "MyName = \"Python\""
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "1age = 30"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "print(f\"我叫{"
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "}，今年{"
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": "}岁。\")"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "MyName",
+      "1age",
+      "my_name",
+      "age",
+      "my-name",
+      "Age",
+      "name",
+      "myName"
+    ],
+    "answer": [
+      0,
+      3
+    ],
+    "explanation": "打印语句使用了变量MyName和1age。虽然MyName以大写开头（不符合蛇形命名惯例），但语法上是合法的。1age以数字开头则不合法，需要换成一个合法的变量名，如‘age’。",
+    "example": "合法变量名才能被正确引用在f-string中，如 print(f\"Value is {valid_var}\")。"
+  },
+  {
+    "id": 6,
+    "type": "choice",
+    "title": "交换变量值",
+    "content": "下面哪段代码能成功交换变量a和b的值？ (a=1, b=2)",
+    "options": [
+      "a = b\nb = a",
+      "temp = a\na = b\nb = temp",
+      "a, b = b, a",
+      "a = b\nb = a\ntemp = a"
+    ],
+    "answer": "B",
+    "hints": [
+      "直接‘a=b; b=a’的话，a原来的值会丢失。",
+      "通常需要引入第三个‘中间人’变量。",
+      "Python其实有一个更简洁的‘元组解包’写法。"
+    ],
+    "explanation": "交换两个变量的值需要借助第三个临时变量(temp)来保存其中一个原始值，或者使用Python特有的元组解包语法。B是标准方法，C是Python的简洁写法。本题考察对变量赋值顺序的理解。",
+    "example": "Python简洁写法：x, y = y, x， 可以直接交换x和y的值。"
+  },
+  {
+    "id": 7,
+    "type": "choice",
+    "title": "宠物店变量",
+    "content": "宠物店老板定义了一个变量‘DogName = \"旺财\"’，下面哪个打印语句会出错？",
+    "options": [
+      "print(DogName)",
+      "print(dogname)",
+      "print(\"DogName\")",
+      "print('旺财')"
+    ],
+    "answer": "B",
+    "hints": [
+      "Python是区分大小写的语言。",
+      "检查变量名的大小写是否完全一致。",
+      "打印字符串本身和打印变量是不同的。"
+    ],
+    "explanation": "Python的变量名是大小写敏感的。定义的变量是‘DogName’（D和N大写），而‘dogname’是全小写，被视为一个未定义的新变量，因此会引发NameError错误。",
+    "example": "MyVar 和 myvar 在Python中是两个不同的变量。"
+  },
+  {
+    "id": 8,
+    "type": "choice",
+    "title": "用户名规则",
+    "content": "程序员小李想生成一个用户昵称变量，以下哪个命名是Python允许的？",
+    "options": [
+      "user-name",
+      "user@name",
+      "user name",
+      "user_name"
+    ],
+    "answer": "D",
+    "hints": [
+      "变量名里能包含空格吗？",
+      "‘@’和‘-’符号通常有什么用途？",
+      "回忆一下，变量名允许的字符有哪些？"
+    ],
+    "explanation": "Python变量名只能包含字母、数字和下划线，且不能以数字开头。‘-’、‘@’和空格都不是合法组成字符，其中‘-’会被解释为减号。",
+    "example": "允许的命名：_score、user2、hello_world。不允许的：2nd_user、my-name、first name。"
+  },
+  {
+    "id": 9,
+    "type": "fill",
+    "title": "自我介绍填空",
+    "content": "补全代码，让机器人用f-string正确地做自我介绍。",
+    "input": null,
+    "output": [
+      "我是Python，已经30岁了！"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "name = \"Python\""
+            },
+            {
+              "type": "code_line",
+              "value": "age = 30"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "intro = f\"我是{"
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "}，已经{"
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": "}岁了！\""
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(intro)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "name",
+      "\"Python\"",
+      "age",
+      "30",
+      "intro",
+      "f\"...\"",
+      "= name",
+      "name ="
+    ],
+    "answer": [
+      0,
+      2
+    ],
+    "explanation": "在f-string中，大括号{}内应放入已定义的变量名，这样才能在字符串中插入该变量的值。这里需要放入变量名‘name’和‘age’，而不是它们的值或引号。",
+    "example": "若 city = \"北京\"，则 sentence = f\"我在{city}\" 会生成 \"我在北京\"。"
+  },
+  {
+    "id": 10,
+    "type": "fill",
+    "title": "钱包余额计算",
+    "content": "下面的代码模拟消费过程，请按顺序选择正确的代码片段完成它。",
+    "input": null,
+    "output": [
+      "余额: 70"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "wallet = "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "wallet = wallet "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " 30"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "print("
+            },
+            {
+              "type": "slot",
+              "index": 2
+            },
+            {
+              "type": "code",
+              "value": ")"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "100",
+      "-\"余额: \"， wallet",
+      "\"余额: \"， wallet",
+      "f\"余额: {wallet}\"",
+      "+",
+      "-",
+      "*",
+      "/",
+      "wallet = 100"
+    ],
+    "answer": [
+      0,
+      5,
+      3
+    ],
+    "explanation": "首先为钱包初始化金额为100。然后消费30元，所以是减去30。最后打印，使用f-string可以方便地将变量值嵌入字符串中。",
+    "example": "类似地：money = 50; money = money - 10; print(f\"剩余：{money}\") 输出 \"剩余：40\"。"
+  },
+  {
+    "id": 11,
+    "type": "choice",
+    "title": "圆周率变量",
+    "content": "小华想把圆周率的值赋给一个变量，下列哪个命名和赋值最合适？",
+    "options": [
+      "pi = 3.1415926",
+      "3pi = 3.14",
+      "PI = \"3.14\"",
+      "p.i = 3.14"
+    ],
+    "answer": "A",
+    "hints": [
+      "变量名不能以数字开头。",
+      "圆周率是一个数值，不是文本。",
+      "变量名中不能包含除下划线以外的标点符号。"
+    ],
+    "explanation": "变量名‘pi’合法且有意义。圆周率是浮点数，所以赋值应为数字而非字符串。全大写的PI通常用于表示常量，但Python没有真正的常量机制，这只是一种约定。",
+    "example": "常量的命名约定：MAX_SIZE = 100。虽然可以改，但程序员约定不去修改它。"
+  },
+  {
+    "id": 12,
+    "type": "choice",
+    "title": "内部变量",
+    "content": "在一个函数内部，定义一个只在这个函数里使用的临时变量，最好用什么风格的命名？",
+    "options": [
+      "使用全局变量风格，如G_TEMP",
+      "使用小写字母和下划线，如temp_var",
+      "使用单下划线开头，如_temp",
+      "使用全大写，如TEMP"
+    ],
+    "answer": "B",
+    "hints": [
+      "想想Python通用的变量命名风格是什么。",
+      "这个变量只在函数内部可见。",
+      "以单下划线开头有特殊的约定含义。"
+    ],
+    "explanation": "对于普通的局部变量，遵循PEP8的蛇形命名法（全小写加下划线）是最常见和推荐的做法。单下划线开头约定用于暗示“内部使用”，非强制。",
+    "example": "函数内变量：def calculate(): result = 0 ... 这里的 result 是局部变量。"
+  },
+  {
+    "id": 13,
+    "type": "choice",
+    "title": "游戏角色类",
+    "content": "阿明要创建一个‘游戏角色’的类，根据命名规范，类名应该是什么？",
+    "options": [
+      "gameRole",
+      "GameRole",
+      "game_role",
+      "GAME_ROLE"
+    ],
+    "answer": "B",
+    "hints": [
+      "回忆一下，变量名和类名在风格上有区别吗？",
+      "Python中类名通常使用什么命名法？",
+      "全大写通常用于常量。"
+    ],
+    "explanation": "根据PEP8，类名应使用驼峰命名法（CapWords/CamelCase），即每个单词首字母大写，且不使-用下划线连接。这有助于将类名与变量名、函数名区分开。",
+    "example": "正确的类名：class PlayerCharacter:, class HttpRequestHandler:。"
+  },
+  {
+    "id": 14,
+    "type": "fill",
+    "title": "变量的作用域",
+    "content": "分析代码，预测运行结果，并选择正确的输出语句。",
+    "input": null,
+    "output": [
+      "函数内: 200",
+      "函数外: 100"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "x = 100"
+            },
+            {
+              "type": "code_line",
+              "value": "def test():"
+            },
+            {
+              "type": "code_inline",
+              "parts": [
+                {
+                  "type": "code",
+                  "value": "    x = "
+                },
+                {
+                  "type": "slot",
+                  "index": 0
+                }
+              ]
+            },
+            {
+              "type": "code_inline",
+              "parts": [
+                {
+                  "type": "code",
+                  "value": "    print(f\"函数内: {"
+                },
+                {
+                  "type": "slot",
+                  "index": 1
+                },
+                {
+                  "type": "code",
+                  "value": "}\")"
+                }
+              ]
+            },
+            {
+              "type": "code_block",
+              "lines": [
+                {
+                  "type": "code_line",
+                  "value": "test()"
+                },
+                {
+                  "type": "code_inline",
+                  "parts": [
+                    {
+                      "type": "code",
+                      "value": "print(f\"函数外: {"
+                    },
+                    {
+                      "type": "slot",
+                      "index": 2
+                    },
+                    {
+                      "type": "code",
+                      "value": "}\")"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "100",
+      "200",
+      "x",
+      "y",
+      "test",
+      "print(x)"
+    ],
+    "answer": [
+      1,
+      2,
+      2
+    ],
+    "explanation": "函数test()内部定义了一个局部变量x=200，打印的是这个局部x。函数外打印的是全局变量x，其值仍为100。两个x虽然同名，但在不同作用域，互不影响。",
+    "example": "这展示了局部变量（在函数内定义）会屏蔽同名的全局变量。"
+  },
+  {
+    "id": 15,
+    "type": "fill",
+    "title": "综合命名与拼接",
+    "content": "补全代码，让程序正确拼接并打印出完整的问候语。",
+    "input": null,
+    "output": [
+      "Hello, Python Learner!"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "greeting = \"Hello\""
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "target = "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "message = greeting + \", \" + "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " + \"!\""
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(message)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "Python",
+      "python",
+      "\"Python\"",
+      "\"Python Learner\"",
+      "target",
+      "greeting",
+      "\"target\"",
+      "\"greeting\""
+    ],
+    "answer": [
+      3,
+      4
+    ],
+    "explanation": "第二个变量target需要被赋值为字符串\"Python Learner\"。在拼接message时，需要引用变量target的值，所以应该直接写变量名target，而不是加引号。",
+    "example": "类似：a=\"Hi\"; b=\"You\"; msg = a + \" \" + b; print(msg) 输出 \"Hi You\"。"
+  }
+]

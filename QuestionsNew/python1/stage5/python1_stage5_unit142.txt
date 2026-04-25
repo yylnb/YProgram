@@ -1,0 +1,203 @@
+```plaintext
+{
+  'unit': '第142单元：序列化与 JSON',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': 'JSON 基本类型',
+      'content': 'JSON 支持以下哪几种基本类型？',
+      'options': {'A': '对象、数组、字符串、数值、布尔、null', 'B': '函数、类、模块', 'C': '二进制、日期', 'D': '仅字符串和数字'},
+      'answer': 'A',
+      'hints': ['提示1：JSON 是轻量数据交换格式', '提示2：没有函数或类', '提示3：null 表示空值'],
+      'explanation': 'JSON 支持对象（字典）、数组（列表）、字符串、数值、布尔和 null。',
+      'example': ''
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': 'Python 与 JSON',
+      'content': '在 Python 中将对象序列化为 JSON 常使用哪个模块？',
+      'options': {'A': 'json', 'B': 'pickle', 'C': 'marshal', 'D': 'xml'},
+      'answer': 'A',
+      'hints': ['提示1：json 是标准库', '提示2：pickle 是 Python 专用序列化', '提示3：json 更通用'],
+      'explanation': 'json 模块用于将 Python 对象与 JSON 字符串互相转换。',
+      'example': 'import json\njson.dumps({"a":1})'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': 'pickle 与 json 区别',
+      'content': '相对于 json，pickle 的优点或缺点是什么？',
+      'options': {'A': 'pickle 可序列化任意 Python 对象但不安全用于不可信数据', 'B': 'pickle 更安全', 'C': 'json 支持函数序列化', 'D': '二者等价'},
+      'answer': 'A',
+      'hints': ['提示1：pickle 能保存对象结构', '提示2：不要反序列化不可信的 pickle 数据', '提示3：json 可跨语言互操作'],
+      'explanation': 'pickle 可序列化复杂对象，但对安全性和跨语言兼容性有限。',
+      'example': ''
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '序列化到字符串（填空）',
+      'content': '将 Python 对象转换为 JSON 字符串使用 json.__1__().',
+      'input': '',
+      'output': '',
+      'code': 'import json\ns = json.__1__({"a":1})',
+      'options': 'dumps, dump, loads, load',
+      'answer': '1',
+      'explanation': 'json.dumps 将对象编码为 JSON 字符串，json.dump 写入文件。',
+      'example': ''
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '从字符串反序列化（填空）',
+      'content': '将 JSON 字符串解析为 Python 对象使用 json.__1__().',
+      'input': '',
+      'output': '',
+      'code': 'import json\nobj = json.__1__("{\"a\":1}")',
+      'options': 'loads, load, dump, dumps',
+      'answer': '1',
+      'explanation': 'json.loads 将 JSON 字符串解析为 Python 对象，json.load 从文件读取并解析。',
+      'example': ''
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '自定义序列化',
+      'content': '当对象不能直接被 JSON 序列化时，通常如何处理？',
+      'options': {'A': '提供 default 函数或先转换为可序列化类型', 'B': '直接跳过', 'C': '修改 json 模块源代码', 'D': '使用 eval'},
+      'answer': 'A',
+      'hints': ['提示1：json.dumps 支持 default 参数', '提示2：把对象转换为字典或基本类型', '提示3：也可实现 __json__ 方法'],
+      'explanation': '提供 default 回调或先将对象转换为基本类型是常见做法。',
+      'example': 'json.dumps(obj, default=lambda o: o.__dict__)'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '文件写入 JSON',
+      'content': '把对象写入文件可用哪个函数？',
+      'options': {'A': 'json.dump', 'B': 'json.dumps', 'C': 'open.write', 'D': 'pickle.dump'},
+      'answer': 'A',
+      'hints': ['提示1：json.dump 接受文件对象', '提示2：dumps 返回字符串', '提示3：常与 with 一起使用'],
+      'explanation': 'json.dump(obj, f) 把对象序列化并写入打开的文件对象。',
+      'example': 'with open("a.json","w") as f:\n    json.dump(obj, f)'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '编码细节',
+      'content': 'json.dumps 默认会如何处理非 ASCII 字符？',
+      'options': {'A': '会将其转义为 \uXXXX，除非 ensure_ascii=False', 'B': '总是保留原字符', 'C': '抛出异常', 'D': '删除这些字符'},
+      'answer': 'A',
+      'hints': ['提示1：ensure_ascii 控制输出', '提示2：默认行为是转义', '提示3：设置 ensure_ascii=False 可输出 UTF-8 文本'],
+      'explanation': '默认 ensure_ascii=True，会转义非 ASCII 字符；关闭该选项可输出原字符。',
+      'example': ''
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '排序键（填空）',
+      'content': 'json.dumps 支持通过 __1__ 参数对字典键进行排序，使输出稳定。',
+      'input': '',
+      'output': '',
+      'code': 'json.dumps(obj, __1__=True)',
+      'options': 'sort_keys, ensure_ascii, indent, separators',
+      'answer': '1',
+      'explanation': 'sort_keys=True 会使输出按键排序，便于比较和测试。',
+      'example': ''
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '美化输出（填空）',
+      'content': '为了可读性可以在 json.dumps 中使用 __1__ 参数设置缩进。',
+      'input': '',
+      'output': '',
+      'code': 's = json.dumps(obj, __1__=2)',
+      'options': 'indent, sort_keys, ensure_ascii, separators',
+      'answer': '1',
+      'explanation': 'indent 参数用于生成带缩进的可读 JSON 文本。',
+      'example': ''
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '流式解析',
+      'content': '当 JSON 数据非常大无法一次加载时，哪类工具或库适合流式解析？',
+      'options': {'A': 'iterparse 或 ijson 等流式解析库', 'B': 'json.loads 一次性解析', 'C': 'pickle', 'D': 'xml.etree'},
+      'answer': 'A',
+      'hints': ['提示1：流式解析按需读取', '提示2：适合大文件', '提示3：ijson 提供迭代式解析'],
+      'explanation': '流式解析库可逐步解析大型 JSON，降低内存占用。',
+      'example': ''
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': 'JSON 安全',
+      'content': '解析不可信 JSON 数据时应注意什么？',
+      'options': {'A': 'json 本身较安全，但不要用 eval 解析', 'B': 'json.loads 会执行任意代码', 'C': '必须使用 pickle', 'D': '先使用 exec 处理'},
+      'answer': 'A',
+      'hints': ['提示1：不要用 eval 反序列化', '提示2：json.loads 仅解析数据结构', '提示3：关注字段验证'],
+      'explanation': 'json.loads 不会执行代码，但仍需对字段进行验证以防止业务逻辑问题。',
+      'example': ''
+    },
+
+    {
+      'id': 13,
+      'type': 'fill',
+      'title': '定制对象序列化（填空）',
+      'content': '在 json.dumps 中自定义序列化函数的参数名为 __1__。',
+      'input': '',
+      'output': '',
+      'code': 'json.dumps(obj, __1__=lambda o: o.__dict__)',
+      'options': 'default, indent, sort_keys, ensure_ascii',
+      'answer': '1',
+      'explanation': 'default 参数用于指定无法序列化对象的转换方法。',
+      'example': ''
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '跨语言互操作（填空）',
+      'content': 'JSON 的优势之一是 __1__，便于不同语言之间交换数据。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': '可读且通用, 快速, 二进制, 专有',
+      'answer': '1',
+      'explanation': 'JSON 是一种通用的文本格式，便于跨语言和跨平台的数据交换。',
+      'example': ''
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '总结（填空）',
+      'content': '使用 json 进行序列化适合 __1__ 数据交换；遇到复杂对象可用 __2__ 自定义处理。',
+      'input': '',
+      'output': '',
+      'code': '',
+      'options': '文本型, 二进制, default, pickle',
+      'answer': '1,3',
+      'explanation': 'JSON 适合文本型数据交换，default 回调可用于自定义复杂对象序列化。',
+      'example': ''
+    }
+
+  ]
+}
+
+```

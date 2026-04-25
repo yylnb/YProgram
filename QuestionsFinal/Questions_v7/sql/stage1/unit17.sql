@@ -1,0 +1,183 @@
+-- Generated SQL for global_unit=17 (stage=1 unit_local=17 unit_id=17)
+INSERT INTO `que_choice_py_1` (`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`) VALUES
+
+(
+  241,
+  17,
+  '侦探的第一次搜寻',
+  '侦探阿强在字符串''Hello, Python!''中寻找字母''y''的藏身之处。他应该使用哪行代码？',
+  '["find(''y'', ''Hello, Python!'')", "''Hello, Python!''.find(''y'')", "''Hello, Python!''.find(y)", "find(''Hello, Python!'', ''y'')"]',
+  2,
+  '["字符串方法应该怎么调用？是直接`find(...)`吗？", "`find`是字符串对象的方法，格式是`字符串.find(...)`。", "被查找的字符或子串需要用引号包裹，否则会被当作变量名。"]',
+  '`find`是字符串方法，调用格式为`字符串.find(子串)`。选项A和D将字符串和子串都作为参数传给了`find`函数，但`find`并非独立函数。选项C中的`y`没有引号，会被当作变量，而非要查找的字符''y''。',
+  '例如在`''apple''.find(''p'')`中，返回的是第一个''p''的位置1。'
+),
+(
+  242,
+  17,
+  '吃货程序猿改菜单',
+  '程序猿小明的午餐订单字符串是`order = ''辣子鸡丁''`。他想把''鸡丁''换成''虾球''，于是写了`order.replace(''鸡丁'', ''虾球'')`。请问现在`order`的值是什么？',
+  '["''辣子鸡丁''", "''辣子虾球''", "辣子虾球", "代码报错"]',
+  1,
+  '["字符串在Python中是什么样的存在？能被轻易改变吗？", "`replace`方法执行后，是直接修改了原字符串，还是返回了一个新的字符串？", "小明只调用了方法，但没有把返回的结果存起来或打印出来。"]',
+  '字符串在Python中是不可变对象。`replace`方法不会修改原字符串，而是返回一个替换后的新字符串。小明没有将这个新字符串赋值给`order`或进行其他操作，所以原字符串`order`的值保持不变。',
+  '正确做法是：`order = order.replace(''鸡丁'', ''虾球'')`，这样`order`才会变成''辣子虾球''。'
+),
+(
+  243,
+  17,
+  '捉迷藏冠军的得分',
+  '字符串`''I am the champion''`中，子串`''win''`明明不存在。如果用`find`方法去寻找它，会得到什么？',
+  '["抛出ValueError异常", "返回字符串的长度", "返回一个随机位置", "返回-1"]',
+  4,
+  '["`find`方法的主要任务是什么？找到和找不到时分别要怎么做？", "想想看，如果一个索引不可能是负数，用什么值来表示“没找到”最安全？", "这是`find`方法的一个约定俗成的规则。"]',
+  '`find`方法在字符串中查找子串，如果找不到，不会报错，而是会返回一个特殊值`-1`。这是因为正常的查找结果（索引）都是非负整数，用`-1`可以明确表示“未找到”的状态。',
+  '`''Python''.find(''java'')`的结果也是-1，因为''java''不在''Python''里。'
+),
+(
+  246,
+  17,
+  '歌词里的第二个‘爱’',
+  '歌词`lyric = ''我爱你，你爱我，甜蜜蜜''`。如果想找到第二个‘爱’字的位置（跳过‘我爱你’里的那个），`find`方法该怎么写？',
+  '["lyric.find(''爱'')", "lyric.find(''爱'', 2)", "lyric.find(''爱'', 3)", "lyric.find(''爱'', lyric.find(''爱'')+1)"]',
+  3,
+  '["第一个‘爱’在索引几的位置？（字符串索引从0开始）", "`find`方法可以接收第二个参数`start`，表示从哪个索引开始向后查找。", "要跳过第一个，就应该从它之后的位置开始找。第一个‘爱’在索引1，之后是索引2，但从索引2开始的字符是‘你’，不对，所以应该是索引3。"]',
+  '第一个‘爱’在索引1。`find`方法的第二个参数`start`指定开始查找的索引。要找到第二个，就需要从第一个‘爱’之后开始，即索引2。但从索引2开始的子串是‘你，你爱我...’，第一个字符是‘你’，不是‘爱’。我们需要从‘我爱你’这个子串之后开始，即索引3（‘，’的位置）开始查找，才能正确找到第二个‘爱’（索引5）。',
+  '`''abca''.find(''a'', 1)`会从索引1（''b''）开始找，找到后面那个''a''，返回索引3。'
+),
+(
+  247,
+  17,
+  '限制次数的涂改',
+  '句子`s = ''ooooops''`里有太多字母''o''了。如果只想把前两个''o''替换成''0''，`replace`方法该用哪个参数？',
+  '["s.replace(''o'', ''0'')", "s.replace(''o'', ''0'', 1)", "s.replace(''o'', ''0'', 2)", "s.replace(''o'', ''0'', -1)"]',
+  3,
+  '["`replace`除了`old`和`new`，还有第三个可选参数。", "这个参数是用来控制什么的？替换所有，还是替换指定次数？", "想替换前两个，次数应该填几？"]',
+  '`replace`方法的完整形式是`replace(old, new, count)`，其中`count`参数指定替换的最大次数（默认是-1，替换所有）。想把前两个''o''替换掉，就需要设置`count=2`。',
+  '`''aaaa''.replace(''a'', ''b'', 2)`会把前两个''a''换成''b''，得到''bbaa''。'
+),
+(
+  248,
+  17,
+  '聊天记录脱敏',
+  '有一句聊天记录`msg = ''我的电话是13800138000，记住了！''`。为了隐私安全，需要先找到电话号码的起始位置，然后把所有数字''8''替换成''*''。下面哪段代码能实现这个效果？',
+  '["msg.find(''138'').replace(''8'', ''*'')", "msg.replace(''8'', ''*'').find(''138'')", "pos = msg.find(''138''); new_msg = msg[pos:].replace(''8'', ''*'')", "pos = msg.find(''138''); new_msg = msg.replace(''8'', ''*'')"]',
+  4,
+  '["仔细读题，目标是替换‘所有’数字8，还是只替换电话号码里的8？", "`find`和`replace`都是字符串方法，但它们能直接连起来用吗？比如`A.find().replace()`？", "选项C只替换了从电话号码开始往后部分的‘8’，但题目要求是替换整句话里的所有‘8’。"]',
+  '题目要求替换字符串中‘所有’的数字‘8’。`find(''138'')`只是为了确认电话号码的存在（或找到其位置），但最终的替换操作`replace(''8'', ''*'')`是针对整个原字符串`msg`进行的，与`find`的结果位置无关。选项A试图对`find`返回的整数调用`replace`，会报错。选项B顺序不对，先替换再找位置，意义不同。选项C只替换了子串，不符合‘所有’的要求。',
+  '`''a8b8c''.replace(''8'', ''#'')`会替换所有的‘8’，得到''a#b#c''，与`find`无关。'
+),
+(
+  251,
+  17,
+  '空白格清理大师',
+  '如何用`replace`方法，快速清除字符串`s = ''P y t h o n''`中所有的空格？',
+  '["s.replace('' '', '''')", "s.replace('''', '' '')", "s.replace('' P'', ''P'')", "s.replace('' '', None)"]',
+  1,
+  '["目标是‘清除’空格，也就是把空格变成什么？", "`replace`方法的新字符串参数，如果想表示‘空’，应该怎么写？", "两个单引号中间什么都不写，就表示空字符串。"]',
+  '`replace(old, new)`方法中，`new`参数是要替换成的字符串。想删除空格，就是把空格`'' ''`替换成空字符串`''''`。选项B是把空串换成空格，会出错。选项C只能处理第一个空格和P的组合。选项D的`None`不是字符串，会报错。',
+  '`''a b c''.replace('' '', '''')`会得到''abc''，删除了所有空格。'
+),
+(
+  252,
+  17,
+  '找出所有的“哈哈”',
+  '在一条大笑的评论`comment = ''哈哈，太好笑了哈哈哈哈哈！''`中，如果想用循环找出所有‘哈哈’出现的位置，循环内的查找起点应该如何更新？',
+  '["start = comment.find(''哈哈'')", "start = comment.find(''哈哈'', start)", "start = comment.find(''哈哈'', start + 1)", "start = comment.find(''哈哈'', start + len(''哈哈''))"]',
+  4,
+  '["如果第二次查找还从同一个`start`开始，会找到同一个位置吗？", "为了避免重复找到同一个‘哈哈’，下次查找应该从这次找到的位置之后开始。", "是之后1位，还是之后整个‘哈哈’的长度那么多位？"]',
+  '为了找到所有不重叠的‘哈哈’，每次找到后，下一次查找的起始位置`start`应该设置为当前找到位置加上子串‘哈哈’的长度（2）。这样就能跳过当前找到的这个‘哈哈’，从它后面开始继续寻找。选项C只加1，如果‘哈哈’连续出现（如‘哈哈哈’），会导致找到重叠的子串。',
+  '在`''ababa''.find(''aba'')`返回0后，下次查找从`0+len(''aba'')=3`开始，才能找到第二个不重叠的''aba''（索引2？这里其实没有不重叠的第二个）。正确案例：`''xxabcxx''.find(''xx'')`返回0，下次从2开始找，找到索引5。'
+),
+(
+  253,
+  17,
+  '不分大小写的替换',
+  '字符串`txt = ''Python is pythonic.''`。如果想不区分大小写，把所有形式的‘python’（包括Python）都替换成‘Java’，下面哪个做法是可行的？',
+  '["txt.replace(''python'', ''Java'')", "txt.replace(''Python'', ''Java'').replace(''python'', ''Java'')", "txt.lower().replace(''python'', ''java'')", "使用正则表达式，而不是简单的replace"]',
+  2,
+  '["直接`replace(''python'', ''Java'')`能替换首字母大写的‘Python’吗？", "选项C把整个字符串都转小写了，替换后的结果也会全是小写，这符合要求吗？", "题目要求只替换单词，不改变其他部分的大小写。"]',
+  '`replace`是大小写敏感的。`''Python''`和`''python''`是不同的字符串。选项A只能替换小写的‘python’。选项C先将整个字符串小写，破坏了原句其他单词（如‘is’）的大小写，且替换后整体变成小写。选项B通过链式调用，分别替换首字母大写和全小写两种形式，能基本实现需求（尽管无法处理全大写PYTHON）。对于更复杂的大小写不敏感替换，确实需要正则表达式（选项D描述的情况），但B在当前语境下是相对可行的。',
+  '`''Hello HELLO''.replace(''Hello'', ''Hi'').replace(''HELLO'', ''Hi'')`得到''Hi Hi''。'
+);
+
+INSERT INTO `que_fill_py_1` (`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`) VALUES
+
+(
+  244,
+  17,
+  '错别字修正器',
+  '小美的作文里把‘努力’写成了‘怒力’，快来帮她用代码自动修正这个错别字吧！',
+  NULL,
+  '["我要努力学习Python！"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "essay = ''我要怒力学习Python！''"}, {"type": "code_line", "value": "corrected_essay = essay.replace("}, {"type": "code_line", "value": "print(corrected_essay)"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "    ''"}, {"type": "slot", "index": 0}, {"type": "code", "value": "'', ''"}, {"type": "slot", "index": 1}, {"type": "code", "value": "''"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": ")"}]}]}',
+  '["怒力", "努力", "Python", "！", "我要", "学习"]',
+  '[1, 2]',
+  '`replace(old, new)`方法需要两个参数：要被替换的旧子串`''怒力''`和用来替换的新子串`''努力''`。调用后生成新字符串并打印。',
+  '`''abc''.replace(''a'', ''A'')`会把字符串中的''a''都换成''A''，得到''Abc''。'
+),
+(
+  245,
+  17,
+  '藏宝图坐标提取',
+  '根据线索‘宝物藏在`X123Y456`的第4到第6个字符之间’，请写出代码提取出坐标‘123’。',
+  NULL,
+  '["123"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "clue = ''X123Y456''"}, {"type": "code_line", "value": "start_index = clue.find(''"}, {"type": "slot", "index": 0}, {"type": "code", "value": "'')"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "if start_index != -1:"}, {"type": "code", "value": "\\n    coordinate = clue["}, {"type": "slot", "index": 1}, {"type": "code", "value": ":"}, {"type": "slot", "index": 2}, {"type": "code", "value": "]"}, {"type": "code", "value": "\\n    print(coordinate)"}]}]}',
+  '["X", "Y", "1", "2", "start_index", "start_index + 1", "start_index + 3", "start_index + 4", "6", "clue.find(''Y'')"]',
+  '[1, 6, 10]',
+  '首先用`find(''X'')`找到''X''的位置（索引0）。坐标‘123’是从''X''之后（索引1）开始，到''Y''之前结束。所以切片起点是`start_index + 1`，终点是找到''Y''的位置`clue.find(''Y'')`。',
+  '在`''Hello''`中，`''Hello''.find(''l'')`返回2，要提取''ll''可以用切片`[2:4]`，即`[find结果 : find结果+2]`。'
+),
+(
+  249,
+  17,
+  '和谐聊天过滤器',
+  '构建一个简单的敏感词过滤器，将输入句子中的‘吵架’和‘打架’都替换成‘讨论’。',
+  '["我们不要吵架，更不要打架。"]',
+  '["我们不要讨论，更不要讨论。"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "text = input()"}, {"type": "code_line", "value": "text = text.replace("}, {"type": "slot", "index": 0}, {"type": "code", "value": ")"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "text = text.replace("}, {"type": "slot", "index": 1}, {"type": "code", "value": ")"}, {"type": "code", "value": "\\nprint(text)"}]}]}',
+  '["''吵架''", "''打架''", "''讨论''", "''吵架'', ''讨论''", "''打架'', ''讨论''", "text"]',
+  '[4, 5]',
+  '需要对同一个字符串变量依次调用两次`replace`方法。第一次将‘吵架’替换为‘讨论’，第二次将‘打架’替换为‘讨论’。每次调用都更新`text`变量。',
+  '类似地，`s = s.replace(''a'',''A'').replace(''b'',''B'')`可以连续替换多种字符。'
+),
+(
+  250,
+  17,
+  '网址协议提取器',
+  '从一个网址中，提取出‘://’之前的部分，也就是协议类型（如http, https）。',
+  NULL,
+  '["https"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "url = ''https://www.example.com''"}, {"type": "code_line", "value": "separator = "}, {"type": "slot", "index": 0}, {"type": "code", "value": ""}, {"type": "code", "value": "\\nidx = url.find(separator)"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "if idx != -1:"}, {"type": "code", "value": "\\n    protocol = url["}, {"type": "slot", "index": 1}, {"type": "code", "value": ":"}, {"type": "slot", "index": 2}, {"type": "code", "value": "]"}, {"type": "code", "value": "\\n    print(protocol)"}, {"type": "code", "value": "\\nelse:"}, {"type": "code", "value": "\\n    print(''未找到协议分隔符'')"}]}]}',
+  '["://", "''://''", "0", "idx", "idx-1", "idx+1", "idx+3", "-1"]',
+  '[2, 1, 4]',
+  '首先定义分隔符`''://''`并用`find`找到其位置`idx`。要提取它前面的部分，切片应从开头`0`开始，到分隔符的位置`idx`结束（不包含`idx`本身）。',
+  '在`''name: John''`中，`idx = find('':'')`为4，提取名字用`[0:4]`，得到''name''。'
+),
+(
+  254,
+  17,
+  '安全检查：包含关键协议',
+  '写一段代码检查一个网址是否包含安全协议‘https’。如果包含，则输出‘安全’；否则输出‘不安全’。',
+  '["http://example.com"]',
+  '["不安全"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "url = input()"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "if url."}, {"type": "slot", "index": 0}, {"type": "code", "value": "("}, {"type": "slot", "index": 1}, {"type": "code", "value": ") "}, {"type": "slot", "index": 2}, {"type": "code", "value": " -1:"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "    print(''安全'')"}, {"type": "code_line", "value": "else:"}, {"type": "code_line", "value": "    print(''不安全'')"}]}]}',
+  '["find", "replace", "''https''", "\\\"https\\\"", ">", "<", ">=", "<=", "!=", "=="]',
+  '[1, 3, 5]',
+  '使用`find`方法查找子串`''https''`。如果找到了，返回的是索引（>=0）；如果没找到，返回-1。因此判断条件是`find`的结果`!= -1`（即结果不等于-1）。',
+  '检查`''abc''`是否包含`''b''`：`if ''abc''.find(''b'') != -1: print(''包含'')`。'
+),
+(
+  255,
+  17,
+  '下划线转驼峰',
+  '有一份旧数据，里面所有用下划线`_`连接的多词名称（如`first_name`）都需要改成驼峰式（如`firstName`）。请补全代码。',
+  NULL,
+  '["firstName", "lastName", "userId"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "old_names = [''first_name'', ''last_name'', ''user_id'']"}, {"type": "code_line", "value": "new_names = []"}, {"type": "code_line", "value": "for name in old_names:"}, {"type": "code_line", "value": "    while "}, {"type": "slot", "index": 0}, {"type": "code", "value": " != -1:"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "        idx = name.find(''_'')"}, {"type": "code", "value": "\\n        if idx + 1 < len(name):"}, {"type": "code", "value": "\\n            # 将下划线后的字符大写，并移除下划线"}, {"type": "code", "value": "\\n            next_char = name[idx + 1]"}, {"type": "code", "value": "\\n            name = name[:"}, {"type": "slot", "index": 1}, {"type": "code", "value": "] + "}, {"type": "slot", "index": 2}, {"type": "code", "value": ".upper() + name["}, {"type": "slot", "index": 3}, {"type": "code", "value": ":]"}, {"type": "code", "value": "\\n    new_names.append(name)"}, {"type": "code", "value": "\\nprint(new_names)"}]}]}',
+  '["name.find(''_'')", "idx", "idx+2", "name", "next_char", "next_char.upper()", "idx+1", "idx-1"]',
+  '[1, 2, 6, 7]',
+  '这是一个循环处理多个下划线的逻辑。`while`条件检查是否还有下划线。找到下划线位置`idx`后，构造新字符串：取下划线前的部分`[:idx]`，加上下划线后字符的大写形式`next_char.upper()`，再加上剩下的部分`[idx+2:]`（因为跳过了下划线`_`和它后面的原字符`next_char`，共两个字符）。',
+  '处理`''a_b_c''`：第一次循环`idx=1`，`name`变成`''aB_c''`；第二次循环`idx=2`（‘B’的位置？注意此时字符串已变），实际会找到''c''前面的下划线，`name`最终变成`''aBC''`。'
+);

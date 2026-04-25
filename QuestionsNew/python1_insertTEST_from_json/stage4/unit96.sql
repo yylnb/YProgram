@@ -1,0 +1,212 @@
+USE `questions`;
+-- Unit 96 | Start ID: 1426
+-- Generated at 2025-12-25 17:41:14
+
+INSERT INTO `que_choice_py_1`
+(`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`)
+VALUES (
+    1426,
+    96,
+    '索引赋值',
+    '把列表中索引为 0 的元素设为 5 应使用哪条语句？',
+    JSON_OBJECT('A', 'lst[0] = 5', 'B', 'lst.set(0,5)', 'C', 'lst.add(0,5)', 'D', 'replace(lst,0,5)'),
+    1,
+    JSON_ARRAY('提示1：列表支持用索引直接赋值。', '提示2：Python 列表没有 set 方法。', '提示3：直接用方括号索引并赋值。'),
+    '通过索引直接赋值（lst[0]=5）可就地修改列表元素。',
+    'lst = [1,2]; lst[0] = 5  # 结果 [5,2]'
+);
+INSERT INTO `que_choice_py_1`
+(`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`)
+VALUES (
+    1427,
+    96,
+    '切片赋值',
+    '用切片赋值替换一段可以改变列表长度吗？',
+    JSON_OBJECT('A', '可以，切片赋值可插入或删除元素', 'B', '不可以，切片仅替换且长度固定', 'C', '会抛出异常', 'D', '只能替换为同长度序列'),
+    1,
+    JSON_ARRAY('提示1：切片赋值可以用不同长度的序列替换', '提示2：切片赋值会影响原列表长度', '提示3：例如 lst[1:2] = [9,9] 会扩展列表'),
+    '切片赋值可以把一段替换为任意长度的序列，从而改变列表长度。',
+    'a=[1,2,3]; a[1:2]=[9,9]  # 结果 [1,9,9,3]'
+);
+INSERT INTO `que_choice_py_1`
+(`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`)
+VALUES (
+    1428,
+    96,
+    '就地修改返回值',
+    '像 lst.sort() 或 lst.append(x) 这种就地修改列表的方法通常返回什么？',
+    JSON_OBJECT('A', 'None', 'B', '新列表', 'C', '被修改的元素', 'D', '布尔值'),
+    1,
+    JSON_ARRAY('提示1：Python 里很多就地操作返回 None', '提示2：这样可避免混淆是就地修改还是返回副本', '提示3：例如 lst.sort() 返回 None，而 sorted(lst) 返回新列表'),
+    '就地修改方法通常返回 None，明确区分就地修改和返回新对象的操作。',
+    'lst = [3,1]; lst.sort(); print(lst)  # [1,3]'
+);
+INSERT INTO `que_fill_py_1`
+(`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`)
+VALUES (
+    1429,
+    96,
+    '替换元素（填空）',
+    '将输入列表的第一个元素改为 0 并打印结果。',
+    JSON_ARRAY('1 2 3'),
+    JSON_ARRAY('0 2 3'),
+    '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "lst = list(map(int, input().split()))"}]}, {"type": "code_inline", "parts": [{"type": "slot", "index": 0}, {"type": "code", "value": ""}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "print(*lst)"}]}]}',
+    JSON_ARRAY('lst[0]=0', 'lst.set(0,0)', 'lst.replace(0,0)', 'lst[0].set(0)'),
+    JSON_ARRAY(1),
+    '使用索引赋值 lst[0]=0 即可修改第一个元素。',
+    'lst = [5,6]; lst[0]=0  # [0,6]'
+);
+INSERT INTO `que_fill_py_1`
+(`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`)
+VALUES (
+    1430,
+    96,
+    '切片插入（填空）',
+    '用切片在索引 1 处插入两个元素 9 和 9。',
+    JSON_ARRAY('1 2 3'),
+    JSON_ARRAY('1 9 9 2 3'),
+    '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "lst = list(map(int, input().split()))"}]}, {"type": "code_inline", "parts": [{"type": "slot", "index": 0}, {"type": "code", "value": ""}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "print(*lst)"}]}]}',
+    JSON_ARRAY('lst[1:1]=[9,9]', 'lst.insert(1,[9,9])', 'lst.extend([9,9])', 'lst[1]=[9,9]'),
+    JSON_ARRAY(1),
+    '切片赋值 lst[1:1]=[9,9] 在索引 1 前插入两个元素。',
+    'a=[1,2]; a[1:1]=[9,9]  # [1,9,9,2]'
+);
+INSERT INTO `que_choice_py_1`
+(`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`)
+VALUES (
+    1431,
+    96,
+    '原地替换 vs 新对象',
+    '如果想保持原列表对象的引用不变，应使用下列哪类操作？',
+    JSON_OBJECT('A', '对原列表进行就地修改（如索引赋值/切片赋值）', 'B', '使用 + 生成新列表并赋值给同名变量', 'C', '用 tuple 替换', 'D', '重新创建新的列表对象并返回'),
+    1,
+    JSON_ARRAY('提示1：就地修改不会改变对象 id', '提示2：使用 + 会产生新对象', '提示3：有时需要就地修改以让别处引用看到变化'),
+    '就地修改会保留对象引用，适用于需要其他持有该引用的代码看到变化的情形。',
+    'a = []; b = a; a.append(1); print(b)  # [1]'
+);
+INSERT INTO `que_choice_py_1`
+(`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`)
+VALUES (
+    1432,
+    96,
+    'replace 列表方法',
+    '下面哪项不是列表的内置方法？',
+    JSON_OBJECT('A', 'replace', 'B', 'append', 'C', 'insert', 'D', 'pop'),
+    1,
+    JSON_ARRAY('提示1：replace 是字符串方法', '提示2：列表有 append/insert/pop 等方法', '提示3：若要替换元素需用索引赋值或切片'),
+    '列表没有 replace 方法，这是字符串的操作；列表替换用索引或切片。',
+    's.replace("a","b") 是字符串替换示例'
+);
+INSERT INTO `que_choice_py_1`
+(`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`)
+VALUES (
+    1433,
+    96,
+    '全切片赋值',
+    '把整个列表替换为另一个序列可用哪个语法？',
+    JSON_OBJECT('A', 'lst[:] = other', 'B', 'lst = other', 'C', 'lst.replace(other)', 'D', 'lst.update(other)'),
+    1,
+    JSON_ARRAY('提示1：lst = other 会改变引用', '提示2：lst[:] = other 就地替换保留对象 id', '提示3：replace/update 不是列表通用方法'),
+    '使用 lst[:] = other 会在就地替换所有元素，从而保持原对象引用。',
+    'a=[1,2]; b=a; a[:] = [9]; print(b)  # [9]'
+);
+INSERT INTO `que_fill_py_1`
+(`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`)
+VALUES (
+    1434,
+    96,
+    '就地替换演示（填空）',
+    '把列表内容替换为 [0] 并打印被其他变量引用时的变化。',
+    JSON_ARRAY('1 2'),
+    JSON_ARRAY('[0] [0]'),
+    '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "a = list(map(int, input().split()))"}, {"type": "code_line", "value": "b = a"}, {"type": "code_line", "value": "a[:] = [0]"}, {"type": "code_line", "value": "print(a, b)"}]}]}',
+    JSON_ARRAY('a[:]=[0]', 'a=[0]', 'a.replace([0])', 'a.clear(); a.append(0)'),
+    JSON_ARRAY(1),
+    'a[:] = [0] 就地替换会让 b（引用相同对象）也看到变化。',
+    'lst[:] = [x]'
+);
+INSERT INTO `que_fill_py_1`
+(`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`)
+VALUES (
+    1435,
+    96,
+    '原位修改 vs 重新赋值（填空）',
+    '比较 a = b 和 a[:] = b 的不同（填入合适语句并打印 id）。',
+    JSON_ARRAY('1 2
+3 4'),
+    JSON_ARRAY('(two ids, first equals second), (same ids)'),
+    '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "a = list(map(int, input().split()))"}, {"type": "code_line", "value": "b = list(map(int, input().split()))"}, {"type": "code_line", "value": "old_id = id(a)"}, {"type": "code_line", "value": "a = b"}, {"type": "code_line", "value": "print(old_id == id(a))"}, {"type": "code_line", "value": "# 重新开始"}, {"type": "code_line", "value": "a = list(map(int, input().split()))"}, {"type": "code_line", "value": "b = list(map(int, input().split()))"}, {"type": "code_line", "value": "old_id = id(a)"}, {"type": "code_line", "value": "a[:] = b"}, {"type": "code_line", "value": "print(old_id == id(a))"}]}]}',
+    JSON_ARRAY('True', 'False', 'Depends', 'Error'),
+    JSON_ARRAY(2, 1),
+    'a = b 会让 a 指向新的对象（id 变化），而 a[:] = b 就地替换保持原 id。',
+    '使用 id() 可观察对象是否为同一引用'
+);
+INSERT INTO `que_choice_py_1`
+(`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`)
+VALUES (
+    1436,
+    96,
+    '可变元素的修改',
+    '列表中包含可变对象（如子列表），对该子列表修改会如何？',
+    JSON_OBJECT('A', '改变会反映在外层列表的对应元素上', 'B', '不会影响外层列表', 'C', '会报错', 'D', '会创建新子列表并替换原有'),
+    1,
+    JSON_ARRAY('提示1：列表引用其元素对象', '提示2：修改子列表会影响所有引用到该对象的位置', '提示3：要避免这一点可使用深拷贝'),
+    '列表元素是对对象的引用，修改可变元素会对所有持有该引用的地方可见。',
+    'a=[[1]]; b=a; a[0].append(2); print(b)  # [[1,2]]'
+);
+INSERT INTO `que_choice_py_1`
+(`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`)
+VALUES (
+    1437,
+    96,
+    '批量更新',
+    '要把列表中满足条件的元素批量修改，推荐的做法是？',
+    JSON_OBJECT('A', '使用列表推导或循环并就地赋值', 'B', '多次调用 replace', 'C', '用字符串方法', 'D', '不可实现'),
+    1,
+    JSON_ARRAY('提示1：列表推导可生成新列表', '提示2：循环可就地修改特定索引', '提示3：字符串方法与列表元素类型不匹配'),
+    '可用列表推导生成新列表或在循环中对满足条件的索引进行就地赋值，二者都是常用并清晰的做法。',
+    'lst = [x*2 if x>0 else x for x in lst]'
+);
+INSERT INTO `que_choice_py_1`
+(`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`)
+VALUES (
+    1438,
+    96,
+    '不可变元素替换',
+    '对不可变元素（如整数）赋新值是怎样的？',
+    JSON_OBJECT('A', '替换相应位置的引用为新对象', 'B', '修改原对象', 'C', '抛出异常', 'D', '不允许'),
+    1,
+    JSON_ARRAY('提示1：整数是不可变的，赋值会绑定新对象到索引位置', '提示2：原整数对象保持不变', '提示3：赋值是引用替换行为'),
+    '对不可变类型赋新值会让列表索引处的引用指向新的对象，不会修改原对象。',
+    'lst[0] = 10'
+);
+INSERT INTO `que_fill_py_1`
+(`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`)
+VALUES (
+    1439,
+    96,
+    '条件修改（填空）',
+    '把列表中所有负数替换为 0 并打印结果。',
+    JSON_ARRAY('-1 2 -3 4'),
+    JSON_ARRAY('0 2 0 4'),
+    '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "lst = list(map(int, input().split()))"}, {"type": "code_line", "value": "for i in range(len(lst)):"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "    if "}, {"type": "slot", "index": 0}, {"type": "code", "value": ":"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "        lst[i] = 0"}, {"type": "code_line", "value": "print(*lst)"}]}]}',
+    JSON_ARRAY('lst[i]<0', 'lst[i]>0', 'lst[i]==0', 'lst[i]!=0'),
+    JSON_ARRAY(1),
+    '判断元素是否小于 0，然后就地赋值为 0 即可。',
+    'for i in range(len(a)): if a[i]<0: a[i]=0'
+);
+INSERT INTO `que_fill_py_1`
+(`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`)
+VALUES (
+    1440,
+    96,
+    '索引替换多项（填空）',
+    '把索引 1 到 3 的元素替换为 9 并打印。',
+    JSON_ARRAY('1 2 3 4 5'),
+    JSON_ARRAY('1 9 9 9 5'),
+    '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "lst = list(map(int, input().split()))"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "lst[1:4] = "}, {"type": "slot", "index": 0}, {"type": "code", "value": ""}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "print(*lst)"}]}]}',
+    JSON_ARRAY('[9,9,9]', '[9]*3', '[9]', '9'),
+    JSON_ARRAY(1, 2),
+    '可以使用具体列表 [9,9,9] 或者 [9]*3 来生成三个 9 的序列进行切片赋值。',
+    'a[1:4] = [0]*3'
+);

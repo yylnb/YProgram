@@ -1,0 +1,201 @@
+```plaintext
+{
+  'unit': '第30单元：阶段总复习（21–29 单元）',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '复习：规则优先级',
+      'content': '当多个分类规则同时匹配时应优先？',
+      'options': {'A':'更具体或更严格的规则','B':'随机一个规则','C':'总是最后一个规则','D':'删除规则'},
+      'answer': 'A',
+      'hints': ['具体优先以避免被宽泛规则覆盖'],
+      'explanation': '优先更具体或更严格的规则可以保证预期分类结果。',
+      'example': '先判断特殊 case 再判断一般 case'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '复习：登录安全',
+      'content': '登录流程中不应在响应中返回？',
+      'options': {'A':'明文密码','B':'session token','C':'用户 id','D':'登录时间'},
+      'answer': 'A',
+      'hints': ['敏感信息勿回传'],
+      'explanation': '明文密码绝对不应返回或存储于响应中。',
+      'example': '返回 token 而不是密码'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '复习：区间判断',
+      'content': '链式比较 a < x <= b 等价于？',
+      'options': {'A':'a < x and x <= b','B':'a < x or x <= b','C':'(a<x)<=b','D':'a<=x<=b'},
+      'answer': 'A',
+      'hints': ['链式比较由 and 连接'],
+      'explanation': '链式比较等价于并列比较的 and 组合。',
+      'example': 'if 0<x<=10: ...'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '复习：异常处理模板',
+      'content': '补全：捕获并记录 ValueError。',
+      'input': '',
+      'output': '',
+      'code': 'try:\n    x = int(input())\nexcept ValueError as e:\n    print("invalid")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '捕获特定异常并作出友好提示是良好实践。',
+      'example': 'except KeyError: ...'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '复习：映射表用法',
+      'content': '补全：用 dict 选择处理函数。',
+      'input': 'cmd="a"',
+      'output': 'A',
+      'code': 'fmap = {"a": lambda: print("A"), "b": lambda: print("B")}\nfmap.get(cmd, lambda: print("invalid"))()',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '使用字典将命令映射到行为是替代长分支的常用方法。',
+      'example': 'actions[opt]()'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '复习：日志与隐私',
+      'content': '记录异常时应避免记录？',
+      'options': {'A':'敏感用户数据','B':'错误栈信息','C':'错误时间','D':'错误上下文摘要'},
+      'answer': 'A',
+      'hints': ['保护用户隐私','记录有用而非敏感信息'],
+      'explanation': '日志应避免记录敏感信息但保留足够上下文便于排查。',
+      'example': 'log.info("action failed for uid=%s", mask(uid))'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '复习：短路求值',
+      'content': '表达式 a and b or c 的风险是什么？',
+      'options': {'A':'当 b 为假的非布尔值时结果可能异常','B':'总是安全','C':'没有短路','D':'不可运行'},
+      'answer': 'A',
+      'hints': ['and/or 返回实际操作数','谨慎使用复合简写'],
+      'explanation': '复合简写在 b 为假但非布尔值时可能导致不预期的返回值，建议用括号或三元表达式。',
+      'example': '用 (a and b) or c 时注意 b 的类型'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '复习：菜单循环',
+      'content': '实现循环菜单时应确保？',
+      'options': {'A':'提供退出并校验输入','B':'无限循环无退出','C':'每次都重启程序','D':'不处理异常'},
+      'answer': 'A',
+      'hints': ['用户体验与健壮性并重'],
+      'explanation': '循环菜单应允许退出并处理无效输入以提升稳定性。',
+      'example': 'while True: ch=input(); if ch=="q": break'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '复习：三元表达式',
+      'content': '补全：用三元表达式返回最大值。',
+      'input': 'a=3 b=5',
+      'output': '5',
+      'code': 'a = int(input())\nb = int(input())\nprint(a if a>=b else b)',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '三元表达式可用于简单条件的返回值选择。',
+      'example': 'res = x if cond else y'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '复习：白名单校验',
+      'content': '补全：只接受 "yes" 或 "no"。',
+      'input': 's=yes',
+      'output': 'accepted',
+      'code': 's = input().strip()\nif s in ("yes","no"):\n    print("accepted")\nelse:\n    print("rejected")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '白名单可以有效控制输入范围。',
+      'example': 'if choice in options: ...'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '复习：重构策略',
+      'content': '重构长分支链时应优先？',
+      'options': {'A':'提取公共逻辑并用映射替代','B':'增加更多注释而不改代码','C':'复制粘贴以节省时间','D':'删除测试'},
+      'answer': 'A',
+      'hints': ['减少重复','增加可测试性'],
+      'explanation': '提取公共逻辑和映射表是常见且有效的重构手段。',
+      'example': '使用 helper 函数'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '复习：异常恢复',
+      'content': '对暂时性失败更推荐的处理是？',
+      'options': {'A':'有限重试并记录','B':'直接放弃且不记录','C':'无限重试','D':'终止服务'},
+      'answer': 'A',
+      'hints': ['有限重试减少失败几率','避免无限循环'],
+      'explanation': '有限重试可在短暂故障恢复后继续流程，同时记录便于以后分析。',
+      'example': 'retry 3 times with delay'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '复习：日志粒度',
+      'content': '调试阶段日志粒度通常应如何选择？',
+      'options': {'A':'较详细以便排查问题','B':'完全不记录','C':'仅记录成功日志','D':'只记录用户输入'},
+      'answer': 'A',
+      'hints': ['调试阶段多记录','生产阶段注意简化与隐私'],
+      'explanation': '调试阶段适当增加日志有助于快速定位问题，生产环境需平衡性能与隐私。',
+      'example': 'logger.debug("state=%s", state)'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '复习：map 用法',
+      'content': '补全：将函数应用到列表并输出结果。',
+      'input': 'lst=1,2,3',
+      'output': '2 3 4',
+      'code': 'lst = [1,2,3]\nprint(*map(lambda x: x+1, lst))',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': 'map 可用于把同一操作批量应用到序列元素。',
+      'example': 'list(map(str, lst))'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '复习：小结写法',
+      'content': '补全：在函数开头写明函数用途示例。',
+      'input': '',
+      'output': '',
+      'code': 'def f(x):\n    """返回 x 的平方"""\n    return x*x',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '在函数加入 docstring 能帮助他人快速理解用途。',
+      'example': 'def add(a,b): """返回 a+b"""'
+    }
+
+  ]
+}
+
+```

@@ -1,0 +1,991 @@
+[
+  {
+    "id": 1,
+    "type": "choice",
+    "title": "阿强的“记忆面包”",
+    "content": "阿强写了一段代码，但一个月后回来看，完全忘了为什么要这么写。他想给代码加一块“记忆面包”（注释）。请问下面哪一行是有效的Python单行注释？",
+    "options": [
+      "// 这是一段很重要的计算",
+      "# 这是一段很重要的计算",
+      "<!-- 这是一段很重要的计算 -->",
+      "/* 这是一段很重要的计算 */"
+    ],
+    "answer": "B",
+    "hints": [
+      "想想看，Python中用来标记注释的符号是什么？它和某些其他语言不一样哦。",
+      "在Python中，单行注释以一个特殊的符号开头，这个符号通常在键盘的数字键区上面。",
+      "正确的单行注释符号是井号(#)，其他选项分别是C、HTML和JavaScript风格的注释。"
+    ],
+    "explanation": "在Python中，单行注释以井号 `#` 开头，其后的所有内容直到行尾都会被解释器忽略。选项A是C++/Java的风格，选项C是HTML注释，选项D是C语言的多行注释风格，在Python中均无效。",
+    "example": "# 计算圆的面积\nradius = 5\narea = 3.14 * radius ** 2"
+  },
+  {
+    "id": 2,
+    "type": "choice",
+    "title": "迷宫的规则",
+    "content": "小猫“缩进”在玩一个Python迷宫游戏。它发现，只要自己站错位置（缩进不一致），游戏就崩溃。这说明了Python代码风格的哪个核心特点？",
+    "options": [
+      "A. 变量名必须很长",
+      "B. 注释可有可无",
+      "C. 缩进（空格/制表符）用于定义代码块，是语法的一部分",
+      "D. 每行代码不能超过80个字符"
+    ],
+    "answer": "C",
+    "hints": [
+      "想想看，是什么决定了代码是循环体的一部分还是函数体的一部分？",
+      "在许多语言中用大括号{}，但在Python里，用的是……空白？",
+      "Python使用缩进来区分代码块，而不是像C或Java那样使用花括号。错误的缩进会导致语法错误或逻辑错误。"
+    ],
+    "explanation": "Python最具特色的规则之一就是使用缩进来表示代码块的开始和结束（如if语句、循环、函数体）。缩进必须一致（通常用4个空格），它是强制性的语法要求，而不仅仅是美观。其他选项虽然也是良好风格，但并非语法核心。",
+    "example": "if True:\n    print(\"缩进正确\")  # 这4个空格是必须的\nprint(\"总是执行\")  # 这行没有缩进，不属于if代码块"
+  },
+  {
+    "id": 3,
+    "type": "choice",
+    "title": "给函数戴“高帽”",
+    "content": "阿珍写了一个超棒的函数，她想在函数开头用三引号给它戴一顶说明功能的“高帽”。这种“高帽”的正式名称是什么？它和普通#注释有何不同？",
+    "options": [
+      "A. 叫“头部注释”，它会被Python忽略。",
+      "B. 叫“文档字符串”（docstring），通常用于模块、类、函数的说明，能被`__doc__`属性获取。",
+      "C. 叫“多行注释”，和#开头的注释功能完全一样。",
+      "D. 叫“字符串装饰”，主要用来让代码看起来更花哨。"
+    ],
+    "answer": "B",
+    "hints": [
+      "想想看，用三个单引号或双引号包裹的长文本，除了注释还有其他用途吗？",
+      "这个“高帽”不仅是给人看的，Python解释器也能以某种方式“看到”它。",
+      "它有一个专门的名字，并且是PEP 257中约定的规范，用于生成自动文档。"
+    ],
+    "explanation": "使用三个单引号 `'''` 或三个双引号 `\"\"\"` 包裹的、位于模块、类或函数定义之首的字符串，被称为文档字符串（docstring）。它不仅是注释，更是对象的一部分，可以通过`obj.__doc__`访问，常用于生成帮助文档（如help()函数）。它与普通的#注释有本质区别。",
+    "example": "def greet(name):\n    \"\"\"\n    向指定的人问好。\n    \n    参数:\n        name (str): 要问候的人名。\n    \"\"\"\n    print(f\"Hello, {name}!\")"
+  },
+  {
+    "id": 4,
+    "type": "fill",
+    "title": "修复混乱的留言板",
+    "content": "一段代码本该输出“Python注释很简单！”，但现在它把注释和代码混在一起输出了。请从选项中挑选片段，修复它。",
+    "input": null,
+    "output": [
+      "Python注释很简单！"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": ""
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " 这是一行被错误输出的注释"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print("
+            },
+            {
+              "type": "code_line",
+              "value": "    "
+            },
+            {
+              "type": "code_line",
+              "value": ")"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": ""
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " 正确：在字符串里写内容"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "\"Python注释很简单！\"",
+      "#",
+      "print",
+      "Python注释很简单！",
+      "'Python注释很简单！'",
+      "//",
+      "'''",
+      "message = "
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "第一个空需要字符串`\"Python注释很简单！\"`作为print函数的输出内容。第二个空需要在“这是一行被错误输出的注释”前添加`#`，将其变为真正的单行注释，这样它就不会被执行和输出。注意，字符串可以使用单引号或双引号，但选项中的`'Python注释很简单！'`也是正确的字符串形式，不过根据上下文，print语句中已经换行，我们需要一个完整的字符串选项，且与挖空位置匹配，因此选择带双引号的选项0。",
+    "example": "# 这是一个注释，不会被执行\nprint(\"这是输出\")  # 这是行内注释"
+  },
+  {
+    "id": 5,
+    "type": "fill",
+    "title": "代码风格大改造",
+    "content": "下面这段代码功能正确但风格“狂野”。请根据Python之禅（PEP 20）和代码风格指南（PEP 8），选择合适的选项让它变得优雅、清晰。",
+    "input": null,
+    "output": [
+      "亲爱的阿土：",
+      "今天天气真好，适合学Python！",
+      "---你的代码朋友"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": ""
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "收信人 = \"阿土\"  # 变量名应该更清晰"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "weather_today = \"真好\""
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": ""
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " 给关键计算加上说明"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "greeting = f\"亲爱的{收信人}：\""
+            },
+            {
+              "type": "code_line",
+              "value": "body = f\"今天天气{weather_today}，适合学Python！\""
+            },
+            {
+              "type": "code_line",
+              "value": "signature = \"---你的代码朋友\""
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "print(greeting);print(body);print(signature) "
+            },
+            {
+              "type": "slot",
+              "index": 2
+            },
+            {
+              "type": "code",
+              "value": ""
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "recipient_name",
+      "# 定义收信人",
+      "  # 应避免使用分号，改为多行",
+      "# 计算问候语各部分",
+      "// 定义收信人",
+      "收件人",
+      "''' 多行注释 '''",
+      "   # 这是一行注释"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "1. 第一个空：变量名`收信人`虽然能用，但不符合PEP 8推荐的英文命名习惯。应使用更清晰、英文的`recipient_name`。\n2. 第二个空：应在变量定义后添加注释`# 定义收信人`来解释其用途，提高可读性。\n3. 第三个空：PEP 8不推荐使用分号将多个语句放在一行。应在分号后添加注释`# 应避免使用分号，改为多行`来指出问题，并暗示更好的做法是分成三个print语句。",
+    "example": "# 良好的风格示例\nrecipient = \"Bob\"  # 收件人姓名\ngreeting = f\"Hello, {recipient}!\"\nprint(greeting)  # 输出问候\n# 而不是 print(greeting);print(\"Something else\")"
+  },
+  {
+    "id": 6,
+    "type": "choice",
+    "title": "PEP 8 情书",
+    "content": "阿琳要写一封很长的Python“情书”（代码），但PEP 8风格指南告诉她，单行代码不能太长，否则阅读体验不好。PEP 8建议的最大行长度是多少字符？",
+    "options": [
+      "A. 无限制，显示器有多宽就写多长",
+      "B. 80个字符",
+      "C. 120个字符",
+      "D. 79个字符"
+    ],
+    "answer": "D",
+    "hints": [
+      "PEP 8是Python的官方风格指南，对代码布局有明确建议。",
+      "这个限制源于早期计算机终端和打印机的宽度，现在仍然适用以保证代码可读性。",
+      "仔细想想，是79、80还是其他数字？PEP 8原文有精确的描述。"
+    ],
+    "explanation": "根据PEP 8，所有行的最大长度应限制在79个字符。对于文档字符串或注释，建议限制在72个字符。这个限制确保了代码在多种工具和环境中（如并排窗口、代码评审工具）的可读性。虽然一些项目放宽到88或120字符，但79字符是官方推荐的标准。",
+    "example": "# 这行注释如果超过了79个字符，就应该考虑换行或者精简语句，以符合PEP 8规范。"
+  },
+  {
+    "id": 7,
+    "type": "choice",
+    "title": "名字里的学问",
+    "content": "Python社区推崇“显式优于隐式”。下列哪项关于命名风格的描述符合PEP 8约定？",
+    "options": [
+      "A. 函数名和变量名应该用大驼峰式，如`CalculateTotal`。",
+      "B. 类名应该用蛇形命名法（小写加下划线），如`my_class`。",
+      "C. 常量名应该全大写并用下划线分隔，如`MAX_CONNECTIONS`。",
+      "D. 模块名应该尽量用单个大写字母，如`M`。"
+    ],
+    "answer": "C",
+    "hints": [
+      "回忆一下，你见过的Python内置模块和函数，它们的名字是什么样子的？",
+      "想想`math.pi`、`datetime.datetime`这些名字，它们的风格一致吗？",
+      "PEP 8对不同的命名对象（变量、函数、类、常量等）有不同的约定。"
+    ],
+    "explanation": "PEP 8命名约定如下：\n- 函数名和变量名：小写字母，单词间用下划线分隔（蛇形命名法），如`calculate_total`。\n- 类名：单词首字母大写，不使用下划线（大驼峰式），如`MyClass`。\n- 常量名：全部大写，单词间用下划线分隔，如`MAX_SIZE`。\n- 模块名：简短、全小写，必要时可用下划线，如`my_module`。\n因此，只有选项C正确。",
+    "example": "PI = 3.14159  # 常量\nclass DataProcessor:  # 类\n    def process_data(self):  # 方法/函数\n        temp_var = 0  # 变量"
+  },
+  {
+    "id": 8,
+    "type": "choice",
+    "title": "“套娃”注释",
+    "content": "阿强尝试用三引号写一个多行注释，在里面他又想临时注释掉一小部分。他能否在`'''...'''`内部使用`#`来注释其中一行？",
+    "options": [
+      "A. 不能，因为`'''`内部的所有内容都是字符串字面量，`#`也会被当作字符串的一部分。",
+      "B. 能，`#`在任何地方都表示注释，优先级高于三引号。",
+      "C. 能，但前提是三引号是`\"\"\"`而不是`'''`。",
+      "D. 不能，因为Python不允许注释嵌套。"
+    ],
+    "answer": "A",
+    "hints": [
+      "三引号在Python中本质是什么？是注释指令还是字符串定界符？",
+      "试试在交互环境里输入 `s = '''# 这是一个字符串'''`，然后 `print(s)`，看看输出什么。",
+      "`#`的注释功能只在它出现在真正的代码行中时才生效。"
+    ],
+    "explanation": "三引号(`'''`或`\"\"\"`)在Python中用于定义多行字符串字面量。当它未被赋值给变量或作为文档字符串时，这个字符串会被创建但随后被丢弃，效果上类似于“注释”。但在语法层面，引号内的所有内容（包括`#`）都是字符串的一部分，`#`在此处并不触发注释功能。因此，无法在字符串字面量内部再用`#`注释。要实现注释嵌套，只能在`#`注释的行内避免使用多行字符串字面量作为注释。",
+    "example": "'''\n这是一个多行字符串（常被用作注释）。\n# 这一行开头的井号是字符串内容，不是注释标记。\nprint(\"这行不会执行，因为整个三引号内容只是一个未使用的字符串\")\n'''\n# 这才是真正的单行注释，可以“注释掉”上面整个三引号字符串。"
+  },
+  {
+    "id": 9,
+    "type": "fill",
+    "title": "重构计算器",
+    "content": "下面的函数能计算两个数的运算，但代码风格很差且缺少说明。请选择正确的选项重构它，使其符合PEP 8并具有清晰的文档。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "def calc(a,b,op):"
+            },
+            {
+              "type": "code_line",
+              "value": "    "
+            },
+            {
+              "type": "code_line",
+              "value": "    根据操作符op对a和b进行运算。"
+            },
+            {
+              "type": "code_line",
+              "value": "    "
+            },
+            {
+              "type": "code_line",
+              "value": "    参数:"
+            },
+            {
+              "type": "code_line",
+              "value": "        a (int/float): 第一个操作数。"
+            },
+            {
+              "type": "code_line",
+              "value": "        b (int/float): 第二个操作数。"
+            },
+            {
+              "type": "code_line",
+              "value": "        op (str): 操作符，支持'+', '-', '*', '/'。"
+            },
+            {
+              "type": "code_line",
+              "value": "    "
+            },
+            {
+              "type": "code_line",
+              "value": "    返回:"
+            },
+            {
+              "type": "code_line",
+              "value": "        int/float: 运算结果。"
+            },
+            {
+              "type": "code_line",
+              "value": "    "
+            },
+            {
+              "type": "code_line",
+              "value": "    "
+            },
+            {
+              "type": "code_line",
+              "value": "    if op=='+':result=a+b"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "    elif op=='-':"
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "a-b"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "    elif op == '*':"
+            },
+            {
+              "type": "code_line",
+              "value": "        result = a * b  "
+            },
+            {
+              "type": "code_line",
+              "value": "    "
+            },
+            {
+              "type": "code_line",
+              "value": "    elif op == '/':"
+            },
+            {
+              "type": "code_line",
+              "value": "        if b == 0:"
+            },
+            {
+              "type": "code_line",
+              "value": "            return \"错误：除数不能为零\""
+            },
+            {
+              "type": "code_line",
+              "value": "        result = a / b"
+            },
+            {
+              "type": "code_line",
+              "value": "    else:"
+            },
+            {
+              "type": "code_line",
+              "value": "        return \"错误：不支持的操作符\""
+            },
+            {
+              "type": "code_line",
+              "value": "    return result"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "result = ",
+      "\"\"\"",
+      "#",
+      "    result = ",
+      "'''",
+      "// 计算结果",
+      "   # 执行减法",
+      "_result"
+    ],
+    "answer": [
+      1,
+      3
+    ],
+    "explanation": "1. 第一个空：函数定义下方应添加文档字符串（docstring）的起始定界符。根据PEP 257和通用实践，通常使用三个双引号`\"\"\"`。\n2. 第二个空：在`elif op=='-':`这一行中，代码风格不佳（运算符周围缺少空格），且赋值语句应具有一致的缩进（4个空格）和良好的可读性。应填入`    result = `，这样与后续分支的`result = a * b`等保持风格一致，并正确缩进。\n整个重构过程强调了添加文档字符串、改善运算符周围空格以及保持缩进一致的重要性。",
+    "example": "def calculate(x, y, operator):\n    \"\"\"\n    对两个数字执行基本运算。\n    \n    参数与上述类似...\n    \"\"\"\n    if operator == '+':\n        result = x + y  # 良好的空格和缩进\n    # ... 其他分支"
+  },
+  {
+    "id": 10,
+    "type": "fill",
+    "title": "模块开头的“声明”",
+    "content": "一个Python脚本的开头常常有几行特殊的注释，用来声明编码或指明解释器路径。请补全这个标准文件头的代码片段。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": ""
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "/usr/bin/env python3"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": ""
+            },
+            {
+              "type": "code_line",
+              "value": "-*- coding: utf-8 -*-"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": ""
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " 本模块提供一些工具函数。"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": ""
+            },
+            {
+              "type": "code_line",
+              "value": "import sys"
+            },
+            {
+              "type": "code_line",
+              "value": "import os"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "#!",
+      "\"\"\"",
+      "# coding: utf-8",
+      "//",
+      "'''",
+      "#",
+      "  #",
+      "/*"
+    ],
+    "answer": [
+      0,
+      5
+    ],
+    "explanation": "1. 第一个空：在Unix/Linux系统中，脚本第一行的 `#!`（shebang）用于指定执行该脚本的解释器路径。`/usr/bin/env python3` 会从环境变量中查找`python3`。因此需要 `#!`。\n2. 第二个空：在shebang和编码声明之后，通常是模块的文档字符串（多行注释）或普通注释。这里的内容是`本模块提供一些工具函数。`，从上下文看，它应该是模块级的说明，因此前面应该用 `#` 使其成为单行注释。编码声明`# -*- coding: utf-8 -*-`本身也是一行特殊的注释。",
+    "example": "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\"\"\"\n这是模块的文档字符串。\n它可以用三引号来写。\n\"\"\"\n# 也可以在这里写普通的单行注释\nimport math"
+  },
+  {
+    "id": 11,
+    "type": "choice",
+    "title": "绕口令注释",
+    "content": "考虑以下代码：\n`# print(\"我不会被执行\")`\n`print(\"我会被执行\")  # 但这部分注释不会`\n关于注释对程序执行的影响，下列哪个说法最准确？",
+    "options": [
+      "A. 注释会被Python解释器忽略，因此注释中的任何代码都不会影响程序。",
+      "B. 注释中的代码如果语法错误，会导致整个程序运行失败。",
+      "C. 注释会被解释器读取并做简单语法检查，但不会执行。",
+      "D. 行内注释（`#`之后）的内容如果包含拼写错误，可能会影响其前面的代码执行。"
+    ],
+    "answer": "A",
+    "hints": [
+      "Python解释器是如何处理以`#`开头的行的？",
+      "你可以试试在注释里写一句明显错误的语法，比如 `# if = 10`，看看程序会不会报错？",
+      "注释对于解释器来说，相当于“不存在”。"
+    ],
+    "explanation": "Python解释器在预处理阶段会完全移除源代码中的所有注释。因此，注释内的任何内容（无论是看似有效的代码、语法错误还是纯文本）都不会对程序的解析、编译或执行产生任何影响。选项B和C是错误的，因为解释器根本不检查注释的语法。选项D也是错误的，行内注释仅对其后的文本生效，不会影响前面的代码。",
+    "example": "# 下面这行是无效的 Python 代码，但因为是注释，所以没关系：\n# if else for while def class\nprint(\"Hello\")  # 这个 print 函数会被正常执行。"
+  },
+  {
+    "id": 12,
+    "type": "choice",
+    "title": "TODO 的使命",
+    "content": "在代码注释中，我们常常看到`TODO`、`FIXME`、`XXX`等标记。下列关于这些标记用途的描述，哪个是正确的？",
+    "options": [
+      "A. 它们是Python的特殊关键字，用于声明未完成的任务。",
+      "B. 它们是注释中的约定俗成的标记，用于提醒开发者未来需要完成或修复的工作，对解释器无意义。",
+      "C. 它们会触发解释器的特殊模式，让程序以调试方式运行。",
+      "D. 它们必须写在三引号文档字符串内才有效。"
+    ],
+    "answer": "B",
+    "hints": [
+      "`TODO`这些词是英语单词，不是Python的保留字。",
+      "许多集成开发环境（IDE）或代码分析工具可以识别这些标记并高亮显示，提醒程序员。",
+      "它们的作用是给人看的，而不是给机器执行的。"
+    ],
+    "explanation": "`TODO`、`FIXME`、`XXX`、`HACK`等是编程中的常见注释标签（tag），是一种约定俗成的做法。它们本身不是Python语法的一部分，解释器会像对待其他注释一样忽略它们。但它们对开发者非常有用，可以快速在代码中定位到需要后续处理的部分。许多现代IDE和代码编辑器可以扫描并列出这些标签。",
+    "example": "def calculate_tax(income):\n    # TODO: 增加对海外收入的计税逻辑\n    # FIXME: 当前税率需要更新为2024年新规\n    tax_rate = 0.2\n    return income * tax_rate"
+  },
+  {
+    "id": 13,
+    "type": "choice",
+    "title": "神秘的 “-*-”",
+    "content": "在Python文件开头，你可能会看到 `# -*- coding: utf-8 -*-` 这样一行注释。关于这行注释，以下说法错误的是？",
+    "options": [
+      "A. 它指定了该源文件使用的字符编码。",
+      "B. 它是为了告诉Python解释器如何解码文件中的非ASCII字符（如中文）。",
+      "C. 在Python 3中，由于默认编码是UTF-8，这行注释通常可以省略。",
+      "D. 它必须放在文件的第一行，否则无效。"
+    ],
+    "answer": "D",
+    "hints": [
+      "回忆一下，文件开头的第一行通常被什么占据了？（提示：shebang）",
+      "Python 3的默认编码是什么？这行注释在什么情况下显得尤为重要？",
+      "查看PEP 263关于编码声明的规范。"
+    ],
+    "explanation": "编码声明 `# -*- coding: ... -*-` 用于指定Python源文件的字符编码。它通常放在文件的第1或第2行。如果文件第一行是shebang（`#!...`），那么编码声明应该放在第二行。所以选项D“必须放在文件的第一行”是错误的。Python 3默认使用UTF-8编码，因此对于纯ASCII或UTF-8文件，此声明可以省略，但显式声明是一个好习惯，尤其是在文件包含非ASCII字符时。",
+    "example": "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n# 或者简写为 # coding: utf-8\nprint(\"你好，世界！\")  # 文件中的中文字符需要正确的编码声明"
+  },
+  {
+    "id": 14,
+    "type": "fill",
+    "title": "优雅的读文件",
+    "content": "下面的代码尝试读取文件并处理，但风格不佳且有潜在bug。请选择正确的选项改进它，使其健壮、清晰。",
+    "input": [
+      "data.txt的内容：",
+      "Alice",
+      "Bob",
+      "Charlie"
+    ],
+    "output": [
+      "处理第1行: Alice",
+      "处理第2行: Bob",
+      "处理第3行: Charlie",
+      "文件读取完成。"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": ""
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " 读取数据文件并逐行处理"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "def process_file(filename):"
+            },
+            {
+              "type": "code_line",
+              "value": "    \"\"\"读取文件，处理每一行。\"\"\""
+            },
+            {
+              "type": "code_line",
+              "value": "    try:"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "        "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " = open(filename, "
+            },
+            {
+              "type": "slot",
+              "index": 2
+            },
+            {
+              "type": "code",
+              "value": ")"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "    except FileNotFoundError:"
+            },
+            {
+              "type": "code_line",
+              "value": "        print(f\"错误：找不到文件 {filename}\")"
+            },
+            {
+              "type": "code_line",
+              "value": "        return"
+            },
+            {
+              "type": "code_line",
+              "value": ""
+            },
+            {
+              "type": "code_line",
+              "value": "    line_count = 0  "
+            },
+            {
+              "type": "code_line",
+              "value": "    "
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "    for line in "
+            },
+            {
+              "type": "slot",
+              "index": 3
+            },
+            {
+              "type": "code",
+              "value": ":"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "        line_count += 1"
+            },
+            {
+              "type": "code_line",
+              "value": "        cleaned_line = line.strip()  "
+            },
+            {
+              "type": "code_line",
+              "value": "        "
+            },
+            {
+              "type": "code_line",
+              "value": "        if cleaned_line:  "
+            },
+            {
+              "type": "code_line",
+              "value": "            print(f\"处理第{line_count}行: {cleaned_line}\")"
+            },
+            {
+              "type": "code_line",
+              "value": "    "
+            },
+            {
+              "type": "code_line",
+              "value": "    file.close()  "
+            },
+            {
+              "type": "code_line",
+              "value": "    "
+            },
+            {
+              "type": "code_line",
+              "value": "    print(\"文件读取完成。\")"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "file_handle",
+      "#",
+      "\"r\"",
+      "file",
+      "  # 移除换行符",
+      "open_file",
+      "'r'",
+      "file_handle.read()",
+      "with open(...) as f:",
+      "   # 初始化计数器",
+      "f"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      0
+    ],
+    "explanation": "1. 第一个空：在函数定义前，应添加一个描述函数目的的模块级注释，使用 `#`。\n2. 第二个空和第三个空：在try块内打开文件。根据良好的命名习惯，文件对象变量名应具有描述性，如`file_handle`或`f`。同时，打开文件的模式应为读模式`\"r\"`（字符串）。这里选择`file_handle`和`\"r\"`。\n3. 第四个空：循环迭代文件对象以逐行读取。应填入文件对象变量名`file_handle`。\n4. 此外，代码中已经有一些良好的实践，如异常处理、使用strip()清理行，以及显式关闭文件（虽然使用`with`语句是更推荐的方式，但当前代码框架下显式close也是正确的）。选项中的 `# 移除换行符` 和 `# 初始化计数器` 也是合理的注释，但未在挖空中体现。",
+    "example": "# 使用with语句是更优雅和安全的方式\ndef process_file_v2(filename):\n    \"\"\"读取文件，处理每一行。\"\"\"\n    try:\n        with open(filename, 'r', encoding='utf-8') as f:  # 指定编码更佳\n            for i, line in enumerate(f, 1):\n                cleaned = line.strip()\n                if cleaned:\n                    print(f\"处理第{i}行: {cleaned}\")\n    except FileNotFoundError:\n        print(f\"错误：找不到文件 {filename}\")"
+  },
+  {
+    "id": 15,
+    "type": "fill",
+    "title": "定义一个小动物类",
+    "content": "请补全下面这个简单类的定义，使其具有良好的文档和代码风格。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "class Pet:"
+            },
+            {
+              "type": "code_line",
+              "value": "    "
+            },
+            {
+              "type": "code_line",
+              "value": "    表示一个宠物。"
+            },
+            {
+              "type": "code_line",
+              "value": "    "
+            },
+            {
+              "type": "code_line",
+              "value": "    …（其他文档字符串内容）…"
+            },
+            {
+              "type": "code_line",
+              "value": "    "
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "    def "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "(self, name, species):"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "        "
+            },
+            {
+              "type": "code_line",
+              "value": "        初始化一个新的宠物实例。"
+            },
+            {
+              "type": "code_line",
+              "value": "        "
+            },
+            {
+              "type": "code_line",
+              "value": "        参数:"
+            },
+            {
+              "type": "code_line",
+              "value": "            name (str): 宠物的名字。"
+            },
+            {
+              "type": "code_line",
+              "value": "            species (str): 物种，如\"Dog\"、\"Cat\"。"
+            },
+            {
+              "type": "code_line",
+              "value": "        "
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "        self.name = name  "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "        self.species = species  "
+            },
+            {
+              "type": "code_line",
+              "value": ""
+            },
+            {
+              "type": "code_line",
+              "value": "    def speak(self):"
+            },
+            {
+              "type": "code_line",
+              "value": "        "
+            },
+            {
+              "type": "code_line",
+              "value": "        让宠物发出叫声。"
+            },
+            {
+              "type": "code_line",
+              "value": "        "
+            },
+            {
+              "type": "code_line",
+              "value": "        返回:"
+            },
+            {
+              "type": "code_line",
+              "value": "            str: 宠物的叫声。"
+            },
+            {
+              "type": "code_line",
+              "value": "        "
+            },
+            {
+              "type": "code_line",
+              "value": "        if self.species.lower() == \"dog\":"
+            },
+            {
+              "type": "code_line",
+              "value": "            return \"Woof!\""
+            },
+            {
+              "type": "code_line",
+              "value": "        elif self.species.lower() == \"cat\":"
+            },
+            {
+              "type": "code_line",
+              "value": "            return \"Meow!\""
+            },
+            {
+              "type": "code_line",
+              "value": "        else:"
+            },
+            {
+              "type": "code_line",
+              "value": "            return \"...\""
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "__init__",
+      "\"\"\"",
+      "# 设置名字属性",
+      "Initialize",
+      "   # 初始化名字",
+      "init",
+      "'''",
+      "  # 物种"
+    ],
+    "answer": [
+      1,
+      0,
+      4
+    ],
+    "explanation": "1. 第一个空：类定义下的多行文本应是类的文档字符串（docstring），其起始定界符通常为三个双引号 `\"\"\"`。\n2. 第二个空：这是一个特殊方法，用于初始化新创建的对象实例。在Python中，构造器方法的名字必须是 `__init__`（前后各有两个下划线）。\n3. 第三个空：在 `self.name = name` 这行赋值语句后，可以添加一个行内注释来解释其作用，提高可读性。`# 初始化名字` 或 `# 设置名字属性` 都是合适的，这里根据选项选择 `# 初始化名字`（对应选项`   # 初始化名字`，注意选项包含前导空格，但填入时会与前面的代码空格结合）。在`self.species = species`后也可以类似地添加注释，但该处没有挖空。",
+    "example": "class Animal:\n    \"\"\"一个基础的动物类。\"\"\"\n    \n    def __init__(self, family):\n        \"\"\"初始化动物。\"\"\"\n        self.family = family  # 设置科属属性\n    \n    # ... 其他方法"
+  }
+]

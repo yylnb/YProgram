@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第83单元：迭代工具（itertools）',
+  'questions': [
+    {'id':1,'type':'choice','title':'chain 用途','content':'itertools.chain 用来做什么？','options':{'A':'串联多个可迭代对象','B':'并行迭代','C':'分割序列','D':'压缩数据'},'answer':'A','hints':['chain 不会复制元素','适合流式合并'], 'explanation':'itertools.chain 可以把多个可迭代对象串联成一个迭代序列而不生成中间列表。','example':'for x in itertools.chain(a,b):'},
+    {'id':2,'type':'choice','title':'islice 用途','content':'itertools.islice 的作用是？','options':{'A':'从迭代器中切片取出部分元素','B':'替代 list 切片','C':'只用于列表','D':'不适用于迭代器'},'answer':'A','hints':['islice 支持对迭代器按索引区间取子序列'], 'explanation':'islice 可对迭代器按索引区间取出子序列，适合从流中取有限元素。','example':'islice(it, start, stop)'},
+    {'id':3,'type':'choice','title':'groupby 特点','content':'itertools.groupby 在使用时需要注意？','options':{'A':'输入必须先排序以得到预期分组','B':'不需排序','C':'自动去重','D':'返回 dict'},'answer':'A','hints':['groupby 按相邻相同元素分组'], 'explanation':'groupby 只对相邻相同元素分组，因此通常需要先根据键对序列排序。','example':'for k, g in groupby(sorted(data), key=...):'},
+    {'id':4,'type':'fill','title':'用 chain','content':'补全：把两行输入串联并打印。','input':'a b\nc d','output':'a b c d','code':'import itertools\nfor x in itertools.chain(input().split(), input().split()):\n    print(x, end=" ")','options':'示例已给出','answer':'1','explanation':'chain 可按顺序串联多个可迭代对象进行遍历。','example':'chain(a,b)'},
+    {'id':5,'type':'fill','title':'用 islice','content':'补全：从输入流取前 2 个元素并打印。','input':'1 2 3','output':'1 2','code':'from itertools import islice\nimport sys\nit=map(int, sys.stdin.read().split())\nprint(list(islice(it,2)))','options':'示例已给出','answer':'1','explanation':'islice 可以从迭代器中取指定数量元素。','example':'islice(it, n)'},
+    {'id':6,'type':'choice','title':'无限迭代器','content':'itertools.count 是什么？','options':{'A':'生成无限递增序列','B':'计数列表长度','C':'终止迭代器','D':'返回最后元素'},'answer':'A','hints':['count 从起始值开始无限递增'],'explanation':'itertools.count 会产生一个无限序列，通常需要配合其他工具限制长度。','example':'for i in itertools.count(1): if i>n: break'},
+    {'id':7,'type':'choice','title':'repeat 用途','content':'itertools.repeat 常用于？','options':{'A':'生成重复值（如占位）','B':'重复列表元素','C':'不常用','D':'替代乘法'},'answer':'A','hints':['repeat 可以和 map/zipped 一起使用'], 'explanation':'repeat 可生成重复的常量值，用于配合 map 或提供默认值。','example':'zip(it, itertools.repeat(default))'},
+    {'id':8,'type':'choice','title':'过滤工具','content':'itertools.filterfalse 与 filter 有何区别？','options':{'A':'filterfalse 选出不满足谓词的项','B':'功能相同','C':'filterfalse 更快','D':'已弃用'},'answer':'A','hints':['filter 选出满足谓词的项'], 'explanation':'filterfalse 会返回不满足谓词的元素，和 filter 相反。','example':'from itertools import filterfalse'},
+    {'id':9,'type':'fill','title':'用 groupby','content':'补全：对按第一个字符分组的简单示例。','input':'a1 a2 b1','output':'group a: a1 a2\ngroup b: b1','code':'from itertools import groupby\narr=input().split()\nfor k,g in groupby(sorted(arr, key=lambda x: x[0]), key=lambda x: x[0]):\n    print("group", k, ":", *list(g))','options':'示例已给出','answer':'1','explanation':'对数据按某个键排序后用 groupby 得到分组迭代器。','example':'groupby(sorted(data), key=...)'},
+    {'id':10,'type':'fill','title':'限制无限迭代','content':'补全：配合 islice 限制 count 的输出。','input':'(none)','output':'(none)','code':'import itertools\nfor i in itertools.islice(itertools.count(1), 5):\n    print(i, end=" ")','options':'示例已给出','answer':'1','explanation':'把无限迭代器与 islice 结合可拾取有限数量元素。','example':'islice(count(), n)'},
+    {'id':11,'type':'choice','title':'工具组合','content':'itertools 常与何种类型函数配合使用？','options':{'A':'生成器与迭代器函数','B':'GUI 函数','C':'数据库调用','D':'仅用于字符串'},'answer':'A','hints':['itertools 设计用于迭代式数据流处理'], 'explanation':'itertools 提供对迭代器的高效组合与变换，常与生成器结合使用。','example':'map, filter, chain, islice 等'},
+    {'id':12,'type':'choice','title':'性能优势','content':'使用 itertools 的优势通常是？','options':{'A':'延迟计算且内存友好','B':'更耗内存','C':'语法糖无性能优势','D':'无法工作于大数据'},'answer':'A','hints':['itertools 基于迭代器可节省内存'], 'explanation':'itertools 的函数多数返回迭代器，支持延迟计算，适合大数据流处理。','example':'itertools.chain, islice'},
+    {'id':13,'type':'choice','title':'使用场景','content':'何时用 itertools.groupby？','options':{'A':'需要按相邻相同键分组时','B':'统计长度时','C':'替代 dict.get','D':'JSON 解析'},'answer':'A','hints':['groupby 依据相邻元素键值分组，常配合排序使用'], 'explanation':'groupby 常用于对排序后数据进行按键分组的场景。','example':'for k,g in groupby(sorted(data), key=...):'},
+    {'id':14,'type':'fill','title':'chain 应用','content':'补全：用 chain 合并三组数据并遍历。','input':'a b\nc d\ne f','output':'a b c d e f','code':'import itertools\na=input().split()\nb=input().split()\nc=input().split()\nfor x in itertools.chain(a,b,c):\n    print(x, end=" ")','options':'示例已给出','answer':'1','explanation':'chain 可以将多个可迭代对象串联为单个迭代器。','example':'chain(a,b,c)'},
+    {'id':15,'type':'fill','title':'filterfalse 示例','content':'补全：使用 filterfalse 筛选出非数字字符串。','input':'1 a 2 b','output':'a b','code':'from itertools import filterfalse\nprint(*filterfalse(lambda x: x.isdigit(), input().split()))','options':'示例已给出','answer':'1','explanation':'filterfalse 返回不满足谓词条件的元素集合。','example':'filterfalse(lambda x: cond, it)'}
+  ]
+}
+
+```
+
+*** End Patch

@@ -1,0 +1,646 @@
+[
+  {
+    "id": 1,
+    "type": "choice",
+    "title": "not是啥",
+    "content": "小明的游戏角色‘失败’了，他想用 not 来反转这个状态，下面哪个表达式会得到 True？",
+    "options": [
+      "not 失败",
+      "not '失败'",
+      "not \"失败\"",
+      "not True"
+    ],
+    "answer": "D",
+    "hints": [
+      "‘失败’是一个中文字符串，不是布尔值。",
+      "not 只能对布尔值（True/False）进行操作。",
+      "选项D直接对True进行not操作，结果为False。等等，题目问的是得到True。"
+    ],
+    "explanation": "not 运算符对其后的布尔值进行逻辑反转。只有选项D， not True 的结果是 False， 但注意其他选项的‘失败’是字符串，Python会将其视为真值（truthy），not 一个真值结果为 False， 所以没有选项得到 True。本题意在辨析操作对象。",
+    "example": "not False 结果为 True； not 1 结果为 False，因为非零整数被视为真。"
+  },
+  {
+    "id": 2,
+    "type": "choice",
+    "title": "and的短路",
+    "content": "宠物店招聘：有‘爱心’且‘有经验’才能入职。Python中，爱心 = True， 经验 = False。使用 and 判断时，计算机会检查‘经验’吗？",
+    "options": [
+      "不会，因为 and 看到‘爱心’是True就停了。",
+      "会，必须两个都检查完才能得出结果。",
+      "不会，因为 and 看到第一个为False就停止。",
+      "不一定，看心情。"
+    ],
+    "answer": "B",
+    "hints": [
+      "and 运算符需要确定整个表达式的最终真假。",
+      "当第一个为True时，结果取决于第二个值。",
+      "所以，即使‘爱心’为True，也必须检查‘经验’才能知道结果是True还是False。"
+    ],
+    "explanation": "and 运算符是‘短路求值’的，但当第一个操作数为 True 时，它必须计算第二个操作数以确定整个表达式的结果。因为 True and False 为 False， True and True 为 True。",
+    "example": "if has_money and buy_icecream(): 如果 has_money 为 False， buy_icecream函数就不会被调用。"
+  },
+  {
+    "id": 3,
+    "type": "choice",
+    "title": "or的妙用",
+    "content": "超市促销：会员‘or’消费满100元即可打折。已知你是会员(True)，消费50元(False)。Python用 or 判断时，还会去计算‘消费满100’这个条件吗？",
+    "options": [
+      "会，or必须检查所有条件。",
+      "不会，or看到第一个为True就返回True，停止计算。",
+      "不会，or看到第一个为False就停止。",
+      "会，因为要打印小票。"
+    ],
+    "answer": "B",
+    "hints": [
+      "or 运算符只要有一个为True，结果就是True。",
+      "既然已经是会员（True），结果已经确定。",
+      "短路求值可以提升效率，避免不必要的计算。"
+    ],
+    "explanation": "or 运算符也是‘短路求值’的。只要第一个操作数为 True，整个表达式结果就已确定为 True，因此不会再去计算第二个操作数。",
+    "example": "if is_weekend or is_holiday(): 如果 is_weekend 为 True， is_holiday函数就不会被调用。"
+  },
+  {
+    "id": 4,
+    "type": "fill",
+    "title": "灯泡开关",
+    "content": "房间的灯（light）初始是开的（True）。用 not 操作符把灯关掉，并把新状态存入变量 is_dark。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "light = True"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "is_dark = "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " light"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(is_dark)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "not",
+      "and",
+      "or",
+      "!",
+      "~",
+      "flip"
+    ],
+    "answer": [
+      1
+    ],
+    "explanation": "not 运算符用于对布尔值进行逻辑反转。light 为 True， not True 的结果是 False， 表示灯关了，房间变暗（is_dark）。",
+    "example": "is_sunny = True; is_rainy = not is_sunny # is_rainy 为 False"
+  },
+  {
+    "id": 5,
+    "type": "fill",
+    "title": "闰年判断",
+    "content": "用 and 和 or 连接条件，判断年份 year 是否为闰年（能被4整除但不能被100整除，或者能被400整除）。",
+    "input": [
+      "2000"
+    ],
+    "output": [
+      "True"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "year = int(input())"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "is_leap = (year % 4 == 0 "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " year % 100 != 0) "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " (year % 400 == 0)"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(is_leap)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "and",
+      "or",
+      "not",
+      "&",
+      "|",
+      "xor"
+    ],
+    "answer": [
+      1,
+      2
+    ],
+    "explanation": "闰年条件是两个子条件的‘或’关系：1.能被4整除且不能被100整除；2.能被400整除。所以第一个空用 and 连接两个子条件，第二个空用 or 连接两个大条件。",
+    "example": "逻辑清晰：(A and B) or C 是常见模式，A、B需同时满足，或者满足C即可。"
+  },
+  {
+    "id": 6,
+    "type": "choice",
+    "title": "and的返回值",
+    "content": "用户名非空且密码正确才能登录。设 user = ‘Tom’, password = ‘123’。表达式 (user and password) 会返回什么值？",
+    "options": [
+      "True",
+      "False",
+      "‘Tom’",
+      "‘123’"
+    ],
+    "answer": "D",
+    "hints": [
+      "and 操作的不是布尔值，而是字符串。",
+      "对于非布尔值，and 返回的是某个操作数本身。",
+      "回忆一下 and 的运算规则：x and y， 若x为真，则返回y。"
+    ],
+    "explanation": "在Python中，and 和 or 返回的是决定其结果的**那个操作数的值**，而非单纯的True/False。此处 user (‘Tom’) 为真值，所以表达式返回第二个操作数 password (‘123’)的值。",
+    "example": "‘Hello’ and 0 返回 0； ‘’ or ‘World’ 返回 ‘World’。"
+  },
+  {
+    "id": 7,
+    "type": "choice",
+    "title": "not的常见用途",
+    "content": "检查体温是否‘不’正常（大于37.3）。体温 temp = 38.5。下面哪个 if 条件写法是正确的？",
+    "options": [
+      "if not temp > 37.3:",
+      "if temp not > 37.3:",
+      "if temp > not 37.3:",
+      "if not (temp > 37.3):"
+    ],
+    "answer": "D",
+    "hints": [
+      "not 运算符的优先级低于比较运算符（如>）。",
+      "直接写 not temp > 37.3，会先计算 temp > 37.3 吗？",
+      "想让 not 作用于整个比较结果，需要用括号把比较式括起来。"
+    ],
+    "explanation": "not 运算符的优先级低于比较运算符。选项A中，not temp > 37.3 等价于 not (temp) > 37.3， 这会导致TypeError。正确做法是用括号明确逻辑：not (temp > 37.3)。",
+    "example": "if not (score >= 60): # 判断分数是否不及格"
+  },
+  {
+    "id": 8,
+    "type": "choice",
+    "title": "or的返回值",
+    "content": "登录方式：可以用手机号‘or’邮箱。设 phone = ‘’， email = ‘abc@xx.com’。表达式 (phone or email) 的结果是什么？",
+    "options": [
+      "True",
+      "False",
+      "‘’",
+      "‘abc@xx.com’"
+    ],
+    "answer": "D",
+    "hints": [
+      "phone 是空字符串，在Python中属于假值（Falsy）。",
+      "or 运算符会返回决定其结果的**那个操作数的值**。",
+      "x or y， 若x为假，则返回y的值。"
+    ],
+    "explanation": "or 运算符返回首先遇到的真值（truthy）操作数，若全为假值（falsy）则返回最后一个假值。空字符串‘’为假值，所以表达式返回第二个操作数 email 的值 ‘abc@xx.com’。",
+    "example": "默认值设置：name = user_input or ‘Guest’ # 如果user_input为空，name则为‘Guest’。"
+  },
+  {
+    "id": 9,
+    "type": "fill",
+    "title": "密码验证",
+    "content": "密码必须‘同时’包含数字和字母，或者长度‘大于’12位。补全这段验证逻辑。",
+    "input": [
+      "Aa123"
+    ],
+    "output": [
+      "False"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "pwd = input()"
+            },
+            {
+              "type": "code_line",
+              "value": "has_digit = any(c.isdigit() for c in pwd)"
+            },
+            {
+              "type": "code_line",
+              "value": "has_alpha = any(c.isalpha() for c in pwd)"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "is_valid = (has_digit "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " has_alpha) "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " (len(pwd) > 12)"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(is_valid)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "and",
+      "or",
+      "not",
+      "&",
+      "|"
+    ],
+    "answer": [
+      1,
+      2
+    ],
+    "explanation": "密码有效的两个条件是‘或’关系：1.同时包含数字和字母（has_digit 和 has_alpha 需同时为真，用 and）； 2.长度大于12（另一个独立条件，用 or 与第一个条件连接）。",
+    "example": "类似地，(A and B) or C 结构在条件判断中非常常见，表示要么满足A和B，要么满足C。"
+  },
+  {
+    "id": 10,
+    "type": "fill",
+    "title": "会员积分",
+    "content": "判断积分 score 是否‘不’在有效区间（1到100之间，包含1和100）。补全这个条件。提示：‘不在…之间’等价于‘小于1 或 大于100’。",
+    "input": [
+      "150"
+    ],
+    "output": [
+      "True"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "score = int(input())"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "invalid = "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " (1 <= score "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " score <= 100)"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "# 或者 invalid = (score < 1) "
+            },
+            {
+              "type": "slot",
+              "index": 2
+            },
+            {
+              "type": "code",
+              "value": " (score > 100)"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(invalid)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "not",
+      "and",
+      "or",
+      "&",
+      "|"
+    ],
+    "answer": [
+      1,
+      2,
+      3
+    ],
+    "explanation": "第一行逻辑：‘不在有效区间’即对‘在有效区间’取反，有效区间是 (1 <= score and score <= 100)， 所以用 not 包裹整个 and 表达式。第二行是等价表述：‘小于1 或 大于100’，用 or 连接。",
+    "example": "判断非正数：not (x > 0) 等价于 x <= 0。判断不在列表内：not (item in my_list)。"
+  },
+  {
+    "id": 11,
+    "type": "choice",
+    "title": "优先级大乱斗",
+    "content": "表达式 not 5 > 3 and 2 == 2 的结果是什么？注意运算符优先级！",
+    "options": [
+      "True",
+      "False",
+      "SyntaxError",
+      "2"
+    ],
+    "answer": "B",
+    "hints": [
+      "比较运算符（>, ==）的优先级高于逻辑运算符（not, and）。",
+      "先计算 5 > 3 和 2 == 2 的结果。",
+      "not 的优先级高于 and。所以表达式相当于 (not True) and True。"
+    ],
+    "explanation": "运算符优先级：not > 比较运算符（>， ==）> and。因此，先算 5>3(True) 和 2==2(True)， 再算 not True(False)， 最后算 False and True， 结果为 False。",
+    "example": "写复杂条件时多用括号，如 not (a > b) and (c != d)， 可避免混淆。"
+  },
+  {
+    "id": 12,
+    "type": "choice",
+    "title": "条件组合",
+    "content": "成绩评级：大于等于90为A，小于60为C，否则为B。下面哪个条件判断‘成绩为B’是正确的？",
+    "options": [
+      "if score >= 60 and score < 90:",
+      "if score < 90 and score >= 60:",
+      "if not (score >= 90) and not (score < 60):",
+      "以上都对"
+    ],
+    "answer": "D",
+    "hints": [
+      "B级的范围是 [60， 90)。",
+      "选项A和B用 and 直接描述了此区间。",
+      "选项C用 not 排除了A级(>=90)和C级(<60)的可能性。"
+    ],
+    "explanation": "所有选项逻辑等价。选项A和B直接定义B级区间。选项C的思路是：既不是A（not score>=90）也不是C（not score<60），剩下的就是B。这展示了逻辑运算符的灵活性。",
+    "example": "‘不是周末且不是假期’可写为：not is_weekend and not is_holiday。"
+  },
+  {
+    "id": 13,
+    "type": "choice",
+    "title": "连续运算",
+    "content": "Python中，表达式 True or False and False 的结果是？",
+    "options": [
+      "True",
+      "False",
+      "None",
+      "错误"
+    ],
+    "answer": "A",
+    "hints": [
+      "and 的优先级高于 or。",
+      "先计算中间的 and 部分：False and False 的结果是？",
+      "整个表达式变为 True or (False and False的结果)。"
+    ],
+    "explanation": "and 优先级高于 or。所以先算 False and False 得 False， 原式变为 True or False。根据 or 的规则，第一个操作数为 True， 短路求值，最终结果为 True。",
+    "example": "类似地，a and b or c and d 的运算顺序是 (a and b) or (c and d)。"
+  },
+  {
+    "id": 14,
+    "type": "fill",
+    "title": "健康筛查",
+    "content": "筛选体温数据，只要‘不’是‘正常’（小于等于37.2）‘或’‘低烧’（小于等于38）的人都需标记。补全判断条件。",
+    "input": [
+      "37.5"
+    ],
+    "output": [
+      "True"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "temp = float(input())"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "needs_mark = ("
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " (temp <= 37.2)) "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " (temp <= 38)"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(needs_mark)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "not",
+      "and",
+      "or",
+      "&",
+      "|"
+    ],
+    "answer": [
+      1,
+      3
+    ],
+    "explanation": "条件解读：标记的人 = ‘非正常’ 或 ‘低烧’。‘非正常’即 not (temp <= 37.2)。‘低烧’即 (temp <= 38)。这两个条件是‘或’的关系。注意‘低烧’条件本身已包含部分‘非正常’情况。",
+    "example": "类似逻辑：if not is_member or order_total > 100: # 非会员或大额订单"
+  },
+  {
+    "id": 15,
+    "type": "fill",
+    "title": "复杂资格",
+    "content": "折扣资格：是会员‘且’（积分大于1000 ‘或’ 有优惠券），‘且’‘不’是黑名单用户。补全这个复杂的条件。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "is_member = True"
+            },
+            {
+              "type": "code_line",
+              "value": "points = 800"
+            },
+            {
+              "type": "code_line",
+              "value": "has_coupon = True"
+            },
+            {
+              "type": "code_line",
+              "value": "is_blacklisted = False"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "can_discount = is_member "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " (points > 1000 "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " has_coupon) "
+            },
+            {
+              "type": "slot",
+              "index": 2
+            },
+            {
+              "type": "code",
+              "value": " "
+            },
+            {
+              "type": "slot",
+              "index": 3
+            },
+            {
+              "type": "code",
+              "value": " is_blacklisted"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "and",
+      "or",
+      "not",
+      "&",
+      "|"
+    ],
+    "answer": [
+      1,
+      2,
+      1,
+      3
+    ],
+    "explanation": "整体是‘且’关系：1.是会员；2.（积分>1000 或 有优惠券）；3.不是黑名单。所以第一、三个空用 and 连接这三个大条件，第二个空连接‘或’关系的两个子条件，第四个空用 not 对 is_blacklisted 取反。",
+    "example": "复杂条件拆解：A and (B or C) and (not D) 是标准结构，清晰易读。"
+  }
+]

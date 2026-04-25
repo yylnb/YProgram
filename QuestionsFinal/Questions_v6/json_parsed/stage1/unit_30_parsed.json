@@ -1,0 +1,685 @@
+[
+  {
+    "id": 1,
+    "type": "choice",
+    "title": "命名大冒险",
+    "content": "阿强想在注册‘学神修仙系统’时给自己起个用户名，下面的选项中，哪个是Python完全合法的变量名？",
+    "options": [
+      "2B-or-not-2B",
+      "_inner_power",
+      "class",
+      "user name"
+    ],
+    "answer": "B",
+    "hints": [
+      "变量名不能以数字开头哦！",
+      "Python的关键词是不能用作变量名的。",
+      "变量名中间不能有空格。"
+    ],
+    "explanation": "合法的变量名可以包含字母、数字和下划线，但不能以数字开头，且不能是关键字。选项A以数字开头；选项C是Python关键字；选项D包含空格。",
+    "example": "合法变量名举例：my_var_1, _score, userName_2024。"
+  },
+  {
+    "id": 2,
+    "type": "choice",
+    "title": "切片取手机号",
+    "content": "手机号字符串‘13812345678’存放在变量phone中，警察叔叔想让你用切片取出中间四位号码‘1234’，你的大脑短路了，哪句代码正确？",
+    "options": [
+      "phone[3:7]",
+      "phone[3:6]",
+      "phone[4:8]",
+      "phone[4:7]"
+    ],
+    "answer": "A",
+    "hints": [
+      "字符串索引从0开始。字符‘1’的索引是0。",
+      "切片是‘左闭右开’的，包含起点，不包含终点。",
+      "试着数一下，‘1’(0),‘3’(1),‘8’(2),‘1’(3)..."
+    ],
+    "explanation": "字符串索引从0开始，'1234'在原字符串中起始于索引3（第四个字符），结束于索引7（第八个字符，但不包括）。因此切片[3:7]是正确的。",
+    "example": "对于s=‘Python’，s[1:4]得到‘yth’，因为包含索引1的‘y’，不包含索引4的‘o’。"
+  },
+  {
+    "id": 3,
+    "type": "choice",
+    "title": "收快递的条件",
+    "content": "你设定的收快递条件是：周一到周五白天（9-18点）且快递员必须打电话。下面的逻辑判断哪个正确表达了此条件？",
+    "options": [
+      "is_weekday and (9 <= hour < 18) and call_made",
+      "is_weekday or (9 <= hour < 18) or call_made",
+      "is_weekday and 9 <= hour < 18 or call_made",
+      "not is_weekend and hour == ‘9-18’ and call_made == True"
+    ],
+    "answer": "A",
+    "explanation": "所有条件必须同时满足，因此需要使用逻辑与（and）连接。选项B使用了或（or），选项C的优先级可能导致误解，选项D中hour应为数值比较而非字符串。",
+    "example": "同时满足多个条件通常用and连接：条件1 and 条件2 and 条件3。"
+  },
+  {
+    "id": 4,
+    "type": "fill",
+    "title": "‘薅羊毛’计算器",
+    "content": "下面的代码用来计算用游戏金币兑换的汉堡数量，但有几处关键代码被吃掉了，请帮它恢复原状。",
+    "input": [
+      "100"
+    ],
+    "output": [
+      "你可以兑换 20 个汉堡！"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "coins_str = input(\"请输入你的金币数量：\")"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "coins = "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "(coins_str)"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "burgers = coins "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " 5"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "print(\"你可以兑换"
+            },
+            {
+              "type": "slot",
+              "index": 2
+            },
+            {
+              "type": "code",
+              "value": " 个汉堡！\")"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "int",
+      "float",
+      "//",
+      "/",
+      "%",
+      "+",
+      "-",
+      "burgers",
+      "coins",
+      "\", burgers, \"",
+      "\", coins, \""
+    ],
+    "answer": [
+      0,
+      2,
+      7
+    ],
+    "explanation": "首先，需要将输入的字符串转换为整数（int）。其次，计算汉堡数量是整除（//），因为汉堡是整数个。最后，打印时需要将整数变量burgers的值拼接进字符串。",
+    "example": "类似转换：num = int(\"10\")；类似输出：print(f\"结果是{num}\") 或 print(\"结果是\", num, \"!\")。"
+  },
+  {
+    "id": 5,
+    "type": "fill",
+    "title": "提取密码",
+    "content": "一段神秘电文‘A1B2C3D4E5’被截获，情报显示真正的密码藏在第2到第8个字符之间，并且要倒着读。请补全提取密码的切片代码。",
+    "input": null,
+    "output": [
+      "4D3C2B"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "message = 'A1B2C3D4E5'"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "password = message["
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "]"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(password)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "1:8",
+      "1:7",
+      "7:0:-1",
+      "7:1:-1",
+      "8:1:-1",
+      "8:2:-1"
+    ],
+    "answer": [
+      4
+    ],
+    "explanation": "第2到第8个字符（索引1到7，包含7）是‘1B2C3D4’。要倒着读，切片应为[7:1:-1]，表示从索引7（‘4’）开始，到索引1（‘1’）之前结束（即索引2的‘B’），步长为-1。",
+    "example": "s='12345'，s[4:0:-1]得到‘5432’，从索引4开始反向到索引0（不含）。"
+  },
+  {
+    "id": 6,
+    "type": "choice",
+    "title": "命名规范之争",
+    "content": "团队里新来的实习生写了段代码，变量名用了‘user-list’。经验丰富的你，应该怎么教育他？（提示：PEP 8）",
+    "options": [
+      "没问题，Python允许使用短横线。",
+      "变量名应该用下划线分隔单词，比如‘user_list’。",
+      "应该用驼峰命名法，写成‘userList’。",
+      "这个变量名很完美，清晰易懂，不用改。"
+    ],
+    "answer": "B",
+    "hints": [
+      "在Python中，短横线‘-’在变量名里有特殊含义。",
+      "Python官方的风格指南（PEP 8）推荐使用蛇形命名法。",
+      "试试在解释器里执行 a-b=1 看看？"
+    ],
+    "explanation": "根据Python的PEP 8风格指南，变量名应使用小写字母，单词之间用下划线连接（蛇形命名法）。短横线会被解释为减号，导致语法错误。",
+    "example": "推荐写法：student_name, max_score, is_valid_input。"
+  },
+  {
+    "id": 7,
+    "type": "choice",
+    "title": "自动折扣计算",
+    "content": "超市结账系统有一段代码，用于判断是否为会员并计算折扣。如果输入是会员卡号‘VIP001’，以下哪个说法是正确的？\ncode: \nid = input('输入ID：')\nif type(id) == str and id.startswith('VIP'):\n    discount = 0.8",
+    "options": [
+      "discount会被赋值为0.8，因为条件成立。",
+      "条件永远成立，因为input()返回的总是字符串。",
+      "条件永远不成立，因为type(id)不是‘str’。",
+      "程序会报错，因为id是字符串，不能和‘VIP’比较。"
+    ],
+    "answer": "B",
+    "explanation": "在Python中，input()函数总是返回字符串类型（str）。因此type(id) == str总是为True，且id.startswith('VIP')在输入以‘VIP’开头时为True，所以条件成立。但注意，这个type检查是多余的。",
+    "example": "input()返回字符串，无需再用type()判断。可以直接用if id.startswith('VIP'):。"
+  },
+  {
+    "id": 8,
+    "type": "choice",
+    "title": "游戏角色操作",
+    "content": "游戏里，角色移动的条件是：(W键按下 或 S键按下) 且 同时不能按下 Shift键。下面的逻辑表达式哪个是错的？",
+    "options": [
+      "(W_pressed or S_pressed) and not Shift_pressed",
+      "not Shift_pressed and (W_pressed or S_pressed)",
+      "W_pressed or S_pressed and not Shift_pressed",
+      "(W_pressed and not Shift_pressed) or (S_pressed and not Shift_pressed)"
+    ],
+    "answer": "C",
+    "hints": [
+      "注意逻辑运算符的优先级：and 高于 or。",
+      "选项C中，‘and’会先和谁结合？",
+      "试试代入 W_pressed=True, S_pressed=False, Shift_pressed=True 到各个选项。"
+    ],
+    "explanation": "选项C中，由于and优先级高于or，表达式等价于W_pressed or (S_pressed and not Shift_pressed)。这意味着只要W键按下，无论Shift是否按下，条件都成立，这不符合原意。",
+    "example": "当有or和and混合时，使用括号明确优先级是好习惯，如(A or B) and C。"
+  },
+  {
+    "id": 9,
+    "type": "fill",
+    "title": "构造文件名",
+    "content": "一个自动归档程序需要生成如‘report_2024_05.txt’格式的文件名。请补全代码，正确组合出文件名。",
+    "input": null,
+    "output": [
+      "report_2024_05.txt"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "name = \"report\""
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "year = \"2024\""
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "month = \"05\""
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "extension = \".txt\""
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "filename = "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(filename)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "name + \"_\" + year + \"_\" + month + extension",
+      "\"report_\" + \"2024_05.txt\"",
+      "f\"{name}_{year}_{month}{extension}\"",
+      "name + year + month + extension",
+      "\"report_2024_05.txt\""
+    ],
+    "answer": [
+      0,
+      2
+    ],
+    "explanation": "正确做法是使用字符串拼接（+）或f-string格式化，将变量组合成目标格式。注意需要添加下划线和点号。直接写死字符串（选项B、E）失去了变量的意义。",
+    "example": "类似的组合：path = folder + \"/\" + file_name + \".py\" 或 path = f\"{folder}/{file_name}.py\"。"
+  },
+  {
+    "id": 10,
+    "type": "fill",
+    "title": "蔬菜均价计算器",
+    "content": "帮妈妈计算买菜的平均价格，但前提是买的种类超过2种且总价不超过50元。请补全这个智能判断的代码。",
+    "input": null,
+    "output": [
+      "符合条件，可以计算均价。"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "kind_count = 3"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "total_price = 45.5"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "if "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " :"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "    avg_price = total_price / kind_count"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "    print(\"符合条件，可以计算均价。\")"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "kind_count > 2 and total_price <= 50",
+      "kind_count > 2 or total_price <= 50",
+      "kind_count > 2 & total_price <= 50",
+      "kind_count >= 2 and total_price < 50",
+      "total_price <= 50 and kind_count > 2"
+    ],
+    "answer": [
+      0,
+      4
+    ],
+    "explanation": "两个条件必须同时满足，因此使用逻辑与（and）。条件一：种类超过2种（>2）。条件二：总价不超过50元（<=50）。两个条件顺序可以互换。",
+    "example": "多重条件判断常见形式：if 条件A and 条件B: 或 if 条件B and 条件A:。"
+  },
+  {
+    "id": 11,
+    "type": "choice",
+    "title": "切片高手",
+    "content": "文件路径 ‘/usr/local/bin/python3’，你想用切片取出最后的文件名‘python3’，最简洁的写法是？",
+    "options": [
+      "path[-7:]",
+      "path[15:]",
+      "path[-7:-1]",
+      "path.split('/')[-1] (这个不是切片，但你能选出等价的切片吗？)"
+    ],
+    "answer": "A",
+    "hints": [
+      "试试用负数索引从末尾开始计数。",
+      "‘python3’长度是7，并且位于字符串末尾。",
+      "选项C的切片[-7:-1]会漏掉最后一个字符。"
+    ],
+    "explanation": "字符串‘python3’位于整个路径的末尾，长度为7。使用负索引切片[-7:]表示从倒数第7个字符开始，直到字符串结束，正好能取出‘python3’。",
+    "example": "s=‘abcdef’，s[-3:]得到‘def’。负索引在不确定字符串总长时很有用。"
+  },
+  {
+    "id": 12,
+    "type": "choice",
+    "title": "防呆输入法",
+    "content": "程序要求用户输入一个数字，但用户可能误输入字母。以下哪段代码能有效防止因转换类型而导致的程序崩溃？",
+    "options": [
+      "num = int(input(‘请输入数字：’))",
+      "s = input(‘请输入数字：’); if s.isdigit(): num = int(s)",
+      "s = input(‘请输入数字：’); num = float(s)",
+      "s = input(‘请输入数字：’); num = int(s) if s else 0"
+    ],
+    "answer": "B",
+    "explanation": "字符串的.isdigit()方法可以判断字符串是否只包含数字字符，在安全地转换为int之前进行判断，可以避免ValueError异常。直接转换（选项A、C）或简单的空值检查（选项D）无法处理字母输入。",
+    "example": "安全转换模板：user_input = input(); if user_input.isdigit(): num = int(user_input) else: print(‘输入错误’)。"
+  },
+  {
+    "id": 13,
+    "type": "choice",
+    "title": "闰年判断官",
+    "content": "判断闰年的规则是：能被4整除但不能被100整除，或者能被400整除。下面哪个逻辑表达式是正确的？",
+    "options": [
+      "year % 4 == 0 and year % 100 != 0 and year % 400 == 0",
+      "(year % 4 == 0 and year % 100 != 0) or year % 400 == 0",
+      "year % 4 == 0 or (year % 100 != 0 and year % 400 == 0)",
+      "year % 400 == 0 or year % 100 != 0 and year % 4 == 0"
+    ],
+    "answer": "B",
+    "hints": [
+      "注意区分‘或者’和‘并且’的关系。",
+      "能被400整除的年份一定是闰年，这是一个独立条件。",
+      "试着用2000年（闰）和1900年（非闰）分别代入验证。"
+    ],
+    "explanation": "闰年有两个并列条件，满足其一即可：1.(能被4整除 且 不能被100整除)；2.(能被400整除)。因此逻辑结构应为 (条件1) or (条件2)。选项B正确表达了这一点。",
+    "example": "复杂条件通常用括号分组，例如：(A and B) or C。"
+  },
+  {
+    "id": 14,
+    "type": "fill",
+    "title": "验证对称字符串",
+    "content": "判断一个字符串是否前后对称（如‘level’）。代码逻辑是：如果字符串和它的逆序相等，就打印‘是对称的’。请补全代码。",
+    "input": [
+      "level"
+    ],
+    "output": [
+      "level 是对称的！"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "s = input(\"请输入一个字符串：\")"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "if s == s["
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "] :"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "    print(s, \"是对称的！\")"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "else:"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "    print(s, \"不是对称的。\")"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      ":]",
+      "::",
+      "::-1",
+      ":0:-1",
+      "[::-1]"
+    ],
+    "answer": [
+      2
+    ],
+    "explanation": "在Python中，切片[::-1]表示从开始到结束，以步长-1遍历，即得到字符串的逆序。这是创建字符串逆序副本的简洁方法。",
+    "example": "获取逆序的通用写法：reversed_s = original_s[::-1]。"
+  },
+  {
+    "id": 15,
+    "type": "fill",
+    "title": "混合运算与命名",
+    "content": "下面是一段计算身体质量指数(BMI)的代码，但有几处挖空。请选择正确的选项补全，使其能正常运行。",
+    "input": [
+      "70",
+      "1.75"
+    ],
+    "output": [
+      "您的BMI是： 22.86"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "weight_input = input(\"体重(kg)：\")"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "height_input = input(\"身高(m)：\")"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "weight = float("
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": ")"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "height = float(height_input)"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": ""
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " = weight / (height ** 2)"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "print(\"您的BMI是：\", round("
+            },
+            {
+              "type": "slot",
+              "index": 2
+            },
+            {
+              "type": "code",
+              "value": ", 2))"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "weight_input",
+      "\"weight_input\"",
+      "weight_input.isdigit()",
+      "bmi",
+      "BMI",
+      "body_mass_index",
+      "bmi",
+      "weight",
+      "height",
+      "bmi"
+    ],
+    "answer": [
+      0,
+      3,
+      6
+    ],
+    "explanation": "首先，需要将输入的体重字符串转换为浮点数（float(weight_input)）。然后，将计算结果赋值给一个变量，变量名应遵循规则（如bmi）。最后，打印时需要引用这个变量（bmi）来计算和四舍五入。",
+    "example": "类似的流程：input_str -> float()转换 -> 计算 -> 存储到变量 -> 输出变量值。"
+  }
+]

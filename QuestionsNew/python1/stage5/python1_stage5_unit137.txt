@@ -1,0 +1,37 @@
+```plaintext
+{
+  'unit': '第137单元：异步编程与 asyncio',
+  'questions': [
+    {'id':1,'type':'choice','title':'协程定义','content':'在 asyncio 中，协程通常由什么定义？','options':{'A':'async def 函数','B':'普通 def 函数','C':'线程函数','D':'lambda'},'answer':'A','hints':['提示1: 使用 async 关键字定义','提示2: 返回协程对象','提示3: 需要 await 来运行内部异步操作'],'explanation':'async def 定义的函数在调用时返回协程对象，需要事件循环驱动。','example':''},
+
+    {'id':2,'type':'choice','title':'await 用途','content':'在协程中使用 await 的作用是？','options':{'A':'挂起当前协程并等待可等待对象完成','B':'阻塞整个线程','C':'创建新线程','D':'终止程序'},'answer':'A','hints':['提示1: await 用于等待 Future 或协程','提示2: 非阻塞地交出执行权','提示3: 必须在 async 函数内使用'],'explanation':'await 会挂起协程并让出执行权，直到被等待对象完成再继续。','example':''},
+
+    {'id':3,'type':'choice','title':'事件循环','content':'要运行顶层协程并获取结果，常用哪个函数？','options':{'A':'asyncio.run','B':'loop.run_forever','C':'threading.run','D':'multiprocessing.run'},'answer':'A','hints':['提示1: asyncio.run 创建并管理事件循环','提示2: 适合运行顶层协程一次性执行','提示3: 在现有事件循环中不应调用 asyncio.run'],'explanation':'asyncio.run 是运行单个顶层协程并返回其结果的简便入口。','example':''},
+
+    {'id':4,'type':'fill','title':'并发启动协程（填空）','content':'若需并发等待多个协程完成可使用 asyncio.__1__。','input':'','output':'','code':'import asyncio\nresults = asyncio.__1__([coro1, coro2])','options':'gather, sleep, run, wait','answer':'1','explanation':'asyncio.gather 可并发运行多个协程并收集结果。','example':''},
+
+    {'id':5,'type':'fill','title':'非阻塞睡眠（填空）','content':'在协程中暂停但不阻塞事件循环应使用 asyncio.__1__(seconds)。','input':'','output':'','code':'await asyncio.__1__(1)', 'options':'sleep, pause, wait, delay','answer':'1','explanation':'asyncio.sleep 是非阻塞的协程友好休眠函数。','example':''},
+
+    {'id':6,'type':'choice','title':'异步 I/O 优势','content':'相较线程模型，asyncio 的优点是？','options':{'A':'极低的上下文切换开销，适合大量并发连接','B':'自动使用多核 CPU','C':'不需考虑同步问题','D':'替代数据库索引'},'answer':'A','hints':['提示1: 协程切换成本低','提示2: 需配合异步库使用','提示3: 对 CPU 密集任务帮助有限'],'explanation':'asyncio 的协程切换轻量，适合高并发 I/O 场景。','example':''},
+
+    {'id':7,'type':'choice','title':'阻塞调用注意','content':'在异步代码中直接调用阻塞函数会如何？','options':{'A':'阻塞事件循环导致性能退化','B':'自动转为协程','C':'抛出异常','D':'无影响'},'answer':'A','hints':['提示1: 阻塞操作会阻塞整个事件循环','提示2: 可用 run_in_executor 移到线程池','提示3: 推荐使用异步库替代阻塞调用'],'explanation':'阻塞调用会阻塞事件循环，需用线程/进程池或异步替代方法避免。','example':''},
+
+    {'id':8,'type':'choice','title':'run_in_executor','content':'asyncio.get_event_loop().run_in_executor 用于？','options':{'A':'在后台线程或进程中运行阻塞函数','B':'在事件循环内并发运行协程','C':'替代 asyncio.gather','D':'自动序列化对象'},'answer':'A','hints':['提示1: 将阻塞调用委托到线程池','提示2: 返回 Future 可 await','提示3: 适合与已有阻塞库集成'],'explanation':'run_in_executor 将阻塞函数移到线程/进程池以避免阻塞事件循环。','example':''},
+
+    {'id':9,'type':'fill','title':'异步上下文（填空）','content':'支持异步上下文管理的魔法方法为 __1__ 与 __2__。','input':'','output':'','code':'class A:\n    async def __1__(self): pass\n    async def __2__(self, exc): pass','options':'__aenter__, __aexit__, __enter__, __exit__','answer':'1,2','explanation':'异步上下文管理器实现 __aenter__ 和 __aexit__，可用于 async with。','example':''},
+
+    {'id':10,'type':'fill','title':'取消协程（填空）','content':'要取消一个正在运行的 Task，可调用 task.__1__().','input':'','output':'','code':'t = asyncio.create_task(coro)\n__1__', 'options':'cancel, stop, kill, close','answer':'1','explanation':'Task.cancel() 用于请求取消协程任务，需在协程内处理 CancelledError。','example':''},
+
+    {'id':11,'type':'choice','title':'创建任务','content':'在事件循环中创建后台任务常用哪个函数？','options':{'A':'asyncio.create_task','B':'threading.Thread','C':'multiprocessing.Process','D':'os.fork'},'answer':'A','hints':['提示1: create_task 返回 Task 对象','提示2: 可与 await 搭配管理','提示3: 适用于 Python3.7+'],'explanation':'asyncio.create_task 用于并发调度协程并返回可管理的 Task。','example':''},
+
+    {'id':12,'type':'choice','title':'异常传播','content':'如果 gather 中某个协程抛出异常，默认行为是？','options':{'A':'gather 会将异常传播，且其他协程可能被取消（取决于参数）','B':'忽略异常继续返回 None','C':'自动重试失败协程','D':'将异常写入日志但不抛出'},'answer':'A','hints':['提示1: 参数 return_exceptions 可影响行为','提示2: 异常会在 await gather 时抛出','提示3: 需显式处理失败情况'],'explanation':'gather 默认会在 await 时抛出第一个异常，可通过 return_exceptions 控制返回行为。','example':''},
+
+    {'id':13,'type':'fill','title':'事件循环获取（填空）','content':'在协程内部获取当前事件循环应使用 asyncio.__1__()。','input':'','output':'','code':'loop = asyncio.__1__()','options':'get_running_loop, get_event_loop, run, new_event_loop','answer':'1','explanation':'在协程内应使用 get_running_loop() 获取当前正在运行的事件循环。','example':''},
+
+    {'id':14,'type':'fill','title':'超时控制（填空）','content':'要为协程添加超时，可使用 asyncio.__1__(coro, timeout)。','input':'','output':'','code':'import asyncio\nawait asyncio.__1__(coro, 5)', 'options':'wait_for, sleep, gather, shield','answer':'1','explanation':'asyncio.wait_for 可设置超时并在超时抛出 TimeoutError。','example':''},
+
+    {'id':15,'type':'fill','title':'总结（填空）','content':'asyncio 适合 __1__ 场景，需避免直接运行 __2__ 函数。','input':'','output':'','code':'','options':'I/O 密集型, 阻塞, CPU 密集型, 并行计算','answer':'1,2','explanation':'asyncio 适合 I/O 密集型场景，应避免直接调用阻塞函数，或将其移到 executor。','example':''}
+  ]
+}
+
+```

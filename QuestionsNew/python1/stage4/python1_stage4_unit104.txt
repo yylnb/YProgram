@@ -1,0 +1,282 @@
+```plaintext
+{
+  'unit': '第104单元：列表作为栈与队列',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '栈的实现',
+      'content': '使用列表实现栈，入栈与出栈常用哪两个方法？',
+      'options': {
+        'A': 'append 和 pop',
+        'B': 'insert 和 remove',
+        'C': 'extend 和 pop',
+        'D': 'push 和 pop'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：append 到末尾，pop 从末尾弹出',
+        '提示2：列表没有 push 方法',
+        '提示3：这是 LIFO 行为'
+      ],
+      'explanation': '使用 append 和 pop 可把列表当作 LIFO 栈实现。',
+      'example': 'stack.append(x); x = stack.pop()'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '队列的低效实现',
+      'content': '用列表实现队列并频繁在头部 pop(0) 会怎样？',
+      'options': {
+        'A': '性能低下，O(n) 每次操作',
+        'B': '性能很好，O(1)',
+        'C': '会抛出异常',
+        'D': '无法实现'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：从头部删除会导致元素移动',
+        '提示2': 应使用 collections.deque 更高效',
+        '提示3': pop(0) 是线性时间'
+      ],
+      'explanation': '从列表头部插入或删除会导致元素移动，效率为 O(n)，推荐使用 deque。',
+      'example': 'from collections import deque'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': 'deque 优势',
+      'content': 'collections.deque 相比列表的优点是？',
+      'options': {
+        'A': '左右两端插入删除效率高',
+        'B': '更节省内存',
+        'C': '自动排序',
+        'D': '只能存放数字'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：deque 为双向队列',
+        '提示2': 'appendleft/pop left 操作是 O(1)',
+        '提示3': '适合实现队列'
+      ],
+      'explanation': 'deque 在两端插入和删除均为 O(1)，适合做队列或双端操作。',
+      'example': 'd = deque(); d.appendleft(1)'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '栈操作示例（填空）',
+      'content': '把输入的数字依次入栈后出栈并打印顺序。',
+      'input': '1 2 3',
+      'output': '3 2 1',
+      'code': 'lst = list(map(int, input().split()))\nstack = []\nfor x in lst:\n    stack.__1__(x)\nwhile stack:\n    print(stack.__2__(), end=" ")',
+      'options': 'append, extend, pop, pop(0)',
+      'answer': '1,3',
+      'explanation': '用 append 入栈，用 pop 弹出最新元素实现 LIFO。',
+      'example': 'stack.append(1); stack.pop()'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '队列操作（填空）',
+      'content': '用列表模拟队列，从头部取出元素并打印（示范低效方法）。',
+      'input': '1 2 3',
+      'output': '1 2 3',
+      'code': 'lst = list(map(int, input().split()))\nwhile lst:\n    print(lst.__1__(0), end=" ")',
+      'options': 'pop, pop(0), remove, append',
+      'answer': '2',
+      'explanation': 'pop(0) 从头部移除元素并返回，但对长列表效率低。',
+      'example': 'lst.pop(0)'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': 'FIFO 与 LIFO',
+      'content': '队列与栈的区别是？',
+      'options': {
+        'A': '队列是 FIFO，栈是 LIFO',
+        'B': '队列是 LIFO，栈是 FIFO',
+        'C': '两者相同',
+        'D': '与数据结构无关'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：队列先进先出',
+        '提示2：栈后进先出',
+        '提示3': '用法场景不同'
+      ],
+      'explanation': '队列（FIFO）和栈（LIFO）是不同的抽象数据结构。',
+      'example': 'queue vs stack'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': 'list insert 作为队列',
+      'content': '若使用 lst.insert(0,x) 做入队，会有什么影响？',
+      'options': {
+        'A': '每次插入成本高，O(n)',
+        'B': '效率高，O(1)',
+        'C': '无法实现',
+        'D': '不改变列表'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：插入头部会导致元素移动',
+        '提示2': 推荐使用 deque',
+        '提示3': insert(0,x) 是线性时间'
+      ],
+      'explanation': 'insert(0,x) 会把元素插入头部并移动后续元素，时间复杂度为 O(n)。',
+      'example': 'lst.insert(0,1)'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': 'deque 方法',
+      'content': 'deque 提供哪个方法可高效从左端弹出？',
+      'options': {
+        'A': 'popleft',
+        'B': 'popleft',
+        'C': 'pop',
+        'D': 'shift'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：deque 有 popleft 和 appendleft',
+        '提示2': 'popleft 为 O(1)',
+        '提示3': 'pop 用于右端'
+      ],
+      'explanation': 'deque.popleft() 可在左端常数时间弹出元素。',
+      'example': 'd.popleft()'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': 'deque 示例（填空）',
+      'content': '用 deque 实现队列，左入右出并打印出队元素。',
+      'input': '1 2',
+      'output': '1 2',
+      'code': 'from collections import deque\nd = deque()\nfor x in map(int, input().split()):\n    d.append(x)\nwhile d:\n    print(d.__1__(), end=" ")',
+      'options': 'popleft, pop, appendleft, append',
+      'answer': '1',
+      'explanation': '使用 popleft 实现从左端出队。',
+      'example': 'd.popleft()'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '栈顶访问（填空）',
+      'content': '不弹出只查看栈顶元素并打印。',
+      'input': '5 6',
+      'output': '6',
+      'code': 's = list(map(int, input().split()))\nprint(s[__1__])',
+      'options': '-1, 0, 1, len(s)',
+      'answer': '1',
+      'explanation': '栈顶为列表末尾元素，可用 s[-1] 访问。',
+      'example': 'top = stack[-1]'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': 'LRU 缓存与 deque',
+      'content': '实现简单的 LRU 缓存时 deque 哪个操作有用？',
+      'options': {
+        'A': 'appendleft 与 pop',
+        'B': 'extend',
+        'C': 'clear',
+        'D': 'sort'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：需要在左侧快速插入最新项',
+        '提示2': 过期项从右侧弹出',
+        '提示3': deque 支持两端操作'
+      ],
+      'explanation': 'LRU 常把最新项放在左端（或右端），使用 appendleft 和 pop 可高效维护顺序。',
+      'example': 'd.appendleft(item); d.pop()'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': 'list 作为栈的限制',
+      'content': '列表作为栈的主要限制是什么？',
+      'options': {
+        'A': '当频繁从头部操作时效率低',
+        'B': '不能存放对象',
+        'C': '只能用于整数',
+        'D': '不支持并发'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：列表尾部操作为 O(1)',
+        '提示2': '头部操作为 O(n)',
+        '提示3': 'deque 更合适做双端队列'
+      ],
+      'explanation': '列表用于栈（尾部操作）是高效的，但若需要头部插入/删除则效率下降。',
+      'example': 'stack.append/pop 高效'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '性能建议',
+      'content': '实现高性能队列应优先使用？',
+      'options': {
+        'A': 'collections.deque',
+        'B': 'list',
+        'C': 'tuple',
+        'D': 'set'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：deque 提供 O(1) 两端操作',
+        '提示2': list 的头部操作为 O(n)',
+        '提示3': tuple 不支持修改'
+      ],
+      'explanation': 'deque 支持高效的两端插入与弹出，适合队列用途。',
+      'example': 'from collections import deque'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '模拟队列（填空）',
+      'content': '用 deque 将输入按顺序出队并打印。',
+      'input': '7 8',
+      'output': '7 8',
+      'code': 'from collections import deque\nd = deque(map(int, input().split()))\nwhile d:\n    print(d.__1__(), end=" ")',
+      'options': 'pop, popleft, append, appendleft',
+      'answer': '2',
+      'explanation': 'popleft 从左端出队，符合 FIFO 行为。',
+      'example': 'd.popleft()'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '栈长度（填空）',
+      'content': '入栈 3 个元素后栈长度为多少？',
+      'input': '1 2 3',
+      'output': '3',
+      'code': 'stack = []\nfor x in input().split():\n    stack.append(int(x))\nprint(len(stack))',
+      'options': '',
+      'answer': '',
+      'explanation': 'append 三次后 len 返回 3。',
+      'example': 'len(stack)'
+    }
+
+  ]
+}
+
+```

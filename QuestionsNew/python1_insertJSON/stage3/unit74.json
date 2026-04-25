@@ -1,0 +1,548 @@
+{
+    "choice_questions": [
+        {
+            "id": 1,
+            "title": "遍历同时删除",
+            "content": "遍历列表同时删除元素，安全做法是？",
+            "answer": "A",
+            "hints": [
+                "遍历列表副本避免跳跃问题",
+                "或反向遍历"
+            ],
+            "explanation": "直接在遍历同一列表时删除会跳过元素，应遍历副本或反向遍历。",
+            "example": "for x in lst[:]:",
+            "options": {
+                "A": "遍历副本并在原列表删除",
+                "B": "边遍历边删除原列表",
+                "C": "使用索引 skip",
+                "D": "不可实现"
+            }
+        },
+        {
+            "id": 2,
+            "title": "过滤生成新列表",
+            "content": "最 Pythonic 的过滤列表方法是？",
+            "answer": "A",
+            "hints": [
+                "列表推导式简洁高效",
+                "可读性好"
+            ],
+            "explanation": "列表推导式通常既简洁又高效。",
+            "example": "new=[x for x in lst if cond(x)]",
+            "options": {
+                "A": "列表推导式",
+                "B": "手动循环并 append",
+                "C": "map with lambda",
+                "D": "使用 while"
+            }
+        },
+        {
+            "id": 3,
+            "title": "反向删除",
+            "content": "反向遍历删除元素的优点？",
+            "answer": "A",
+            "hints": [
+                "从后往前删除不会改变未遍历的前面元素索引"
+            ],
+            "explanation": "反向遍历在删除元素时可避免跳过问题。",
+            "example": "for i in range(len(lst)-1,-1,-1):",
+            "options": {
+                "A": "避免索引移动影响未遍历元素",
+                "B": "性能更差",
+                "C": "不推荐",
+                "D": "只能用于数字"
+            }
+        },
+        {
+            "id": 6,
+            "title": "迭代器失效",
+            "content": "在循环中修改列表会导致什么？",
+            "answer": "A",
+            "hints": [
+                "迭代器基于原列表索引",
+                "删除会改变索引序列"
+            ],
+            "explanation": "在遍历时修改列表会导致迭代器跳过或重复元素。",
+            "example": "remove during iteration",
+            "options": {
+                "A": "迭代器行为异常（跳过元素）",
+                "B": "抛出异常",
+                "C": "自动复制",
+                "D": "无影响"
+            }
+        },
+        {
+            "id": 7,
+            "title": "用 filter",
+            "content": "使用 filter 函数与列表推导相比，优势是？",
+            "answer": "A",
+            "hints": [
+                "filter 返回迭代器（Python3 需转 list）",
+                "适合链式操作"
+            ],
+            "explanation": "filter 可与迭代器配合节省内存。",
+            "example": "filter(cond, iterable)",
+            "options": {
+                "A": "延迟执行（结合迭代器）",
+                "B": "更易读",
+                "C": "更快很多",
+                "D": "不兼容 Python3"
+            }
+        },
+        {
+            "id": 8,
+            "title": "插入与延展",
+            "content": "在遍历时使用 insert 或 extend 的注意点？",
+            "answer": "A",
+            "hints": [
+                "插入会改变后续索引",
+                "谨慎在遍历原列表时修改"
+            ],
+            "explanation": "插入会改变序列长度和索引，影响遍历行为。",
+            "example": "lst.insert(0,x)",
+            "options": {
+                "A": "可能改变正在遍历的序列",
+                "B": "不会改变",
+                "C": "总是报错",
+                "D": "只影响副本"
+            }
+        },
+        {
+            "id": 11,
+            "title": "复制浅拷贝",
+            "content": "list.copy() 与 lst[:] 的差别？",
+            "answer": "A",
+            "hints": [
+                "两者返回浅拷贝",
+                "对于嵌套结构需注意"
+            ],
+            "explanation": "两者都做浅拷贝，嵌套对象仍为引用。",
+            "example": "b = a.copy()",
+            "options": {
+                "A": "基本相同，为浅拷贝",
+                "B": "deep copy",
+                "C": "不复制",
+                "D": "返回迭代器"
+            }
+        },
+        {
+            "id": 12,
+            "title": "速度考量",
+            "content": "对大列表进行过滤时通常应？",
+            "answer": "A",
+            "hints": [
+                "节省内存",
+                "延迟处理有优势"
+            ],
+            "explanation": "生成器按需处理可减少内存峰值。",
+            "example": "(x for x in lst if cond(x))",
+            "options": {
+                "A": "使用生成器或迭代器",
+                "B": "一次性创建新列表总是最好",
+                "C": "使用 while 更快",
+                "D": "使用递归"
+            }
+        },
+        {
+            "id": 13,
+            "title": "原地 vs 新列表",
+            "content": "何时优先原地修改？",
+            "answer": "A",
+            "hints": [
+                "考虑内存与可变性需求",
+                "避免破坏原数据"
+            ],
+            "explanation": "原地修改节省内存，但需确认是否破坏原数据可接受。",
+            "example": "lst.sort() in-place",
+            "options": {
+                "A": "当内存受限且不需原始顺序",
+                "B": "永远原地更好",
+                "C": "从不原地修改",
+                "D": "仅在函数中"
+            }
+        }
+    ],
+    "fill_questions": [
+        {
+            "id": 4,
+            "title": "就地修改",
+            "content": "补全：将列表中每个元素乘以 2（就地修改）。",
+            "explanation": "通过索引就地修改元素避免生成新列表。",
+            "example": "in-place multiply",
+            "input": "1 2 3",
+            "output": [
+                "2 4 6"
+            ],
+            "options": [
+                "示例已给出"
+            ],
+            "answer": [
+                "1"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "lst=list(map(int,input().split()))"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "for i in range(len(lst)):"
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": ""
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "    lst[i]*=2"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "print(*lst)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 5,
+            "title": "安全删除示例",
+            "content": "补全：遍历并删除所有负数（安全方式）。",
+            "explanation": "通过生成新列表来避免在遍历中删除产生的问题。",
+            "example": "list comprehension filter",
+            "input": "1 -1 2 -3",
+            "output": [
+                "1 2"
+            ],
+            "options": [
+                "示例已给出"
+            ],
+            "answer": [
+                "1"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "lst=list(map(int,input().split()))"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "res=[x for x in lst if x>=0]"
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": ""
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "print(*res)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 9,
+            "title": "删除指定元素",
+            "content": "补全：删除列表中所有出现的 x。",
+            "explanation": "生成新列表保留不等于 x 的元素。",
+            "example": "filter x out",
+            "input": "5 1 5 2\n5",
+            "output": [
+                "1 2"
+            ],
+            "options": [
+                "示例已给出"
+            ],
+            "answer": [
+                "1"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "lst=list(map(int,input().split()))"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "x=int(input())"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "print(*[v for v in lst if v!=x])"
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": ""
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 10,
+            "title": "替换元素",
+            "content": "补全：将列表中所有 0 替换为 1。",
+            "explanation": "使用索引就地修改元素更直接。",
+            "example": "enumerate for index",
+            "input": "0 2 0",
+            "output": [
+                "1 2 1"
+            ],
+            "options": [
+                "示例已给出"
+            ],
+            "answer": [
+                "1"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "lst=list(map(int,input().split()))"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "for i,v in enumerate(lst):"
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": ""
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "    if v==0:"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "        lst[i]=1"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "print(*lst)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 14,
+            "title": "反向遍历删除",
+            "content": "补全：反向遍历并删除奇数。",
+            "explanation": "反向遍历删除安全且直接。",
+            "example": "del by index",
+            "input": "1 2 3 4 5",
+            "output": [
+                "2 4"
+            ],
+            "options": [
+                "示例已给出"
+            ],
+            "answer": [
+                "1"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "lst=list(map(int,input().split()))"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "for i in range(len(lst)-1,-1,-1):"
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": ""
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "    if lst[i]%2==1:"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "        del lst[i]"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "print(*lst)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 15,
+            "title": "就地排序",
+            "content": "补全：对列表就地升序排序并打印。",
+            "explanation": "list.sort() 在原列表就地排序，返回 None。",
+            "example": "lst.sort()",
+            "input": "3 1 2",
+            "output": [
+                "1 2 3"
+            ],
+            "options": [
+                "示例已给出"
+            ],
+            "answer": [
+                "1"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "lst=list(map(int,input().split()))"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "lst.sort()"
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": ""
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "print(*lst)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}

@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第66单元：break（常见误区）',
+  'questions': [
+    {'id':1,'type':'choice','title':'误区：认为 break 退出所有循环','content':'下列说法正确吗？ break 会退出所有嵌套循环。','options':{'A':'错误','B':'正确','C':'视 Python 版本而定','D':'仅在函数中为真'},'answer':'A','hints':['break 仅退出当前循环','要退出外层需其他手段','可用 flag 或异常实现外层退出'],'explanation':'break 只退出包含它的最近一层循环。','example':'inner break only'},
+    {'id':2,'type':'choice','title':'误区：break 必然优雅','content':'过度使用 break 总是好的做法吗？','options':{'A':'不是，总要权衡可读性','B':'是，越多越好','C':'只在小脚本中适用','D':'在函数外可用'},'answer':'A','hints':['可能降低可读性','应按需使用','注释明确退出理由'],'explanation':'break 会改变控制流，使用时应确保清晰的退出意图。','example':'use sparingly'},
+    {'id':3,'type':'choice','title':'误区：break 会回收资源','content':'使用 break 后资源会自动释放吗？','options':{'A':'不一定，需显式管理','B':'总会释放','C':'在 Windows 下释放','D':'在 Linux 下释放'},'answer':'A','hints':['资源需用 with 或 finally 管理','break 不会自动清理外部资源'],'explanation':'break 不会替代资源管理，仍需在合适位置释放资源。','example':'with open() as f'},
+    {'id':4,'type':'fill','title':'误区示例修正','content':'补全：用 flag 退出外层示例。','input':'','output':'','code':'done=False\nfor i in range(3):\n    for j in range(3):\n        if cond:\n            done=True\n            break\n    if done:\n        break','options':'示例已给出','answer':'1','explanation':'使用 flag 明确退出外层循环的意图。','example':'flag pattern'},
+    {'id':5,'type':'fill','title':'break 与 finally','content':'补全：确保 finally 块执行的写法。','input':'','output':'','code':'try:\n    while True:\n        if cond:\n            break\nfinally:\n    cleanup()','options':'示例已给出','answer':'1','explanation':'finally 会在 break 后仍然执行，因此可在其中释放资源。','example':'ensure cleanup'},
+    {'id':6,'type':'choice','title':'内部异常','content':'在循环内捕获异常后用 break 是合适的吗？','options':{'A':'视情况，有时合适','B':'永远不合适','C':'总是合适','D':'只能在 for 中'},'answer':'A','hints':['记录并合理退出','考虑是否需要重试'],'explanation':'在不可恢复异常时记录并用 break 退出是合理的策略。','example':'except: log; break'},
+    {'id':7,'type':'choice','title':'测试覆盖','content':'对使用 break 的代码应该如何测试？','options':{'A':'覆盖触发 break 与不触发的情形','B':'只测试触发情形','C':'只看不测试','D':'只测试异常'},'answer':'A','hints':['测试不同路径','包括边界情况'],'explanation':'测试应覆盖 break 被触发和未触发的路径以验证行为一致。','example':'unit tests for both cases'},
+    {'id':8,'type':'choice','title':'break 与可读性','content':'为提高可读性使用 break 时应？','options':{'A':'加注释说明退出原因','B':'不需注释','C':'写成一行','D':'删除其他代码'},'answer':'A','hints':['说明退出条件','便于维护者理解'],'explanation':'在复杂地方使用 break 应给出注释说明其退出意图。','example':'# found match, break'},
+    {'id':9,'type':'fill','title':'找到后处理','content':'补全：找到目标前先处理再 break。','input':'','output':'','code':'for x in lst:\n    if check(x):\n        handle(x)\n        break','options':'示例已给出','answer':'1','explanation':'在退出前做必要处理能保证重要逻辑被执行。','example':'process then break'},
+    {'id':10,'type':'fill','title':'避免重复代码','content':'补全：用函数提取重复处理后 break。','input':'','output':'','code':'def proc(x):\n    do(x)\nfor x in lst:\n    if cond(x):\n        proc(x)\n        break','options':'示例已给出','answer':'1','explanation':'提取函数可减少重复并明确职责。','example':'extract handler'},
+    {'id':11,'type':'choice','title':'break 与逻辑复杂度','content':'在高度复杂分支处使用 break 可能导致？','options':{'A':'控制流不清晰','B':'自动优化','C':'减少错误','D':'增加类型检查'},'answer':'A','hints':['跳转点太多难以跟踪','建议重构简化逻辑'],'explanation':'过多跳转会增加理解成本，应考虑重构。','example':'refactor if many breaks'},
+    {'id':12,'type':'choice','title':'替代 break 的模式','content':'若希望显式控制退出，常用何种模式？','options':{'A':'修改循环条件或使用 flag','B':'增加更多 break','C':'用全局变量','D':'用 print'},'answer':'A','hints':['更显式更易理解','flag 清晰表达意图'],'explanation':'通过修改循环条件或使用 flag 提高可读性与可测试性。','example':'running = False'},
+    {'id':13,'type':'choice','title':'代码审查关注点','content':'审查使用 break 的代码应关注？','options':{'A':'是否会跳过必要清理或逻辑','B':'是否减少行数','C':'变量名长度','D':'注释数量'},'answer':'A','hints':['检查清理逻辑是否仍然执行','查看 finally 或上下文管理'], 'explanation':'审查时要确保 break 不会导致必须执行的清理逻辑被跳过。','example':'ensure cleanup in finally'},
+    {'id':14,'type':'fill','title':'将 break 变为条件','content':'补全：用条件修改循环以避免 break。','input':'','output':'','code':'running=True\nwhile running:\n    if cond:\n        running=False','options':'示例已给出','answer':'1','explanation':'通过修改条件使得退出意图更显式而非跳转。','example':'set flag to false'},
+    {'id':15,'type':'fill','title':'注释 break 原因','content':'补全：在 break 上方写注释说明。','input':'','output':'','code':'# found target, exit loop\nif found:\n    break','options':'示例已给出','answer':'1','explanation':'注释能帮助他人在后续维护中理解为何退出循环。','example':'# explanation before break'}
+  ]
+}
+
+```
+
+*** End Patch

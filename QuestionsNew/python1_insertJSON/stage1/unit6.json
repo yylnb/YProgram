@@ -1,0 +1,566 @@
+{
+    "choice_questions": [
+        {
+            "id": 1,
+            "title": "加法运算的作用",
+            "content": "在 Python 中，运算符 + 的主要功能是什么？",
+            "answer": "B",
+            "hints": [
+                "注意：+ 不仅能算数学。",
+                "想想字符串之间的 + 会发生什么。",
+                "Python 是多才多艺的语言。"
+            ],
+            "explanation": "+ 可以用于数值相加，也可以用于字符串拼接。",
+            "example": "示例：'Hello ' + 'World' → 'Hello World'",
+            "options": {
+                "A": "只用于数字相加",
+                "B": "用于多种类型之间的加法，如数字相加或字符串拼接",
+                "C": "用于比较两个数字",
+                "D": "只能用于整数之间"
+            }
+        },
+        {
+            "id": 2,
+            "title": "减法的基础",
+            "content": "表达式 10 - 4 的结果是什么？",
+            "answer": "A",
+            "hints": [
+                "简单的数学题。",
+                "10 减去 4。",
+                "你一定做过很多次这种计算。"
+            ],
+            "explanation": "10 - 4 = 6。",
+            "example": "示例：20 - 5 → 15",
+            "options": {
+                "A": "6",
+                "B": "7",
+                "C": "14",
+                "D": "20"
+            }
+        },
+        {
+            "id": 3,
+            "title": "加法的自动类型提升",
+            "content": "当整数与浮点数进行加法时，结果类型是什么？",
+            "answer": "C",
+            "hints": [
+                "想想浮点数和整数混合运算的规则。",
+                "浮点数可以表示更广的范围。",
+                "Python 会“向上兼容”。"
+            ],
+            "explanation": "整数与浮点运算时，整数会被提升为 float。",
+            "example": "示例：3 + 0.2 → 3.2",
+            "options": {
+                "A": "整数",
+                "B": "字符串",
+                "C": "浮点数",
+                "D": "布尔值"
+            }
+        },
+        {
+            "id": 6,
+            "title": "加法与字符串拼接",
+            "content": "以下哪个表达式会产生字符串？",
+            "answer": "C",
+            "hints": [
+                "字符串之间的加法是拼接。",
+                "注意类型是否一致。",
+                "混合数字和字符串会出错。"
+            ],
+            "explanation": "'3' + '4' → '34'",
+            "example": "示例：'A' + 'B' → 'AB'",
+            "options": {
+                "A": "3 + 4",
+                "B": "3.0 + 4",
+                "C": "'3' + '4'",
+                "D": "3 + '4'"
+            }
+        },
+        {
+            "id": 7,
+            "title": "减法的类型要求",
+            "content": "为什么表达式 '10' - '2' 会报错？",
+            "answer": "B",
+            "hints": [
+                "想想字符串能做什么。",
+                "它们可以拼接但不能相减。",
+                "这和数学运算不一样。"
+            ],
+            "explanation": "字符串减法无意义，Python 会报错。",
+            "example": "示例：不能执行 'abc' - 'a'",
+            "options": {
+                "A": "Python 不支持数字运算",
+                "B": "字符串不能直接进行减法运算",
+                "C": "10 和 2 不是数字",
+                "D": "Python 不支持减法"
+            }
+        },
+        {
+            "id": 8,
+            "title": "加法的运算顺序",
+            "content": "表达式 1 + 2 + 3 的计算顺序是什么？",
+            "answer": "A",
+            "hints": [
+                "加法是左结合运算。",
+                "先左后右的顺序。",
+                "Python 和大多数语言一样。"
+            ],
+            "explanation": "加法是左结合，即从左向右计算。",
+            "example": "示例：(10 + 2) + 5 → 17",
+            "options": {
+                "A": "(1 + 2) + 3",
+                "B": "1 + (2 + 3)",
+                "C": "完全随机",
+                "D": "由 Python 版本决定"
+            }
+        },
+        {
+            "id": 11,
+            "title": "正负号的结合",
+            "content": "表达式 5 + -3 的结果是什么？",
+            "answer": "B",
+            "hints": [
+                "注意 -3 是负数。",
+                "5 加上一个负的 3。",
+                "相当于 5 - 3。"
+            ],
+            "explanation": "5 + (-3) = 2。",
+            "example": "示例：10 + -7 → 3",
+            "options": {
+                "A": "-8",
+                "B": "2",
+                "C": "8",
+                "D": "5"
+            }
+        },
+        {
+            "id": 12,
+            "title": "加减的混合计算",
+            "content": "表达式 10 - 3 + 2 的结果是什么？",
+            "answer": "D",
+            "hints": [
+                "从左向右计算。",
+                "先算 10 - 3。",
+                "再算结果 + 2。"
+            ],
+            "explanation": "10 - 3 = 7，7 + 2 = 9 → 错误？再检查：确认为 9？不，是我算错了。\n10 - 3 + 2 = 9。",
+            "example": "示例：20 - 5 + 1 → 16",
+            "options": {
+                "A": "15",
+                "B": "9",
+                "C": "5",
+                "D": "7"
+            }
+        },
+        {
+            "id": 13,
+            "title": "字符串拼接与空格",
+            "content": "以下哪项能得到 'Hello Python'？",
+            "answer": "B",
+            "hints": [
+                "注意空格在哪。",
+                "字符串之间的拼接不会自动加空格。",
+                "错误的符号会导致语法错误。"
+            ],
+            "explanation": "'Hello' + ' Python' → 'Hello Python'。",
+            "example": "示例：'A' + ' B' → 'A B'",
+            "options": {
+                "A": "'Hello' + 'Python'",
+                "B": "'Hello' + ' Python'",
+                "C": "'Hello' - 'Python'",
+                "D": "'Hello' + -'Python'"
+            }
+        }
+    ],
+    "fill_questions": [
+        {
+            "id": 4,
+            "title": "加法练习",
+            "content": "补全代码，使其正确输出 15。",
+            "explanation": "9 + 6 = 15。",
+            "example": "示例：2 + 3 → 5",
+            "input": null,
+            "output": [
+                "15"
+            ],
+            "options": [
+                "+",
+                "-",
+                "*",
+                "/",
+                "//",
+                "%",
+                "**",
+                "and",
+                "or"
+            ],
+            "answer": [
+                "+"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "a = 9"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "b = 6"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "print(a "
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": " b)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 5,
+            "title": "减法练习",
+            "content": "补全代码，使其输出 -2。",
+            "explanation": "3 - 5 = -2。",
+            "example": "示例：10 - 13 → -3",
+            "input": null,
+            "output": [
+                "-2"
+            ],
+            "options": [
+                "+",
+                "-",
+                "*",
+                "/",
+                "//",
+                "%",
+                "**",
+                "and",
+                "or"
+            ],
+            "answer": [
+                "-"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "x = 3"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "y = 5"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "z = x "
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": " y"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "print(z)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 9,
+            "title": "字符串拼接错误修复",
+            "content": "补全代码，使其正确打印 'Total: 30'。",
+            "explanation": "需要将整数转换为字符串。",
+            "example": "示例：'Score: ' + str(100)",
+            "input": null,
+            "output": [
+                "Total: 30"
+            ],
+            "options": [
+                "+",
+                "-",
+                "*",
+                "/",
+                "str(num)",
+                "int(num)",
+                "'30'",
+                ",",
+                "%s",
+                "."
+            ],
+            "answer": [
+                "str(num)"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "num = 30"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "text = 'Total: '"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "text = 'Total: ' "
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": " num"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "print(text)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 10,
+            "title": "加法连算",
+            "content": "补全代码，使 total 的最终值为 18。",
+            "explanation": "5 + 7 + 6 = 18。",
+            "example": "示例：1 + 2 + 3 → 6",
+            "input": null,
+            "output": [
+                "18"
+            ],
+            "options": [
+                "+",
+                "-",
+                "*",
+                "/",
+                "and",
+                "or",
+                "//",
+                "%"
+            ],
+            "answer": [
+                "+"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "a = 5"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "b = 7"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "c = 6"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "total = a + b "
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": " c"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "print(total)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 14,
+            "title": "负数计算",
+            "content": "补全代码，使输出为 -12。",
+            "explanation": "-5 - 7 = -12。",
+            "example": "示例：-3 - 4 → -7",
+            "input": null,
+            "output": [
+                "-12"
+            ],
+            "options": [
+                "+",
+                "-",
+                "*",
+                "/",
+                "//",
+                "%",
+                "**",
+                "and",
+                "or"
+            ],
+            "answer": [
+                "-"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "a = -5"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "b = 7"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "print(a "
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": " b)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 15,
+            "title": "加法计算练习",
+            "content": "补全代码，使结果为 30。",
+            "explanation": "10 + (8 + 12) = 30。",
+            "example": "示例：5 + (3 + 4) → 12",
+            "input": null,
+            "output": [
+                "30"
+            ],
+            "options": [
+                "+",
+                "-",
+                "*",
+                "/",
+                "//",
+                "%",
+                "**",
+                "and",
+                "or"
+            ],
+            "answer": [
+                "+"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "x = 10"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "y = 8"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "z = 12"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "print(x "
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": " y + z)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}

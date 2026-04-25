@@ -1,0 +1,183 @@
+-- Generated SQL for global_unit=9 (stage=1 unit_local=9 unit_id=9)
+INSERT INTO `que_choice_py_1` (`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`) VALUES
+
+(
+  121,
+  9,
+  '购物车的陷阱',
+  '阿强在网上购物，他用 `input()` 输入了商品价格，并想计算总价，但代码 `price = input(''请输入价格：'')` 后执行 `total = price * 2` 却报错了。他最可能犯了什么错误？',
+  '["input() 函数不能用于输入数字。", "price 被当作字符串，不能直接与数字相乘。", "乘法符号 * 不能用于计算总价。", "变量名 price 是Python的保留字，不能使用。"]',
+  2,
+  '["想想 input() 函数返回什么类型的数据？", "在Python中，‘3’ * 2 和 3 * 2 的结果一样吗？", "价格需要从文本（字符串）转换为数字才能进行数学运算。"]',
+  'input() 函数返回的是字符串（str）类型。字符串与数字相乘，Python会理解为字符串重复，而非数值乘法。需要先进行类型转换，如 `int(price)` 或 `float(price)`。',
+  '正确做法：`price = float(input(''请输入价格：''))`，然后 `total = price * 2`。'
+),
+(
+  122,
+  9,
+  '分披萨的困惑',
+  'Python侦探小P被问到：`6 // 4` 和 `6 / 4` 结果分别是什么？他该如何回答？',
+  '["都是 1.5", "都是 1", "1 和 1.5", "2 和 1"]',
+  3,
+  '["回忆一下，哪个运算符是‘地板除’？", "地板除的意思是向下取整，得到整数。", "单斜杠 `/` 进行的除法总会得到浮点数结果。"]',
+  '`//` 是地板除（整除）运算符，结果向下取整为整数，6 // 4 = 1。`/` 是标准除法运算符，结果总是浮点数，6 / 4 = 1.5。这是初学者常见的混淆点。',
+  '`9 // 2` 结果是 4，`9 / 2` 结果是 4.5。'
+),
+(
+  123,
+  9,
+  '丢失的一分钱',
+  '小芳用Python计算 `0.1 + 0.2`，惊讶地发现结果不是 0.3，而是一个接近 0.3 的很长的小数。这是为什么？',
+  '["Python的加法运算有bug。", "这是浮点数在计算机中二进制表示的精度限制所致。", "她没有使用高精度计算库。", "她输入的数字格式不对，应该写成 ‘.1’ 和 ‘.2’。"]',
+  2,
+  '["这与计算机存储数字的方式有关。", "很多十进制小数无法用二进制精确表示。", "这不是Python独有的问题，是计算机浮点运算的普遍现象。"]',
+  '由于计算机使用二进制（0和1）存储数据，像0.1、0.2这样的十进制小数无法用有限位二进制精确表示，会产生微小的舍入误差，导致计算结果有微小偏差。',
+  '对于需要精确计算的场景（如金融），应使用 `decimal` 模块或直接以‘分’为单位使用整数计算。'
+),
+(
+  126,
+  9,
+  '类型混搭的算式',
+  '在Python中，执行表达式 `3 + 5.0`，结果会是什么类型？这体现了什么规则？',
+  '["整数 (int)，因为第一个操作数是整数。", "浮点数 (float)，因为第二个操作数是浮点数。", "字符串 (str)，因为类型不同会触发拼接。", "布尔值 (bool)，因为这是一个比较运算。"]',
+  2,
+  '["试试在解释器里直接输入 `3 + 5.0` 看看结果。", "结果看起来是整数8还是小数8.0？", "当整数和浮点数混合运算时，结果会向精度更高的类型转换。"]',
+  '当整数（int）和浮点数（float）进行混合算术运算时，Python会自动将整数提升为浮点数，以保证计算的精度，因此结果也是浮点数类型。',
+  '类似地，`7 * 2.5` 结果是 17.5 (float)。除法 `/` 也总是产生 float 结果。'
+),
+(
+  127,
+  9,
+  '预算计算优先级',
+  '项目经理在计算预算：`budget = 2 + 3 * 4 ** 2`。他认为结果是 `(2+3) * (4*2) = 40`。Python实际计算出的 `budget` 值是多少？',
+  '["40", "50", "82", "98"]',
+  2,
+  '["回忆一下运算符的优先级顺序。", "指数运算（**）的优先级通常最高。", "然后是乘法（*），最后才是加法（+）。"]',
+  'Python运算符优先级：`**` > `*` > `+`。因此先算 `4 ** 2 = 16`，再算 `3 * 16 = 48`，最后算 `2 + 48 = 50`。项目经理错在没有考虑优先级，误以为是从左到右计算。',
+  '使用括号可以改变优先级，如 `budget = (2 + 3) * (4 ** 2)` 结果才是 80。'
+),
+(
+  128,
+  9,
+  '四舍五入的玄机',
+  '观察以下代码：`print(round(2.5), round(3.5))`。输出结果最可能是？',
+  '["2 3", "3 4", "2 4", "3 3"]',
+  3,
+  '["这考察的是 `round` 函数的舍入规则。", "它并非简单的‘四舍五入’。", "对于 `.5` 这种恰好在中间的值，它遵循‘银行家舍入法’（向最近的偶数舍入）。"]',
+  'Python的 `round` 函数对于恰好为 `.5` 的数采用‘银行家舍入法’（round half to even），即舍入到最近的偶数。2.5 最近的偶数是 2，3.5 最近的偶数是 4。',
+  '`round(4.5)` 得 4，`round(5.5)` 得 6。如果需要严格的四舍五入，需借助 `math.floor(x+0.5)` 等方法。'
+),
+(
+  131,
+  9,
+  '大整数的威力',
+  'Python中执行 `2 ** 100`，结果会是什么？这体现了Python整数处理的什么特点？',
+  '["一个非常巨大的浮点数。", "一个整数，但可能会因为太大而溢出报错。", "一个精度有限的近似值。", "一个精确的、任意大的整数。"]',
+  4,
+  '["你可以尝试在Python交互环境中计算它。", "看看结果是整数还是小数？有没有科学计数法？", "Python的整数（int）类型支持任意精度，不会像其他语言那样轻易溢出。"]',
+  'Python的整数类型（int）支持任意精度，这意味着它可以表示任意大的整数（仅受限于计算机内存），运算结果也是精确的，不会像其他语言那样发生溢出或自动转换为浮点数。',
+  '你可以轻松计算 `10 ** 1000`（1后面1000个0），这在很多语言中是难以直接做到的。'
+),
+(
+  132,
+  9,
+  '类型转换的“断舍离”',
+  '将浮点数 `3.14` 转换为整数，`int(3.14)` 的结果是什么？这种转换方式称为？',
+  '["3，这是向上取整。", "4，这是四舍五入。", "3，这是向零取整（截断小数）。", "报错，因为浮点数不能直接转整数。"]',
+  3,
+  '["试试 `int(3.9)` 的结果，能帮助你理解规则。", "它不是四舍五入，也不是向上/向下取整。", "对于正数，效果等同于去掉所有小数部分。"]',
+  '使用 `int()` 将浮点数转换为整数时，采用的是“向零取整”（Truncate towards zero），即直接舍弃小数部分，不进行任何舍入。因此 `int(3.14)` 和 `int(3.9)` 的结果都是 3。',
+  '`int(-2.7)` 的结果是 -2，同样是向零取整（向着数轴上0的方向）。'
+),
+(
+  133,
+  9,
+  '负数的求余难题',
+  '在Python中，`-7 % 3` 的结果是多少？这与我们数学中的余数概念有何不同？',
+  '["-1，余数保持与被除数相同的符号。", "2，余数总是非负的。", "1，取绝对值后再求余。", "-2，这是错误的计算结果。"]',
+  2,
+  '["记住公式：`余数 = 被除数 - 除数 * 商`。", "Python中，商是向下取整（向负无穷方向）。", "对于 -7 // 3，商是 -3，因为 -3 * 3 = -9，比 -7 小。"]',
+  'Python的取余运算 `%` 遵循规则：`余数 = 被除数 - 除数 * floor(被除数 / 除数)`。对于 `-7 % 3`，`-7 // 3` 结果是 -3（向下取整），所以余数为 `-7 - 3*(-3) = 2`，保证了余数非负且小于除数。',
+  '`-10 % 4` 结果是 2。这种定义在循环处理中很有用，例如确定列表循环索引。'
+);
+
+INSERT INTO `que_fill_py_1` (`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`) VALUES
+
+(
+  124,
+  9,
+  '修复简易计算器',
+  '小明的计算器程序总是出错，请帮他修复代码，使其能正确计算两个输入数字的和。',
+  '["5", "3"]',
+  '["计算结果为：8.0"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "num1 = input(''请输入第一个数字：'')"}, {"type": "code_line", "value": "num2 = input(''请输入第二个数字：'')"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "result = "}, {"type": "slot", "index": 0}, {"type": "code", "value": "(num1) + "}, {"type": "slot", "index": 1}, {"type": "code", "value": "(num2)"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "print(f''计算结果为：{result}'')"}]}]}',
+  '["int", "float", "str", "num1", "num2", "+", "*", "//"]',
+  '[1, 1]',
+  'input() 返回字符串，需要转换为数字类型才能进行加法运算。选项 `int` 或 `float` 都可以，但输出示例结果为 8.0（浮点数），且为了通用性（可处理小数），通常使用 `float`。',
+  '类似地，计算平均值：`avg = (float(a) + float(b)) / 2`。'
+),
+(
+  125,
+  9,
+  '公平的游戏得分比较',
+  '在比较两个玩家的游戏得分（可能是浮点数）是否相等时，直接使用 `==` 可能因精度问题出错。请完善下面更可靠的比较代码。',
+  NULL,
+  NULL,
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "score_a = 0.1 + 0.2"}, {"type": "code_line", "value": "score_b = 0.3"}, {"type": "code_line", "value": "# 直接比较可能为False"}, {"type": "code_line", "value": "print(score_a == score_b) # 输出：False"}, {"type": "code_line", "value": "# 使用一个很小的误差范围进行判断"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "epsilon = 1"}, {"type": "slot", "index": 0}, {"type": "code", "value": "(-5) # 定义一个非常小的数，如0.00001"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "if abs(score_a - score_b) "}, {"type": "slot", "index": 1}, {"type": "code", "value": " epsilon:"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "    print(\\\"得分相等（在误差允许范围内）\\\")"}, {"type": "code_line", "value": "else:"}, {"type": "code_line", "value": "    print(\\\"得分不相等\\\")"}]}]}',
+  '["<", ">", "<=", ">=", "==", "!=", "e", "**", "*", "10", "0.1"]',
+  '[6, 0]',
+  '科学计数法 `1e-5` 表示 0.00001，常被用作浮点数比较的误差容限（epsilon）。判断两数之差（绝对值）是否‘小于’这个容限，即可认为它们在精度上‘相等’。',
+  '判断 `abs(x - y) < 1e-7` 是一种常见的浮点数近似相等判断方法。'
+),
+(
+  129,
+  9,
+  '计算身体质量指数(BMI)',
+  '下面代码用于计算BMI，公式为 `体重(kg) / 身高(m)的平方`。请找出代码中的两处错误并修正。',
+  NULL,
+  NULL,
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "weight = 70"}, {"type": "code_line", "value": "height_cm = 175"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "height_m = height_cm "}, {"type": "slot", "index": 0}, {"type": "code", "value": " 100 # 错误1：此处应将厘米转换为米"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "bmi = weight / height_m "}, {"type": "slot", "index": 1}, {"type": "code", "value": " 2 # 错误2：此处是计算平方"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "print(f\\\"您的BMI指数是：{bmi:.1f}\\\")"}]}]}',
+  '["*", "/", "+", "-", "**", "//", "float", "int"]',
+  '[1, 4]',
+  '错误1：厘米转米是除以100，不是乘以100。错误2：身高的平方应使用幂运算符 `**`，而不是 `*`，`height_m * 2` 只是乘以2。',
+  '正确计算：`bmi = 70 / (1.75 ** 2)` 或 `bmi = 70 / pow(1.75, 2)`。'
+),
+(
+  130,
+  9,
+  '格式化价格标签',
+  '超市需要将价格统一格式化为保留两位小数。请完成下面的格式化代码，即使价格是整数（如10），也显示为‘10.00’。',
+  NULL,
+  '["价格： 19.99", "价格： 10.00"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "price1 = 19.99"}, {"type": "code_line", "value": "price2 = 10"}, {"type": "code_line", "value": "# 使用格式化字符串，确保两位小数"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "print(f\\\"价格：{price1:"}, {"type": "slot", "index": 0}, {"type": "code", "value": "}\\\")"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "print(f\\\"价格：{price2:"}, {"type": "slot", "index": 0}, {"type": "code", "value": "}\\\")"}]}]}',
+  '[".0f", ".1f", ".2f", ",.2f", ":2f", ".2d", ">6.2f"]',
+  '[2]',
+  '格式化规范 `.2f` 表示将数字格式化为浮点数，并固定保留两位小数。即使原数是整数，也会补齐 `.00`。这是确保数字显示一致性的常用方法。',
+  '`print(f"平均分：{score:.2f}")` 可将平均分统一显示为两位小数。'
+),
+(
+  134,
+  9,
+  '平方根与整数判断',
+  '小美想判断一个数是否是完全平方数（如4, 9, 16）。她的思路是先计算平方根，再判断平方根是否为整数。请补全代码。',
+  NULL,
+  '["16 是完全平方数。", "18 不是完全平方数。"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "import math"}, {"type": "code_line", "value": "num = 16"}, {"type": "code_line", "value": "root = math.sqrt(num)"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "# 错误做法：直接判断浮点数是否等于其整数转换"}, {"type": "slot", "index": 0}, {"type": "code", "value": "    print(f\\\"{num} 是完全平方数。\\\")"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "else:"}, {"type": "code_line", "value": "    print(f\\\"{num} 不是完全平方数。\\\")"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "num = 18"}, {"type": "code_line", "value": "root = math.sqrt(num)"}, {"type": "code_line", "value": "# 正确做法：考虑浮点数精度，应判断其是否‘非常接近’一个整数"}, {"type": "code_line", "value": "# 使用取整后再平方是否等于原数的方法更可靠"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "if "}, {"type": "slot", "index": 1}, {"type": "code", "value": " == num:"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "    print(f\\\"{num} 是完全平方数。\\\")"}, {"type": "code_line", "value": "else:"}, {"type": "code_line", "value": "    print(f\\\"{num} 不是完全平方数。\\\")"}]}]}',
+  '["if root == int(root):", "if root is int(root):", "if int(root) ** 2", "if round(root) ** 2", "int(root)", "round(root)"]',
+  '[0, 2]',
+  '错误做法 `root == int(root)` 可能因浮点数精度问题失败（例如 sqrt(25) 可能得到 4.999999...）。可靠方法是：将平方根取整后再平方，判断是否等于原数，即 `if int(root) ** 2 == num:`。',
+  '判断完全平方数：`if int(num ** 0.5) ** 2 == num:`。'
+),
+(
+  135,
+  9,
+  '计算折扣与总价',
+  '设计一个结账程序：输入单价和数量，计算总价并应用8折优惠。请补全代码，特别注意数据类型和运算顺序。',
+  '["25", "3"]',
+  '["原价： 75.0 元", "折后总价： 60.0 元"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "price_str = input(\\\"请输入单价：\\\")"}, {"type": "code_line", "value": "quantity_str = input(\\\"请输入数量：\\\")"}, {"type": "code_line", "value": "# 第一步：将输入转换为数值"}, {"type": "code_line", "value": "price = float(price_str)"}, {"type": "code_line", "value": "quantity = int(quantity_str)"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "# 第二步：计算原价（注意：此处可能会得到一个整数）"}, {"type": "slot", "index": 0}, {"type": "code", "value": " = price * quantity"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "print(f\\\"原价： {original_price} 元\\\")"}, {"type": "code_line", "value": "# 第三步：应用8折（即乘以0.8）"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "final_price = "}, {"type": "slot", "index": 1}, {"type": "code", "value": " "}, {"type": "slot", "index": 2}, {"type": "code", "value": " 0.8"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "print(f\\\"折后总价： {final_price} 元\\\")"}]}]}',
+  '["original_price", "final_price", "price", "quantity", "*", "/", "+", "-", "original_price * 0.8", "original_price", "int(original_price)", "float(original_price)"]',
+  '[0, 0, 4]',
+  '变量 `original_price` 必须先计算并赋值。然后折扣计算是 `final_price = original_price * 0.8`。尽管 `quantity` 是整数，但 `price` 是浮点数，`original_price` 会自动成为浮点数，所以直接相乘即可。',
+  '类似场景：`discounted = total_price * (1 - discount_rate)`，其中 discount_rate 如 0.2 表示 8 折。'
+);

@@ -1,0 +1,622 @@
+[
+  {
+    "id": 1,
+    "type": "choice",
+    "title": "引号迷踪",
+    "content": "精灵说它的藏宝图路径是'C:\\Users\\treasure\\map.txt'。如果你想在print里原样输出这个路径，应该用下面哪个字符串？",
+    "options": [
+      "'C:\\Users\\treasure\\map.txt'",
+      "\"C:\\Users\\treasure\\map.txt\"",
+      "r'C:\\Users\\treasure\\map.txt'",
+      "\"C:\\Users\\treasure\\map.txt\""
+    ],
+    "answer": "C",
+    "hints": [
+      "注意观察，路径里有很多反斜杠！",
+      "Python中的反斜杠是转义字符，会改变它后面字符的意思。",
+      "有一种字符串叫‘原始字符串’，可以原样输出所有字符。"
+    ],
+    "explanation": "选项C使用了原始字符串前缀r，它使得字符串中的每个反斜杠都被当作普通字符，不会进行转义，从而正确表示文件路径。其他选项会导致\n（换行）、\t（制表符）等错误转义。",
+    "example": "print(r'Hello\\nWorld') 会输出 Hello\\nWorld，而 print('Hello\\nWorld') 则会输出 Hello 然后换行输出 World。"
+  },
+  {
+    "id": 2,
+    "type": "choice",
+    "title": "双剑合璧",
+    "content": "一段魔法咒语要求你输出两句话，并且第二句要缩进。已知第一句是'Hello'，第二句是'World'，哪个print语句能帮你实现？",
+    "options": [
+      "print(\"Hello\"\"World\")",
+      "print(\"Hello\\tWorld\")",
+      "print(\"Hello\\n\\tWorld\")",
+      "print(\"Hello\\t\\nWorld\")"
+    ],
+    "answer": "C",
+    "hints": [
+      "‘两句话’意味着中间需要换行。",
+      "‘缩进’通常是通过制表符实现的。",
+      "需要先换行到新行，再缩进。"
+    ],
+    "explanation": "\\n 是换行符，\\t 是制表符（通常相当于4个空格）。‘Hello\\n\\tWorld’ 表示先输出Hello，然后换到新行，再输出一个制表符缩进，最后输出World。",
+    "example": "print(\"Name:\\n\\tAlice\") 会输出 Name: 换行，然后缩进输出 Alice。"
+  },
+  {
+    "id": 3,
+    "type": "choice",
+    "title": "语出惊人",
+    "content": "你想定义一个字符串，内容是英文双引号包裹的单词“Awesome”。以下哪种Python写法是正确的？",
+    "options": [
+      "\"'Awesome'\"",
+      "'\"Awesome\"'",
+      "\"\\\"Awesome\\\"\"",
+      "\"'Awesome\""
+    ],
+    "answer": "C",
+    "hints": [
+      "目标是让输出结果的外层是双引号。",
+      "在双引号字符串内部，如果再出现双引号，需要特殊处理。",
+      "想想转义字符的作用。"
+    ],
+    "explanation": "要在一个用双引号定义的字符串内部包含双引号字符本身，需要使用反斜杠进行转义，即 \"\\\"\"。所以正确写法是 \"\\\"Awesome\\\"\"，它定义的字符串内容是 \"Awesome\"。",
+    "example": "要定义字符串 It's cool，可以用 \"It's cool\"（单引号定义）或 'It\\'s cool'（单引号定义内转义单引号）。"
+  },
+  {
+    "id": 4,
+    "type": "fill",
+    "title": "编程冷笑话",
+    "content": "补全这段输出“程序员笑话”的代码。笑话是：为什么程序员总把万圣节和圣诞节搞混？因为 Oct 31 == Dec 25。",
+    "input": null,
+    "output": [
+      "为什么程序员总把万圣节和圣诞节搞混？因为 Oct 31 == Dec 25。"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "joke = \"为什么程序员总把万圣节和圣诞节搞混？因为 Oct 31 == Dec 25。\""
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "print("
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": ")"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "joke",
+      "\"joke\"",
+      "joke()",
+      "\\\"joke\\\"",
+      "'joke'"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "变量joke已经存储了完整的字符串，打印时直接传入变量名joke即可。其他选项会打印字符串“joke”而非变量的内容。",
+    "example": "类似地，name = \"Alice\"; print(name) 会输出 Alice。"
+  },
+  {
+    "id": 5,
+    "type": "fill",
+    "title": "文件路径困扰",
+    "content": "帮小菜修复他的文件路径输出代码，让他能正确打印出指向‘我的文档’的路径。",
+    "input": null,
+    "output": [
+      "C:\\Users\\xiao\\Documents\\readme.txt"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "path = "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "\"C:\\\\Users\\\\xiao\\\\Documents\\\\readme.txt\""
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(path)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "r",
+      "f",
+      "u",
+      "b",
+      ""
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "在字符串字面量前加r表示原始字符串，其中的反斜杠不会被当作转义字符处理，从而能正确表示Windows文件路径。",
+    "example": "print(r'New\\nLine') 输出 New\\nLine，而 print('New\\nLine') 输出 New 并换行。"
+  },
+  {
+    "id": 6,
+    "type": "fill",
+    "title": "收据排版",
+    "content": "餐厅小票需要清晰显示商品和价格，要求商品名和价格在不同行，且价格前有缩进。补全代码实现这个格式。",
+    "input": null,
+    "output": [
+      "商品: 炸鸡套餐",
+      "    价格: 30元"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "item = \"炸鸡套餐\""
+            },
+            {
+              "type": "code_line",
+              "value": "price = 30"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "receipt = \"商品: \" + item + "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "\"\\t价格: \" + str(price) + \"元\""
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(receipt)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "\\n",
+      "\\t",
+      "\\r",
+      "\\b",
+      "\"\\n\""
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "题目要求商品和价格在不同行，所以需要在字符串中间插入换行符'\\n'。'\\t'是制表符用于缩进，在后面的字符串中已经提供。",
+    "example": "\"Line1\" + \"\\n\" + \"Line2\" 会拼接成一个两行的字符串。"
+  },
+  {
+    "id": 7,
+    "type": "fill",
+    "title": "密码生成器",
+    "content": "你需要生成一个包含反斜杠和双引号的复杂密码。补全定义这个密码字符串的代码。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "password = "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "\"A\\\\B\\\"C\\\"D\""
+            },
+            {
+              "type": "code",
+              "value": "  # 我们想要字符串内容为: A\\B\"C\"D"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "r",
+      "f",
+      "u",
+      "b",
+      ""
+    ],
+    "answer": [
+      4
+    ],
+    "explanation": "此密码字符串内部的双引号需要用反斜杠转义（\\\"），反斜杠本身也需要转义（\\\\）。如果加了r前缀，则\\\"不会被转义，会破坏字符串结构。所以这里不应使用原始字符串。",
+    "example": "\"He said, \\\"Hi!\\\"\" 定义的字符串内容是 He said, \"Hi!\"。"
+  },
+  {
+    "id": 8,
+    "type": "fill",
+    "title": "多行告示",
+    "content": "社区要贴一个多行公告。请补全代码，让它能正确输出三行文字。",
+    "input": null,
+    "output": [
+      "停水通知",
+      "时间：明天9:00-17:00",
+      "请大家提前储水。"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "notice = \"\"\"停水通知"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "时间：明天9:00-17:00"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "请大家提前储水。\"\"\""
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(notice)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "\\n",
+      "\\t",
+      "\\r\\n",
+      "",
+      "\\n\\n"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "在Python的三引号字符串中，换行可以直接通过回车实现。但这里第二行末尾没有换行符，要开始第三行，必须在第二行末尾显式添加换行符'\\n'。",
+    "example": "\"\"\"Line1\\nLine2\"\"\" 和 \"\"\"Line1\nLine2\"\"\" 效果相同，都定义了一个两行字符串。"
+  },
+  {
+    "id": 9,
+    "type": "fill",
+    "title": "响铃的惊喜",
+    "content": "写一个程序，在打印重要消息前，让计算机发出‘嘟’的一声提示音（ASCII Bell）。补全代码。",
+    "input": null,
+    "output": [
+      "(听到提示音)",
+      "重要消息：你的程序编译成功！"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "print("
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "\"重要消息：你的程序编译成功！\")"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "\"\\a\" + ",
+      "\"\\b\" + ",
+      "\"\\n\" + ",
+      "\"\\t\" + ",
+      "\"\\r\" + "
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "转义序列 '\\a' 代表 ASCII Bell 字符，在某些终端中输出时会触发系统提示音（一声‘嘟’）。它需要与其他字符串拼接后一起打印。",
+    "example": "print('\\a警告！') 可能会先发出提示音，然后输出‘警告！’。"
+  },
+  {
+    "id": 10,
+    "type": "fill",
+    "title": "退格魔术",
+    "content": "下面的代码想用‘退格’字符实现一个简单的动态效果，让输出看起来像是‘Loading...’中的点逐个出现。请填入正确的转义序列。",
+    "input": null,
+    "output": [
+      "Loading...",
+      "（观察点逐渐增加的效果）"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "import time"
+            },
+            {
+              "type": "code_line",
+              "value": "print(\"Loading\", end='')"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "for i in range(3):"
+            },
+            {
+              "type": "code_line",
+              "value": "    time.sleep(0.5)"
+            },
+            {
+              "type": "code_inline",
+              "parts": [
+                {
+                  "type": "code",
+                  "value": "    print(\"."
+                },
+                {
+                  "type": "slot",
+                  "index": 0
+                },
+                {
+                  "type": "code",
+                  "value": "\", end='')"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print()"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "",
+      "\\n",
+      "\\t",
+      "\\b",
+      "\\a"
+    ],
+    "answer": [
+      3
+    ],
+    "explanation": "要实现在同一行末尾连续添加点，不需要特殊字符。这里'end=''''参数让print不换行。选项D'\\b'（退格）是干扰项，在此上下文中并不需要，因为题目只是描述，实际代码是顺序打印点。",
+    "example": "print('Hi', end=''); print('!') 会在一行输出 Hi!。"
+  },
+  {
+    "id": 11,
+    "type": "choice",
+    "title": "进制误会",
+    "content": "下面这段代码会打印出什么？s = \"\\x48\\x65\\x6c\\x6c\\x6c\" (注意最后是6c6c6c，多了一个6c)",
+    "options": [
+      "Hello",
+      "Hex48ex65ex6c...",
+      "Hell",
+      "会报错"
+    ],
+    "answer": "A",
+    "hints": [
+      "\\x后面跟两个十六进制数是一种转义序列。",
+      "它表示一个ASCII字符。",
+      "\\x48, \\x65, \\x6c, \\x6c, \\x6c 分别对应 H, e, l, l, o? 等等，数一下。"
+    ],
+    "explanation": "\\xHH 表示一个十六进制值为HH的字符。\\x48是'H'，\\x65是'e'，\\x6c是'l'。字符串中有三个\\x6c，对应三个'l'。所以最终字符串是'Hello'。注意：\\x6c就是小写'l'，三个'l'拼成'lll'。",
+    "example": "\"\\x41\\x42\\x43\" 解码后就是字符串 \"ABC\"。"
+  },
+  {
+    "id": 12,
+    "type": "choice",
+    "title": "原始的力量",
+    "content": "关于原始字符串（raw string）的说法，下列哪一项是错误的？",
+    "options": [
+      "原始字符串以r或R前缀开头。",
+      "原始字符串中的反斜杠不会被当作转义字符的起始。",
+      "原始字符串的末尾不能是单个反斜杠。",
+      "在原始字符串中，双引号不需要转义。"
+    ],
+    "answer": "D",
+    "hints": [
+      "原始字符串主要处理的是反斜杠问题。",
+      "想想字符串的边界符号（引号）。",
+      "原始字符串只是让反斜杠‘失效’，并不改变字符串定义的基本规则。"
+    ],
+    "explanation": "原始字符串（r''）处理的是反斜杠转义，但定义字符串所用的引号（单引号或双引号）仍然需要配对。如果字符串内容包含定义它的同种引号，依然需要转义，否则会提前结束字符串定义。",
+    "example": "r'It\\'s' 是错误的，因为原始字符串中的\\'不会被转义，导致字符串在t后面就结束了。正确写法是 r\"It's\" 或 'It\\'s'。"
+  },
+  {
+    "id": 13,
+    "type": "choice",
+    "title": "八进制谜题",
+    "content": "字符串 \"\\110\\145\\154\\154\\157\" 在print之后会显示什么？（提示：这是八进制转义）",
+    "options": [
+      "\\110\\145\\154\\154\\157",
+      "Hello",
+      "H e l l o",
+      "110145154154157"
+    ],
+    "answer": "B",
+    "hints": [
+      "反斜杠后跟1-3位八进制数字也是一种转义形式。",
+      "将八进制数转换成十进制，再查ASCII表。",
+      "110（八进制）= 72（十进制），对应ASCII字符'H'。"
+    ],
+    "explanation": "\\ooo（1-3位八进制数字）是八进制值的转义序列。\\110（八进制）等于十进制72，是'H'。\\145是101('e')，\\154是108('l')，\\157是111('o')。因此整个字符串就是'Hello'。",
+    "example": "\"\\101\" 表示八进制101，即十进制65，对应字符'A'。"
+  },
+  {
+    "id": 14,
+    "type": "fill",
+    "title": "混合引号挑战",
+    "content": "补全代码，定义一个字符串，其内容恰好是：他说：\"Python's escape is cool.\" 注意，内容里同时有双引号和单引号。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "sentence = "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "\"他说：\\\"Python's escape is cool.\\\"\""
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "r",
+      "f",
+      "u",
+      "b",
+      ""
+    ],
+    "answer": [
+      4
+    ],
+    "explanation": "字符串内容内双引号需要转义（\\\"），而单引号因为外层用的是双引号定义，所以不需要转义。这里不需要原始字符串前缀r，因为我们需要转义序列\\\"生效。",
+    "example": "\"I'm OK.\\\" 是合法的，单引号在双引号字符串里无需转义。"
+  },
+  {
+    "id": 15,
+    "type": "fill",
+    "title": "转义大全",
+    "content": "下面的代码想打印一个包含多种转义序列的示例字符串。请补全第一个转义序列（换行）。",
+    "input": null,
+    "output": [
+      "第一行",
+      "    缩进第二行（带\\反斜杠）"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "demo = \"第一行"
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "\\t缩进第二行（带\\\\反斜杠）\""
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(demo)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "\\n",
+      "\\t",
+      "\\r",
+      "\\a",
+      "\\b"
+    ],
+    "answer": [
+      0
+    ],
+    "explanation": "根据输出示例，'第一行'和'缩进第二行'在两行，所以中间需要换行符'\\n'。字符串中后面的'\\t'会产生缩进，'\\\\'会输出一个反斜杠字符。",
+    "example": "一个综合例子：\"Line1\\n\\tIndented\\\\Backslash\" 会输出两行，第二行缩进并包含一个反斜杠。"
+  }
+]

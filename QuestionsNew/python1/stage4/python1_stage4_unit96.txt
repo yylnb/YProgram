@@ -1,0 +1,282 @@
+```plaintext
+{
+  'unit': '第96单元：修改元素',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '索引赋值',
+      'content': '把列表中索引为 0 的元素设为 5 应使用哪条语句？',
+      'options': {
+        'A': 'lst[0] = 5',
+        'B': 'lst.set(0,5)',
+        'C': 'lst.add(0,5)',
+        'D': 'replace(lst,0,5)'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：列表支持用索引直接赋值。',
+        '提示2：Python 列表没有 set 方法。',
+        '提示3：直接用方括号索引并赋值。'
+      ],
+      'explanation': '通过索引直接赋值（lst[0]=5）可就地修改列表元素。',
+      'example': 'lst = [1,2]; lst[0] = 5  # 结果 [5,2]'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '切片赋值',
+      'content': '用切片赋值替换一段可以改变列表长度吗？',
+      'options': {
+        'A': '可以，切片赋值可插入或删除元素',
+        'B': '不可以，切片仅替换且长度固定',
+        'C': '会抛出异常',
+        'D': '只能替换为同长度序列'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：切片赋值可以用不同长度的序列替换',
+        '提示2：切片赋值会影响原列表长度',
+        '提示3：例如 lst[1:2] = [9,9] 会扩展列表'
+      ],
+      'explanation': '切片赋值可以把一段替换为任意长度的序列，从而改变列表长度。',
+      'example': 'a=[1,2,3]; a[1:2]=[9,9]  # 结果 [1,9,9,3]'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '就地修改返回值',
+      'content': '像 lst.sort() 或 lst.append(x) 这种就地修改列表的方法通常返回什么？',
+      'options': {
+        'A': 'None',
+        'B': '新列表',
+        'C': '被修改的元素',
+        'D': '布尔值'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：Python 里很多就地操作返回 None',
+        '提示2：这样可避免混淆是就地修改还是返回副本',
+        '提示3：例如 lst.sort() 返回 None，而 sorted(lst) 返回新列表'
+      ],
+      'explanation': '就地修改方法通常返回 None，明确区分就地修改和返回新对象的操作。',
+      'example': 'lst = [3,1]; lst.sort(); print(lst)  # [1,3]'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '替换元素（填空）',
+      'content': '将输入列表的第一个元素改为 0 并打印结果。',
+      'input': '1 2 3',
+      'output': '0 2 3',
+      'code': 'lst = list(map(int, input().split()))\n__1__\nprint(*lst)',
+      'options': 'lst[0]=0, lst.set(0,0), lst.replace(0,0), lst[0].set(0)',
+      'answer': '1',
+      'explanation': '使用索引赋值 lst[0]=0 即可修改第一个元素。',
+      'example': 'lst = [5,6]; lst[0]=0  # [0,6]'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '切片插入（填空）',
+      'content': '用切片在索引 1 处插入两个元素 9 和 9。',
+      'input': '1 2 3',
+      'output': '1 9 9 2 3',
+      'code': 'lst = list(map(int, input().split()))\n__1__\nprint(*lst)',
+      'options': 'lst[1:1]=[9,9], lst.insert(1,[9,9]), lst.extend([9,9]), lst[1]=[9,9]',
+      'answer': '1',
+      'explanation': '切片赋值 lst[1:1]=[9,9] 在索引 1 前插入两个元素。',
+      'example': 'a=[1,2]; a[1:1]=[9,9]  # [1,9,9,2]'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '原地替换 vs 新对象',
+      'content': '如果想保持原列表对象的引用不变，应使用下列哪类操作？',
+      'options': {
+        'A': '对原列表进行就地修改（如索引赋值/切片赋值）',
+        'B': '使用 + 生成新列表并赋值给同名变量',
+        'C': '用 tuple 替换',
+        'D': '重新创建新的列表对象并返回'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：就地修改不会改变对象 id',
+        '提示2：使用 + 会产生新对象',
+        '提示3：有时需要就地修改以让别处引用看到变化'
+      ],
+      'explanation': '就地修改会保留对象引用，适用于需要其他持有该引用的代码看到变化的情形。',
+      'example': 'a = []; b = a; a.append(1); print(b)  # [1]'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': 'replace 列表方法',
+      'content': '下面哪项不是列表的内置方法？',
+      'options': {
+        'A': 'replace',
+        'B': 'append',
+        'C': 'insert',
+        'D': 'pop'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：replace 是字符串方法',
+        '提示2：列表有 append/insert/pop 等方法',
+        '提示3：若要替换元素需用索引赋值或切片'
+      ],
+      'explanation': '列表没有 replace 方法，这是字符串的操作；列表替换用索引或切片。',
+      'example': 's.replace("a","b") 是字符串替换示例'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '全切片赋值',
+      'content': '把整个列表替换为另一个序列可用哪个语法？',
+      'options': {
+        'A': 'lst[:] = other',
+        'B': 'lst = other',
+        'C': 'lst.replace(other)',
+        'D': 'lst.update(other)'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：lst = other 会改变引用',
+        '提示2：lst[:] = other 就地替换保留对象 id',
+        '提示3：replace/update 不是列表通用方法'
+      ],
+      'explanation': '使用 lst[:] = other 会在就地替换所有元素，从而保持原对象引用。',
+      'example': 'a=[1,2]; b=a; a[:] = [9]; print(b)  # [9]'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '就地替换演示（填空）',
+      'content': '把列表内容替换为 [0] 并打印被其他变量引用时的变化。',
+      'input': '1 2',
+      'output': '[0] [0]',
+      'code': 'a = list(map(int, input().split()))\nb = a\na[:] = [0]\nprint(a, b)',
+      'options': 'a[:]=[0], a=[0], a.replace([0]), a.clear(); a.append(0)',
+      'answer': '1',
+      'explanation': 'a[:] = [0] 就地替换会让 b（引用相同对象）也看到变化。',
+      'example': 'lst[:] = [x]' 
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '原位修改 vs 重新赋值（填空）',
+      'content': '比较 a = b 和 a[:] = b 的不同（填入合适语句并打印 id）。',
+      'input': '1 2\n3 4',
+      'output': '(two ids, first equals second), (same ids)',
+      'code': 'a = list(map(int, input().split()))\nb = list(map(int, input().split()))\nold_id = id(a)\na = b\nprint(old_id == id(a))\n# 重新开始\na = list(map(int, input().split()))\nb = list(map(int, input().split()))\nold_id = id(a)\na[:] = b\nprint(old_id == id(a))',
+      'options': 'True, False, Depends, Error',
+      'answer': '2,1',
+      'explanation': 'a = b 会让 a 指向新的对象（id 变化），而 a[:] = b 就地替换保持原 id。',
+      'example': '使用 id() 可观察对象是否为同一引用'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '可变元素的修改',
+      'content': '列表中包含可变对象（如子列表），对该子列表修改会如何？',
+      'options': {
+        'A': '改变会反映在外层列表的对应元素上',
+        'B': '不会影响外层列表',
+        'C': '会报错',
+        'D': '会创建新子列表并替换原有'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：列表引用其元素对象',
+        '提示2：修改子列表会影响所有引用到该对象的位置',
+        '提示3：要避免这一点可使用深拷贝'
+      ],
+      'explanation': '列表元素是对对象的引用，修改可变元素会对所有持有该引用的地方可见。',
+      'example': 'a=[[1]]; b=a; a[0].append(2); print(b)  # [[1,2]]'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '批量更新',
+      'content': '要把列表中满足条件的元素批量修改，推荐的做法是？',
+      'options': {
+        'A': '使用列表推导或循环并就地赋值',
+        'B': '多次调用 replace',
+        'C': '用字符串方法',
+        'D': '不可实现'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：列表推导可生成新列表',
+        '提示2：循环可就地修改特定索引',
+        '提示3：字符串方法与列表元素类型不匹配'
+      ],
+      'explanation': '可用列表推导生成新列表或在循环中对满足条件的索引进行就地赋值，二者都是常用并清晰的做法。',
+      'example': 'lst = [x*2 if x>0 else x for x in lst]'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '不可变元素替换',
+      'content': '对不可变元素（如整数）赋新值是怎样的？',
+      'options': {
+        'A': '替换相应位置的引用为新对象',
+        'B': '修改原对象',
+        'C': '抛出异常',
+        'D': '不允许'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：整数是不可变的，赋值会绑定新对象到索引位置',
+        '提示2：原整数对象保持不变',
+        '提示3：赋值是引用替换行为'
+      ],
+      'explanation': '对不可变类型赋新值会让列表索引处的引用指向新的对象，不会修改原对象。',
+      'example': 'lst[0] = 10'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '条件修改（填空）',
+      'content': '把列表中所有负数替换为 0 并打印结果。',
+      'input': '-1 2 -3 4',
+      'output': '0 2 0 4',
+      'code': 'lst = list(map(int, input().split()))\nfor i in range(len(lst)):\n    if __1__:\n        lst[i] = 0\nprint(*lst)',
+      'options': 'lst[i]<0, lst[i]>0, lst[i]==0, lst[i]!=0',
+      'answer': '1',
+      'explanation': '判断元素是否小于 0，然后就地赋值为 0 即可。',
+      'example': 'for i in range(len(a)): if a[i]<0: a[i]=0'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '索引替换多项（填空）',
+      'content': '把索引 1 到 3 的元素替换为 9 并打印。',
+      'input': '1 2 3 4 5',
+      'output': '1 9 9 9 5',
+      'code': 'lst = list(map(int, input().split()))\nlst[1:4] = __1__\nprint(*lst)',
+      'options': '[9,9,9], [9]*3, [9], 9',
+      'answer': '1,2',
+      'explanation': '可以使用具体列表 [9,9,9] 或者 [9]*3 来生成三个 9 的序列进行切片赋值。',
+      'example': 'a[1:4] = [0]*3'
+    }
+
+  ]
+}
+
+```

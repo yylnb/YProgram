@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第85单元：循环与数据结构（栈、队列、堆）',
+  'questions': [
+    {'id':1,'type':'choice','title':'栈 LIFO','content':'栈的访问顺序是？','options':{'A':'后进先出','B':'先进先出','C':'随机','D':'按优先级'},'answer':'A','hints':['push/pop 的 LIFO 行为'], 'explanation':'栈遵循后进先出（LIFO），最新入栈的元素最先被弹出。','example':'stack.append(x); stack.pop()'},
+    {'id':2,'type':'choice','title':'队列 FIFO','content':'队列的访问顺序是？','options':{'A':'先进先出','B':'后进先出','C':'随机','D':'按索引'},'answer':'A','hints':['队列用于按顺序处理任务'], 'explanation':'队列遵循先进先出（FIFO），先入队的元素先被处理。','example':'from collections import deque'},
+    {'id':3,'type':'choice','title':'heap 用途','content':'heapq 常用于实现？','options':{'A':'优先队列','B':'FIFO 队列','C':'栈','D':'字典'},'answer':'A','hints':['heapq.top 返回最小值','常用于取最小/最大k元素'], 'explanation':'heapq 提供基于堆的数据结构，用于实现优先队列等操作。','example':'import heapq'},
+    {'id':4,'type':'fill','title':'栈示例','content':'补全：用列表模拟栈，入栈后弹出并打印。','input':'1 2','output':'2 1','code':'s=[]\nfor x in input().split():\n    s.append(int(x))\nwhile s:\n    print(s.pop(), end=" ")','options':'示例已给出','answer':'1','explanation':'列表的 append/pop 可方便模拟栈行为。','example':'s.append(x)\ns.pop()'},
+    {'id':5,'type':'fill','title':'队列示例','content':'补全：用 deque 实现队列并出队打印。','input':'1 2','output':'1 2','code':'from collections import deque\nq=deque(map(int,input().split()))\nwhile q:\n    print(q.popleft(), end=" ")','options':'示例已给出','answer':'1','explanation':'deque 的 popleft 提供高效的队头出队操作。','example':'q.popleft()'},
+    {'id':6,'type':'choice','title':'heapq 最小堆','content':'heapq 默认实现的是？','options':{'A':'最小堆','B':'最大堆','C':'平衡树','D':'哈希堆'},'answer':'A','hints':['heapq 返回最小元素'], 'explanation':'heapq 是最小堆实现，push/pop 会维护最小元素在堆顶。','example':'heapq.heappop(h)'}
+    ,{'id':7,'type':'choice','title':'适用场景','content':'遇到需要快速取 top-k 元素时推荐使用？','options':{'A':'堆（heapq）','B':'list 排序每次取','C':'字典','D':'set'},'answer':'A','hints':['堆维护部分有序性更节省时间'], 'explanation':'使用堆可以在 O(n log k) 时间内获取前 k 个元素，比全排序更高效。','example':'heapq.nlargest(k, nums)'},
+    {'id':8,'type':'choice','title':'deque 优势','content':'deque 与 list 在队头出队操作相比？','options':{'A':'deque 更高效','B':'list 更高效','C':'两者相同','D':'deque 无效'},'answer':'A','hints':['list 在头部操作是 O(n) 而 deque 为 O(1)'], 'explanation':'deque 在队头插入/弹出为 O(1)，适合实现队列操作。','example':'from collections import deque'},
+    {'id':9,'type':'fill','title':'堆取 top-k','content':'补全：用 heapq 取前三大值示例。','input':'1 5 3 4','output':'5 4 3','code':'import heapq\narr=list(map(int,input().split()))\nprint(heapq.nlargest(3, arr))','options':'示例已给出','answer':'1','explanation':'heapq.nlargest 直接返回 top-k 元素，内部使用堆实现。','example':'heapq.nlargest(k, iterable)'},
+    {'id':10,'type':'fill','title':'模拟栈应用','content':'补全：判断括号匹配用栈示例。','input':'()[]','output':'True','code':'s=[]\nfor ch in input().strip():\n    if ch in "([": s.append(ch)\n    else:\n        if not s: print(False); break\n        s.pop()\nelse:\n    print(not s)','options':'示例已给出','answer':'1','explanation':'括号匹配经典用栈保存左括号并匹配右括号。','example':'stack usage'},
+    {'id':11,'type':'choice','title':'优先队列更新','content':'要在优先队列中更新某元素优先级常用做法是？','options':{'A':'推入新元组并忽略旧元组','B':'直接修改堆中元素','C':'pop 所有并重建','D':'heapq 提供 update'},'answer':'A','hints':['常用惰性删除策略推入新元素并标记旧元素无效'], 'explanation':'heapq 没有直接更新接口，常用方法是推入带更新优先级的新元组并用标志忽略旧元组。','example':'push new, mark old as removed'},
+    {'id':12,'type':'choice','title':'栈的应用场景','content':'栈常用于实现哪类算法？','options':{'A':'深度优先搜索、表达式求值','B':'广度优先搜索','C':'哈希查找','D':'排序'},'answer':'A','hints':['DFS 天然用栈实现'], 'explanation':'栈适合实现 DFS、括号匹配、表达式求值等后进先出场景。','example':'DFS iterative'},
+    {'id':13,'type':'choice','title':'队列的应用','content':'队列常用于？','options':{'A':'任务调度与 BFS','B':'深度优先搜索','C':'堆实现','D':'字符串拼接'},'answer':'A','hints':['任务按顺序处理或 BFS 使用队列'], 'explanation':'队列适合按顺序处理任务或实现广度优先搜索。','example':'from collections import deque'},
+    {'id':14,'type':'fill','title':'堆入堆出','content':'补全：初始化堆并弹出最小值。','input':'3 1 2','output':'1','code':'import heapq\narr=list(map(int,input().split()))\nheapq.heapify(arr)\nprint(heapq.heappop(arr))','options':'示例已给出','answer':'1','explanation':'heapify 将列表转为堆结构，heappop 弹出最小元素。','example':'heapq.heapify(a)'},
+    {'id':15,'type':'fill','title':'队列处理','content':'补全：用 deque 实现宽度限制的缓存，超过限制则丢弃最旧元素。','input':'1 2 3 4','output':'(depending on limit)','code':'from collections import deque\nq=deque(maxlen=3)\nfor x in input().split():\n    q.append(x)\nprint(*q)','options':'示例已给出','answer':'1','explanation':'deque 支持 maxlen 自动丢弃最旧元素，方便做固定大小缓存。','example':'deque(maxlen=3)'}
+  ]
+}
+
+```
+
+*** End Patch

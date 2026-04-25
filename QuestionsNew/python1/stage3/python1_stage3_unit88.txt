@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第88单元：复杂循环题型组合练习',
+  'questions': [
+    {'id':1,'type':'choice','title':'组合题目','content':'复杂题通常由哪些知识点组合？','options':{'A':'循环 + 条件 + 数据结构','B':'仅循环','C':'仅字符串','D':'仅数学'},'answer':'A','hints':['综合题常融合多个知识点'], 'explanation':'复杂题往往要求将循环、条件判断和数据结构等结合使用。','example':'use list/dict in loops'},
+    {'id':2,'type':'choice','title':'分解策略','content':'遇到复杂循环问题首步应做什么？','options':{'A':'分解为子步骤并逐步实现','B':'直接写一个超长循环','C':'用递归完全替代','D':'放弃'},'answer':'A','hints':['分解能降低复杂度并便于调试'], 'explanation':'分解问题有助于逐步实现并验证每个子步骤的正确性。','example':'write small helper functions'},
+    {'id':3,'type':'choice','title':'边界检查','content':'在组合操作中忘记做边界检查通常会导致？','options':{'A':'索引错误或异常','B':'更快执行','C':'内存减少','D':'无影响'},'answer':'A','hints':['注意空列表和越界情况'], 'explanation':'边界条件缺失常导致越界访问或异常，需要专门考虑。','example':'if not lst: continue'},
+    {'id':4,'type':'fill','title':'合并计数','content':'补全：统计每个单词出现频次并按频次输出。','input':'a b a','output':'a 2\nb 1','code':'from collections import Counter\nprint(*Counter(input().split()).items())','options':'示例已给出','answer':'1','explanation':'使用 Counter 快速统计词频并输出。','example':'Counter(words)'},
+    {'id':5,'type':'fill','title':'滑动窗口','content':'补全：计算长度为 k 的滑动窗口中最大和。','input':'5 2\n1 3 2 5 4','output':'9','code':'n,k=map(int,input().split())\narr=list(map(int,input().split()))\ncur=sum(arr[:k])\nmx=cur\nfor i in range(k,n):\n    cur += arr[i]-arr[i-k]\n    mx = max(mx, cur)\nprint(mx)','options':'示例已给出','answer':'1','explanation':'滑动窗口可在 O(n) 时间内维护窗口和。','example':'sliding window'},
+    {'id':6,'type':'choice','title':'双指针','content':'双指针技巧常用于？','options':{'A':'有序数组的查找或窗口问题','B':'只适用于链表','C':'递归替代','D':'排序'},'answer':'A','hints':['双指针能在 O(n) 内完成某些任务'], 'explanation':'双指针在有序数组或字符串中常用于寻找满足条件的下标对或窗口。','example':'i,j pointers'},
+    {'id':7,'type':'choice','title':'频率映射','content':'在循环中统计并查询频率推荐数据结构？','options':{'A':'字典或 Counter','B':'list 总是','C':'set','D':'tuple'},'answer':'A','hints':['哈希表提供快速计数与查询'], 'explanation':'字典用于频率统计并能在循环中快速查询和更新。','example':'d[x]=d.get(x,0)+1'},
+    {'id':8,'type':'choice','title':'分治与循环','content':'复杂问题可以用分治替代循环吗？','options':{'A':'有时可用但需权衡','B':'从不使用','C':'性能总更优','D':'等价'},'answer':'A','hints':['分治可降低复杂度但实现更复杂'], 'explanation':'分治可能带来算法复杂度改进，但需根据具体问题权衡实现复杂性。','example':'merge sort idea'},
+    {'id':9,'type':'fill','title':'合并有序列表','content':'补全：合并两个有序列表为有序结果。','input':'1 3\n2 4','output':'1 2 3 4','code':'a=list(map(int,input().split()))\nb=list(map(int,input().split()))\nres=[]\ni=j=0\nwhile i<len(a) and j<len(b):\n    if a[i]<b[j]: res.append(a[i]); i+=1\n    else: res.append(b[j]); j+=1\nres += a[i:]+b[j:]\nprint(*res)','options':'示例已给出','answer':'1','explanation':'归并操作使用双指针实现线性时间合并。','example':'merge step'},
+    {'id':10,'type':'fill','title':'计数子数组','content':'补全：统计和为 k 的长度为 2 的子数组数目（示例）。','input':'4 5 1 4\n5','output':'1','code':'arr=list(map(int,input().split()))\nk=int(input())\ncnt=0\nfor i in range(len(arr)-1):\n    if arr[i]+arr[i+1]==k:\n        cnt+=1\nprint(cnt)','options':'示例已给出','answer':'1','explanation':'枚举长度为 2 的子数组并计数满足条件的个数。','example':'sliding pairs'},
+    {'id':11,'type':'choice','title':'避免重复','content':'在组合问题中避免重复解常用技巧是？','options':{'A':'排序并跳过相同元素','B':'不处理','C':'用 set 记录所有序列','D':'仅用于小数据'},'answer':'A','hints':['排序 + 跳过是常见去重方法'], 'explanation':'通过对输入排序并在循环中跳过相同元素可避免生成重复解。','example':'if i>0 and a[i]==a[i-1]: continue'},
+    {'id':12,'type':'choice','title':'贪心可行性','content':'使用贪心策略前应先？','options':{'A':'证明其正确性或贪心选择性质','B':'直接使用不考虑证明','C':'总是正确','D':'不需要验证'},'answer':'A','hints':['贪心需证明局部最优导致全局最优'], 'explanation':'在使用贪心前必须确认问题满足贪心选择性质或证明其正确性。','example':'greedy proof sketch'},
+    {'id':13,'type':'choice','title':'模拟题','content':'复杂题型中模拟问题常指？','options':{'A':'按题目规则逐步模拟状态变化','B':'用公式直接求解','C':'必须用递归','D':'不实用'},'answer':'A','hints':['模拟可避免复杂数学推导'], 'explanation':'模拟按规则迭代状态，适用于规则复杂但规模可控的题目。','example':'simulate steps in loop'},
+    {'id':14,'type':'fill','title':'窗口最大平均','content':'补全：计算长度为 k 的窗口最大平均值。','input':'5 2\n1 2 3 4 5','output':'4.5','code':'n,k=map(int,input().split())\narr=list(map(int,input().split()))\ncur=sum(arr[:k])\nmx=cur\nfor i in range(k,n):\n    cur += arr[i]-arr[i-k]\n    mx = max(mx, cur)\nprint(mx / k)','options':'示例已给出','answer':'1','explanation':'滑动窗口维护窗口和并在每步更新最大和用于计算最大平均。','example':'sliding window average'},
+    {'id':15,'type':'fill','title':'复杂组合练习','content':'补全：判断序列中是否存在三数和为 0（简化版本）。','input':'-1 0 1 2 -1 -4','output':'True','code':'arr=list(map(int,input().split()))\narr.sort()\nfound=False\nfor i in range(len(arr)-2):\n    l=i+1; r=len(arr)-1\n    while l<r:\n        s=arr[i]+arr[l]+arr[r]\n        if s==0: found=True; break\n        if s<0: l+=1\n        else: r-=1\n    if found: break\nprint(found)','options':'示例已给出','answer':'1','explanation':'排序 + 双指针可在 O(n^2) 内查找三数和为 0 的组合。','example':'three sum'}
+  ]
+}
+
+```
+
+*** End Patch

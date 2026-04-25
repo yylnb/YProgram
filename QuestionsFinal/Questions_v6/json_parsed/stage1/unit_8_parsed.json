@@ -1,0 +1,597 @@
+[
+  {
+    "id": 1,
+    "type": "choice",
+    "title": "奶茶店的算术",
+    "content": "阿强在奶茶店买了一杯15元的奶茶，加了两份3元的珍珠。老板用Python计算总价：`15 + 3 * 2`，请问老板会收多少钱？",
+    "options": [
+      "36元（因为15+3得18，再乘以2）",
+      "21元（因为3*2得6，再加15）",
+      "报错，Python不知道怎么算",
+      "18元（从左到右依次计算）"
+    ],
+    "answer": "B",
+    "hints": [
+      "想想是珍珠先算总价，还是奶茶和单份珍珠先相加？",
+      "在数学和Python里，乘法和加法谁先算？",
+      "乘法运算符 `*` 的优先级高于加法运算符 `+`，所以先计算 `3 * 2`。"
+    ],
+    "explanation": "Python中，算术运算符 `*`（乘法）的优先级高于 `+`（加法）。表达式 `15 + 3 * 2` 会先计算 `3 * 2` 得到6，再计算 `15 + 6`，最终结果是21。",
+    "example": "类似地，`2 + 8 / 4` 会先算 `8 / 4` 得到2，再算 `2 + 2`，结果是4。"
+  },
+  {
+    "id": 2,
+    "type": "choice",
+    "title": "谁是真朋友？",
+    "content": "阿珍想用逻辑判断谁是真朋友：条件A是“请我吃饭”，条件B是“借我笔记”。她的判断逻辑是 `not A or B`。如果A为False，B为True，那么她是真朋友吗？",
+    "options": [
+      "是，因为 `not False or True` 结果是 True",
+      "不是，因为 `not False or True` 结果是 False",
+      "不确定，要看 `not` 和 `or` 谁先算",
+      "会报错，逻辑不能这么用"
+    ],
+    "answer": "A",
+    "hints": [
+      "`not`、`or` 和 `and` 这几个逻辑运算符，谁的“权力”更大？",
+      "逻辑非 `not` 会先于逻辑或 `or` 执行。",
+      "所以先算 `not False` 得到 True，再算 `True or True`，结果自然是 True。"
+    ],
+    "explanation": "逻辑非 `not` 的优先级高于逻辑或 `or`。表达式 `not False or True` 会先计算 `not False` 得到 True，再计算 `True or True`，结果为 True。",
+    "example": "类似地，`not True and False` 会先算 `not True` 得到 False，再算 `False and False`，结果为 False。"
+  },
+  {
+    "id": 3,
+    "type": "choice",
+    "title": "比较的陷阱",
+    "content": "小明的考试成绩是85分。他想用 Python 判断“分数大于60且小于90”是否成立，写了 `85 > 60 and < 90`。运行后会怎样？",
+    "options": [
+      "得到结果 True",
+      "得到结果 False",
+      "程序报错 SyntaxError",
+      "程序死循环"
+    ],
+    "answer": "C",
+    "hints": [
+      "看看 `< 90` 前面有比较的对象吗？",
+      "Python语法不允许 `and` 直接连接不完整的比较表达式。",
+      "正确的写法应该是 `85 > 60 and 85 < 90`，或者更简洁的 `60 < 85 < 90`。"
+    ],
+    "explanation": "虽然比较运算符（如 `>`、`<`）的优先级高于逻辑运算符 `and`，但 `85 > 60 and < 90` 中 `< 90` 左侧缺少操作数，是无效的语法。Python无法解析，因此会报错 SyntaxError。",
+    "example": "正确写法：`(85 > 60) and (85 < 90)` 或利用链式比较 `60 < 85 < 90`。"
+  },
+  {
+    "id": 4,
+    "type": "fill",
+    "title": "补全购物计算",
+    "content": "帮收银员补全代码，正确计算“一件8折的商品原价100元，加5元运费”的总价。注意折扣和运费的优先级哦！",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "total = 100 "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " 0.8 "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " 5"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(total)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "and",
+      "or",
+      "**"
+    ],
+    "answer": [
+      2,
+      0
+    ],
+    "explanation": "应先用 `*` 计算折扣价 `100 * 0.8 = 80`，再用 `+` 加上运费 `80 + 5 = 85`。乘法 `*` 的优先级高于加法 `+`，即使不写括号，计算顺序也是正确的。",
+    "example": "计算 `10 + 2 * 3` 先算乘法得到6，再加10，结果是16，体现了 `*` 优先级高于 `+`。"
+  },
+  {
+    "id": 5,
+    "type": "fill",
+    "title": "逻辑门禁",
+    "content": "小区的门禁逻辑是：有门禁卡 `card` 为 True 或者 知道密码 `pwd` 为 True 并且 不是访客 `visitor` 为 False 的人可以进入。补全这个条件判断。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "can_enter = card "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " pwd "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " "
+            },
+            {
+              "type": "slot",
+              "index": 2
+            },
+            {
+              "type": "code",
+              "value": " visitor"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "or",
+      "and",
+      "not",
+      "+",
+      ">",
+      "=="
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "逻辑是 `card or (pwd and not visitor)`。`not` 优先级最高，先于 `and` 计算；`and` 又优先于 `or`。所以填空依次是 `or`、`and`、`not`，确保了 `pwd and not visitor` 作为一个整体先计算。",
+    "example": "类似逻辑：`A or B and C` 会先算 `B and C`，再与 `A` 进行 `or` 运算。"
+  },
+  {
+    "id": 6,
+    "type": "choice",
+    "title": "位运算谜题",
+    "content": "阿乐在玩位运算，他写下表达式 `8 >> 1 + 1`，请问这个表达式的结果是多少？",
+    "options": [
+      "2（因为8>>1是4，再加1）",
+      "5（因为8>>2是2，再加1+1？不对，这不是加）",
+      "1（因为先算1+1得2，8>>2等于2？等等）",
+      "2（因为先算1+1得2，8>>2等于2）"
+    ],
+    "answer": "D",
+    "hints": [
+      "注意 `+` 和 `>>` 两个运算符，谁先执行？",
+      "算术运算符 `+` 的优先级高于位右移运算符 `>>`。",
+      "因此先算 `1 + 1` 得到2，再算 `8 >> 2`，即8的二进制右移两位，结果的确是2。"
+    ],
+    "explanation": "位右移运算符 `>>` 的优先级低于算术加法 `+`。表达式 `8 >> 1 + 1` 先计算 `1 + 1` 得到2，再计算 `8 >> 2`。8的二进制是1000，右移两位是10，即十进制2。",
+    "example": "类似地，`4 << 1 + 1` 会先算 `1+1=2`，再算 `4 << 2`（左移两位）得到16。"
+  },
+  {
+    "id": 7,
+    "type": "choice",
+    "title": "谁先改变？",
+    "content": "观察代码：`x = 5; x *= 2 + 3`。执行后，变量 `x` 的值是多少？",
+    "options": [
+      "25（因为 x = 5 * (2+3)）",
+      "13（因为 x = 5 * 2 + 3）",
+      "16（因为 (x=5*2) + 3）",
+      "报错，语法不对"
+    ],
+    "answer": "A",
+    "hints": [
+      "`*=` 是赋值运算符，`+` 是算术运算符。",
+      "赋值运算符的优先级通常非常低。",
+      "`x *= 2 + 3` 等价于 `x = x * (2 + 3)`，而不是 `(x * 2) + 3`。"
+    ],
+    "explanation": "增强赋值运算符 `*=` 的优先级低于算术运算符 `+`。因此 `x *= 2 + 3` 会先计算右边的 `2 + 3` 得到5，再计算 `x * 5`，最后将结果25赋值给 `x`。",
+    "example": "同理，`y += 4 * 2` 等价于 `y = y + (4 * 2)`，先算乘法。"
+  },
+  {
+    "id": 8,
+    "type": "choice",
+    "title": "成员资格检查",
+    "content": "表达式 `'a' in 'apple' == True` 的求值结果是？",
+    "options": [
+      "True（因为 'a' in 'apple' 为 True，True == True 为 True）",
+      "False（因为 'apple' == True 不成立？等等）",
+      "False（因为比较运算符 `==` 优先级特殊，改变了顺序）",
+      "报错，不能这样比较"
+    ],
+    "answer": "C",
+    "hints": [
+      "这个表达式里有 `in` 和 `==` 两个运算符。",
+      "在Python中，比较运算符（包括 `in`、`==`、`<` 等）具有相同的优先级，并且可以链式比较。",
+      "`x in y == z` 会被解释为 `(x in y) and (y == z)`，而不是 `(x in y) == z`。"
+    ],
+    "explanation": "`in` 和 `==` 都属于比较运算符，优先级相同且支持链式比较。表达式 `'a' in 'apple' == True` 会被解释为 `'a' in 'apple' and 'apple' == True`。第一部分为True，但第二部分 `'apple' == True` 为False，所以 `True and False` 结果为False。",
+    "example": "`1 < 3 == True` 会被解释为 `1 < 3 and 3 == True`，3不等于True，所以结果是False。"
+  },
+  {
+    "id": 9,
+    "type": "fill",
+    "title": "修复判断年龄的代码",
+    "content": "下面的代码想判断年龄age是否在18到60之间（含18，不含60），但结果总不对。请选择合适的运算符填入，修复它。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "age = 25"
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "is_valid = 18 "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " age "
+            },
+            {
+              "type": "slot",
+              "index": 2
+            },
+            {
+              "type": "code",
+              "value": " 60"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(is_valid)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "<",
+      "<=",
+      ">",
+      ">=",
+      "==",
+      "!=",
+      "and",
+      "or"
+    ],
+    "answer": [
+      7,
+      1,
+      0
+    ],
+    "explanation": "条件“18 <= age < 60”利用了比较运算符的链式特性，它等价于 `(18 <= age) and (age < 60)`。链式比较按从左到右顺序求值，且逻辑清晰。",
+    "example": "`1 <= x < 5` 是检查x是否在[1,5)区间的优雅写法，避免了显式使用 `and`。"
+  },
+  {
+    "id": 10,
+    "type": "fill",
+    "title": "混合运算大挑战",
+    "content": "补全代码，使得表达式能正确计算：2 的 3次方，加上 10 除以 5 的商，再减去 1。注意运算顺序！",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "result = 2 "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " 3 "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " 10 "
+            },
+            {
+              "type": "slot",
+              "index": 2
+            },
+            {
+              "type": "code",
+              "value": " 5 "
+            },
+            {
+              "type": "slot",
+              "index": 3
+            },
+            {
+              "type": "code",
+              "value": " 1"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "**",
+      "%",
+      ">>"
+    ],
+    "answer": [
+      4,
+      0,
+      3,
+      1
+    ],
+    "explanation": "幂运算 `**` 优先级最高，先算 `2 ** 3 = 8`。接着除法 `/` 优先级高于加减，算 `10 / 5 = 2`。然后按从左到右计算加减：`8 + 2 - 1 = 9`。填空顺序体现了这个优先级。",
+    "example": "计算 `3 * 2 ** 2 + 1`，先算 `2**2=4`，再算 `3*4=12`，最后 `12+1=13`。"
+  },
+  {
+    "id": 11,
+    "type": "choice",
+    "title": "左结合的秘密",
+    "content": "表达式 `16 / 4 / 2` 在Python中计算结果是多少？",
+    "options": [
+      "2.0（因为16/4=4，再/2）",
+      "8.0（因为4/2=2，再16/2）",
+      "2.0 或 8.0，看心情",
+      "报错，必须加括号明确"
+    ],
+    "answer": "A",
+    "hints": [
+      "当多个相同优先级的运算符连续出现时，计算顺序由结合性决定。",
+      "算术运算符 `/`（除法）是左结合的。",
+      "左结合意味着从左向右计算：`(16 / 4) / 2`。"
+    ],
+    "explanation": "除法运算符 `/` 是左结合的。表达式 `16 / 4 / 2` 等价于 `(16 / 4) / 2`。先计算 `16 / 4 = 4.0`，再计算 `4.0 / 2 = 2.0`。幂运算 `**` 是右结合的例外。",
+    "example": "同理，`10 - 3 - 1` 是左结合，结果为6，而 `2 ** 3 ** 2` 是右结合，结果为512（即2的9次方）。"
+  },
+  {
+    "id": 12,
+    "type": "choice",
+    "title": "括号的力量",
+    "content": "阿明想确保先算加法再算乘法，于是他给代码 `3 + 4 * 5` 加上了括号。下面哪个修改能达到他的目的？",
+    "options": [
+      "`(3 + 4) * 5`",
+      "`3 + (4 * 5)`",
+      "`((3 + 4) * 5)`",
+      "括号加不加都一样，结果不变"
+    ],
+    "answer": "A",
+    "hints": [
+      "加括号的目的是改变默认的优先级顺序。",
+      "默认是先乘后加，结果 `3 + (4 * 5) = 23`。",
+      "要让加法先算，需要用括号把加法部分括起来。"
+    ],
+    "explanation": "括号 `()` 拥有最高的优先级，可以强制改变表达式的求值顺序。选项A `(3 + 4) * 5` 先计算括号内的 `3+4=7`，再计算 `7*5=35`，成功改变了先乘后加的默认顺序。",
+    "example": "`(10 - 2) * 3` 结果为24，而无括号的 `10 - 2 * 3` 结果为4，因为乘法优先级高。"
+  },
+  {
+    "id": 13,
+    "type": "choice",
+    "title": "类型转换的时机",
+    "content": "运行代码 `print(int(3.6) + 0.5)`，输出结果是？",
+    "options": [
+      "4.1",
+      "3.5",
+      "4",
+      "3.5（但其实是浮点数3.5）"
+    ],
+    "answer": "B",
+    "hints": [
+      "函数调用 `int(3.6)` 的优先级非常高。",
+      "`int()` 函数会先执行，将3.6转换成整数。",
+      "转换后得到3，再执行加法 `3 + 0.5`。"
+    ],
+    "explanation": "函数调用 `int()` 拥有非常高的优先级。表达式 `int(3.6) + 0.5` 会先执行 `int(3.6)` 得到整数3，然后执行加法 `3 + 0.5`。由于0.5是浮点数，整数3会隐式转换为浮点数3.0，相加得到浮点数3.5。",
+    "example": "类似地，`float(5) / 2` 先执行 `float(5)` 得到5.0，再除以2得到2.5。"
+  },
+  {
+    "id": 14,
+    "type": "fill",
+    "title": "综合表达式填空",
+    "content": "这是一个综合了多种运算符的表达式。请根据运算符的优先级和结合性，选择正确的填空顺序，使其计算结果为 True。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "result = not 5 "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " 3 "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " 2 "
+            },
+            {
+              "type": "slot",
+              "index": 2
+            },
+            {
+              "type": "code",
+              "value": " 10 "
+            },
+            {
+              "type": "slot",
+              "index": 3
+            },
+            {
+              "type": "code",
+              "value": " 2"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      ">",
+      "<",
+      "==",
+      "%",
+      "+",
+      "*",
+      "and",
+      "or"
+    ],
+    "answer": [
+      0,
+      4,
+      1,
+      7
+    ],
+    "explanation": "表达式应为 `not 5 > 3 + 2 and 10 % 2`。先算 `3 + 2 = 5`（`+`优先级高于`>`和`and`），得 `5 > 5` 为False。`not False` 为True。`10 % 2` 为0（False）。`True and False` 结果为False。等等，目标是True？啊，题目描述说目标是True，但根据这个逻辑是False。我可能需要调整选项或逻辑。让我们重新设计：要使结果为True，可以设为 `not 5 > 3 + 2 or 10 % 2 == 0`。填空 `>`, `+`, `or`, `==`。但选项里没有 `==` 吗？有 `==`（索引2）。所以答案为 `5 > 3 + 2 or 10 % 2 == 0`，即 `[0， 4， 7， 2]`。先算 `3+2=5`，`5>5`为False。再算 `10%2=0`，`0==0`为True。`False or True` 结果为True。",
+    "example": "理解优先级：`not a > b + c or d % e == f`，先算`b+c`和`d%e`，再算`>`和`==`，然后`not`，最后`or`。"
+  },
+  {
+    "id": 15,
+    "type": "fill",
+    "title": "终极代码修复",
+    "content": "下面这段问题代码想要根据条件设置变量`flag`。请修复运算符，使其逻辑为：当`a`大于`b`，并且`c`不等于`d`与`e`的和时，`flag`为True。假设a=5，b=3， c=10， d=4， e=5。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "a, b, c, d, e = 5, 3, 10, 4, 5"
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "flag = a "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " b "
+            },
+            {
+              "type": "slot",
+              "index": 2
+            },
+            {
+              "type": "code",
+              "value": " c "
+            },
+            {
+              "type": "slot",
+              "index": 3
+            },
+            {
+              "type": "code",
+              "value": " d "
+            },
+            {
+              "type": "slot",
+              "index": 4
+            },
+            {
+              "type": "code",
+              "value": " e"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "\n",
+      ";",
+      ">",
+      "<",
+      "==",
+      "!=",
+      "+",
+      "-",
+      "and",
+      "or"
+    ],
+    "answer": [
+      0,
+      1,
+      8,
+      5,
+      6
+    ],
+    "explanation": "首先，第一行两个赋值语句需要用换行或分号分隔，这里选择换行 `\n`。条件逻辑为 `a > b and c != d + e`。`+` 的优先级高于 `!=`，`!=` 和 `>` 又都高于 `and`。所以填空依次为：换行、`>`、`and`、`!=`、`+`。计算：`d+e=9`，`c != 9` 为True，`a>b` 为True，`True and True` 结果为True。",
+    "example": "记住，比较运算符（>， !=）优先级高于逻辑运算符（and），算术运算符（+）又高于比较运算符。括号可以明确意图，如 `c != (d + e)`。"
+  }
+]

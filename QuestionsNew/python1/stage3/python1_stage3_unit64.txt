@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第64单元：无限循环与退出条件',
+  'questions': [
+    {'id':1,'type':'choice','title':'无限循环定义','content':'以下哪种写法会产生无限循环？','options':{'A':'while True: pass','B':'while i<3: i+=1','C':'for i in range(3): pass','D':'while False: pass'},'answer':'A','hints':['True 恒为真','没有 break 或更新条件','CPU 被持续占用'], 'explanation':'while True 且无终止逻辑会导致无限循环。','example':'while True: ...'},
+    {'id':2,'type':'choice','title':'合理退出','content':'为避免无限循环，常见做法是？','options':{'A':'使用 break 或更新条件','B':'不加任何退出','C':'使用递归代替','D':'永远 sleep'},'answer':'A','hints':['提供结束条件','加安全计数'], 'explanation':'设置明确的退出条件或使用 break 可以防止无限循环。','example':'if cond: break'},
+    {'id':3,'type':'choice','title':'检测无限循环','content':'发现程序卡住时首要检查通常是？','options':{'A':'是否存在未更新的循环变量','B':'查看文件大小','C':'网络带宽','D':'用户输入'},'answer':'A','hints':['循环变量可能未更新','检查循环体内部逻辑'], 'explanation':'未更新的控制变量是导致无限循环的常见原因。','example':'missing increment'},
+    {'id':4,'type':'fill','title':'添加超时保护','content':'补全：在循环中添加最大迭代限制。','input':'','output':'','code':'i=0\nwhile cond:\n    i+=1\n    if i>10000:\n        break','options':'示例已给出','answer':'1','explanation':'超时保护可避免长时间挂起。','example':'max_iters guard'},
+    {'id':5,'type':'fill','title':'用户中断','content':'补全：响应 Ctrl+C（KeyboardInterrupt）。','input':'','output':'','code':'try:\n    while True:\n        pass\nexcept KeyboardInterrupt:\n    print("stopped")','options':'示例已给出','answer':'1','explanation':'捕获 KeyboardInterrupt 可以友好处理用户中断。','example':'try/except around loop'},
+    {'id':6,'type':'choice','title':'退出策略','content':'循环内检测到异常情形应如何处理？','options':{'A':'记录并 break 或修正','B':'忽略并继续','C':'立即退出程序不记录','D':'吞掉异常'},'answer':'A','hints':['记录上下文','决定是否恢复或退出'], 'explanation':'对异常情形应记录并根据情况退出或尝试恢复。','example':'log and break'},
+    {'id':7,'type':'choice','title':'后台任务','content':'后台常驻循环应注意？','options':{'A':'添加 sleep 避免 CPU 空转','B':'不停忙等','C':'频繁写日志','D':'无须错误处理'},'answer':'A','hints':['sleep 降低 CPU 占用','合理间隔检查任务'], 'explanation':'后台循环通常应包含适当的等待以降低资源使用。','example':'while running: do(); time.sleep(1)'},
+    {'id':8,'type':'choice','title':'资源释放','content':'循环异常退出时应保证？','options':{'A':'资源被正确释放','B':'保留文件句柄','C':'忽略释放','D':'重启程序'},'answer':'A','hints':['使用 finally 或 context manager','避免资源泄漏'],'explanation':'异常退出后也要保证资源释放以防泄漏。','example':'with open() as f: ...'},
+    {'id':9,'type':'fill','title':'检测条件改变','content':'补全：打印直到外部文件存在。','input':'','output':'','code':'import os\nwhile not os.path.exists("flag.txt"):\n    pass\nprint("ready")','options':'示例已给出','answer':'1','explanation':'轮询文件作为条件的一种方式，但应加入 sleep 避免 CPU 占用。','example':'time.sleep(1)'},
+    {'id':10,'type':'fill','title':'增加延时','content':'补全：在轮询中加入延时。','input':'','output':'','code':'import time\nwhile not ready():\n    time.sleep(0.5)','options':'示例已给出','answer':'1','explanation':'使用 sleep 可减少轮询对 CPU 的影响。','example':'time.sleep(0.1)'},
+    {'id':11,'type':'choice','title':'检测死循环','content':'使用 profiling 工具可帮助发现？','options':{'A':'CPU 占用高的函数','B':'内存小的函数','C':'无用日志','D':'运行时间短的函数'},'answer':'A','hints':['找出热点函数','结合堆栈信息'], 'explanation':'profiling 可帮助定位导致无限循环或高 CPU 的代码。','example':'使用 cProfile'},
+    {'id':12,'type':'choice','title':'停止条件可达性','content':'设计循环条件时要保证什么？','options':{'A':'条件在某步可被满足','B':'条件永远不可达','C':'条件随意设定','D':'不需要考虑'},'answer':'A','hints':['确保退出条件可达','验证边界情况'], 'explanation':'循环条件应是可达的以确保循环可终止。','example':'test with edge cases'},
+    {'id':13,'type':'choice','title':'守护循环','content':'守护循环在实现时要注意？','options':{'A':'不要阻塞主线程或提供后台策略','B':'阻塞所有','C':'无限输出日志','D':'不处理异常'},'answer':'A','hints':['后台任务分离','提供合适退出机制'], 'explanation':'守护循环应不会阻塞主流程且要能优雅退出。','example':'daemon thread'},
+    {'id':14,'type':'fill','title':'使用 sentinel 退出','content':'补全：遇到 sentinel 值则退出循环。','input':'-1','output':'','code':'while True:\n    v=int(input())\n    if v==-1:\n        break','options':'示例已给出','answer':'1','explanation':'使用特定值作为结束信号是一种常见模式。','example':'sentinel = None'},
+    {'id':15,'type':'fill','title':'安全重试','content':'补全：对失败的操作重试并在多次失败时退出。','input':'','output':'','code':'tries=0\nwhile tries<3:\n    if do():\n        break\n    tries+=1','options':'示例已给出','answer':'1','explanation':'有限重试当操作偶发失败时可提高健壮性。','example':'retry with limit'}
+  ]
+}
+
+```
+
+*** End Patch

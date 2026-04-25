@@ -1,0 +1,744 @@
+[
+  {
+    "id": 1,
+    "type": "choice",
+    "title": "面包店算账",
+    "content": "胖虎的面包店今天生意兴隆！一个面包8元，小明买了5个。胖虎想用Python快速计算总收入，应该写哪个表达式？",
+    "options": [
+      "8 * 5",
+      "8 x 5",
+      "8 5",
+      "8 & 5"
+    ],
+    "answer": "A",
+    "hints": [
+      "想想我们平时是怎么算‘几个几’的？",
+      "Python中，乘法是用一个符号表示的。",
+      "选项B是字母x，不是运算符；C少了运算符；D是位与运算符。正确是A，星号表示乘。"
+    ],
+    "explanation": "在Python中，乘法运算符是星号（*）。表达式‘8 * 5’会计算40，代表总价。其他选项的符号在Python中都不是乘法运算符。",
+    "example": "同理，计算每小时工资50元，工作8小时的总收入：50 * 8。"
+  },
+  {
+    "id": 2,
+    "type": "choice",
+    "title": "披萨公平分配",
+    "content": "阿强和朋友们买了12块披萨，他们6个人想平分。下面哪个Python表达式能算出每人能分到几块？",
+    "options": [
+      "12 % 6",
+      "12 // 6",
+      "12 / 6",
+      "12 \\ 6"
+    ],
+    "answer": "C",
+    "hints": [
+      "这是一个平均分配问题，可能需要小数结果。",
+      "在Python中，普通的除法运算能保留小数部分。",
+      "// 是整除（向下取整），% 是求余数。C的 / 是普通除法，能得到精确结果。"
+    ],
+    "explanation": "普通除法运算符（/）返回一个浮点数结果，即使能整除也会返回2.0，这最符合‘平分’的情景。 // 是整除，返回整数部分； % 是取余数。",
+    "example": "9块蛋糕分给4人，每人分到：9 / 4 = 2.25 块。"
+  },
+  {
+    "id": 3,
+    "type": "choice",
+    "title": "游戏生命值",
+    "content": "小明的游戏角色初始有100点生命值，被怪物攻击损失了25点。现在他想用Python计算剩余生命值，哪个表达式正确？",
+    "options": [
+      "100 + 25",
+      "'100' - '25'",
+      "100 - 25",
+      "100 - '25'"
+    ],
+    "answer": "C",
+    "hints": [
+      "这是减法的应用场景。",
+      "确保操作数是数字，而不是字符串。",
+      "减法运算符是减号（-）。A是加法；B和D对字符串进行了操作，会报错。"
+    ],
+    "explanation": "减法运算符是减号（-）。表达式‘100 - 25’会正确计算数值75。其他选项要么运算符错误，要么数据类型不匹配（字符串不能直接进行减法运算）。",
+    "example": "钱包有200元，消费50元，剩余：200 - 50 = 150元。"
+  },
+  {
+    "id": 4,
+    "type": "fill",
+    "title": "梯形面积计算",
+    "content": "帮助小智计算一个梯形花坛的面积。公式是：(上底 + 下底) * 高 / 2。已知上底=5，下底=7，高=4。请补全代码。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "top = 5"
+            },
+            {
+              "type": "code_line",
+              "value": "bottom = 7"
+            },
+            {
+              "type": "code_line",
+              "value": "height = 4"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "area = ("
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " "
+            },
+            {
+              "type": "slot",
+              "index": 2
+            },
+            {
+              "type": "code",
+              "value": ") "
+            },
+            {
+              "type": "slot",
+              "index": 3
+            },
+            {
+              "type": "code",
+              "value": " "
+            },
+            {
+              "type": "slot",
+              "index": 4
+            },
+            {
+              "type": "code",
+              "value": " 2"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(area)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "//",
+      "%",
+      "top",
+      "bottom",
+      "height",
+      "4",
+      "5",
+      "7",
+      "area"
+    ],
+    "answer": [
+      0,
+      7,
+      1,
+      2,
+      3
+    ],
+    "explanation": "公式是（上底+下底）*高/2。因此填空顺序应为：上底(top) 加号(+) 下底(bottom)，然后乘以(*) 高(height)，最后除以(/) 2。",
+    "example": "计算矩形面积长*宽：area = length * width。"
+  },
+  {
+    "id": 5,
+    "type": "fill",
+    "title": "糖果大分配",
+    "content": "老师有47颗糖果，要平均分给6个小组，并想知道会剩下几颗自己吃。请用//和%运算符补全代码。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "candies = 47"
+            },
+            {
+              "type": "code_line",
+              "value": "groups = 6"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "candies_per_group = candies "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " groups"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "left_for_teacher = candies "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " groups"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(candies_per_group, left_for_teacher)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "//",
+      "%"
+    ],
+    "answer": [
+      4,
+      5
+    ],
+    "explanation": "整除（//）用于计算每组能分到的整数糖果数（47//6=7）。取模（%）用于计算余下的糖果数（47%6=5），即老师能吃的数量。",
+    "example": "13块饼干3人分：13//3=4块/人，13%3=1块剩余。"
+  },
+  {
+    "id": 6,
+    "type": "choice",
+    "title": "字符串拼接派对",
+    "content": "阿珍和阿强想在Python中‘手拉手’，把他们的名字合并成‘阿珍阿强’。下面哪种写法能实现？",
+    "options": [
+      "\"阿珍\" % \"阿强\"",
+      "\"阿珍\" * \"阿强\"",
+      "\"阿珍\" + \"阿强\"",
+      "\"阿珍\" // \"阿强\""
+    ],
+    "answer": "C",
+    "hints": [
+      "想想如何把两段文字‘连接’在一起？",
+      "在Python中，加号（+）运算符对于字符串有特殊功能。",
+      "%用于格式化，*用于重复，//用于数值整除。只有+能把两个字符串拼接。"
+    ],
+    "explanation": "加号（+）运算符用于字符串时，功能是拼接（连接）。其他运算符（%， *, //）用于字符串会产生类型错误或非预期结果。",
+    "example": "print(\"Hello\" + \"World\") 会输出 HelloWorld。"
+  },
+  {
+    "id": 7,
+    "type": "choice",
+    "title": "奇偶数的秘密",
+    "content": "小机器人想判断一个数（比如10）是否为偶数。偶数意味着该数能被2整除。下面哪个表达式的结果为0时，代表该数是偶数？",
+    "options": [
+      "10 / 2",
+      "10 // 2",
+      "10 * 2",
+      "10 % 2"
+    ],
+    "answer": "D",
+    "hints": [
+      "判断是否能‘被整除’，关键是看‘余数’。",
+      "哪个运算符是用来计算余数的？",
+      "取模运算符（%）返回除法后的余数。10除以2余数为0，所以10是偶数。"
+    ],
+    "explanation": "取模运算符（%）返回除法后的余数。如果一个数对2取模的结果为0（如10%2==0），说明它能被2整除，即为偶数。其他选项返回的是商或乘积。",
+    "example": "判断15是否为奇数：15 % 2 == 1，所以是奇数。"
+  },
+  {
+    "id": 8,
+    "type": "choice",
+    "title": "鸡蛋装盒",
+    "content": "农场有99个鸡蛋，一盒能装12个。Python中哪个表达式能计算出可以装满几整盒？",
+    "options": [
+      "99 / 12",
+      "99 // 12",
+      "99 % 12",
+      "99 * 12"
+    ],
+    "answer": "B",
+    "hints": [
+      "‘装满整盒’意味着只要完整的部分，不要余数。",
+      "我们需要一个‘向下取整’的运算。",
+      "整除运算符（//）会丢弃小数部分，返回商的整数部分，正好对应整盒数。"
+    ],
+    "explanation": "整除运算符（//）返回除法运算后向下取整的整数结果。99 // 12 = 8，表示可以装满8整盒。普通除法（/）会返回带小数的结果8.25。",
+    "example": "100元买7元的面包，最多买几个？100 // 7 = 14个。"
+  },
+  {
+    "id": 9,
+    "type": "fill",
+    "title": "组建足球队",
+    "content": "学校要组建足球队。高年级有(5*3)人报名，低年级有(4*2)人报名。补全代码计算总人数。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "senior = (5 "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " 3)"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "junior = (4 "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " 2)"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "total = senior "
+            },
+            {
+              "type": "slot",
+              "index": 2
+            },
+            {
+              "type": "code",
+              "value": " junior"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(total)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "//",
+      "%"
+    ],
+    "answer": [
+      2,
+      2,
+      0
+    ],
+    "explanation": "高年级人数是5*3=15，低年级是4*2=8。总人数是两者相加15+8=23。所以前两个空是乘法(*)，第三个空是加法(+)。",
+    "example": "计算两个矩形面积之和：area1 = a*b, area2 = c*d, total = area1 + area2。"
+  },
+  {
+    "id": 10,
+    "type": "fill",
+    "title": "时间换算大师",
+    "content": "一部电影总长135分钟。请补全代码，换算成小时和分钟（如2小时15分钟）。提示：小时用整除，分钟用取模。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "total_minutes = 135"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "hours = total_minutes "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " 60"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "minutes = total_minutes "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " 60"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(hours, \"小时\", minutes, \"分钟\")"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "//",
+      "%"
+    ],
+    "answer": [
+      4,
+      5
+    ],
+    "explanation": "小时数需要对总分钟数进行整除（//）60。分钟数是总分钟数对60取模（%），即余数。135分钟是2小时（135//60）15分钟（135%60）。",
+    "example": "200秒换算：200//60=3分钟，200%60=20秒。"
+  },
+  {
+    "id": 11,
+    "type": "choice",
+    "title": "运算符优先级之争",
+    "content": "表达式 ‘5 + 3 * 2’ 在Python中会先算加法还是先算乘法？最终结果是多少？",
+    "options": [
+      "先算+，结果为16",
+      "先算*，结果为11",
+      "先算+，结果为13",
+      "先算*，结果为13"
+    ],
+    "answer": "B",
+    "hints": [
+      "还记得‘先乘除，后加减’的口诀吗？",
+      "Python遵循标准的数学运算优先级。",
+      "乘法和除法（*， /， //， %）的优先级高于加法和减法（+， -）。"
+    ],
+    "explanation": "在Python中，乘号（*）的优先级高于加号（+）。所以先计算3*2=6，再计算5+6=11。",
+    "example": "表达式‘10 - 4 / 2’先算除法，结果是10 - 2.0 = 8.0。"
+  },
+  {
+    "id": 12,
+    "type": "choice",
+    "title": "奶茶店的尴尬",
+    "content": "店员想把“珍珠奶茶”和数字“3”（表示3杯）用加号连起来，写成 ‘\"珍珠奶茶\" + 3’。你觉得会发生什么？",
+    "options": [
+      "输出字符串 \"珍珠奶茶3\"",
+      "输出数字 3",
+      "程序会报错",
+      "输出字符串 \"珍珠奶茶+3\""
+    ],
+    "answer": "C",
+    "hints": [
+      "加号（+）对字符串和数字都有效吗？",
+      "尝试将文字和数字‘相加’是一种常见的类型错误。",
+      "Python不能直接将字符串（str）和整数（int）用加号连接。"
+    ],
+    "explanation": "在Python中，加号（+）用于字符串拼接时，要求两边都是字符串；用于数值相加时，要求两边都是数字。字符串和数字混合会导致 TypeError。",
+    "example": "正确做法：\"珍珠奶茶\" + \"3\" 或 \"珍珠奶茶\" + str(3)。"
+  },
+  {
+    "id": 13,
+    "type": "choice",
+    "title": "星期几的轮回",
+    "content": "假设今天是星期2（用数字2表示）。100天后是星期几？（一周7天循环）。哪个表达式能正确计算？",
+    "options": [
+      "100 % 7 + 2",
+      "2 + 100 // 7",
+      "(2 + 100) // 7",
+      "(2 + 100) % 7"
+    ],
+    "answer": "D",
+    "hints": [
+      "这是一个周期循环问题，通常用取模（%）运算。",
+      "先计算总天数（今天+100天），再看它在一个周期（7天）中的位置。",
+      "对总天数（2+100）进行取模运算，就能得到0-6的结果，对应星期几。"
+    ],
+    "explanation": "先计算从某个起点开始的总天数（2 + 100 = 102天），然后对一周的天数7取模（%），得到余数就是星期几（0代表周日，1-6代表周一到周六）。(2+100)%7=4，代表星期4。",
+    "example": "星期3的5天后：(3 + 5) % 7 = 1，即星期1。"
+  },
+  {
+    "id": 14,
+    "type": "fill",
+    "title": "超市找零计算器",
+    "content": "编写一个智能找零程序。商品总价86元，顾客付了100元。计算应找回多少张10元纸币，以及剩下的零钱（元）。补全代码。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "price = 86"
+            },
+            {
+              "type": "code_line",
+              "value": "paid = 100"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "change = paid "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " price"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "ten_bills = change "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " 10"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "coins = change "
+            },
+            {
+              "type": "slot",
+              "index": 2
+            },
+            {
+              "type": "code",
+              "value": " 10"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(ten_bills, \"张10元，\", coins, \"元硬币\")"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "//",
+      "%"
+    ],
+    "answer": [
+      1,
+      4,
+      5
+    ],
+    "explanation": "第一步计算找零总额（change = 100 - 86 = 14）。第二步用整除（//）计算10元纸币数量（14 // 10 = 1）。第三步用取模（%）计算剩余零钱（14 % 10 = 4）。",
+    "example": "找零27元：27//10=2张10元，27%10=7元零钱。"
+  },
+  {
+    "id": 15,
+    "type": "fill",
+    "title": "魔法伤害公式",
+    "content": "游戏里，基础魔法伤害是50。智力加成是（智力点数 // 5）。最终伤害 = (基础伤害 + 加成) * (1 + 暴击系数)。假设智力=18，暴击系数=0.3（30%）。补全代码。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "base_dmg = 50"
+            },
+            {
+              "type": "code_line",
+              "value": "intelligence = 18"
+            },
+            {
+              "type": "code_line",
+              "value": "crit_multiplier = 0.3"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "bonus = intelligence "
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": " 5"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "final_dmg = (base_dmg "
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": " bonus) "
+            },
+            {
+              "type": "slot",
+              "index": 2
+            },
+            {
+              "type": "code",
+              "value": " (1 "
+            },
+            {
+              "type": "slot",
+              "index": 3
+            },
+            {
+              "type": "code",
+              "value": " crit_multiplier)"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(final_dmg)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "+",
+      "-",
+      "*",
+      "/",
+      "//",
+      "%"
+    ],
+    "answer": [
+      4,
+      0,
+      2,
+      0
+    ],
+    "explanation": "加成(bonus)用整除（//）计算：18//5=3。最终伤害是基础伤害加加成（50+3），然后乘以（1+暴击系数）（1+0.3）。所以是加法（+）和乘法（*）运算。",
+    "example": "攻击力100，加成20，暴击1.5倍：dmg = (100 + 20) * 1.5 = 180。"
+  }
+]

@@ -1,0 +1,37 @@
+```plaintext
+{
+  'unit': '第135单元：数据类与属性装饰器',
+  'questions': [
+    {'id':1,'type':'choice','title':'dataclass 用途','content':'使用 @dataclass 的主要好处是？','options':{'A':'自动生成 __init__/__repr__ 等实用方法','B':'使类变为不可变','C':'禁止继承','D':'自动并行化'},'answer':'A','hints':['提示1: dataclass 可减少样板代码','提示2: 支持默认值与类型注解','提示3: 可配置为不可变 frozen'],'explanation':'dataclass 自动为类生成常用方法，减少样板代码。','example':''},
+
+    {'id':2,'type':'choice','title':'frozen 参数','content':'在 dataclass 中设置 frozen=True 会怎样？','options':{'A':'实例变为不可变（冻结）','B':'禁止实例化','C':'提升性能','D':'自动加锁'},'answer':'A','hints':['提示1: frozen 会阻止属性赋值','提示2: 仍可用 replace 创建新实例','提示3: 有助于哈希性'], 'explanation':'frozen=True 会使生成的实例属性不可变。','example':''},
+
+    {'id':3,'type':'choice','title':'属性装饰器 property','content':'使用 @property 的主要作用是？','options':{'A':'把方法当属性访问以实现访问控制','B':'自动生成 setter','C':'让方法变成静态方法','D':'替换构造函数'},'answer':'A','hints':['提示1: 提供 getter、setter、deleter','提示2: 可用于延迟计算或校验','提示3: 保持调用方接口'], 'explanation':'property 将方法变成属性访问接口，便于封装与校验。','example':''},
+
+    {'id':4,'type':'fill','title':'dataclass 字段默认（填空）','content':'若字段默认为可变对象，应使用 field(default_factory=__1__) 来避免共享默认值。','input':'','output':'','code':'from dataclasses import dataclass, field\n@dataclass\nclass A:\n    items: list = field(default_factory=__1__)','options':'list, list(), lambda: [], dict, None','answer':'1','explanation':'default_factory 应传入可调用对象以返回新实例，例如 list 或 lambda: []。','example':''},
+
+    {'id':5,'type':'fill','title':'setter 用法（填空）','content':'定义属性 setter 时，应在 getter 上使用 @__1__.setter 装饰器。','input':'','output':'','code':'class A:\n    @property\n    def x(self):\n        return self._x\n    @__1__.setter\n    def x(self, v):\n        self._x = v','options':'x, property, setter, getter','answer':'1','explanation':'使用 @x.setter 将对应的 setter 绑定到 property x。','example':''},
+
+    {'id':6,'type':'choice','title':'dataclass 比较','content':'dataclass 默认是否实现比较方法（如 __eq__）？','options':{'A':'实现 __eq__ 等比较方法','B':'不实现任何比较','C':'只实现 __lt__','D':'只实现 __hash__'},'answer':'A','hints':['提示1: dataclass 可自动实现 eq','提示2: 可以通过参数调整比较行为','提示3: frozen 与 hash 有交互影响'],'explanation':'dataclass 默认生成 __eq__，可用参数调整 hash 与比较行为。','example':''},
+
+    {'id':7,'type':'choice','title':'属性验证','content':'要在设置属性时做验证，常见做法是？','options':{'A':'使用 property setter 来校验并抛出异常','B':'在外部直接修改实例字典','C':'使用全局函数','D':'使用注释'},'answer':'A','hints':['提示1: setter 可拦截赋值','提示2: dataclass 支持 post_init 进行验证','提示3: 验证有助于保证不变式'],'explanation':'通过 property 的 setter 可以在赋值时进行验证并抛出错误。','example':''},
+
+    {'id':8,'type':'choice','title':'post_init','content':'dataclass 提供的 __post_init__ 方法用于什么？','options':{'A':'在默认 __init__ 之后做额外初始化或验证','B':'替代 __init__','C':'在类定义时调用','D':'自动生成文档'},'answer':'A','hints':['提示1: 用于基于字段值做进一步处理','提示2: 常用来校验组合字段','提示3: __post_init__ 在实例创建后执行'],'explanation':'__post_init__ 可用于在 dataclass 自动生成的 __init__ 之后执行额外逻辑。','example':''},
+
+    {'id':9,'type':'fill','title':'只读 dataclass（填空）','content':'要让 dataclass 生成不可变实例，可设置 __1__。','input':'','output':'','code':'@dataclass(__1__=True)\nclass A: pass','options':'frozen, eq, order, unsafe_hash','answer':'1','explanation':'使用 frozen=True 使实例不可变。','example':''},
+
+    {'id':10,'type':'fill','title':'默认比较（填空）','content':'要禁用 dataclass 自动生成的比较方法，可在装饰器中设置 __1__=False。','input':'','output':'','code':'@dataclass(__1__=False)\nclass A: pass','options':'eq, frozen, order, init','answer':'1','explanation':'设置 eq=False 可以禁用 __eq__ 等比较方法的生成。','example':''},
+
+    {'id':11,'type':'choice','title':'属性缓存','content':'要对属性进行缓存，可以在 property 中结合哪个模块的 lru_cache？','options':{'A':'functools.lru_cache（需在方法外包装）','B':'os', 'C':'sys', 'D':'json'},'answer':'A','hints':['提示1: 直接对 property 使用 lru_cache 有限制','提示2: 可用 cached_property 或自定义 descriptor','提示3: functools 提供缓存工具'],'explanation':'functools 提供缓存工具，可用于提升属性计算性能或使用 cached_property。','example':''},
+
+    {'id':12,'type':'choice','title':'dataclass 与继承','content':'dataclass 支持继承吗？','options':{'A':'支持，可继承字段与方法','B':'不支持','C':'仅支持单继承','D':'仅支持接口继承'},'answer':'A','hints':['提示1: 子类可继承父类的字段','提示2: 字段顺序与默认值规则需注意','提示3: 可混合普通类与 dataclass'],'explanation':'dataclass 支持继承，但字段继承与默认值需留意顺序。','example':''},
+
+    {'id':13,'type':'fill','title':'cached_property（填空）','content':'在 Python 3.8+ 中，可通过 functools.__1__ 便捷地实现属性缓存。','input':'','output':'','code':'from functools import __1__','options':'cached_property, lru_cache, wraps, partial','answer':'1','explanation':'functools.cached_property 可将方法变为按需计算并缓存的属性。','example':''},
+
+    {'id':14,'type':'fill','title':'属性删除（填空）','content':'在 property 中定义 deleter 使用装饰器形式 @x.__1__.deleter。','input':'','output':'','code':'class A:\n    @property\n    def x(self): return self._x\n    @x.__1__.deleter\n    def x(self): pass','options':'setter, getter, property, delete','answer':'1','explanation':'使用 @x.deleter 可定义属性删除行为。','example':''},
+
+    {'id':15,'type':'fill','title':'总结（填空）','content':'dataclass 用于减少 __1__，property 用于实现 __2__。','input':'','output':'','code':'','options':'样板代码, 访问控制, 性能, 网络通信','answer':'1,2','explanation':'dataclass 减少样板代码，property 用于访问控制与封装。','example':''}
+  ]
+}
+
+```

@@ -1,0 +1,200 @@
+```plaintext
+{
+  'unit': '第14单元：边界条件判断技巧',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '含端点的区间判断',
+      'content': '要判断 x 是否在区间 [1,10]（包含两端），最恰当的写法是：',
+      'options': {'A':'1 <= x <= 10','B':'1 < x < 10','C':'x >= 1 and x > 10','D':'x in range(1,10)'},
+      'answer': 'A',
+      'hints': ['Python 支持链式比较','注意包含端点','range 上限不包含'],
+      'explanation': '1 <= x <= 10 使用链式比较并包含两端，清晰且高效。',
+      'example': 'if 0 <= n <= 100: ...'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '离散边界测试',
+      'content': '测试整数边界时哪个测试用例最重要？',
+      'options': {'A':'边界值及其相邻值','B':'只测试中间值','C':'随机大量值','D':'只测试最小值'},
+      'answer': 'A',
+      'hints': ['边界附近最容易出错','测试要包含边界及相邻情况','覆盖临界点有助发现 off-by-one'],
+      'explanation': '边界值与其邻近值常露出 off-by-one 等错误，应重点测试。',
+      'example': '测试 0,1,2 而非只测试 1'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '浮点边界比较',
+      'content': '比较浮点数是否等于某值时应注意什么？',
+      'options': {'A':'使用近似比较（abs(a-b)<eps）','B':'直接用 ==','C':'用 is 判断','D':'转换为 str 比较'},
+      'answer': 'A',
+      'hints': ['浮点有精度误差','不要直接用 ==','用容差比较更稳健'],
+      'explanation': '浮点计算有误差，应用 abs(a-b)<eps 等近似比较方法判断相等。',
+      'example': 'if abs(a-b) < 1e-9: ...'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '开区间判断',
+      'content': '补全：判断 x 在 (0,1) 开区间内。',
+      'input': 'x=0.5',
+      'output': 'Inside',
+      'code': 'x = float(input())\nif 0 ___ x ___ 1:\n    print("Inside")',
+      'options': '<, <=, >, >=',
+      'answer': '1,3',
+      'explanation': '开区间用 0 < x < 1；注意端点不被包含。',
+      'example': 'if 0 < r < 10: ...'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '索引边界检查',
+      'content': '补全：访问列表元素前做边界检查。',
+      'input': 'lst=[1,2]; i=2',
+      'output': 'IndexError avoided',
+      'code': 'if 0 <= i ___ len(lst):\n    print(lst[i])',
+      'options': '<, <=, >, >=',
+      'answer': '2',
+      'explanation': '索引上限应使用 i < len(lst) 才是合法索引（0 到 len-1）。',
+      'example': 'if 0 <= idx < len(arr): use arr[idx]'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '哨兵值使用',
+      'content': '使用哨兵值（sentinel）通常用于？',
+      'options': {'A':'表示特殊或终止状态','B':'替代所有 None','C':'避免使用循环','D':'增加全局变量'},
+      'answer': 'A',
+      'hints': ['哨兵表示特殊终止或缺失','常用于循环或解析流式数据','需选不冲突的值'],
+      'explanation': '哨兵常作为特殊标记来终止循环或表示无有效值。',
+      'example': 'while True:\n    line = f.readline()\n    if line == "": break'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '边界测试的自动化',
+      'content': '写单元测试时边界值该如何组织？',
+      'options': {'A':'包括最小、最大和相邻值','B':'只测试正常输入','C':'只测试极大输入','D':'只人工测试'},
+      'answer': 'A',
+      'hints': ['边界附近常见缺陷','自动化覆盖可复现问题','添加注释说明边界含义'],
+      'explanation': '测试应覆盖边界及其相邻值以捕捉 off-by-one 等问题。',
+      'example': 'assert f(0) == ...\nassert f(1) == ...'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '错误示例识别',
+      'content': '下面哪种写法在判断非负整数时可能出错？',
+      'options': {'A':'if n >= 0 and n < 10:','B':'if 0 <= n < 10:','C':'if n in range(0,10):','D':'if 0 < n <= 10:'},
+      'answer': 'D',
+      'hints': ['注意不等号方向与包含端点','D 表示 0 < n <=10 会排除 0','需根据需求选用'],
+      'explanation': 'D 排除了 0，不符合“非负整数”包含 0 的情形。',
+      'example': '用 0 <= n <= 10 包含 0'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '防止除零',
+      'content': '补全：在除法前确保分母非零。',
+      'input': 'a=5;b=0',
+      'output': 'Cannot divide',
+      'code': 'if b ___ 0:\n    print("Cannot divide")\nelse:\n    print(a / b)',
+      'options': '==, !=, <, >',
+      'answer': '2',
+      'explanation': '判断 b != 0 再进行除法可避免 ZeroDivisionError。',
+      'example': 'if denom != 0: result = num/denom'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '处理空输入',
+      'content': '补全：读取输入并在空输入时提示。',
+      'input': '',
+      'output': 'Please input value',
+      'code': 's = input()\nif not s.___():\n    print("Please input value")',
+      'options': 'strip, isdigit, lower, split',
+      'answer': '1',
+      'explanation': '使用 s.strip() 去除空白后判断是否为空以检测空输入。',
+      'example': 'if not s.strip(): ...'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '边界条件的文档',
+      'content': '为边界选择写文档说明有什么好处？',
+      'options': {'A':'帮助未来维护者理解设计意图','B':'增加代码行数无意义','C':'仅在发布时才需要','D':'会泄露实现细节'},
+      'answer': 'A',
+      'hints': ['文档说明设计选择','减少误用与 bug 引入','便于代码审查'],
+      'explanation': '记录边界行为可以帮助后续维护和测试设计。',
+      'example': '注释中说明含不含端点'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '使用 assert 的局限',
+      'content': 'assert 在生产环境用于边界校验有何风险？',
+      'options': {'A':'assert 可能被优化掉','B':'assert 会永远生效','C':'assert 自动抛出 ValueError','D':'assert 会记录日志'},
+      'answer': 'A',
+      'hints': ['使用 -O 运行时 assert 会被移除','不要用 assert 做关键运行时检查','用于调试断言更合适'],
+      'explanation': 'assert 主要用于调试，生产不应依赖其做关键输入校验。',
+      'example': 'use explicit checks instead of assert'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '边界值的可视化',
+      'content': '调试边界问题时哪种方式最直观？',
+      'options': {'A':'在失败用例打印临近值','B':'只看成功用例','C':'删除测试','D':'用随机数测试'},
+      'answer': 'A',
+      'hints': ['打印关键变量有助分析','关注临近边界的值','可结合断言与日志'],
+      'explanation': '在失败场景打印临近值有助快速定位 off-by-one 等问题。',
+      'example': 'print("i", i, "len", len(arr))'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '边界示例练习',
+      'content': '补全：判断 n 是否为有效索引（含 0 到 n-1）。',
+      'input': 'n=3; arr=[1,2,3]',
+      'output': 'Valid',
+      'code': 'idx = int(input())\nif 0 <= idx ___ len(arr):\n    print("Valid")',
+      'options': '<, <=, >, >=',
+      'answer': '1',
+      'explanation': '合法索引满足 0 <= idx < len(arr)。',
+      'example': 'if 0 <= i < len(a): use a[i]'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '实践：端点检查',
+      'content': '补全：确保 x 在闭区间内才继续处理。',
+      'input': 'x=10',
+      'output': 'OK',
+      'code': 'x = int(input())\nif 1 ___ x ___ 10:\n    print("OK")',
+      'options': '<, <=, >, >=',
+      'answer': '2,4',
+      'explanation': '闭区间使用 1 <= x <= 10。',
+      'example': 'if 1 <= score <= 100: ...'
+    }
+
+  ]
+}
+```

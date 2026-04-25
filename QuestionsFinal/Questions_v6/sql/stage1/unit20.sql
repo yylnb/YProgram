@@ -1,0 +1,183 @@
+-- Generated SQL for global_unit=20 (stage=1 unit_local=20 unit_id=20)
+INSERT INTO `que_choice_py_1` (`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`) VALUES
+
+(
+  286,
+  20,
+  '寻找秘密香料',
+  '阿强正在查阅一份秘制炸鸡食谱，他想用Python检查‘辣椒粉’是否是配料之一。已知字符串 recipe = ‘面粉, 鸡蛋, 面包糠, 辣椒粉, 盐’。下列哪个选项能正确判断‘辣椒粉’是否在recipe中？',
+  '["\\\"辣椒粉\\\" in recipe", "recipe in \\\"辣椒粉\\\"", "‘辣椒粉’ in recipe", "recipe.find(\\\"辣椒粉\\\")"]',
+  1,
+  '["使用`in`操作符来判断一个字符串是否包含另一个字符串。", "语法是 `子串 in 母串`，返回布尔值。", "注意字符串的引号需要使用英文半角符号。"]',
+  '正确选项是A。`in`操作符用于检查一个字符串（子串）是否存在于另一个字符串（母串）中，语法为 `子串 in 母串`。选项B顺序反了；选项C使用了中文全角引号；选项D使用`find`方法，虽然功能类似但语法和返回值不同。',
+  '类似用法：`if "apple" in fruit_list:` 判断‘apple’是否在fruit_list字符串中。'
+),
+(
+  287,
+  20,
+  '切出电话号码',
+  '小美的名片上印着‘联系电话：138-1234-5678’。她只想提取出中间四位‘1234’，下列哪个切片操作是正确的？',
+  '["card[8:11]", "card[8:12]", "card[9:13]", "card[9:12]"]',
+  3,
+  '["字符串索引从0开始。先数一数‘联系电话：’有几个字符。", "记住切片是`[起始索引：结束索引]`，包含起始，不包含结束。", "‘联系电话：’共5个字符（‘联’‘系’‘电’‘话’‘：’），后面是‘138-’，然后是‘1234’。"]',
+  '字符串card = ‘联系电话：138-1234-5678’。‘联’索引0，‘系’1，‘电’2，‘话’3，‘：’4，‘1’5，‘3’6，‘8’7，‘-’8，‘1’9，‘2’10，‘3’11，‘4’12。要取‘1234’，即索引9到13（不包含13），所以是`card[9:13]`。',
+  '类似地，`s = ''Python''`，`s[1:4]`的结果是`‘yth’`。'
+),
+(
+  288,
+  20,
+  '诗句大拼盘',
+  '‘床前明月光，疑是地上霜’。这句诗被存在一个字符串里。如果执行`poem.split(''，'')`，会得到什么？',
+  '["[''床前明月光'', ''疑是地上霜'']", "[''床前明月光，疑是地上霜'']", "[''床'', ''前'', ''明'', ''月'', ''光'', ''疑'', ''是'', ''地'', ''上'', ''霜'']", "报错"]',
+  1,
+  '[]',
+  '`split()`方法使用指定的分隔符（这里是逗号‘，’）将字符串分割成多个部分，并返回一个列表。原字符串在逗号处被切开，逗号本身不包含在结果列表中。',
+  '`''a,b,c''.split('','')` 得到 `[''a'', ''b'', ''c'']`。'
+),
+(
+  291,
+  20,
+  '偷懒的切片步长',
+  '对于字符串`s = ''Python编程真有趣’`，执行`s[::2]`会得到什么结果？',
+  '["‘Pto编真有’", "‘Pto编真有趣’", "‘yhn程真趣’", "‘Python编程真有趣’"]',
+  1,
+  '["切片`[::2]`的步长是2，意味着隔一个字符取一个。", "从索引0开始取，然后是2，4，6...直到末尾。", "别忘了中文字符也占一个索引位置。"]',
+  '切片`[::2]`表示从开始到结束，步长为2。索引：0‘P’，1‘y’，2‘t’，3‘h’，4‘o’，5‘n’，6‘编’，7‘程’，8‘真’，9‘有’，10‘趣’。取索引0,2,4,6,8,10对应的字符，得到‘Pto编真有’。',
+  '`‘abcdef’[::2]` 结果为 `‘ace’`。'
+),
+(
+  292,
+  20,
+  'Split的限速器',
+  '字符串`data = "苹果,香蕉,葡萄,西瓜,芒果"`。如果只想把它分成水果篮（列表）和待处理水果两部分，即只在前两个逗号处分割，应该使用哪个选项？',
+  '["data.split('','', 1)", "data.split('','', 2)", "data.split('','')[:2]", "data.split('','', maxsplit=2)"]',
+  4,
+  '["`split`方法有一个可选参数`maxsplit`，用于限制分割次数。", "分割`n`次会产生`n+1`个元素。", "想想`maxsplit=2`意味着在遇到前两个分隔符时进行分割。"]',
+  '`str.split(sep, maxsplit)`中的`maxsplit`参数指定最大分割次数。`maxsplit=2`表示只在前两个逗号处分割，结果得到`[''苹果'', ''香蕉'', ''葡萄,西瓜,芒果'']`共三个元素。选项A只分割一次；B语法正确但参数是位置参数2，效果等同D；C是先全部分割再取前两个元素，不符合要求。B和D功能相同，但D使用了关键字参数更清晰，通常教学和实践中更推荐D的写法。',
+  '`''a,b,c,d''.split('','', maxsplit=1)` 得到 `[''a'', ''b,c,d'']`。'
+),
+(
+  293,
+  20,
+  '大小写侦探',
+  '在检查用户输入是否包含密码关键词‘secret’时，为了更严谨，应该使用下列哪个表达式？(假设`user_input`是用户输入的字符串)',
+  '["\\\"secret\\\" in user_input", "\\\"secret\\\" in user_input or \\\"Secret\\\" in user_input", "\\\"secret\\\" in user_input.lower()", "user_input.find(\\\"secret\\\") != -1"]',
+  3,
+  '["`in`操作符是区分大小写的。‘Secret’和‘secret’不一样。", "如何忽略大小写进行判断？有一个字符串方法可以把所有字母变成小写。", "先将待检查的字符串统一转为小写，再用`in`判断。"]',
+  '正确选项是C。`user_input.lower()`将用户输入的所有字符转换为小写，然后判断小写的‘secret’是否在其中，这样就实现了不区分大小写的包含性检查。选项A和D都是区分大小写的；选项B只考虑了两种特定大写情况，不全面。',
+  '`if "exit" in cmd.lower():` 可以匹配‘EXIT’、‘Exit’、‘exit’等。'
+),
+(
+  296,
+  20,
+  '切片安全员',
+  '对于字符串`text = "Hello"`，下列哪个切片操作不会引发错误，且能返回一个有效结果（可能是空字符串）？',
+  '["text[2:10]", "text[10:]", "text[::-2]", "以上全部"]',
+  4,
+  '["Python的切片操作非常“宽容”，即使索引超出范围，也不会报错。", "它会自动将起始或结束索引调整到字符串的边界。", "负的步长意味着从后向前取。"]',
+  '在Python中，切片索引越界不会引发`IndexError`，而是返回在有效索引范围内的结果。`text[2:10]` 等价于 `text[2:5]`，返回`‘llo’`。`text[10:]` 起始索引已超过字符串长度，返回空字符串`‘’`。`text[::-2]` 步长为-2，从末尾开始反向每隔一个字符取一个，返回`‘olH’`。因此所有选项都不会报错。',
+  '`‘Hi’[5:10]` 返回空字符串 `‘’`。'
+),
+(
+  297,
+  20,
+  'Join的空箱子',
+  '如果用一个连接符去`join`一个空列表`[]`，结果会是什么？',
+  '["报错", "一个空字符串 `‘’`", "连接符本身", "`None`"]',
+  2,
+  '["`join`方法如何处理没有元素的列表？", "可以想象一下，用胶水（连接符）去粘零个积木，手上还剩什么？", "试着在交互式环境中运行一下 `‘-’.join([])`。"]',
+  '`str.join(iterable)`方法当可迭代对象为空时，会直接返回一个空字符串`‘’`。因为没有任何元素需要连接，所以连接符也不会被使用。这是一个安全且符合逻辑的行为。',
+  '`" and ".join([])` 返回 `‘’`；`" and ".join(["Me"])` 返回 `‘Me’`。'
+),
+(
+  298,
+  20,
+  'in 的多重任务',
+  '以下哪段代码可以正确检查字符串`msg`中是否同时包含‘urgent’和‘meeting’这两个单词？',
+  '["if \\\"urgent\\\" in msg or \\\"meeting\\\" in msg:", "if \\\"urgent\\\" and \\\"meeting\\\" in msg:", "if \\\"urgent\\\" in msg and \\\"meeting\\\" in msg:", "if \\\"urgent\\\" + \\\"meeting\\\" in msg:"]',
+  3,
+  '["要检查两个条件都成立，应该使用`and`逻辑操作符。", "选项B的写法是常见的错误，它实际检查的是`（“urgent”） and （“meeting” in msg）`。", "每个`in`操作都需要一个明确的目标字符串。"]',
+  '要判断两个子串是否都存在于母串中，需要使用逻辑与`and`连接两个完整的`in`表达式。选项A是‘或’关系；选项B中，`“urgent”`作为一个非空字符串在布尔上下文中为`True`，所以实际只检查了`“meeting” in msg`；选项D是检查拼接后的长字符串是否在`msg`中，不符合要求。',
+  '检查邮件标题：`if "重要" in subject and "回复" in subject:`。'
+);
+
+INSERT INTO `que_fill_py_1` (`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`) VALUES
+
+(
+  289,
+  20,
+  '反转咒语',
+  '赫敏想让一句咒语倒着念出来。请帮她完成这个神奇的切片操作。',
+  NULL,
+  '["!aloh olleh"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "spell = \\\"hello world!\\\""}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "reversed_spell = spell"}, {"type": "slot", "index": 0}, {"type": "code", "value": " "}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "print(reversed_spell)"}]}]}',
+  '["[::-1]", "[::1]", "[-1]", "[1:-1]"]',
+  '[0]',
+  '`[::-1]`是切片的完整写法，其中第三个参数`-1`表示步长为-1，即从后向前每次取一个字符，从而实现字符串反转。',
+  '`‘abc’[::-1]` 结果为 `‘cba’`。'
+),
+(
+  290,
+  20,
+  '友谊的胶水',
+  '佩奇和她的朋友们名字存放在一个列表里。请用`join`方法将它们用‘和’连接成一句温暖的介绍。',
+  NULL,
+  '["佩奇和乔治和苏西"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "friends = [\\\"佩奇\\\", \\\"乔治\\\", \\\"苏西\\\"]"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "intro = \\\""}, {"type": "slot", "index": 0}, {"type": "code", "value": "\\\".join(friends)"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "print(intro)"}]}]}',
+  '["和", "，", "+", "&"]',
+  '[0]',
+  '`str.join(iterable)`方法使用调用它的字符串`str`作为连接符，将可迭代对象（如列表）中的所有字符串元素连接成一个新的字符串。这里连接符是‘和’。',
+  '`"-".join(["2023", "05", "20"])` 结果为 `"2023-05-20"`。'
+),
+(
+  294,
+  20,
+  '整理凌乱的书架',
+  '书架信息以‘书名-作者-年份’的格式挤在一个字符串里。请补全代码，仅提取出所有的书名，并放入一个整洁的列表。',
+  NULL,
+  '["[''Python入门'', ''数据分析实战'', ''机器学习导论'']"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "shelf = \\\"Python入门-A先生-2020,数据分析实战-B女士-2021,机器学习导论-C博士-2022\\\""}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "books = []"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "for item in shelf.split(\\\",\\\"):"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "    book_name = item"}, {"type": "slot", "index": 0}, {"type": "code", "value": " "}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "    books"}, {"type": "slot", "index": 1}, {"type": "code", "value": "(book_name)"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "print(books)"}]}]}',
+  '[".split(\\\"-\\\")", ".split(\\\",\\\")", ".append", ".insert", "[0]", "[1]", "[-1]"]',
+  '[0, 5, 2]',
+  '首先用`split(",")`将整个字符串按逗号分割成多个`‘书名-作者-年份’`的条目。然后对每个条目，再用`split("-")`按短横分割，分割后的列表第一个元素（索引0）就是书名。最后使用列表的`append`方法将书名添加到`books`列表中。',
+  '处理`‘a-b,c-d’`：先按逗号分得`[‘a-b’， ‘c-d’]`，再对每个元素按‘-’分并取第一个，得`[‘a’， ‘c’]`。'
+),
+(
+  295,
+  20,
+  '回文侦察兵',
+  '补全代码，判断一个字符串是否为回文（正读反读都一样）。注意，我们忽略空格和大小写。',
+  '["A man a plan a canal Panama"]',
+  '["是回文"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "s = input()"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "processed_s = s"}, {"type": "slot", "index": 0}, {"type": "code", "value": "().replace(\\\" \\\", \\\"\\\")"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "if processed_s"}, {"type": "slot", "index": 1}, {"type": "code", "value": "processed_s[::-1]:"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "    print(\\\"是回文\\\")"}, {"type": "code_line", "value": "else:"}, {"type": "code_line", "value": "    print(\\\"不是回文\\\")"}]}]}',
+  '[".lower", ".upper", "==", "in"]',
+  '[0, 2]',
+  '首先，`processed_s = s.lower().replace(" ", "")` 将输入字符串`s`转换为全小写并移除所有空格，以便进行不区分大小写且忽略空格的比较。然后，`if processed_s == processed_s[::-1]:` 判断处理后的字符串是否等于其反转字符串，相等则为回文。',
+  '输入`‘Aba’`，处理后为`‘aba’`，其反转也是`‘aba’`，两者相等，所以是回文。'
+),
+(
+  299,
+  20,
+  'CSV数据变身术',
+  '有一行CSV格式的数据，请补全代码，将其从‘姓名,年龄,城市’的格式，转换为‘城市-年龄-姓名’的格式。',
+  '["张三,25,北京"]',
+  '["北京-25-张三"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "data = input()  # 例如输入：张三,25,北京"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "parts = data"}, {"type": "slot", "index": 0}, {"type": "code", "value": "(\\\",\\\")"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "# 目标顺序：城市(parts[2])、年龄(parts[1])、姓名(parts[0])"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "new_format = \\\"-\\\""}, {"type": "slot", "index": 1}, {"type": "code", "value": "([parts[2], parts[1], parts[0]])"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "print(new_format)"}]}]}',
+  '[".split", ".join", "parts", "[parts[2], parts[1], parts[0]]", "[parts[0], parts[1], parts[2]]"]',
+  '[0, 1]',
+  '首先，使用`split(",")`将输入的CSV字符串按逗号分割成一个列表`parts`。然后，使用`join`方法，以短横线`“-”`作为连接符，将`parts`列表中按新顺序`[parts[2], parts[1], parts[0]]`（即城市、年龄、姓名）排列的元素连接成一个新的字符串。',
+  '`parts = [''a'', ''b'', ''c'']`，`"-".join([parts[2], parts[0]])` 结果为 `‘c-a’`。'
+),
+(
+  300,
+  20,
+  '文本提取大师',
+  '补全代码，从一段包含标签的文本中，提取出所有被`【】`括起来的关键词，并将它们用空格连接起来。',
+  '["会议主题是【Python复习】，重点包括【字符串切片】和【方法应用】。"]',
+  '["Python复习 字符串切片 方法应用"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "text = input()"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "keywords = []"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "start = 0"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "while True:"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "    left = text.find(\\\"【\\\", start)"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "    if left"}, {"type": "slot", "index": 0}, {"type": "code", "value": ":"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "        break"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "    right = text.find(\\\"】\\\", left + 1)"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "    keyword = text"}, {"type": "slot", "index": 1}, {"type": "code", "value": " "}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "    keywords.append(keyword)"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "    start"}, {"type": "slot", "index": 2}, {"type": "code", "value": " "}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "result = \\\" \\\".join(keywords)"}, {"type": "code_line", "value": "print(result)"}]}]}',
+  '["==", "!=", ">", "<", "=", "== -1", "[left:right]", "[left+1:right]", "= right", "= right + 1"]',
+  '[5, 7, 9]',
+  '这是一个综合应用。循环使用`find`方法查找左括号`“【”`的位置`left`。如果`find`返回-1（用`== -1`判断），说明没有找到，则跳出循环。找到左括号后，再从它的下一个位置开始找右括号`“】”`，得到位置`right`。关键词是这两个位置之间的子串，使用切片`[left+1:right]`提取（不包含括号本身）。最后，将搜索起始位置`start`更新为`right + 1`，以便继续查找下一个关键词。',
+  '在`‘a【b】c【d】’`中，第一次找到`left=1`，`right=3`，切片`[2:3]`得`‘b’`，`start`设为4。'
+);

@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第72单元：遍历字符串',
+  'questions': [
+    {'id':1,'type':'choice','title':'字符遍历','content':'遍历字符串每个字符时推荐使用？','options':{'A':'for ch in s','B':'while True','C':'索引访问只能','D':'不能遍历'},'answer':'A','hints':['直接迭代最简洁','避免下标错误'],'explanation':'用 for 直接遍历字符串最简洁明了。','example':'for ch in "abc": print(ch)'},
+    {'id':2,'type':'choice','title':'不可变字符串','content':'字符串是可变还是不可变对象？','options':{'A':'不可变','B':'可变','C':'部分可变','D':'随实现不同'},'answer':'A','hints':['不能直接修改单个字符','常通过新字符串替代'], 'explanation':'字符串在 Python 中是不可变的，修改需生成新字符串。','example':'s = s.replace()'},
+    {'id':3,'type':'choice','title':'遍历与索引','content':'需要索引和字符同时使用时推荐？','options':{'A':'enumerate(s)','B':'手动计数','C':'zip with range','D':'不可实现'},'answer':'A','hints':['enumerate 同时提供索引与值','更简洁'], 'explanation':'使用 enumerate 可同时获得索引和值。','example':'for i,ch in enumerate(s):'},
+    {'id':4,'type':'fill','title':'统计字符','content':'补全：统计字符串中 a 的个数。','input':'aba','output':'2','code':'s=input()\ncount=0\nfor ch in s:\n    if ch=="a":\n        count+=1\nprint(count)','options':'示例已给出','answer':'1','explanation':'遍历并计数特定字符。','example':'s.count("a")'},
+    {'id':5,'type':'fill','title':'转大写遍历','content':'补全：遍历并打印大写字符。','input':'ab','output':'A\nB','code':'s=input()\nfor ch in s:\n    print(ch.upper())','options':'示例已给出','answer':'1','explanation':'对每个字符调用 upper 得到大写字符。','example':'ch.upper()'},
+    {'id':6,'type':'choice','title':'多字节字符','content':'遍历包含中文的字符串时？','options':{'A':'按字符遍历同样有效','B':'必须按字节处理','C':'不可遍历','D':'会报错'},'answer':'A','hints':['Python 按字符处理 Unicode','正常遍历即可'], 'explanation':'Python 字符串是 Unicode，按字符遍历能正确处理中文。','example':'for ch in "你好": print(ch)'},
+    {'id':7,'type':'choice','title':'性能注意','content':'对非常长的字符串进行逐字符处理时应注意？','options':{'A':'避免在循环中做昂贵操作','B':'无限循环','C':'内存不足','D':'不可运行'},'answer':'A','hints':['把昂贵操作移出循环或缓存结果','使用生成器优化'], 'explanation':'在循环中应尽量避免重复昂贵计算以提升性能。','example':'precompute value'},
+    {'id':8,'type':'choice','title':'切片与遍历','content':'用 s[i] 访问字符和直接 for ch in s 相比？','options':{'A':'直接遍历更简洁且安全','B':'索引更快','C':'两者等价','D':'索引无法使用'},'answer':'A','hints':['避免越界问题','代码更清晰'], 'explanation':'直接遍历更简洁，索引方式在需要索引时才使用。','example':'for ch in s'},
+    {'id':9,'type':'fill','title':'倒序遍历','content':'补全：倒序打印字符串。','input':'ab','output':'b\na','code':'s=input()\nfor ch in s[::-1]:\n    print(ch)','options':'示例已给出','answer':'1','explanation':'切片 s[::-1] 产生倒序字符串。','example':'reverse slice'},
+    {'id':10,'type':'fill','title':'查找子串','content':'补全：判断子串是否存在并打印位置。','input':'hello\nll','output':'2','code':'s=input()\nsub=input()\nprint(s.find(sub))','options':'示例已给出','answer':'1','explanation':'find 返回子串首次出现索引或 -1。','example':'s.find("a")'},
+    {'id':11,'type':'choice','title':'不可直接修改','content':'想替换字符串中某个字符，正确做法是？','options':{'A':'生成新字符串','B':'直接赋值 s[i] = x','C':'使用 del','D':'调用 sort'},'answer':'A','hints':['字符串不可变','使用 replace 或拼接生成新字符串'],'explanation':'因为字符串不可变，需要通过 replace 或重建字符串来得到新结果。','example':'s = s[:i]+"x"+s[i+1:]'},
+    {'id':12,'type':'choice','title':'strip 与 split','content':'在逐行遍历文件字符串时常用的清洗操作是？','options':{'A':'strip 去除换行和空白','B':'直接 eval','C':'不处理','D':'写入数据库'},'answer':'A','hints':['strip 常用于清理输入','避免尾部 \n 影响判断'], 'explanation':'使用 strip 清理左右空白是读取文本时常见步骤。','example':'line=line.strip()'},
+    {'id':13,'type':'choice','title':'遍历与编码','content':'读取文本文件并遍历字符时应注意文件的什么？','options':{'A':'编码（encoding）','B':'行数','C':'文件权限','D':'文件名长度'},'answer':'A','hints':['确保以正确编码读取以避免乱码','常用 utf-8'], 'explanation':'读取文件时需指定正确编码以正确解析字符。','example':'open(file, encoding="utf-8")'},
+    {'id':14,'type':'fill','title':'过滤指定字符','content':'补全：只打印不是空格的字符。','input':'a b','output':'a\nb','code':'s=input()\nfor ch in s:\n    if ch==" ":\n        continue\n    print(ch)','options':'示例已给出','answer':'1','explanation':'用 continue 跳过空格字符。','example':'skip spaces'},
+    {'id':15,'type':'fill','title':'字符转码','content':'补全：将字符的 unicode 码点打印。','input':'A','output':'65','code':'ch=input()\nprint(ord(ch))','options':'示例已给出','answer':'1','explanation':'ord 返回字符的 Unicode 码点整数表示。','example':'ord("A") -> 65'}
+  ]
+}
+
+```
+
+*** End Patch

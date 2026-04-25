@@ -1,0 +1,266 @@
+[
+  {
+    "id": 1,
+    "type": "choice",
+    "title": "乘法的基本理解",
+    "text": "在 Python 中，表达式 7 * 3 的结果是？",
+    "options": {
+      "A": "10",
+      "B": "18",
+      "C": "21",
+      "D": "73"
+    },
+    "answer": "C",
+    "hints": [
+      "乘法在 Python 中与日常数学一致。",
+      "7 乘以 3 是一个基础运算。",
+      "7 加 7 加 7 的总和是多少？"
+    ],
+    "explanation": "7 * 3 = 21，是最基础的整数乘法。",
+    "example": "示例：8 * 2 = 16"
+  },
+
+  {
+    "id": 2,
+    "type": "choice",
+    "title": "除法的结果类型",
+    "text": "在 Python 中，表达式 8 / 2 得到的结果类型是？",
+    "options": {
+      "A": "始终为 int",
+      "B": "始终为 float",
+      "C": "若整除则为 int，否则为 float",
+      "D": "取决于 Python 版本"
+    },
+    "answer": "B",
+    "hints": [
+      "Python 的 / 为“真除法”。",
+      "真除法无论是否整除都返回同一种类型。",
+      "运行 type(8/2) 即可确认。"
+    ],
+    "explanation": "Python 的 / 运算永远返回 float 类型。",
+    "example": "示例：5 / 1 的结果是 5.0（float）"
+  },
+
+  {
+    "id": 3,
+    "type": "choice",
+    "title": "整除的方向",
+    "text": "表达式 7 // 3 的结果是？",
+    "options": {
+      "A": "2",
+      "B": "2.333…",
+      "C": "3",
+      "D": "取决于是否四舍五入"
+    },
+    "answer": "A",
+    "hints": [
+      "// 是向下取整的整除。",
+      "7 除以 3 大约是 2.333。",
+      "向下取最接近的整数是多少？"
+    ],
+    "explanation": "7 // 3 = 2，因为整除是向下（floor）取整。",
+    "example": "示例：10 // 4 = 2"
+  },
+
+  {
+    "id": 4,
+    "type": "fill",
+    "title": "订单金额折扣计算",
+    "text": "完成下面代码，使程序正确计算折扣价格。",
+    "input": "",
+    "output": "",
+    "code": "price = 80\nrate = 0.75\ntotal = price * __1__\nprint(total)",
+    "options": "rate, price, //, *, /, 0.25, 0.75, total",
+    "answer": "1",
+    "explanation": "折扣价 = price * rate，因此填入 rate。",
+    "example": "示例：100 * 0.8 表示 8 折价格。"
+  },
+
+  {
+    "id": 5,
+    "type": "fill",
+    "title": "平均分计算",
+    "text": "补全代码，使其计算三门课的平均分。",
+    "code": "a = 80\nb = 90\nc = 100\navg = (a + b + c) __1__ 3\nprint(avg)",
+    "options": "*, /, //, %, +, -, 3, (a+b+c)",
+    "answer": "1",
+    "explanation": "计算平均值需要除以科目数量，故应填 /。",
+    "example": "示例：(10 + 20) / 2 = 15"
+  },
+
+  {
+    "id": 6,
+    "type": "choice",
+    "title": "浮点除法的结果",
+    "text": "9 / 4 的值是？",
+    "options": {
+      "A": "2",
+      "B": "2.0",
+      "C": "2.25",
+      "D": "2.33333"
+    },
+    "answer": "C",
+    "hints": [
+      "想想日常数学中的 9 ÷ 4。",
+      "Python 的 / 结果永远是浮点数。",
+      "计算 9 除以 4 即可得到。"
+    ],
+    "explanation": "9 除以 4 的精确值为 2.25。",
+    "example": "示例：10 / 4 = 2.5"
+  },
+
+  {
+    "id": 7,
+    "type": "choice",
+    "title": "整除与负数",
+    "text": "表达式 -7 // 3 的结果是？",
+    "options": {
+      "A": "-2",
+      "B": "-3",
+      "C": "-1",
+      "D": "0"
+    },
+    "answer": "B",
+    "hints": [
+      "// 是向下取整（floor）。",
+      "向下取整不是“截断”。",
+      "-7 ÷ 3 大约是 -2.333。"
+    ],
+    "explanation": "floor(-2.333) = -3，因此结果是 -3。",
+    "example": "示例：-5 // 2 = -3"
+  },
+
+  {
+    "id": 8,
+    "type": "choice",
+    "title": "取余含义",
+    "text": "表达式 17 % 5 的结果是？",
+    "options": {
+      "A": "2",
+      "B": "3",
+      "C": "5",
+      "D": "1"
+    },
+    "answer": "A",
+    "hints": [
+      "余数 = 被除数 - (除数 × 整除结果)。",
+      "17 // 5 = 3。",
+      "17 - 3*5 = 2。"
+    ],
+    "explanation": "17 ÷ 5 商 3 余 2，因此结果为 2。",
+    "example": "示例：10 % 3 = 1"
+  },
+
+  {
+    "id": 9,
+    "type": "fill",
+    "title": "水果分组展示",
+    "text": "一共有 23 个水果，每排展示 4 个，补全代码计算需要多少排。",
+    "code": "items = 23\nrow = 4\nrows_needed = items __1__ row\nprint(rows_needed)",
+    "input": "",
+    "output": "",
+    "options": "*, /, //, %, +, -, row, items",
+    "answer": "3",
+    "explanation": "// 计算整排数，23 // 4 = 5。",
+    "example": "示例：17 // 3 = 5"
+  },
+
+  {
+    "id": 10,
+    "type": "fill",
+    "title": "剩余库存计算",
+    "text": "补全代码以计算打包后还剩多少库存。",
+    "code": "stock = 57\nbox = 10\nleft = stock __1__ box\nprint(left)",
+    "options": "%, //, *, /, -, +, stock, box",
+    "answer": "1",
+    "explanation": "剩余数量 = stock % box。",
+    "example": "示例：35 % 6 = 5"
+  },
+
+  {
+    "id": 11,
+    "type": "choice",
+    "title": "混合运算优先级",
+    "text": "表达式 6 + 3 * 2 的结果是？",
+    "options": {
+      "A": "12",
+      "B": "18",
+      "C": "6",
+      "D": "30"
+    },
+    "answer": "A",
+    "hints": [
+      "* 的优先级高于 +。",
+      "先算 3 * 2。",
+      "再加上 6。"
+    ],
+    "explanation": "6 + (3*2) = 12。",
+    "example": "示例：10 + 2 * 3 = 16"
+  },
+
+  {
+    "id": 12,
+    "type": "choice",
+    "title": "百分比计算",
+    "text": "要计算 200 的 15%，以下哪种写法正确？",
+    "options": {
+      "A": "200 * 15",
+      "B": "200 / 15",
+      "C": "200 * 0.15",
+      "D": "200 % 15"
+    },
+    "answer": "C",
+    "hints": [
+      "百分数要转化为小数乘法。",
+      "比如 20% = 0.2。",
+      "因此 15% = 0.15。"
+    ],
+    "explanation": "百分比换成小数后乘即可。",
+    "example": "示例：80 的 20% = 80 * 0.2 = 16"
+  },
+
+  {
+    "id": 13,
+    "type": "choice",
+    "title": "长宽计算面积",
+    "text": "长 12，宽 3 的矩形面积计算式为？",
+    "options": {
+      "A": "12 + 3",
+      "B": "12 * 3",
+      "C": "12 / 3",
+      "D": "12 // 3"
+    },
+    "answer": "B",
+    "hints": [
+      "面积 = 长 × 宽。",
+      "这里不涉及除法。",
+      "也不涉及整除或余数。"
+    ],
+    "explanation": "12 * 3 = 36。",
+    "example": "示例：5 * 4 = 20"
+  },
+
+  {
+    "id": 14,
+    "type": "fill",
+    "title": "分钟换算小时",
+    "text": "补全代码，将总分钟转换为小时和剩余分钟。",
+    "code": "total = 145\nh = total __1__ 60\nm = total __2__ 60\nprint(h, m)",
+    "options": "//, %, /, *, -, +, 60, total",
+    "answer": "1,2",
+    "explanation": "整除用于计算小时数，取余用于计算剩余分钟。",
+    "example": "示例：130 分钟 = 2 小时 10 分钟"
+  },
+
+  {
+    "id": 15,
+    "type": "fill",
+    "title": "购物满减逻辑",
+    "text": "满 200 减 50，完成代码：",
+    "code": "cost = 260\nfull = 200\noff = 50\npay = cost __1__ off if cost __2__ full else cost\nprint(pay)",
+    "options": ">=, <=, ==, -, +, *, /, //, %, off, full, cost",
+    "answer": "1,2",
+    "explanation": "若消费大于等于 full，则 cost - off。",
+    "example": "示例：300 ≥ 200 → 300 - 50 = 250"
+  }
+]

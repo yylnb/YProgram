@@ -1,0 +1,27 @@
+```plaintext
+{
+  'unit': '第67单元：continue（基础）',
+  'questions': [
+    {'id':1,'type':'choice','title':'continue 的基本作用','content':'在循环中使用 continue 会？','options':{'A':'跳过本次剩余并进入下一次迭代','B':'退出循环','C':'终止程序','D':'回到函数开头'},'answer':'A','hints':['跳过本次后续语句','继续判断条件'],'explanation':'continue 会立即开始下一次循环判断并跳过当前迭代剩余代码。','example':'if cond: continue'},
+    {'id':2,'type':'choice','title':'continue 与 break 区别','content':'下面哪项是正确的区别？','options':{'A':'continue 跳过本次，break 退出循环','B':'两者相同','C':'continue 退出函数','D':'break 跳过本次'},'answer':'A','hints':['继续 vs 终止','不同控制流影响'], 'explanation':'continue 跳过后续语句进入下一次循环，break 则直接退出循环。','example':'continue vs break'},
+    {'id':3,'type':'choice','title':'使用场景','content':'continue 常用于？','options':{'A':'过滤不需要处理的情况','B':'提前退出函数','C':'替代 return','D':'声明变量'},'answer':'A','hints':['如跳过无效数据','保持循环结构简单'],'explanation':'当要跳过某些不需要处理的迭代时使用 continue 更清晰。','example':'if invalid: continue'},
+    {'id':4,'type':'fill','title':'跳过示例','content':'补全：遇到负数跳过打印。','input':'1 -1 2','output':'1\n2','code':'i=0\nwhile i<3:\n    v=int(input())\n    i+=1\n    if v<0:\n        continue\n    print(v)','options':'示例已给出','answer':'1','explanation':'continue 跳过当前迭代中的打印语句。','example':'skip negative'},
+    {'id':5,'type':'fill','title':'避免死循环','content':'补全：使用 continue 时也要保证更新计数器。','input':'','output':'','code':'i=0\nwhile i<3:\n    i+=1\n    if cond:\n        continue\n    do()',
+      'options':'示例已给出','answer':'1','explanation':'即使使用 continue，计数器也应被更新以避免无限循环。','example':'update before continue'},
+    {'id':6,'type':'choice','title':'可读性','content':'频繁使用 continue 会怎样？','options':{'A':'可能降低可读性','B':'没有影响','C':'提高逻辑透明度','D':'提升性能'},'answer':'A','hints':['跳跃点过多使理解困难','适度使用更佳'],'explanation':'过多的 continue 会使代码执行路径跳跃，影响可读性。','example':'limit continue use'},
+    {'id':7,'type':'choice','title':'与 for 一起用','content':'在 for 循环中使用 continue 会？','options':{'A':'跳到下一个迭代项','B':'退出整个循环','C':'报错','D':'重置迭代'},'answer':'A','hints':['继续下一个元素','常用于过滤'],'explanation':'在 for 中 continue 用于跳过当前元素并进入下一个元素的处理。','example':'for x in seq: if cond: continue'},
+    {'id':8,'type':'choice','title':'跟踪跳过次数','content':'若想统计被 continue 跳过的次数，应该？','options':{'A':'在跳过处增加计数器','B':'忽略','C':'在循环外统计','D':'无法统计'},'answer':'A','hints':['在 continue 前递增计数','记录跳过情形'], 'explanation':'在判断到跳过条件时递增计数器便能统计跳过次数。','example':'skips += 1; continue'},
+    {'id':9,'type':'fill','title':'统计示例','content':'补全：统计负数个数并跳过它们。','input':'1 -1 2 -2','output':'2','code':'skips=0\ni=0\nwhile i<4:\n    v=int(input())\n    i+=1\n    if v<0:\n        skips+=1\n        continue\nprint(skips)','options':'示例已给出','answer':'1','explanation':'在跳过处累加 skips 可以统计负数数量。','example':'count then continue'},
+    {'id':10,'type':'fill','title':'位置重要性','content':'补全：将更新计数器放在合适位置避免跳过更新。','input':'','output':'','code':'i=0\nwhile i<3:\n    i+=1\n    if cond:\n        continue\n    do()',
+      'options':'示例已给出','answer':'1','explanation':'在可能 continue 的路径前更新计数器以保证不会无限循环。','example':'update counter early'},
+    {'id':11,'type':'choice','title':'循环体复杂度','content':'当循环体很复杂时使用 continue 会？','options':{'A':'可能隐藏逻辑分支','B':'减少代码行数','C':'提高可读性','D':'自动化测试通过率提高'},'answer':'A','hints':['跳过路径众多使逻辑难以全局把握'],'explanation':'复杂循环中过度使用 continue 会使逻辑路径难以追踪，需谨慎。','example':'consider refactor'},
+    {'id':12,'type':'choice','title':'替代方案','content':'不想用 continue 时可用？','options':{'A':'用条件分支将余下逻辑包起来','B':'删除循环','C':'增加更多 continue','D':'用异常'},'answer':'A','hints':['显式条件可读性更高','减少跳转点'], 'explanation':'用条件块包裹需要执行的逻辑能替代 continue，代码更直观。','example':'if not cond: do()'},
+    {'id':13,'type':'choice','title':'continue 与性能','content':'使用 continue 对性能有何影响？','options':{'A':'通常无明显负面影响','B':'会显著变慢','C':'会占用更多内存','D':'会抛错'},'answer':'A','hints':['主要影响是可读性而非性能'],'explanation':'continue 本身开销小，主要需关注循环体的操作。','example':'micro-bench not needed'},
+    {'id':14,'type':'fill','title':'使用注释说明','content':'补全：在 continue 前写注释说明跳过原因。','input':'','output':'','code':'if invalid:\n    # skip invalid entries\n    continue','options':'示例已给出','answer':'1','explanation':'注释有助于后续维护者理解为什么跳过该分支。','example':'# reason for skip'},
+    {'id':15,'type':'fill','title':'结合 break 使用','content':'补全：有时需要在满足条件时既跳过又退出，合理写法是？','input':'','output':'','code':'if cond_skip:\n    continue\nelif cond_exit:\n    break','options':'示例已给出','answer':'1','explanation':'通过明确分支分别处理跳过与退出使逻辑清晰。','example':'separate branches'}
+  ]
+}
+
+```
+
+*** End Patch

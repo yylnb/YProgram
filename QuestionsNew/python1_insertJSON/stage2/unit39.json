@@ -1,0 +1,491 @@
+{
+    "choice_questions": [
+        {
+            "id": 1,
+            "title": "三元表达式形式",
+            "content": "Python 中三元表达式的正确写法是？",
+            "options": {
+                "A": "a if cond else b",
+                "B": "cond ? a : b",
+                "C": "a ?: b",
+                "D": "if cond then a else b"
+            },
+            "answer": "A",
+            "hints": [
+                "Python 使用 if ... else 放中间",
+                "不是 C 风格语法",
+                "返回两者之一"
+            ],
+            "explanation": "Python 的三元为 a if cond else b，先写结果再写条件。",
+            "example": "x = \"yes\" if flag else \"no\""
+        },
+        {
+            "id": 2,
+            "title": "短写的注意点",
+            "content": "下面哪种情况不适合用三元表达式？",
+            "options": {
+                "A": "简单的分支赋值",
+                "B": "复杂多行逻辑",
+                "C": "单行默认值",
+                "D": "条件返回不同常量"
+            },
+            "answer": "B",
+            "hints": [
+                "可读性优先",
+                "三元适合简短表达",
+                "复杂逻辑应使用 if 块"
+            ],
+            "explanation": "复杂多行逻辑应使用常规 if/else，保持可读性。",
+            "example": "if heavy: ... else: ... 更清晰"
+        },
+        {
+            "id": 3,
+            "title": "三元返回值类型",
+            "content": "三元表达式两侧返回值类型最好如何？",
+            "options": {
+                "A": "最好相同或兼容",
+                "B": "必须相同",
+                "C": "必须不同",
+                "D": "无所谓"
+            },
+            "answer": "A",
+            "hints": [
+                "避免类型混乱",
+                "提升后续处理方便",
+                "兼容性最重要"
+            ],
+            "explanation": "两侧返回类型最好相同或兼容，避免后续使用出错。",
+            "example": "x = 1 if ok else 0"
+        },
+        {
+            "id": 6,
+            "title": "可读性优先",
+            "content": "当三元表达式长度过长，应如何处理？",
+            "options": {
+                "A": "改为普通 if/else",
+                "B": "继续写在一行",
+                "C": "用逗号分隔",
+                "D": "用 lambda 嵌套"
+            },
+            "answer": "A",
+            "hints": [
+                "可读性很重要",
+                "写多行更清晰",
+                "避免巧妙但难懂的单行表达"
+            ],
+            "explanation": "当表达式过长时，使用普通的 if/else 更清晰。",
+            "example": "if cond:\n    res = a\nelse:\n    res = b"
+        },
+        {
+            "id": 7,
+            "title": "三元与列表推导",
+            "content": "下面哪个可以在列表推导中使用三元表达式？",
+            "options": {
+                "A": "[x if cond else y for x in seq]",
+                "B": "[if cond: x else: y for x in seq]",
+                "C": "[cond ? x : y for x in seq]",
+                "D": "不可以在推导中使用"
+            },
+            "answer": "A",
+            "hints": [
+                "Python 支持在推导里用三元",
+                "语法为 x if cond else y",
+                "常用于基于条件变换序列"
+            ],
+            "explanation": "在列表推导中使用三元表达式可以实现条件映射。",
+            "example": "[n if n%2==0 else 0 for n in nums]"
+        },
+        {
+            "id": 8,
+            "title": "简写的限制",
+            "content": "三元表达式能否替代复杂的分支逻辑？",
+            "options": {
+                "A": "不建议替代复杂分支",
+                "B": "永远可以替代",
+                "C": "只能在函数中使用",
+                "D": "只能在表达式中使用"
+            },
+            "answer": "A",
+            "hints": [
+                "复杂分支影响可读性",
+                "三元适合简单情况",
+                "清晰比简洁重要"
+            ],
+            "explanation": "复杂分支应使用标准 if/else 来保持代码清晰。",
+            "example": "use if for multi-step logic"
+        },
+        {
+            "id": 11,
+            "title": "三元与副作用",
+            "content": "在三元中调用函数会怎样？",
+            "options": {
+                "A": "会在被选分支上调用",
+                "B": "总会调用两边",
+                "C": "永不调用",
+                "D": "导致语法错误"
+            },
+            "answer": "A",
+            "hints": [
+                "只有被选分支会被求值",
+                "不会调用另一侧"
+            ],
+            "explanation": "三元表达式只会求值被选中的那一侧，因此只有那个分支的函数会被调用。",
+            "example": "f() if cond else g()"
+        },
+        {
+            "id": 12,
+            "title": "表达式求值顺序",
+            "content": "在 a if cond else b 中，cond 在何时求值？",
+            "options": {
+                "A": "先求 cond，再根据结果求 a 或 b",
+                "B": "先求 a，再求 cond",
+                "C": "同时求",
+                "D": "先求 b"
+            },
+            "answer": "A",
+            "hints": [
+                "cond 决定选择哪侧",
+                "先判断条件",
+                "只有一侧会被求值"
+            ],
+            "explanation": "cond 先被求值，根据真假决定只求值 a 或 b。",
+            "example": "x = val if check() else other"
+        },
+        {
+            "id": 13,
+            "title": "风格指南建议",
+            "content": "PEP8 对三元表达式的建议是什么？",
+            "options": {
+                "A": "保持简短且可读",
+                "B": "尽可能嵌套",
+                "C": "尽量用一行实现所有逻辑",
+                "D": "禁止使用"
+            },
+            "answer": "A",
+            "hints": [
+                "注重可读性",
+                "简洁优于复杂一行",
+                "遵循团队规范"
+            ],
+            "explanation": "PEP8 强调可读性，建议三元表达式保持简短易懂。",
+            "example": "避免复杂嵌套的三元"
+        }
+    ],
+    "fill_questions": [
+        {
+            "id": 4,
+            "title": "用三元表达式赋值",
+            "content": "补全：根据输入决定是否使用默认值。",
+            "input": "s=\"\"",
+            "output": [
+                "guest"
+            ],
+            "options": [
+                "if",
+                "or",
+                "and",
+                "!="
+            ],
+            "answer": [
+                "if"
+            ],
+            "explanation": "正确写法为 name = s if s else \"guest\"。",
+            "example": "mode = \"r\" if read else \"w\"",
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "s = input()"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "name = s "
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": " s else \"guest\""
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 5,
+            "title": "短表达式的副作用",
+            "content": "补全：避免在三元中调用副作用函数。",
+            "input": null,
+            "output": [],
+            "options": [
+                "func2",
+                "print",
+                "None",
+                "func3"
+            ],
+            "answer": [
+                "func2"
+            ],
+            "explanation": "尽量不要在三元表达式中包含复杂或带副作用的函数调用。",
+            "example": "use separate if for complex calls",
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "res = func1() if cond else "
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": "()"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 9,
+            "title": "嵌套三元的风险",
+            "content": "补全：避免嵌套三元，示意替换为 if。",
+            "input": null,
+            "output": [],
+            "options": [
+                "示例已给出"
+            ],
+            "answer": [
+                "示例已给出"
+            ],
+            "explanation": "嵌套三元可读性差，应改写为 if/elif/else。",
+            "example": "见上方改写示例",
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "res = a if cond1 else (b if cond2 else c)"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "# 推荐改写为"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "if cond1:"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "    res = a"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "elif cond2:"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "    res = b"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "else:"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "    res = c"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 10,
+            "title": "用三元设置格式",
+            "content": "补全：根据分数显示等级字符串。",
+            "input": "score=85",
+            "output": [
+                "Pass"
+            ],
+            "options": [
+                "else",
+                "then",
+                "than",
+                ","
+            ],
+            "answer": [
+                "else"
+            ],
+            "explanation": "三元表达式写法为 A if cond else B。",
+            "example": "level = \"A\" if s>90 else \"B\"",
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "score = int(input())"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "status = \"Pass\" if score >= 60 "
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": " \"Fail\""
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "print(status)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 14,
+            "title": "三元表达式在字典推导中",
+            "content": "补全：在字典推导中使用三元为值选择分支。",
+            "input": null,
+            "output": [],
+            "options": [
+                "示例已给出"
+            ],
+            "answer": [
+                "示例已给出"
+            ],
+            "explanation": "在推导中三元可用于选择值，语法与列表推导相同。",
+            "example": "kv pairs -> {k: v if cond else w for ...}",
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "d = {k: (v if v>0 else 0) for k,v in items}"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "print(d)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 15,
+            "title": "实践练习：短条件赋值",
+            "content": "补全：根据 flag 选择函数返回值。",
+            "input": "flag=True",
+            "output": [
+                "A"
+            ],
+            "options": [
+                "else",
+                "then",
+                "or",
+                "and"
+            ],
+            "answer": [
+                "else"
+            ],
+            "explanation": "三元中使用 else 连接两分支。",
+            "example": "res = func1() if cond else func2()",
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "def a():"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "    return \"A\""
+                            },
+                            {
+                                "type": "code_line",
+                                "value": ""
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "def b():"
+                            },
+                            {
+                                "type": "code_line",
+                                "value": "    return \"B\""
+                            },
+                            {
+                                "type": "code_line",
+                                "value": ""
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "res = a() if flag "
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": " b()"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "print(res)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}

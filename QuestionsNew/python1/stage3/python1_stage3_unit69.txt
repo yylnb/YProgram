@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第69单元：while + input',
+  'questions': [
+    {'id':1,'type':'choice','title':'交互循环用途','content':'while 与 input 配合常用于？','options':{'A':'交互式命令循环','B':'定义类','C':'编译代码','D':'写入文件'},'answer':'A','hints':['REPL 风格交互','等待用户命令','提供退出选项'],'explanation':'while+input 常用于交互式命令循环直到用户退出。','example':'while True: cmd=input()'},
+    {'id':2,'type':'choice','title':'结束信号','content':'交互循环常用哪个作为结束信号？','options':{'A':'特定字符串如 "quit"','B':'任意字符','C':'换行符','D':'无结束'},'answer':'A','hints':['使用明确 sentinel','便于判断'],'explanation':'使用固定字符串作为 sentinel 便于退出交互循环。','example':'if cmd=="quit": break'},
+    {'id':3,'type':'choice','title':'输入校验','content':'处理用户输入应先做什么？','options':{'A':'strip 并检查格式','B':'直接使用','C':'存入数据库','D':'忽略空格'},'answer':'A','hints':['strip 去空白','检测空输入或非法字符'],'explanation':'应先清洗并校验输入以避免意外行为。','example':'s=s.strip()'},
+    {'id':4,'type':'fill','title':'简单命令循环','content':'补全：实现一行命令循环并在 quit 时退出。','input':'quit','output':'','code':'while True:\n    cmd = input().strip()\n    if cmd == "quit":\n        break','options':'示例已给出','answer':'1','explanation':'strip 有助于接受带空格的输入并识别 quit。','example':'cmd loop'},
+    {'id':5,'type':'fill','title':'忽略空输入','content':'补全：遇空行继续等待。','input':'\nhello\nquit','output':'hello','code':'while True:\n    s = input()\n    if s == "":\n        continue\n    if s=="quit":\n        break\n    print(s)','options':'示例已给出','answer':'1','explanation':'空行可用 continue 跳过。','example':'skip empty'},
+    {'id':6,'type':'choice','title':'命令解析','content':'解析命令时应使用？','options':{'A':'先 split 然后根据第一个词分发','B':'直接 eval','C':'写成一行正则','D':'用随机'},'answer':'A','hints':['按空格分割得到命令和参数','再分发给 handler'],'explanation':'先 split 命令然后根据命令名分发是常见做法。','example':'cmd, *args = s.split()'},
+    {'id':7,'type':'choice','title':'安全性','content':'不要在交互中直接执行用户输入的什么？','options':{'A':'eval 或 exec','B':'print','C':'strip','D':'split'},'answer':'A','hints':['eval 会执行任意代码','会带来安全隐患'],'explanation':'直接 eval 用户输入会导致任意代码执行风险，应避免。','example':'avoid eval'},
+    {'id':8,'type':'choice','title':'提示信息','content':'交互式程序应在何时显示提示符？','options':{'A':'在等待输入前','B':'每次输出后','C':'程序结束时','D':'不显示'},'answer':'A','hints':['提示符引导用户输入','增强交互体验'],'explanation':'提示符（如 "> ") 在等待输入前显示，提醒用户输入。','example':'input("> ")'},
+    {'id':9,'type':'fill','title':'命令映射示例','content':'补全：把命令映射到函数并调用。','input':'help','output':'help info','code':'actions={"help":lambda:print("help info")}\ncmd=input()\nactions.get(cmd, lambda:print("unknown"))()','options':'示例已给出','answer':'1','explanation':'使用字典映射命令到处理函数易于扩展。','example':'actions[cmd]()'},
+    {'id':10,'type':'fill','title':'处理异常输入','content':'补全：捕获异常并提示错误。','input':'bad','output':'error','code':'try:\n    process(input())\nexcept Exception:\n    print("error")','options':'示例已给出','answer':'1','explanation':'在交互中捕获异常并提示可保持程序继续运行。','example':'try/except around processing'},
+    {'id':11,'type':'choice','title':'日志记录','content':'是否在交互命令中记录用户命令？','options':{'A':'通常记录摘要以便审计','B':'绝对不要记录','C':'记录全部敏感信息','D':'只记录错误'},'answer':'A','hints':['记录摘要有助于排查','避免泄露敏感数据'],'explanation':'记录命令摘要便于审计和调试，注意隐私保护。','example':'log.info("cmd=%s", cmd)'},
+    {'id':12,'type':'choice','title':'帮助命令','content':'实现 help 命令应提供？','options':{'A':'可用命令列表与示例','B':'源代码','C':'随机字符串','D':'不说明'},'answer':'A','hints':['示例更易理解','列出参数说明'],'explanation':'help 应列出命令和示例，便于用户上手。','example':'print("help: ...")'},
+    {'id':13,'type':'choice','title':'退出确认','content':'若命令可能破坏数据，退出前应？','options':{'A':'提示并要求确认','B':'立即执行','C':'记录后忽略','D':'不提示'},'answer':'A','hints':['危险操作需确认','防止误操作'],'explanation':'对于危险操作先提示并要求用户确认可以避免误删操作。','example':'confirm before delete'},
+    {'id':14,'type':'fill','title':'交互式示例扩展','content':'补全：当输入为 "help" 时打印帮助。','input':'help','output':'help info','code':'cmd=input().strip()\nif cmd=="help":\n    print("help info")','options':'示例已给出','answer':'1','explanation':'基础命令处理示例，便于扩展更多命令。','example':'if cmd=="exit": break'},
+    {'id':15,'type':'fill','title':'保存会话历史','content':'补全：把每条命令追加到历史列表。','input':'a b','output':'','code':'history=[]\nwhile True:\n    cmd=input()\n    history.append(cmd)\n    if cmd=="quit":\n        break','options':'示例已给出','answer':'1','explanation':'保存历史便于回溯和实现命令索引。','example':'history.append(cmd)'}
+  ]
+}
+
+```
+
+*** End Patch

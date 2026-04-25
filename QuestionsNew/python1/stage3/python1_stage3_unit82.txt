@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第82单元：列表推导式与生成器表达式',
+  'questions': [
+    {'id':1,'type':'choice','title':'推导式优点','content':'列表推导式相较于普通循环的优势是？','options':{'A':'语法简洁且通常更快','B':'更慢','C':'内存更少','D':'不可读'},'answer':'A','hints':['通常由 C 实现部分优化','更简洁'], 'explanation':'列表推导式语法紧凑且在许多情况下比显式循环性能更好。','example':'[x*2 for x in lst]'},
+    {'id':2,'type':'choice','title':'生成器表达式','content':'生成器表达式与列表推导的主要区别是？','options':{'A':'生成器惰性产出节省内存','B':'生成器更快构建完整列表','C':'无区别','D':'只有列表推导可用于嵌套'},'answer':'A','hints':['生成器不会一次性创建整个列表','适合大数据流'], 'explanation':'生成器表达式按需产生值，不占用全部内存，适合流式处理。','example':'(x for x in it)'},
+    {'id':3,'type':'choice','title':'条件过滤','content':'在推导式中添加条件过滤写法为？','options':{'A':'[x for x in lst if cond(x)]','B':'[if cond: x for x]','C':'filter 不能用','D':'使用 try/except'},'answer':'A','hints':['在表达式末尾添加 if 作为过滤条件'], 'explanation':'推导式末尾的 if 子句可用于过滤元素。','example':'[x for x in lst if x%2==0]'},
+    {'id':4,'type':'fill','title':'简单推导','content':'补全：把输入数字都平方并输出。','input':'1 2 3','output':'1 4 9','code':'print(*[int(x)**2 for x in input().split()])','options':'示例已给出','answer':'1','explanation':'列表推导式能在一行内表达对每个元素的操作。','example':'[x*x for x in nums]'},
+    {'id':5,'type':'fill','title':'生成器内存','content':'补全：用生成器计算大序列的和。','input':'1 2 3','output':'6','code':'import sys\nprint(sum(int(x) for x in sys.stdin.read().split()))','options':'示例已给出','answer':'1','explanation':'生成器表达式在 sum 中按需提供元素，节省内存。','example':'sum(x for x in it)'},
+    {'id':6,'type':'choice','title':'嵌套推导','content':'要扁平化二维列表可用？','options':{'A':'[x for row in mat for x in row]','B':'sum(mat)','C':'zip(mat)','D':'map only'},'answer':'A','hints':['内置顺序为外层先，内层后'], 'explanation':'嵌套推导可以将二维列表扁平化为一维。','example':'[x for row in mat for x in row]'},
+    {'id':7,'type':'choice','title':'可读性折中','content':'当推导式太复杂时应？','options':{'A':'改写为显式循环以提高可读性','B':'坚持写复杂推导式','C':'压缩更多逻辑进一行','D':'用 lambda 嵌套'},'answer':'A','hints':['可读性优先于一行写完的炫技'], 'explanation':'当推导式变得难以理解时，显式循环更易维护。','example':'use for loops instead'},
+    {'id':8,'type':'choice','title':'生成器消费','content':'消费生成器后要再用需如何？','options':{'A':'重新创建生成器','B':'可以 reset','C':'直接再迭代','D':'转换为 tuple后可复用'},'answer':'A','hints':['生成器被消费后不可复用','可转为 list/tuple 以复用'], 'explanation':'生成器被消费后不可复用，需要重新创建或转换为序列以复用。','example':'g = (x for x in it); list(g)'},
+    {'id':9,'type':'fill','title':'带条件的推导','content':'补全：选出偶数并乘以 10。','input':'1 2 3 4','output':'20 40','code':'print(*[x*10 for x in map(int,input().split()) if x%2==0])','options':'示例已给出','answer':'1','explanation':'推导式可以同时进行过滤和转换。','example':'[f(x) for x in it if cond(x)]'},
+    {'id':10,'type':'fill','title':'生成器与函数','content':'补全：将生成器结果传入函数处理示例（如 sum）。','input':'1 2 3','output':'6','code':'print(sum(int(x) for x in input().split()))','options':'示例已给出','answer':'1','explanation':'许多内建函数支持直接接受生成器表达式以节省内存。','example':'min(x for x in it)'},
+    {'id':11,'type':'choice','title':'嵌套生成器','content':'嵌套生成器表达式可用于？','options':{'A':'复杂扁平化或延迟计算','B':'不被允许','C':'仅在列表中有效','D':'会报错'},'answer':'A','hints':['可用于扁平化与按需计算'], 'explanation':'嵌套生成器可实现复杂的延迟计算与扁平化操作。','example':'(x for row in mat for x in row)'},
+    {'id':12,'type':'choice','title':'转换代价','content':'将生成器转换为列表的代价是？','options':{'A':'需要一次性将所有元素存入内存','B':'更快','C':'无代价','D':'自动优化'},'answer':'A','hints':['转换会消耗内存与时间'], 'explanation':'list(generator) 会把所有元素载入内存，消耗与数据规模线性相关的资源。','example':'list(it)'},
+    {'id':13,'type':'choice','title':'表达式复杂性','content':'在推导式中用条件表达式会如何影响可读性？','options':{'A':'可能降低可读性','B':'总是更清晰','C':'无影响','D':'禁止使用'},'answer':'A','hints':['过多条件使表达式难以理解'], 'explanation':'复杂的条件表达式会降低可读性，必要时改用显式循环。','example':'[x if cond else y for x in it]'},
+    {'id':14,'type':'fill','title':'带索引的推导','content':'补全：使用 enumerate 在推导式中获得索引和值。','input':'a b','output':'0-a 1-b','code':'print(*[f"{i}-{v}" for i,v in enumerate(input().split())])','options':'示例已给出','answer':'1','explanation':'可以在推导式里使用 enumerate 获取索引信息。','example':'[ (i,v) for i,v in enumerate(lst) ]'},
+    {'id':15,'type':'fill','title':'复杂数据生成','content':'补全：生成 (i, x*2) 的生成器表达式示例。','input':'1 2','output':'(0,2) (1,4)','code':'g = ((i, x*2) for i,x in enumerate(map(int,input().split())))\nprint(list(g))','options':'示例已给出','answer':'1','explanation':'生成器表达式可用于生成复杂的元组序列以便后续处理。','example':'(func(x) for x in it)'}
+  ]
+}
+
+```
+
+*** End Patch

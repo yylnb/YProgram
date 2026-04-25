@@ -1,0 +1,92 @@
+[
+  {
+    "q_id": "1",
+    "type": "choice",
+    "title": "找位置的基本用法",
+    "text": "小王正在检查用户输入中有没有\"@\"符号，他使用 s.find(\"@\")。如果找不到，会返回什么？",
+    "explanation": "find() 找不到时返回 -1，这能让程序知道搜索失败但不中断。",
+    "example": "例如 \"hello\".find(\"x\") 会返回 -1。",
+    "hints": [
+      "find 的返回值是一个整数。",
+      "当找不到时，它不会报错。",
+      "找不到时的返回值是一个特殊数字，而不是 None。"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "-1",
+      "B": "0",
+      "C": "None",
+      "D": "报错"
+    },
+    "answer": "A"
+  },
+  {
+    "q_id": "2",
+    "type": "choice",
+    "title": "replace 的基础替换逻辑",
+    "text": "字符串 s = \"hello world\"，执行 s.replace(\"o\",\"O\") 会发生什么？",
+    "explanation": "replace(\"o\",\"O\") 会把所有的 o 全部替换成 O。",
+    "example": "例如 \"banana\".replace(\"a\",\"A\") → \"bAnAnA\"。",
+    "hints": [
+      "replace 的默认行为不会只替换一个。",
+      "它会替换所有匹配的部分。",
+      "注意 replace 不会修改原字符串，而是生成新字符串。"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "只替换第一个 o",
+      "B": "替换全部 o",
+      "C": "报错，因为大小写不同",
+      "D": "只替换最后一个 o"
+    },
+    "answer": "B"
+  },
+  {
+    "q_id": "3",
+    "type": "choice",
+    "title": "find 的起始搜索位置",
+    "text": "执行 \"pythonpython\".find(\"py\", 3) 会从哪里开始找？",
+    "explanation": "find(\"py\", 3) 会从下标 3 开始搜索匹配。",
+    "example": "例如 \"abcabc\".find(\"a\",2) 会返回 3。",
+    "hints": [
+      "find 可以指定起始位置。",
+      "指定起始后会忽略之前的内容。",
+      "下标从 0 开始计算。"
+    ],
+    "input": null,
+    "output": null,
+    "options": {
+      "A": "从头开始",
+      "B": "从下标 3 开始",
+      "C": "从下标 2 开始",
+      "D": "从下标 1 开始"
+    },
+    "answer": "B"
+  },
+  {
+    "q_id": "4",
+    "type": "fill",
+    "title": "使用 find 找到关键字位置",
+    "text": "补全代码，找到子字符串第一次出现的位置。",
+    "explanation": "find(\"to\") 会返回子串在字符串中的位置。",
+    "example": "例如 \"abcde\".find(\"cd\") 返回 2。",
+    "hints": null,
+    "input": "text = \"welcome to python world\"",
+    "output": "11",
+    "raw_code": "pos = text.__1__(\"to\")\nprint(pos)",
+    "options": [
+      "len",
+      "lower",
+      "upper",
+      "find",
+      "replace",
+      "11",
+      "to"
+    ],
+    "answer": [
+      4
+    ]
+  }
+]

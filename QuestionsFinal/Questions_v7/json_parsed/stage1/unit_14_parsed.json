@@ -1,0 +1,646 @@
+[
+  {
+    "id": 1,
+    "type": "choice",
+    "title": "切片取前菜",
+    "content": "阿强有个字符串 s = 'Python大餐'，他只想取出'Pyth'这部分当开胃菜，应该用哪个切片？",
+    "options": [
+      "s[0:4]",
+      "s[1:5]",
+      "s[0:5]",
+      "s[:4]"
+    ],
+    "answer": "D",
+    "hints": [
+      "Python索引从0开始。",
+      "切片左闭右开，要包含'Pyth'（4个字母）。",
+      "起始索引0可以省略。"
+    ],
+    "explanation": "s[:4]表示从索引0（开头）开始，到索引4（但不包含索引4）结束，正好取出'Pyth'。其他选项要么范围不对，要么起始索引不对。",
+    "example": "类似地，'Hello'[:2] 会得到 'He'。"
+  },
+  {
+    "id": 2,
+    "type": "choice",
+    "title": "负索引切片",
+    "content": "字符串 name = 'abcdef'，想用负索引取出最后两个字符'ef'，哪个切片是正确的？",
+    "options": [
+      "name[-2:-1]",
+      "name[-2:0]",
+      "name[-2:]",
+      "name[4:6]"
+    ],
+    "answer": "C",
+    "hints": [
+      "负索引-1是最后一个字符。",
+      "切片需要包含-2和-1的位置。",
+      "不指定结束索引意味着到末尾。"
+    ],
+    "explanation": "name[-2:] 表示从倒数第二个字符（索引-2）开始，到字符串末尾结束，因此会取出'ef'。选项A只取到-1（不包含），选项B结束索引为0会往前取，选项D虽然正确但不是负索引。",
+    "example": "类似地，'Python'[-3:] 会得到 'hon'。"
+  },
+  {
+    "id": 3,
+    "type": "choice",
+    "title": "切片的方向",
+    "content": "字符串 s = '12345'，执行 s[4:1:-1] 会得到什么？",
+    "options": [
+      "'543'",
+      "'432'",
+      "'45'",
+      "报错"
+    ],
+    "answer": "B",
+    "hints": [
+      "步长为负表示反向切片。",
+      "起始索引4对应'5'，结束索引1对应'2'。",
+      "反向切片时，起始索引要大于结束索引。"
+    ],
+    "explanation": "s[4:1:-1] 表示从索引4（'5'）开始，反向步进1，到索引1（但不包含索引1，即'2'）停止，所以取出的字符依次是索引4('5')、3('4')、2('3')，结果为'543'。",
+    "example": "类似地，'abcde'[4:1:-1] 会得到 'edc'。"
+  },
+  {
+    "id": 4,
+    "type": "fill",
+    "title": "填空截取中段",
+    "content": "字符串 text = 'Python编程很有趣'，想用切片取出'编程'这两个字（假设一个汉字占一个索引位置），请补全代码。",
+    "input": null,
+    "output": null,
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "text = 'Python编程很有趣'"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "result = text["
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": ":"
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": "]"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(result)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "answer": [
+      6,
+      8
+    ],
+    "explanation": "字符串中，'Python'占0-5索引，'编'在索引6，'程'在索引7，因此用切片[6:8]可以取出'编程'（注意切片不包含结束索引8）。",
+    "example": "类似地，'HelloWorld'[5:7] 会取出 'Wo'。"
+  },
+  {
+    "id": 5,
+    "type": "fill",
+    "title": "填空步长跳跃",
+    "content": "字符串 s = 'a1b2c3d4'，想取出所有字母（即索引为偶数的字符），请补全代码。",
+    "input": null,
+    "output": [
+      "abcd"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "s = 'a1b2c3d4'"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "letters = s["
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": ":"
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": ":"
+            },
+            {
+              "type": "slot",
+              "index": 2
+            },
+            {
+              "type": "code",
+              "value": "]"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(letters)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "0",
+      "1",
+      "2",
+      "7",
+      "8",
+      "-1",
+      "-2",
+      "::",
+      ":",
+      ""
+    ],
+    "answer": [
+      0,
+      8,
+      2
+    ],
+    "explanation": "要取索引0,2,4,6的字符，起始索引为0，结束索引为8（不包含），步长为2，因此切片为[0:8:2]。",
+    "example": "类似地，'12345678'[1:8:2] 会得到 '2468'。"
+  },
+  {
+    "id": 6,
+    "type": "choice",
+    "title": "省略索引的妙用",
+    "content": "字符串 s = 'Python'，下列哪个切片不能得到整个字符串？",
+    "options": [
+      "s[:]",
+      "s[::]",
+      "s[0:6]",
+      "s[0:5]"
+    ],
+    "answer": "D",
+    "hints": [
+      "s[:] 和 s[::] 都是复制整个字符串的常用写法。",
+      "s[0:6] 明确指定了从0到6（不包含）的范围。",
+      "s[0:5] 只取到索引5，而'Python'的索引范围是0到5。"
+    ],
+    "explanation": "'Python'长度为6，索引从0到5。s[0:5]只取到索引5（不包含），即只取到第6个字符之前的5个字符，结果为'Pytho'，缺少最后一个字符'n'。",
+    "example": "对于长度为n的字符串，s[0:n]才能得到整个字符串。"
+  },
+  {
+    "id": 7,
+    "type": "choice",
+    "title": "负步长的陷阱",
+    "content": "字符串 s = 'ABCD'，执行 s[::-2] 会得到什么？",
+    "options": [
+      "'DB'",
+      "'AC'",
+      "'CA'",
+      "'BD'"
+    ],
+    "answer": "A",
+    "hints": [
+      "步长为负表示从后往前取。",
+      "没有指定起始和结束，默认会从末尾开始。",
+      "步长-2表示每隔一个字符取一个。"
+    ],
+    "explanation": "s[::-2] 表示从字符串末尾开始，步长为-2（反向每隔一个取一个）。从最后一个字符'D'开始，然后取'B'，得到'DB'。",
+    "example": "类似地，'12345'[::-2] 会得到 '531'。"
+  },
+  {
+    "id": 8,
+    "type": "choice",
+    "title": "切片的边界",
+    "content": "字符串 s = 'Hello'，请问 s[2:10] 的结果是什么？",
+    "options": [
+      "'llo'",
+      "'lloHello'",
+      "'llo'后面跟着乱码",
+      "不会报错，返回'llo'"
+    ],
+    "answer": "D",
+    "hints": [
+      "切片时，结束索引可以超过字符串长度。",
+      "Python切片会自动限制在有效范围内。",
+      "不会因为索引越界而报错。"
+    ],
+    "explanation": "当切片的结束索引超过字符串长度时，Python会自动将其截断为字符串的长度。s[2:10] 相当于 s[2:5]，因此返回'llo'，且不会报错。",
+    "example": "类似地，'Hi'[0:10] 会返回 'Hi'。"
+  },
+  {
+    "id": 9,
+    "type": "fill",
+    "title": "填空反转字符串",
+    "content": "已知字符串 s = 'racecar'，想通过切片得到它的反转字符串，请补全代码。",
+    "input": null,
+    "output": [
+      "racecar"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "s = 'racecar'"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "reversed_s = s["
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": "]"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(reversed_s)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "",
+      "::-1",
+      ":0:-1",
+      "-1::-1",
+      "::-2",
+      "[:]"
+    ],
+    "answer": [
+      1
+    ],
+    "explanation": "s[::-1] 表示步长为-1，不指定起始和结束（默认会从末尾到开头），从而得到反转字符串。",
+    "example": "类似地，'Python'[::-1] 会得到 'nohtyP'。"
+  },
+  {
+    "id": 10,
+    "type": "fill",
+    "title": "填空提取数字",
+    "content": "字符串 s = '2024-07-15'，想提取出月份'07'，请补全代码。",
+    "input": null,
+    "output": [
+      "07"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "s = '2024-07-15'"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "month = s["
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": ":"
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": "]"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(month)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "answer": [
+      5,
+      7
+    ],
+    "explanation": "字符串索引：'2'0,'0'1,'2'2,'4'3,'-'4,'0'5,'7'6,'-'7,'1'8,'5'9。月份'07'从索引5开始，到索引7（不包含）结束，所以切片为[5:7]。",
+    "example": "类似地，'12-31'[0:2] 会得到 '12'。"
+  },
+  {
+    "id": 11,
+    "type": "choice",
+    "title": "切片与步长组合",
+    "content": "字符串 s = 'abcdefgh'，执行 s[1:6:2] 会得到什么？",
+    "options": [
+      "'bdf'",
+      "'ace'",
+      "'bdfh'",
+      "'bdf'然后报错"
+    ],
+    "answer": "A",
+    "hints": [
+      "起始索引1是'b'。",
+      "结束索引6是'g'（不包含）。",
+      "步长2表示每隔一个字符取一个。"
+    ],
+    "explanation": "s[1:6:2] 表示从索引1('b')开始，到索引6('g'，但不包含)结束，步长为2，因此取索引1('b')、3('d')、5('f')，结果为'bdf'。",
+    "example": "类似地，'0123456'[0:5:2] 会得到 '024'。"
+  },
+  {
+    "id": 12,
+    "type": "choice",
+    "title": "负索引与步长",
+    "content": "字符串 s = 'Python'，执行 s[-1:-4:-1] 会得到什么？",
+    "options": [
+      "'noht'",
+      "'noh'",
+      "'n'",
+      "'no'"
+    ],
+    "answer": "B",
+    "hints": [
+      "起始索引-1是最后一个字符'n'。",
+      "结束索引-4是'o'（注意不包含-4）。",
+      "步长为负，反向取。"
+    ],
+    "explanation": "s[-1:-4:-1] 表示从索引-1('n')开始，反向步进1，到索引-4('o'，但不包含)停止，因此取索引-1('n')、-2('o')、-3('h')，结果为'noh'。",
+    "example": "类似地，'abcdef'[-1:-4:-1] 会得到 'fed'。"
+  },
+  {
+    "id": 13,
+    "type": "choice",
+    "title": "切片默认值",
+    "content": "字符串 s = 'Hello World'，请问 s[:5] 和 s[6:] 的结果分别是什么？",
+    "options": [
+      "'Hello' 和 'World'",
+      "'Hello' 和 ' World'",
+      "'Hello ' 和 'World'",
+      "'Hello ' 和 ' World'"
+    ],
+    "answer": "A",
+    "hints": [
+      "s[:5] 从开头到索引5（不包含）。",
+      "s[6:] 从索引6到末尾。",
+      "注意空格也是字符。"
+    ],
+    "explanation": "s[:5] 取索引0到5（不包含），即 'Hello'（注意索引5是空格，所以不包含空格）。s[6:] 从索引6（'W'）开始到末尾，即 'World'。",
+    "example": "类似地，'Python Code'[:6] 为 'Python'，'Python Code'[7:] 为 'Code'。"
+  },
+  {
+    "id": 14,
+    "type": "fill",
+    "title": "填空隔字符取",
+    "content": "字符串 s = 'a_b_c_d_e'，想取出所有下划线之间的字母（即'b','c','d'），请补全代码。注意：结果应该是一个字符串。",
+    "input": null,
+    "output": [
+      "bcd"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "s = 'a_b_c_d_e'"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "result = s["
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": ":"
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": ":"
+            },
+            {
+              "type": "slot",
+              "index": 2
+            },
+            {
+              "type": "code",
+              "value": "]"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(result)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "-1",
+      "-2"
+    ],
+    "answer": [
+      2,
+      8,
+      2
+    ],
+    "explanation": "字母'b','c','d'在字符串中的索引分别为2,4,6。所以起始索引为2，结束索引为8（不包含，索引8是'e'），步长为2，切片为[2:8:2]。",
+    "example": "类似地，'1a2b3c'[1:6:2] 会得到 'abc'。"
+  },
+  {
+    "id": 15,
+    "type": "fill",
+    "title": "填空复杂的切片",
+    "content": "字符串 s = 'PythonIsFun'，想通过切片得到'Fun'的反转，即'nuF'，请补全代码。",
+    "input": null,
+    "output": [
+      "nuF"
+    ],
+    "code_segments": {
+      "segments": [
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "s = 'PythonIsFun'"
+            }
+          ]
+        },
+        {
+          "type": "code_inline",
+          "parts": [
+            {
+              "type": "code",
+              "value": "result = s["
+            },
+            {
+              "type": "slot",
+              "index": 0
+            },
+            {
+              "type": "code",
+              "value": ":"
+            },
+            {
+              "type": "slot",
+              "index": 1
+            },
+            {
+              "type": "code",
+              "value": ":"
+            },
+            {
+              "type": "slot",
+              "index": 2
+            },
+            {
+              "type": "code",
+              "value": "]"
+            }
+          ]
+        },
+        {
+          "type": "code_block",
+          "lines": [
+            {
+              "type": "code_line",
+              "value": "print(result)"
+            }
+          ]
+        }
+      ]
+    },
+    "options": [
+      "-1",
+      "-2",
+      "-3",
+      "-4",
+      "0",
+      "1",
+      "-1",
+      "-2",
+      "-3"
+    ],
+    "answer": [
+      -1,
+      -4,
+      -1
+    ],
+    "explanation": "'Fun'在字符串最后三个字符，索引为-3,-2,-1。要得到反转，应从-1开始，到-4（不包含）结束，步长为-1，即切片[-1:-4:-1]。",
+    "example": "类似地，'Hello'[-1:-6:-1] 会得到 'olleH'。"
+  }
+]

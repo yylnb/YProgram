@@ -1,0 +1,29 @@
+{
+  "requested_range": [
+    1,
+    2
+  ],
+  "total": 2,
+  "ok": 1,
+  "error": 1,
+  "details": [
+    {
+      "status": "skipped",
+      "global_unit": 1,
+      "stage": 1,
+      "unit_local": 1,
+      "unit_id": 1,
+      "sql": "F:\\project\\YProgram\\QuestionsFinal\\Questions_v7\\sql\\stage1\\unit1.sql"
+    },
+    {
+      "status": "ok",
+      "global_unit": 2,
+      "stage": 1,
+      "unit_local": 2,
+      "unit_id": 2,
+      "parsed_json": "F:\\project\\YProgram\\QuestionsFinal\\Questions_v7\\json_parsed\\stage1\\unit_2_parsed.json",
+      "raw_json": "F:\\project\\YProgram\\QuestionsFinal\\Questions_v7\\json_raw\\stage1\\unit_2_raw.json",
+      "sql": "F:\\project\\YProgram\\QuestionsFinal\\Questions_v7\\sql\\stage1\\unit2.sql"
+    }
+  ]
+}

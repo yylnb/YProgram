@@ -1,0 +1,7 @@
+-- 默认 sql="sql", 表名使用 "library_entries"
+INSERT INTO library_entries (lang, lb_id, difficulty, page, title, tags, summary, content, eg_in, eg_out) VALUES
+('c++', 6, 'beginner', 1, 'int 类型', '["数据类型","整数"]', 'int 是C++中用于表示整数的基本数据类型。', 'int 类型用于存储整数，没有小数部分。在大多数系统上，int 通常占用4字节内存，范围从-2147483648到2147483647。\\n可以用于声明变量，例如 int age = 25;。\\nint 类型可以是有符号的，默认是signed int。', '["int a = 10;\\ncout << a;", "int b = -5;\\ncout << b;"]', '["10", "-5"]'),
+('c++', 7, 'beginner', 1, 'float 类型', '["数据类型","浮点数"]', 'float 是C++中用于表示单精度浮点数的基本数据类型。', 'float 类型用于存储带有小数部分的数字，但精度有限。通常占用4字节内存，范围大约从1.2e-38到3.4e38。\\n例如 float price = 19.99;。\\n注意浮点数计算可能有精度误差。', '["float x = 3.14;\\ncout << x;", "float y = 2.5e2;\\ncout << y;"]', '["3.14", "250"]'),
+('c++', 8, 'beginner', 1, 'double 类型', '["数据类型","浮点数"]', 'double 是C++中用于表示双精度浮点数的基本数据类型。', 'double 类型用于存储更高精度的浮点数，通常占用8字节内存，范围大约从2.3e-308到1.7e308。\\n例如 double pi = 3.1415926535;。\\n在需要更高精度时使用double而不是float。', '["double d = 123.456;\\ncout << d;", "double e = 1.23e-4;\\ncout << e;"]', '["123.456", "0.000123"]'),
+('c++', 9, 'beginner', 1, 'char 类型', '["数据类型","字符"]', 'char 是C++中用于表示单个字符的基本数据类型。', 'char 类型用于存储字符，通常占用1字节内存，表示ASCII字符或其他字符集。\\n例如 char grade = ''A'';。\\nchar 变量用单引号括起来。', '["char c = ''A'';\\ncout << c;", "char d = ''1'';\\ncout << d;"]', '["A", "1"]'),
+('c++', 10, 'beginner', 1, 'bool 类型', '["数据类型","布尔"]', 'bool 是C++中用于表示布尔值的基本数据类型。', 'bool 类型只有两个可能的值：true 和 false，通常用于条件判断。\\n例如 bool isReady = true;。\\n在表达式中，非零值转换为true，零值转换为false。', '["bool flag = true;\\ncout << flag;", "bool val = false;\\ncout << val;"]', '["1", "0"]');

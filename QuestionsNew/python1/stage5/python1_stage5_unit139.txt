@@ -1,0 +1,37 @@
+```plaintext
+{
+  'unit': '第139单元：测试基础（unittest 与 pytest）',
+  'questions': [
+    {'id':1,'type':'choice','title':'单元测试目的','content':'编写单元测试的主要目的是？','options':{'A':'验证小单元代码正确性并防止回归','B':'提高运行速度','C':'替代代码审查','D':'自动生成文档'},'answer':'A','hints':['提示1: 捕捉回归问题','提示2: 小粒度测试便于定位错误','提示3: 与 CI 集成提升质量'],'explanation':'单元测试用于验证函数或类在各种输入下的行为是否符合预期，从而防止回归。','example':''},
+
+    {'id':2,'type':'choice','title':'unittest 框架','content':'unittest 框架中，测试用例类通常继承自哪个基类？','options':{'A':'unittest.TestCase','B':'object','C':'pytest.TestCase','D':'Test'},'answer':'A','hints':['提示1: 使用 assertEqual 等断言方法','提示2: setUp/tearDown 提供资源准备与清理','提示3: 是标准库提供的框架'],'explanation':'unittest.TestCase 提供测试断言及生命周期方法。','example':''},
+
+    {'id':3,'type':'choice','title':'pytest 优势','content':'pytest 相较 unittest 的常见优势包括？','options':{'A':'写法更简洁且插件生态丰富','B':'速度更慢','C':'不能运行 unittest 测试','D':'没有断言'},'answer':'A','hints':['提示1: 直接用 assert 语句编写测试','提示2: fixture 提供灵活资源管理','提示3: 广泛社区支持'],'explanation':'pytest 提供更简洁的测试写法与丰富的插件，适合现代 Python 项目。','example':''},
+
+    {'id':4,'type':'fill','title':'断言示例（填空）','content':'使用 pytest，可直接写断言例如 assert __1__ == 3。','input':'','output':'','code':'def test_add():\n    assert __1__ == 3','options':'add(1,2), 1+1, f(3), None','answer':'1','explanation':'直接断言函数返回值以简洁表达测试预期。','example':''},
+
+    {'id':5,'type':'fill','title':'fixture 用途（填空）','content':'pytest 中 fixture 常用于 __1__。','input':'','output':'','code':'@pytest.fixture\ndef db():\n    return connect()','options':'资源准备, 运行测试, 打印日志, 结束测试','answer':'1','explanation':'fixture 用于准备和清理测试所需的资源，如数据库连接、临时目录等。','example':''},
+
+    {'id':6,'type':'choice','title':'测试覆盖率','content':'测量代码被测试的比例通常使用哪个工具？','options':{'A':'coverage.py','B':'pytest-cov, coverage.py 都可','C':'flake8','D':'mypy'},'answer':'B','hints':['提示1: coverage.py 是核心工具','提示2: pytest-cov 提供集成插件','提示3: 覆盖率帮助找出未测路径'],'explanation':'coverage.py 与 pytest-cov 常用于计算测试覆盖率并生成报告。','example':''},
+
+    {'id':7,'type':'choice','title':'测试命名约定','content':'pytest 中测试函数通常以什么前缀命名？','options':{'A':'test_','B':'should_','C':'case_','D':'check_'},'answer':'A','hints':['提示1: pytest 识别以 test_ 开头的函数与文件','提示2: 有助于自动发现测试','提示3: 文件名也以 test_ 开始'], 'explanation':'pytest 自动发现以 test_ 前缀的测试函数和模块。','example':''},
+
+    {'id':8,'type':'choice','title':'跳过测试','content':'要在 pytest 中跳过某个测试，应使用哪个标记？','options':{'A':'@pytest.mark.skip','B':'@pytest.skipif', 'C':'@unittest.skip', 'D':'@skipall'},'answer':'A','hints':['提示1: skip 可跳过无条件测试','提示2: skipif 可基于条件跳过','提示3: 两者皆可用于管理测试执行'],'explanation':'@pytest.mark.skip 用于标记测试跳过，skipif 基于条件跳过。','example':''},
+
+    {'id':9,'type':'fill','title':'断言异常（填空）','content':'要断言某段代码抛出异常，可用 pytest.raises(Exception) 作为上下文管理器： with pytest.raises(__1__):','input':'','output':'','code':'with pytest.raises(__1__):\n    f()','options':'ValueError, None, Exception, 0','answer':'1','explanation':'将期望的异常类型传给 pytest.raises 以断言抛出相应异常。','example':''},
+
+    {'id':10,'type':'fill','title':'模拟（填空）','content':'在单元测试中常用 unittest.mock 的 __1__ 来替换依赖对象。','input':'','output':'','code':'from unittest.mock import __1__\nwith __1__(module, "name") as m:','options':'patch, Mock, MagicMock, create_autospec','answer':'1','explanation':'patch 可临时替换对象或函数以隔离测试环境。','example':''},
+
+    {'id':11,'type':'choice','title':'测试顺序依赖','content':'为什么应避免测试间相互依赖？','options':{'A':'会导致难以定位失败且不可重现','B':'可提升性能','C':'仅在 CI 中发生','D':'提高可读性'},'answer':'A','hints':['提示1: 每个测试应独立','提示2: 独立性有利于并行执行','提示3: 使用 fixture 管理共享资源'],'explanation':'测试应当独立，避免顺序依赖以确保可重复和可并行运行。','example':''},
+
+    {'id':12,'type':'choice','title':'集成 CI','content':'将测试集成到 CI 的好处是？','options':{'A':'自动化回归检测，及时发现问题','B':'减少代码审查需求','C':'避免任何 bug','D':'替代代码风格检查'},'answer':'A','hints':['提示1: CI 在提交或 PR 时跑测试','提示2: 可与覆盖率和 lint 集成','提示3: 提升交付质量'],'explanation':'CI 自动化执行测试有助于早期发现问题并保证代码质量。','example':''},
+
+    {'id':13,'type':'fill','title':'断言信息（填空）','content':'在断言失败时提供有意义的信息可帮助调试，例如 assert x==y, "__1__"。','input':'','output':'','code':'assert x==y, "__1__"','options':'mismatch, ok, pass, done','answer':'1','explanation':'在断言中添加有意义的信息有助于快速定位失败原因。','example':''},
+
+    {'id':14,'type':'fill','title':'清理资源（填空）','content':'在 unittest 中用于测试后清理的方法名为 __1__。','input':'','output':'','code':'class T(unittest.TestCase):\n    def __1__(self):\n        pass','options':'tearDown, setUp, cleanup, finish','answer':'1','explanation':'tearDown 在每个测试方法后执行用于清理资源。','example':''},
+
+    {'id':15,'type':'fill','title':'总结（填空）','content':'单元测试有助于防止 __1__，pytest 提供 __2__ 风格的断言写法。','input':'','output':'','code':'','options':'回归, 简洁, 性能, 文档','answer':'1,2','explanation':'测试帮助防止回归，pytest 提供简洁的断言语法。','example':''}
+  ]
+}
+
+```

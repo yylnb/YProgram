@@ -1,0 +1,38 @@
+```plaintext
+{
+  'unit': '第133单元：继承与多态',
+  'questions': [
+    {'id':1,'type':'choice','title':'单继承与多继承','content':'Python 支持哪种继承模型？','options':{'A':'单继承与多继承均支持','B':'仅单继承','C':'仅多继承','D':'不支持继承'},'answer':'A','hints':['提示1: Python 支持多继承','提示2: 需关注菱形继承问题','提示3: 使用 MRO 解决方法解析顺序'],'explanation':'Python 支持单继承和多继承，并使用 MRO 决定方法解析顺序。','example':''},
+
+    {'id':2,'type':'choice','title':'方法解析顺序（MRO）','content':'MRO 的主要作用是？','options':{'A':'决定在多继承中方法查找顺序','B':'决定类的内存布局','C':'决定模块导入顺序','D':'决定异常处理顺序'},'answer':'A','hints':['提示1: mro() 可查看顺序','提示2: 避免菱形继承冲突','提示3: C3 算法用于计算 MRO'],'explanation':'MRO 决定在多继承中按何种顺序查找方法与属性。','example':'C.mro()'},
+
+    {'id':3,'type':'choice','title':'调用父类方法','content':'在子类中调用父类方法常用写法是？','options':{'A':'super().method()','B':'Parent.method(self)','C':'两者均可','D':'不能调用父类方法'},'answer':'C','hints':['提示1: super 更推荐用于多继承','提示2: 直接 Parent.method(self) 可绕过 MRO','提示3: 注意参数传递'],'explanation':'两种方式都可，super 更适合多继承场景。','example':''},
+
+    {'id':4,'type':'fill','title':'覆盖父方法（填空）','content':'子类中重写父类方法称为 __1__。','input':'','output':'','code':'class Parent:\n    def f(self): pass\nclass Child(Parent):\n    def __1__(self): pass','options':'override, overload, rewrite, extend','answer':'1','explanation':'在子类中提供与父类相同签名的方法实现称为重写（override）。','example':''},
+
+    {'id':5,'type':'fill','title':'抽象基类（填空）','content':'若要定义抽象方法并强制子类实现，可使用模块 __1__ 中的 ABC 类。','input':'','output':'','code':'from __1__ import ABC, abstractmethod','options':'abc, typing, inspect, functools','answer':'1','explanation':'abc 模块提供抽象基类支持。','example':''},
+
+    {'id':6,'type':'choice','title':'多态使用场景','content':'多态最常用的场景之一是？','options':{'A':'统一接口处理不同类型对象','B':'提高 I/O 性能','C':'静态类型检查','D':'模块打包'},'answer':'A','hints':['提示1: 常见于实现插件或策略模式','提示2: 通过接口调用不同实现','提示3: 增强代码灵活性'],'explanation':'多态允许通过统一接口对不同实现进行操作。','example':''},
+
+    {'id':7,'type':'choice','title':'super() 的好处','content':'使用 super() 的优点是？','options':{'A':'遵循 MRO，适合多继承','B':'省去传入 self','C':'自动生成文档','D':'提高性能'},'answer':'A','hints':['提示1: super() 返回代理对象','提示2: 在多继承中避免重复调用父类','提示3: 使用时通常写 super().method()'],'explanation':'super() 按 MRO 寻找下一个方法实现，对于多继承很重要。','example':''},
+
+    {'id':8,'type':'choice','title':'isinstance 与 issubclass','content':'要判断 B 是否为 A 的子类，应使用哪个函数？','options':{'A':'issubclass(B, A)','B':'isinstance(B, A)','C':'type(B)==A','D':'B in A'},'answer':'A','hints':['提示1: issubclass 检查类与子类关系','提示2: isinstance 检查实例'], 'explanation':'issubclass 用于判断类继承关系，isinstance 用于实例。','example':''},
+
+    {'id':9,'type':'fill','title':'菱形继承问题（填空）','content':'为了解决菱形继承导致的重复调用，Python 使用 __1__ 算法计算 MRO。','input':'','output':'','code':'','options':'C3, BFS, DFS, LIFO','answer':'1','explanation':'Python 使用 C3 线性化算法来计算 MRO。','example':''},
+
+
+    {'id':10,'type':'fill','title':'接口替代（填空）','content':'虽然 Python 没有显式接口，通常使用抽象基类或约定（duck typing）来实现；鸭子类型的口号是 "__1__"。','input':'','output':'','code':'','options':'If it walks like a duck and quacks like a duck, it is a duck, Duck, Interface, Protocol','answer':'1','explanation':'鸭子类型强调行为而不是显式接口。','example':''},
+
+    {'id':11,'type':'choice','title':'复用 vs 组合','content':'在类设计中，推荐优先使用哪种以减少耦合？','options':{'A':'组合优于继承','B':'继承优于组合','C':'都不用','D':'直接复制代码'},'answer':'A,' , 'hints':['提示1: 组合更灵活'], 'explanation':'组合比继承在许多场景下更灵活，减少耦合。','example':''},
+
+    {'id':12,'type':'choice','title':'方法重载','content':'Python 是否支持基于参数签名的方法重载（overload）？','options':{'A':'不直接支持，通常通过可选参数或 functools.singledispatch 实现','B':'内建支持','C':'通过类装饰器自动实现','D':'仅在 Python2 支持'},'answer':'A','hints':['提示1: 使用默认参数或 dispatch','提示2: functools.singledispatch 可实现函数级别的多态','提示3: 设计时注意接口一致性'], 'explanation':'Python 不基于签名进行方法重载，需用其它手段实现。','example':''},
+
+    {'id':13,'type':'fill','title':'重写父类构造（填空）','content':'在子类 __1__ 中常需调用 super().__1__() 来初始化父类部分。','input':'','output':'','code':'class Child(Parent):\n    def __1__(self, *a, **k):\n        super().__1__(*a, **k)','options':'__init__, __new__, construct, init','answer':'1','explanation':'子类 __init__ 通常调用 super().__init__ 来初始化父类状态。','example':''},
+
+    {'id':14,'type':'fill','title':'多态实例（填空）','content':'下面代码中，调用 obj.speak() 会调用子类还是父类实现？取决于 __1__。','input':'','output':'','code':'class A:\n    def speak(self):\n        print("A")\nclass B(A):\n    def speak(self):\n        print("B")\nobj = B()\n# obj.speak()', 'options':'实例类型, 变量名, 函数名, 模块', 'answer':'1','explanation':'方法调用基于对象的实际类型，故调用子类实现。','example':''},
+
+    {'id':15,'type':'fill','title':'总结（填空）','content':'继承用于 __1__，多态用于 __2__。','input':'','output':'','code':'','options':'代码复用, 统一接口, 性能提升, 内存管理','answer':'1,2','explanation':'继承促进代码复用，多态支持使用统一接口处理不同对象。','example':''}
+  ]
+}
+
+```

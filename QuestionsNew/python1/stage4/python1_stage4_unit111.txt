@@ -1,0 +1,282 @@
+```plaintext
+{
+  'unit': '第111单元：字典与哈希性能',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '字典查找复杂度',
+      'content': '在平均情况下，使用 key 访问字典 dict[key] 的时间复杂度是？',
+      'options': {
+        'A': 'O(1)',
+        'B': 'O(n)',
+        'C': 'O(log n)',
+        'D': 'O(n log n)'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：哈希表平均常数时间',
+        '提示2：冲突会影响性能',
+        '提示3': 'resize 会产生额外开销'
+      ],
+      'explanation': '字典基于哈希表，平均查找为 O(1)，但最坏情况可能退化。',
+      'example': 'v = mydict.get(key)'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '插入与更新',
+      'content': '向字典插入或更新键值对的平均复杂度是？',
+      'options': {
+        'A': 'O(1)',
+        'B': 'O(n)',
+        'C': 'O(log n)',
+        'D': 'O(n^2)'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：哈希计算加常数时间',
+        '提示2：扩容时会有摊销成本',
+        '提示3': '平均为 O(1)'
+      ],
+      'explanation': '插入/更新均为均摊 O(1)，扩容时开销摊到多次操作上。',
+      'example': "mydict[key]=value"
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '键的可哈希性',
+      'content': '作为字典键的对象必须满足什么条件？',
+      'options': {
+        'A': '可哈希且不可变',
+        'B': '可变且可哈希',
+        'C': '任意对象都可',
+        'D': '必须是字符串'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：哈希值必须稳定',
+        '提示2：可变对象的哈希可能改变',
+        '提示3': tuple 可作为键而 list 不行'
+      ],
+      'explanation': '字典键需是可哈希（hashable）且哈希值在生命周期中不变的对象。',
+      'example': "d[(1,2)]=3"
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '冲突处理（填空）',
+      'content': '哈希冲突出现时，哈希表通常会采取什么策略来处理？',
+      'input': '',
+      'output': '',
+      'code': 'print("开放寻址或链地址法")',
+      'options': '',
+      'answer': '',
+      'explanation': '常见策略包括开放寻址和链地址（链表/桶）来解决冲突。',
+      'example': ''
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '遍历复杂度（填空）',
+      'content': '遍历字典所有键值对的时间复杂度为？',
+      'input': '',
+      'output': '',
+      'code': 'print("O(n)")',
+      'options': '',
+      'answer': '',
+      'explanation': '必须访问每个元素，因此为 O(n)。',
+      'example': ''
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '字典大小与性能',
+      'content': '当字典非常大且装载因子高时，常见问题是？',
+      'options': {
+        'A': '冲突增加导致性能下降',
+        'B': '访问变为 O(log n)',
+        'C': '字典自动变为列表',
+        'D': '内存不变'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：装载因子高会增加冲突概率',
+        '提示2': 冲突引发更多探测或链长',
+        '提示3': 触发扩容可缓解'
+      ],
+      'explanation': '装载因子高会提升冲突几率，影响查找与插入的常数时间。',
+      'example': ''
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '使用 dict.get',
+      'content': '相比直接索引，使用 dict.get(key) 的优势是什么？',
+      'options': {
+        'A': '避免 KeyError，可提供默认值',
+        'B': '速度更快',
+        'C': '降低内存',
+        'D': '转换为列表'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：get 可指定默认返回',
+        '提示2：索引不存在会抛异常',
+        '提示3': 常用于安全访问'
+      ],
+      'explanation': 'dict.get 在键不存在时返回默认值而不是抛出异常，便于安全访问。',
+      'example': "v = mydict.get('k', 0)"
+    },
+
+    {
+      'id': 8,
+      'type': 'fill',
+      'title': '合并字典（填空）',
+      'content': '使用 {**a, **b} 合并两个字典的复杂度通常为？',
+      'input': '',
+      'output': '',
+      'code': 'print("O(len(a)+len(b))")',
+      'options': '',
+      'answer': '',
+      'explanation': '需要复制两边元素到新字典，复杂度为两者长度之和。',
+      'example': ''
+    },
+
+    {
+      'id': 9,
+      'type': 'choice',
+      'title': 'ordered dict',
+      'content': '从 Python 3.7 起，dict 的一个重要属性是？',
+      'options': {
+        'A': '保持插入顺序',
+        'B': '自动排序键',
+        'C': '使用二叉树存储',
+        'D': '键按哈希值排序'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：插入顺序被保留',
+        '提示2：这使得 ordered dict 常用场景减少',
+        '提示3': 注意与排序不同
+      ],
+      'explanation': '从 CPython 3.7 起，字典保证插入顺序，这对序列化与可预测性有好处。',
+      'example': ''
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '键删除复杂度（填空）',
+      'content': '删除字典中一个键 del d[k] 的平均复杂度为？',
+      'input': '',
+      'output': '',
+      'code': 'print("O(1)")',
+      'options': '',
+      'answer': '',
+      'explanation': '删除单个键在平均上为常数时间。',
+      'example': ''
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '使用字典的场景',
+      'content': '下列哪个场景最适合使用字典？',
+      'options': {
+        'A': '做快速键到值的映射',
+        'B': '顺序化的数列存储',
+        'C': '频繁按位置插入',
+        'D': '数值计算矩阵'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：字典用于映射',
+        '提示2：索引基于键而非位置',
+        '提示3': 常用于缓存或索引'
+      ],
+      'explanation': '字典是键到值的哈希映射，适合快速查找和映射场景。',
+      'example': "cache[key]=result"
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': 'hash 冲突攻击',
+      'content': '如果外部输入可控且大量相同哈希，会导致什么？',
+      'options': {
+        'A': '性能大幅下降，可能被利用为拒绝服务',
+        'B': '内存泄露',
+        'C': '自动转换为树',
+        'D': '影响浮点运算'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：大量冲突会退化到链表查找',
+        '提示2': 可能成为攻击面',
+        '提示3': 应验证或限制用户输入'
+      ],
+      'explanation': '可控输入造成大量冲突可导致哈希表退化，影响性能甚至安全。',
+      'example': ''
+    },
+
+    {
+      'id': 13,
+      'type': 'fill',
+      'title': '视图操作（填空）',
+      'content': '调用 d.keys()、d.values() 返回的对象类型通常为？',
+      'input': '',
+      'output': '',
+      'code': 'print("dict view objects")',
+      'options': '',
+      'answer': '',
+      'explanation': '这些方法返回字典视图（view objects），不是列表，且与原字典动态关联。',
+      'example': ''
+    },
+
+    {
+      'id': 14,
+      'type': 'choice',
+      'title': '浅拷贝 vs 深拷贝',
+      'content': '对字典使用 copy() 会发生什么？',
+      'options': {
+        'A': '进行浅拷贝，引用相同的可变值',
+        'B': '进行深拷贝，递归复制所有对象',
+        'C': '不复制，返回原字典引用',
+        'D': '转换为列表'
+      },
+      'answer': 'A',
+      'hints': [
+        '提示1：copy 是浅拷贝',
+        '提示2：可变值仍共享',
+        '提示3': 使用 deepcopy 可完全复制'
+      ],
+      'explanation': 'dict.copy() 仅拷贝顶层映射，内部可变对象仍为同一引用。',
+      'example': "d2 = d.copy()"
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '总结（填空）',
+      'content': '字典常见操作的平均复杂度通常为？（访问/插入/删除）',
+      'input': '',
+      'output': '',
+      'code': 'print("O(1), O(1), O(1)")',
+      'options': '',
+      'answer': '',
+      'explanation': '在平均情况下，访问、插入和删除均为常数时间。',
+      'example': ''
+    }
+
+  ]
+}
+
+```

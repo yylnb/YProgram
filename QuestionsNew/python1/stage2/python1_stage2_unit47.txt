@@ -1,0 +1,200 @@
+```plaintext
+{
+  'unit': '第17单元：条件判断中的变量作用范围',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '局部变量与全局变量',
+      'content': '在函数内部赋值一个变量会默认创建什么？',
+      'options': {'A':'局部变量','B':'全局变量','C':'常量','D':'静态变量'},
+      'answer': 'A',
+      'hints': ['函数内部赋值通常不影响外部','用 global 可以修改全局变量','局部变量只在函数内有效'],
+      'explanation': '函数内部赋值会创建局部变量，除非使用 global 声明。',
+      'example': 'def f():\n    x = 1  # 局部'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': 'global 的作用',
+      'content': '在函数内使用 `global x` 会怎样？',
+      'options': {'A':'引用并修改模块级的 x','B':'创建局部变量 x','C':'删除 x','D':'让 x 成为常量'},
+      'answer': 'A',
+      'hints': ['global 用于声明要在函数中使用全局变量','可修改模块级变量'],
+      'explanation': 'global 声明使得函数内对 x 的赋值作用于模块作用域的变量。',
+      'example': 'global counter\ncounter += 1'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': '闭包中变量绑定',
+      'content': '闭包（closure）捕获外层变量时通常会发生什么？',
+      'options': {'A':'捕获变量引用而非值','B':'捕获变量的拷贝','C':'创建全局变量','D':'立即评估为常量'},
+      'answer': 'A',
+      'hints': ['闭包保存对变量的引用','在循环中常见绑定陷阱','使用默认参数可规避'],
+      'explanation': '闭包捕获的是变量引用，循环中常见所有闭包最终引用同一变量的情况。',
+      'example': 'def make(i):\n    return lambda: i'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': 'nonlocal 的用途',
+      'content': '补全：在嵌套函数中修改外层非全局变量需用到。',
+      'input': '',
+      'output': '',
+      'code': 'def outer():\n    x = 0\n    def inner():\n        nonlocal ___\n        x += 1\n    inner()',
+      'options': 'x, global, outer, inner',
+      'answer': '1',
+      'explanation': 'nonlocal 声明能让 inner 修改 outer 中的 x（非全局）。',
+      'example': '使用 nonlocal 管理闭包状态'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '访问模块变量',
+      'content': '补全：在函数中读取模块级变量无需声明。',
+      'input': 'x=5',
+      'output': '5',
+      'code': 'x = 5\ndef f():\n    print(___)',
+      'options': 'x, global x, local x, None',
+      'answer': '1',
+      'explanation': '读取模块级变量不需要 global，只有赋值时需要。',
+      'example': 'def f():\n    print(config)'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '名前遮蔽',
+      'content': '下列情形称为“变量遮蔽（shadowing）”？',
+      'options': {'A':'局部变量名与外层同名','B':'变量被垃圾回收','C':'变量未初始化','D':'变量值被改变'},
+      'answer': 'A',
+      'hints': ['同名会遮蔽外层变量','可能导致混淆','最好避免同名'],
+      'explanation': '局部同名变量会遮蔽外层变量，导致对外层变量不可见。',
+      'example': 'x = 1\ndef f():\n    x = 2  # 遮蔽'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '模块作用域',
+      'content': '模块级变量在哪个作用域内？',
+      'options': {'A':'模块作用域','B':'函数作用域','C':'类作用域','D':'全局操作系统'},
+      'answer': 'A',
+      'hints': ['模块作用域是文件级别','导入时会执行模块顶层代码','模块变量以模块名访问'],
+      'explanation': '模块变量属于模块作用域，通过 module.var 访问或在模块内直接使用。',
+      'example': 'import m\nprint(m.CONST)'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '动态作用域？',
+      'content': 'Python 使用静态（词法）作用域还是动态作用域？',
+      'options': {'A':'静态（词法）作用域','B':'动态作用域','C':'两者皆是','D':'取决于函数类型'},
+      'answer': 'A',
+      'hints': ['作用域由代码位置决定','闭包依赖于词法作用域','不是调用栈决定'],
+      'explanation': 'Python 使用词法作用域，变量绑定由定义位置决定。',
+      'example': '闭包示例说明词法作用域'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '避免全局可变状态',
+      'content': '补全：若需要共享可变对象，推荐做法是通过参数传入，而不是直接修改全局。',
+      'input': '',
+      'output': '',
+      'code': 'def add_item(lst, item):\n    lst.append(item)\n\nmylist = []\nadd_item(mylist, 1)\nprint(mylist)',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '通过函数参数传递可变对象比在函数内直接修改全局变量更安全。',
+      'example': 'def push(stack, v): stack.append(v)'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '捕获循环变量的常见坑',
+      'content': '补全：用默认参数固定当前循环变量。',
+      'input': '',
+      'output': '',
+      'code': 'funcs = []\nfor i in range(3):\n    funcs.append(lambda i=i: i)\nprint([f() for f in funcs])',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '在 lambda 中使用默认参数 i=i 可以捕获当时的值，避免闭包引用同一变量导致的陷阱。',
+      'example': 'lambda x=x: x'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': '模块级常量命名',
+      'content': '模块级常量通常使用什么命名约定？',
+      'options': {'A':'全部大写','B':'全部小写','C':'驼峰命名','D':'随机命名'},
+      'answer': 'A',
+      'hints': ['常量使用大写以示意','PEP8 建议常量为大写','不是语言强制'],
+      'explanation': '模块常量通常用大写命名以表示不可变约定。',
+      'example': 'MAX_RETRIES = 3'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': '作用域排查技巧',
+      'content': '调试变量不可见问题时，哪个方法有用？',
+      'options': {'A':'打印 locals() 与 globals()','B':'删除变量','C':'重命名文件','D':'强制重新启动解释器'},
+      'answer': 'A',
+      'hints': ['locals()/globals() 可查看当前作用域变量','有助于定位变量在哪个命名空间'],
+      'explanation': '打印 locals() 和 globals() 可以帮助定位变量的实际位置和名称。',
+      'example': 'print(globals().get("x"))'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '命名冲突避免',
+      'content': '为避免命名冲突，推荐做法是？',
+      'options': {'A':'使用明确的模块或类名前缀','B':'使用单字母变量名','C':'随意命名','D':'把所有变量放到全局'},
+      'answer': 'A',
+      'hints': ['模块名前缀能避免冲突','提高语义清晰度','别用过短的名字'],
+      'explanation': '使用模块名前缀或命名空间可以减少命名冲突，提高可读性。',
+      'example': 'config.DEFAULT_TIMEOUT'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '实践：查看变量作用域',
+      'content': '补全：在函数中打印局部变量列表。',
+      'input': '',
+      'output': '',
+      'code': 'def f():\n    a=1\n    b=2\n    print(___())\nf()',
+      'options': 'locals, globals, dir, vars',
+      'answer': '1',
+      'explanation': 'locals() 返回当前局部命名空间的字典。',
+      'example': 'print(locals())'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '实践：避免全局修改',
+      'content': '补全：如果需要修改全局列表，推荐通过参数返回新列表而非直接在函数中赋值。',
+      'input': '',
+      'output': '',
+      'code': 'def add(lst, v):\n    new = lst + [v]\n    return new\n\nL = [1]\nL = add(L, 2)',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '函数返回新对象并在外层赋值能避免不必要的全局副作用。',
+      'example': 's = append(s, x)'
+    }
+
+  ]
+}
+```

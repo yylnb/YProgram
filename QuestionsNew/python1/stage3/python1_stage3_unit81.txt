@@ -1,0 +1,23 @@
+```plaintext
+{
+  'unit': '第81单元：for 循环进阶（可迭代协议）',
+  'questions': [
+    {'id':1,'type':'choice','title':'可迭代对象','content':'哪些对象是可迭代的？','options':{'A':'实现 __iter__ 或 __getitem__ 的对象','B':'只有 list','C':'只有 str','D':'所有对象'},'answer':'A','hints':['实现迭代协议即可迭代','常见有 list/tuple/dict/str'], 'explanation':'只要实现迭代协议（__iter__ 或 __getitem__）的对象就可以用于 for 循环。','example':'for x in obj:'},
+    {'id':2,'type':'choice','title':'迭代器消耗','content':'迭代器在遍历后还能再次遍历吗？','options':{'A':'不能（已消费）','B':'总能再次遍历','C':'取决于实现','D':'需 reset 方法'},'answer':'A','hints':['一般一次性消费','可将数据转换为 list 以重用'], 'explanation':'迭代器在遍历后通常被消耗，要重用需重新创建或转换为序列。','example':'list(iterator) to reuse'},
+    {'id':3,'type':'choice','title':'for else','content':'for…else 结构中 else 在何时执行？','options':{'A':'循环正常结束（无 break）','B':'每次循环都会执行','C':'只在 break 时执行','D':'在异常时执行'},'answer':'A','hints':['else 与 break 的配合常用于查找并区分找到与未找到情况'], 'explanation':'当循环没有通过 break 提前退出时，会执行 else 块。','example':'for x in it: if cond: break\nelse: not found'},
+    {'id':4,'type':'fill','title':'迭代字典','content':'补全：遍历字典并打印键与值。','input':'a:1 b:2','output':'a 1\nb 2','code':'d=dict(x.split(":") for x in input().split())\nfor k,v in d.items():\n    print(k, v)','options':'示例已给出','answer':'1','explanation':'使用 items() 可同时遍历键和值。','example':'for k,v in d.items():'},
+    {'id':5,'type':'fill','title':'并行迭代','content':'补全：并行遍历两个列表。','input':'a b\n1 2','output':'a 1\nb 2','code':'a=input().split()\nb=input().split()\nfor x,y in zip(a,b):\n    print(x, y)','options':'示例已给出','answer':'1','explanation':'zip 可并行迭代多个序列，按最短长度停止。','example':'for x,y in zip(a,b):'},
+    {'id':6,'type':'choice','title':'zip 行为','content':'zip(a,b) 在长度不同时如何终止？','options':{'A':'以最短序列长度终止','B':'以最长序列终止并填 None','C':'报错','D':'无限循环'},'answer':'A','hints':['zip 会按最短长度配对元素'], 'explanation':'zip 会在最短输入序列耗尽时停止迭代。','example':'list(zip([1,2],[3])) -> [(1,3)]'},
+    {'id':7,'type':'choice','title':'迭代器与内存','content':'对大数据使用迭代器而不是 list 的优势？','options':{'A':'节省内存','B':'更快随机访问','C':'更易索引','D':'更安全'},'answer':'A','hints':['迭代器惰性产生值','适合流式处理'], 'explanation':'使用迭代器按需生成元素可以减少内存占用。','example':'generator expression'},
+    {'id':8,'type':'choice','title':'枚举起始','content':'enumerate 可指定起始索引参数吗？','options':{'A':'可以（start=）','B':'不可以','C':'仅在 Python2 可用','D':'只用于 dict'},'answer':'A','hints':['常用 enumerate(iterable, 1) 来从 1 开始编号'], 'explanation':'enumerate 可以通过第二个参数指定起始索引。','example':'for i,x in enumerate(lst,1):'},
+    {'id':9,'type':'fill','title':'解包迭代','content':'补全：遍历嵌套元组并解包打印。','input':'(a,1) (b,2)','output':'a 1\nb 2','code':'for k,v in [tuple(x.split()) for x in input().split(",")]:\n    print(k, v)','options':'示例已给出','answer':'1','explanation':'for 循环支持对可迭代元素进行多变量解包。','example':'for a,b in pairs:'},
+    {'id':10,'type':'fill','title':'可迭代转列表','content':'补全：把迭代器的前 3 个元素转列表。','input':'1 2 3 4','output':'[1,2,3]','code':'it=map(int,input().split())\nprint(list(__import__("itertools").islice(it,3)))','options':'示例已给出','answer':'1','explanation':'islice 可从迭代器中获取指定数量元素并转换为列表。','example':'from itertools import islice'},
+    {'id':11,'type':'choice','title':'可迭代与迭代器区别','content':'迭代器对象与可迭代对象区别是？','options':{'A':'迭代器有 __next__ 方法并可消费','B':'可迭代有 __next__','C':'二者相同','D':'不可比较'},'answer':'A','hints':['迭代器可以直接 next()','可迭代对象提供 __iter__ 返回迭代器'], 'explanation':'迭代器支持 __next__ 被消费，可迭代对象实现 __iter__ 返回迭代器。','example':'it = iter([1,2])'},
+    {'id':12,'type':'choice','title':'for else 用例','content':'for…else 常用于？','options':{'A':'查找并判断未找到情况','B':'计数','C':'排序','D':'打印'},'answer':'A','hints':['在没找到就执行 else'], 'explanation':'for…else 常用于在循环中查找元素，未找到时在 else 中处理。','example':'for x in lst: if x==v: break\nelse: print("not found")'},
+    {'id':13,'type':'choice','title':'遍历字典键','content':'直接 for k in d 时遍历的是什么？','options':{'A':'键','B':'值','C':'键值对','D':'项目索引'},'answer':'A','hints':['默认遍历字典键'], 'explanation':'直接遍历字典会得到键；用 d.values()/d.items() 可遍历值或键值对。','example':'for k in d:'},
+    {'id':14,'type':'fill','title':'链式迭代','content':'补全：把多个可迭代对象串联后遍历。','input':'1 2\n3 4','output':'1 2 3 4','code':'import itertools\nfor x in itertools.chain(input().split(), input().split()):\n    print(x, end=" ")','options':'示例已给出','answer':'1','explanation':'itertools.chain 可将多个可迭代对象串联为单一迭代序列。','example':'chain(a,b)'},
+    {'id':15,'type':'fill','title':'反向迭代','content':'补全：倒序遍历列表。','input':'1 2 3','output':'3 2 1','code':'for x in reversed(list(map(int,input().split()))):\n    print(x, end=" ")','options':'示例已给出','answer':'1','explanation':'reversed 返回反向迭代器，无需拷贝序列即可倒序遍历。','example':'for x in reversed(lst):'}
+  ]
+}
+
+```

@@ -1,0 +1,274 @@
+[ 
+    {
+    'id': 1,
+    'type': 'choice',
+    'title': '字符串的基本输出回顾',
+    'content': '小李想打印一句问候语："Good morning"。以下哪一项写法正确？',
+    'options': {
+        'A': 'print(Good morning)',
+        'B': 'print("Good morning")',
+        'C': 'echo("Good morning")',
+        'D': 'print(\'Good morning\')'
+    },
+    'answer': 'B',
+    'hints': [
+        'Python 输出必须使用 print。',
+        '字符串需要引号。',
+        '注意区分 Python 语法与其他语言语法。'
+    ],
+    'explanation': 'print("Good morning") 是标准 Python 字符串输出。',
+    'example': '你也可以输出 print("Have a nice day") 来练习。'
+    },
+
+    {
+    'id': 2,
+    'type': 'choice',
+    'title': '字符串拼接与重复复习',
+    'content': '小王想让字符串 "Hi" 重复 3 次，以下哪个选项正确？',
+    'options': {
+        'A': '"Hi" * 3',
+        'B': 'repeat("Hi", 3)',
+        'C': '"Hi".repeat(3)',
+        'D': '"Hi" + 3'
+    },
+    'answer': 'A',
+    'hints': [
+        'Python 使用 * 进行字符串重复。',
+        '不要选其他语言的语法。',
+        '重复的结果应该是 "HiHiHi"。'
+    ],
+    'explanation': '"Hi" * 3 使用乘法运算符重复字符串。',
+    'example': '"ha" * 5 会得到 "hahahahaha"。'
+    },
+
+    {
+    'id': 3,
+    'type': 'choice',
+    'title': '转义字符复习',
+    'content': '下列哪一项可以正确输出一个双引号字符？',
+    'options': {
+        'A': 'print(" ")',
+        'B': 'print(\'"\')',
+        'C': 'print("\"")',
+        'D': 'print("\\")'
+    },
+    'answer': 'C',
+    'hints': [
+        '转义符是通过反斜杠完成的。',
+        '你要输出的是 " 这个符号。',
+        '看看哪个选项是合规的字符串写法。'
+    ],
+    'explanation': '要输出双引号，需要写成 print("\\"")，即转义双引号。',
+    'example': '例如 print("He said: \\"Hello!\\"")。'
+    },
+
+    {
+    'id': 4,
+    'type': 'fill',
+    'title': '基础切片复习',
+    'content': '补全代码，取得前 3 个字符。',
+    'input': 'text = "Python"',
+    'output': 'Pyt',
+    'code': 'result = text[___:___]',
+    'options': '0, 1, 2, 3, 4, len(text)',
+    'answer': '1,4',
+    'explanation': 'text[0:3] 能得到前 3 个字符。',
+    'example': '"abcdef"[0:4] 会得到 "abcd"。'
+    },
+
+    {
+    'id': 5,
+    'type': 'fill',
+    'title': '进阶切片复习',
+    'content': '补全代码，将字符串倒序输出。',
+    'input': 's = "hello"',
+    'output': 'olleh',
+    'code': 'rev = s[___:___:___]',
+    'options': '0, 1, -1, -2, None, :, ::, 5',
+    'answer': '5,0,-1',
+    'explanation': 's[::-1] 是倒序，但展开为 s[len:0:-1] 也能实现倒序。',
+    'example': '"Python"[::-1] -> "nohtyP"。'
+    },
+
+    {
+    'id': 6,
+    'type': 'choice',
+    'title': '字符串长度与大小写方法复习',
+    'content': '下列哪个语句可以把 word 转成全大写？',
+    'options': {
+        'A': 'word.upper()',
+        'B': 'upper(word)',
+        'C': 'word.toUpper()',
+        'D': 'toUpper(word)'
+    },
+    'answer': 'A',
+    'hints': [
+        '注意 Python 方法调用形式。',
+        'upper 是字符串对象的方法。',
+        '不要选其他语言的写法。'
+    ],
+    'explanation': 'word.upper() 将所有字母转换为大写。',
+    'example': '"abc".upper() -> "ABC"。'
+    },
+
+    {
+    'id': 7,
+    'type': 'choice',
+    'title': 'find 方法复习',
+    'content': 'message = "hello world"。以下哪个能找到 "world" 的起始位置？',
+    'options': {
+        'A': 'message.index("world")',
+        'B': 'message.find("world")',
+        'C': 'find(message, "world")',
+        'D': 'message.search("world")'
+    },
+    'answer': 'B',
+    'hints': [
+        'find 是字符串方法。',
+        '找不到会返回 -1。',
+        'index 在找不到时会报错。'
+    ],
+    'explanation': 'find 返回子串位置，因此 message.find("world") 正确。',
+    'example': '"banana".find("na") -> 2。'
+    },
+
+    {
+    'id': 8,
+    'type': 'choice',
+    'title': 'replace 方法复习',
+    'content': '以下哪个操作可以把 "2024-12-31" 中的 "-" 替换为 "/"？',
+    'options': {
+        'A': '"2024-12-31".swap("-","/")',
+        'B': '"2024-12-31".replace("/", "-")',
+        'C': '"2024-12-31".replace("-", "/")',
+        'D': 'replace("2024-12-31","-","/")'
+    },
+    'answer': 'C',
+    'hints': [
+        '注意参数顺序：旧的→新的。',
+        'replace 是字符串对象的方法。',
+        '检查哪个语法正确。'
+    ],
+    'explanation': '"2024-12-31".replace("-", "/") 正确替换符号。',
+    'example': '"a-b-c".replace("-", "*") -> "a*b*c"。'
+    },
+
+    {
+    'id': 9,
+    'type': 'fill',
+    'title': 'split 方法复习',
+    'content': '补全代码，将一行 csv 数据拆分成列表。',
+    'input': 'row = "apple,banana,orange"',
+    'output': "['apple','banana','orange']",
+    'code': 'items = row.___(___)',
+    'options': 'split, join, ",", " ", "-", 1',
+    'answer': '1,3',
+    'explanation': 'row.split(",") 按逗号分割。',
+    'example': '"a|b|c".split("|") -> ["a","b","c"]。'
+    },
+
+    {
+    'id': 10,
+    'type': 'fill',
+    'title': 'join 方法复习',
+    'content': '补全代码，把列表合并成字符串并用 "-"连接。',
+    'input': 'lst = ["A", "B", "C"]',
+    'output': 'A-B-C',
+    'code': 'result = ___.join(___)',
+    'options': '"-", ",", ".", lst, join, "-", "A-B-C"',
+    'answer': '1,4',
+    'explanation': '"-".join(lst) -> "A-B-C"。',
+    'example': '"|".join(["x","y"]) -> "x|y"。'
+    },
+
+    {
+    'id': 11,
+    'type': 'choice',
+    'title': 'in 判断复习',
+    'content': '以下哪个表达式会返回 True？',
+    'options': {
+        'A': '"py" in "Python"',
+        'B': '"Py" in "python"',
+        'C': '"thon" not in "Python"',
+        'D': '"abc" in ""'
+    },
+    'answer': 'A',
+    'hints': [
+        '记住大小写敏感。',
+        '"py" 小写在 "Python" 中确实存在。',
+        '"abc" 不会出现在空字符串中。'
+    ],
+    'explanation': '"py" 确实是子串（从第二个字符开始）。',
+    'example': '"on" in "Python" -> True。'
+    },
+
+    {
+    'id': 12,
+    'type': 'choice',
+    'title': 'not in 判断复习',
+    'content': '以下哪个表达式结果为 False？',
+    'options': {
+        'A': '"h" not in "hello"',
+        'B': '"x" not in "hello"',
+        'C': '"he" not in "hello"',
+        'D': '"lo" not in "hello"'
+    },
+    'answer': 'C',
+    'hints': [
+        '检查每个子串是否真实存在。',
+        '"he" 是存在的。',
+        '存在 → not in 就是 False。'
+    ],
+    'explanation': '"he" 在 "hello" 开头出现，因此 not in 的结果为 False。',
+    'example': '"ab" not in "abc" -> False。'
+    },
+
+    {
+    'id': 13,
+    'type': 'choice',
+    'title': '综合判断题',
+    'content': '关于字符串，下列说法正确的是？',
+    'options': {
+        'A': '字符串可以直接修改某个字符。',
+        'B': '字符串切片会返回新字符串。',
+        'C': 'len() 不能用于字符串。',
+        'D': 'join 用于分割字符串。'
+    },
+    'answer': 'B',
+    'hints': [
+        '字符串是不可变类型。',
+        'len 可以用于字符串。',
+        'join 用于连接序列。'
+    ],
+    'explanation': '切片总会返回一个新字符串对象。',
+    'example': '"abc"[0:2] -> "ab"。'
+    },
+
+    {
+    'id': 14,
+    'type': 'fill',
+    'title': '多技能综合题：切片 + 判断',
+    'content': '补全代码：若字符串前半部分包含 "ab" 则打印 "Yes"。',
+    'input': 's = "abcd1234"',
+    'output': 'Yes',
+    'code': 'half = s[___:___]\nif ___ in half:\n    print("Yes")',
+    'options': '0, 2, 4, 5, "ab", "cd", s, half',
+    'answer': '1,3,5',
+    'explanation': 's[0:4] -> "abcd"，其中包含 "ab"。',
+    'example': '用同样方法检测字符串是否以某些前缀开头。'
+    },
+
+    {
+    'id': 15,
+    'type': 'fill',
+    'title': '多技能综合题：split + replace + join',
+    'content': '补全代码：把句子按空格拆分，再把每个词中的 "-" 去掉，然后用空格拼回。',
+    'input': 'sentence = "good-morning to-day everyone"',
+    'output': 'goodmorning today everyone',
+    'code': 'words = sentence.___(" ") \nclean = [ w.___("-", "") for w in words ]\nresult = ___ .join(clean)',
+    'options': 'split, replace, join, " ", "-", "", "/", clean, words',
+    'answer': '1,2,4',
+    'explanation': '按空格拆分 → 对每个词做 replace → 用空格拼回。',
+    'example': '你也可以去掉邮箱中的 ".", 然后重新拼接成字符串。'
+    }
+]

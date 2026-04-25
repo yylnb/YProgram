@@ -1,0 +1,213 @@
+USE `questions`;
+-- Unit 69 | Start ID: 1021
+-- Generated at 2025-12-24 23:19:46
+
+INSERT INTO `que_choice_py_1` 
+(`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`)
+VALUES (
+    1021, 
+    69, 
+    '交互循环用途', 
+    'while 与 input 配合常用于？', 
+    JSON_OBJECT('A', '交互式命令循环', 'B', '定义类', 'C', '编译代码', 'D', '写入文件'), 
+    1, 
+    JSON_ARRAY('REPL 风格交互', '等待用户命令', '提供退出选项'), 
+    'while+input 常用于交互式命令循环直到用户退出。', 
+    'while True: cmd=input()'
+);
+INSERT INTO `que_choice_py_1` 
+(`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`)
+VALUES (
+    1022, 
+    69, 
+    '结束信号', 
+    '交互循环常用哪个作为结束信号？', 
+    JSON_OBJECT('A', '特定字符串如 "quit"', 'B', '任意字符', 'C', '换行符', 'D', '无结束'), 
+    1, 
+    JSON_ARRAY('使用明确 sentinel', '便于判断'), 
+    '使用固定字符串作为 sentinel 便于退出交互循环。', 
+    'if cmd=="quit": break'
+);
+INSERT INTO `que_choice_py_1` 
+(`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`)
+VALUES (
+    1023, 
+    69, 
+    '输入校验', 
+    '处理用户输入应先做什么？', 
+    JSON_OBJECT('A', 'strip 并检查格式', 'B', '直接使用', 'C', '存入数据库', 'D', '忽略空格'), 
+    1, 
+    JSON_ARRAY('strip 去空白', '检测空输入或非法字符'), 
+    '应先清洗并校验输入以避免意外行为。', 
+    's=s.strip()'
+);
+INSERT INTO `que_fill_py_1`
+(`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`)
+VALUES (
+    1024,
+    69,
+    '简单命令循环',
+    '补全：实现一行命令循环并在 quit 时退出。',
+    'quit',
+    JSON_ARRAY(''),
+    '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "while True:"}, {"type": "code_line", "value": "    cmd = input().strip()"}, {"type": "code_line", "value": "    if cmd == \"quit\":"}, {"type": "code_line", "value": "        break"}]}]}',
+    JSON_ARRAY('示例已给出'),
+    JSON_ARRAY(0),
+    'strip 有助于接受带空格的输入并识别 quit。',
+    'cmd loop'
+);
+INSERT INTO `que_fill_py_1`
+(`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`)
+VALUES (
+    1025,
+    69,
+    '忽略空输入',
+    '补全：遇空行继续等待。',
+    '
+hello
+quit',
+    JSON_ARRAY('hello'),
+    '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "while True:"}, {"type": "code_line", "value": "    s = input()"}, {"type": "code_line", "value": "    if s == \"\":"}, {"type": "code_line", "value": "        continue"}, {"type": "code_line", "value": "    if s==\"quit\":"}, {"type": "code_line", "value": "        break"}, {"type": "code_line", "value": "    print(s)"}]}]}',
+    JSON_ARRAY('示例已给出'),
+    JSON_ARRAY(0),
+    '空行可用 continue 跳过。',
+    'skip empty'
+);
+INSERT INTO `que_choice_py_1` 
+(`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`)
+VALUES (
+    1026, 
+    69, 
+    '命令解析', 
+    '解析命令时应使用？', 
+    JSON_OBJECT('A', '先 split 然后根据第一个词分发', 'B', '直接 eval', 'C', '写成一行正则', 'D', '用随机'), 
+    1, 
+    JSON_ARRAY('按空格分割得到命令和参数', '再分发给 handler'), 
+    '先 split 命令然后根据命令名分发是常见做法。', 
+    'cmd, *args = s.split()'
+);
+INSERT INTO `que_choice_py_1` 
+(`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`)
+VALUES (
+    1027, 
+    69, 
+    '安全性', 
+    '不要在交互中直接执行用户输入的什么？', 
+    JSON_OBJECT('A', 'eval 或 exec', 'B', 'print', 'C', 'strip', 'D', 'split'), 
+    1, 
+    JSON_ARRAY('eval 会执行任意代码', '会带来安全隐患'), 
+    '直接 eval 用户输入会导致任意代码执行风险，应避免。', 
+    'avoid eval'
+);
+INSERT INTO `que_choice_py_1` 
+(`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`)
+VALUES (
+    1028, 
+    69, 
+    '提示信息', 
+    '交互式程序应在何时显示提示符？', 
+    JSON_OBJECT('A', '在等待输入前', 'B', '每次输出后', 'C', '程序结束时', 'D', '不显示'), 
+    1, 
+    JSON_ARRAY('提示符引导用户输入', '增强交互体验'), 
+    '提示符（如 "> ") 在等待输入前显示，提醒用户输入。', 
+    'input("> ")'
+);
+INSERT INTO `que_fill_py_1`
+(`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`)
+VALUES (
+    1029,
+    69,
+    '命令映射示例',
+    '补全：把命令映射到函数并调用。',
+    'help',
+    JSON_ARRAY('help info'),
+    '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "actions={\"help\":lambda:print(\"help info\")}"}, {"type": "code_line", "value": "cmd=input()"}, {"type": "code_line", "value": "actions.get(cmd, lambda:print(\"unknown\"))()"}]}]}',
+    JSON_ARRAY('示例已给出'),
+    JSON_ARRAY(0),
+    '使用字典映射命令到处理函数易于扩展。',
+    'actions[cmd]()'
+);
+INSERT INTO `que_fill_py_1`
+(`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`)
+VALUES (
+    1030,
+    69,
+    '处理异常输入',
+    '补全：捕获异常并提示错误。',
+    'bad',
+    JSON_ARRAY('error'),
+    '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "try:"}, {"type": "code_line", "value": "    process(input())"}, {"type": "code_line", "value": "except Exception:"}, {"type": "code_line", "value": "    print(\"error\")"}]}]}',
+    JSON_ARRAY('示例已给出'),
+    JSON_ARRAY(0),
+    '在交互中捕获异常并提示可保持程序继续运行。',
+    'try/except around processing'
+);
+INSERT INTO `que_choice_py_1` 
+(`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`)
+VALUES (
+    1031, 
+    69, 
+    '日志记录', 
+    '是否在交互命令中记录用户命令？', 
+    JSON_OBJECT('A', '通常记录摘要以便审计', 'B', '绝对不要记录', 'C', '记录全部敏感信息', 'D', '只记录错误'), 
+    1, 
+    JSON_ARRAY('记录摘要有助于排查', '避免泄露敏感数据'), 
+    '记录命令摘要便于审计和调试，注意隐私保护。', 
+    'log.info("cmd=%s", cmd)'
+);
+INSERT INTO `que_choice_py_1` 
+(`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`)
+VALUES (
+    1032, 
+    69, 
+    '帮助命令', 
+    '实现 help 命令应提供？', 
+    JSON_OBJECT('A', '可用命令列表与示例', 'B', '源代码', 'C', '随机字符串', 'D', '不说明'), 
+    1, 
+    JSON_ARRAY('示例更易理解', '列出参数说明'), 
+    'help 应列出命令和示例，便于用户上手。', 
+    'print("help: ...")'
+);
+INSERT INTO `que_choice_py_1` 
+(`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`)
+VALUES (
+    1033, 
+    69, 
+    '退出确认', 
+    '若命令可能破坏数据，退出前应？', 
+    JSON_OBJECT('A', '提示并要求确认', 'B', '立即执行', 'C', '记录后忽略', 'D', '不提示'), 
+    1, 
+    JSON_ARRAY('危险操作需确认', '防止误操作'), 
+    '对于危险操作先提示并要求用户确认可以避免误删操作。', 
+    'confirm before delete'
+);
+INSERT INTO `que_fill_py_1`
+(`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`)
+VALUES (
+    1034,
+    69,
+    '交互式示例扩展',
+    '补全：当输入为 "help" 时打印帮助。',
+    'help',
+    JSON_ARRAY('help info'),
+    '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "cmd=input().strip()"}, {"type": "code_line", "value": "if cmd==\"help\":"}, {"type": "code_line", "value": "    print(\"help info\")"}]}]}',
+    JSON_ARRAY('示例已给出'),
+    JSON_ARRAY(0),
+    '基础命令处理示例，便于扩展更多命令。',
+    'if cmd=="exit": break'
+);
+INSERT INTO `que_fill_py_1`
+(`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`)
+VALUES (
+    1035,
+    69,
+    '保存会话历史',
+    '补全：把每条命令追加到历史列表。',
+    'a b',
+    JSON_ARRAY(''),
+    '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "history=[]"}, {"type": "code_line", "value": "while True:"}, {"type": "code_line", "value": "    cmd=input()"}, {"type": "code_line", "value": "    history.append(cmd)"}, {"type": "code_line", "value": "    if cmd==\"quit\":"}, {"type": "code_line", "value": "        break"}]}]}',
+    JSON_ARRAY('示例已给出'),
+    JSON_ARRAY(0),
+    '保存历史便于回溯和实现命令索引。',
+    'history.append(cmd)'
+);

@@ -1,0 +1,200 @@
+```plaintext
+{
+  'unit': '第16单元：条件判断与字符串处理综合',
+  'questions': [
+
+    {
+      'id': 1,
+      'type': 'choice',
+      'title': '去除两端空白',
+      'content': '下面哪个方法可以去除字符串两端空白？',
+      'options': {'A':'strip','B':'split','C':'replace','D':'find'},
+      'answer': 'A',
+      'hints': ['strip 移除两端空白','split 拆分','replace 替换子串'],
+      'explanation': 'strip 用于去除字符串两端的空白字符。',
+      'example': 's.strip()'
+    },
+
+    {
+      'id': 2,
+      'type': 'choice',
+      'title': '格式化与条件',
+      'content': '根据布尔值选择输出格式，推荐使用？',
+      'options': {'A':'三元表达式配合 f-string','B':'字符串拼接 with +','C':'使用 print 多次','D':'使用全局变量'},
+      'answer': 'A',
+      'hints': ['简洁且可读','f-string 支持内联表达式','三元适合短条件'],
+      'explanation': '三元与 f-string 配合可写出简洁且可读的条件格式化。',
+      'example': 'print(f"{val if ok else 0}")'
+    },
+
+    {
+      'id': 3,
+      'type': 'choice',
+      'title': 'startswith 的用途',
+      'content': '判断字符串是否以某前缀开头应使用？',
+      'options': {'A':'startswith','B':'in','C':'find','D':'index'},
+      'answer': 'A',
+      'hints': ['startswith 专门用于前缀检测','比 in 更表达意图','返回布尔'],
+      'explanation': 'startswith 能直观地判断前缀并返回布尔值。',
+      'example': 'if s.startswith("http"):'
+    },
+
+    {
+      'id': 4,
+      'type': 'fill',
+      'title': '条件与大小写无关比较',
+      'content': '补全：忽略大小写比较两个字符串。',
+      'input': 'a="Yes"; b="yes"',
+      'output': 'Equal',
+      'code': 'if a.___() == b.___():\n    print("Equal")',
+      'options': 'lower, upper, strip, title',
+      'answer': '1,1',
+      'explanation': '统一使用 lower() 或 upper() 可忽略大小写差异。',
+      'example': 'if s1.lower() == s2.lower():'
+    },
+
+    {
+      'id': 5,
+      'type': 'fill',
+      'title': '去除内部空白',
+      'content': '补全：把字符串中间的空格去掉。',
+      'input': 's="a b c"',
+      'output': 'abc',
+      'code': 's = s.___(" ", "")\nprint(s)',
+      'options': 'replace, strip, split, join',
+      'answer': '1',
+      'explanation': 'replace 可以替换中间空格为无，达到去除内部空白效果。',
+      'example': 's.replace(" ", "")'
+    },
+
+    {
+      'id': 6,
+      'type': 'choice',
+      'title': '分割与连接',
+      'content': '把句子按空格拆成单词列表该用？',
+      'options': {'A':'split','B':'join','C':'replace','D':'strip'},
+      'answer': 'A',
+      'hints': ['split 根据分隔符拆分','常与 join 配合使用','返回列表'],
+      'explanation': 'split 用于拆分字符串为列表，join 用于把列表拼回字符串。',
+      'example': 'words = s.split()\n" ".join(words)'
+    },
+
+    {
+      'id': 7,
+      'type': 'choice',
+      'title': '检测子串位置',
+      'content': '要获取子串第一次出现的索引，使用？',
+      'options': {'A':'find','B':'in','C':'startswith','D':'count'},
+      'answer': 'A',
+      'hints': ['find 返回索引或 -1','in 只返回布尔','index 找不到抛异常'],
+      'explanation': 'find 返回首次出现的索引，找不到返回 -1，适合位置检测。',
+      'example': 'pos = s.find("py")'
+    },
+
+    {
+      'id': 8,
+      'type': 'choice',
+      'title': '格式化字符串安全',
+      'content': '使用 f-string 时应避免？',
+      'options': {'A':'将不受信任的表达式直接插入','B':'把变量放入花括号','C':'用表达式格式化数值','D':'用于调试输出'},
+      'answer': 'A',
+      'hints': ['f-string 会求值表达式','不要在 f-string 中执行不受信任的代码','用于格式化数据'],
+      'explanation': '避免把不受信任的表达式直接插入 f-string，会带来安全风险。',
+      'example': 'print(f"{user_input}") 前先清洗'
+    },
+
+    {
+      'id': 9,
+      'type': 'fill',
+      'title': '限制输出长度',
+      'content': '补全：只输出字符串前 10 个字符。',
+      'input': 's="abcdefghijk"',
+      'output': 'abcdefghij',
+      'code': 's = input()\nprint(s[___])',
+      'options': '0:10, :10, 0:9, 1:10',
+      'answer': '2',
+      'explanation': '切片 s[:10] 返回前 10 个字符（包含索引 0 到 9）。',
+      'example': 's[:5]'
+    },
+
+    {
+      'id': 10,
+      'type': 'fill',
+      'title': '检测含有数字的字符串',
+      'content': '补全：判断字符串是否包含数字字符。',
+      'input': 's="a1b"',
+      'output': 'Has digit',
+      'code': 'if any(ch.isdigit() for ch in s):\n    print("Has digit")',
+      'options': '示例已给出',
+      'answer': '1',
+      'explanation': '任何字符的 isdigit 返回 True 则表示字符串包含数字。',
+      'example': 'if any(c.isalpha() for c in s): ...'
+    },
+
+    {
+      'id': 11,
+      'type': 'choice',
+      'title': 'strip 的参数用法',
+      'content': 'strip 可以带参数用于去除特定字符吗？',
+      'options': {'A':'可以，strip("x") 去除两端的 x','B':'不可以，必须为空','C':'只接受 None','D':'strip 会删除所有中间字符'},
+      'answer': 'A',
+      'hints': ['strip 可接受参数','只去除两端而非中间','参数为字符串，按字符集合处理'],
+      'explanation': 'strip("ab") 会去除两端的 a 或 b 字符。',
+      'example': 's.strip("\n")'
+    },
+
+    {
+      'id': 12,
+      'type': 'choice',
+      'title': 'split 默认行为',
+      'content': 'str.split() 默认按什么拆分？',
+      'options': {'A':'任意空白字符并去重连续空白','B':'仅按单个空格','C':'按逗号','D':'按换行符'},
+      'answer': 'A',
+      'hints': ['默认 split 无参数时按任意空白','连续空白被视为一个分隔','常用于拆单词'],
+      'explanation': 'str.split() 无参数时会按任意空白分隔并忽略首尾空白。',
+      'example': 's.split()'
+    },
+
+    {
+      'id': 13,
+      'type': 'choice',
+      'title': '字符串不可变',
+      'content': '在 Python 中字符串是可变还是不可变的？',
+      'options': {'A':'不可变','B':'可变','C':'取决于实现','D':'在某些版本可变'},
+      'answer': 'A',
+      'hints': ['字符串操作产生新对象','不能原地修改单个字符','赋值会创建新字符串'],
+      'explanation': '字符串不可变，对字符串的修改会生成新对象。',
+      'example': 's = s.replace("a","b")'
+    },
+
+    {
+      'id': 14,
+      'type': 'fill',
+      'title': '字符替换练习',
+      'content': '补全：把字符串中的 a 替换为 b 并打印。',
+      'input': 's="aab"',
+      'output': 'bbb',
+      'code': 's = input()\nprint(s.___("a","b"))',
+      'options': 'replace, strip, split, join',
+      'answer': '1',
+      'explanation': 'replace 用于替换子串。',
+      'example': 's.replace(" ", "")'
+    },
+
+    {
+      'id': 15,
+      'type': 'fill',
+      'title': '综合练习：格式化输出',
+      'content': '补全：输出姓名与年龄的 f-string。',
+      'input': 'name="Tom"; age=18',
+      'output': 'Tom is 18',
+      'code': 'print(f"{___} is {___}")',
+      'options': 'name, age, "name", "age"',
+      'answer': '1,2',
+      'explanation': '在 f-string 中直接放变量名来格式化输出。',
+      'example': 'print(f"{user} has {n} items")'
+    }
+
+  ]
+}
+```

@@ -1,0 +1,477 @@
+{
+    "choice_questions": [
+        {
+            "id": 1,
+            "title": "split 用法",
+            "content": "s.split() 对字符串做了什么？",
+            "answer": "A",
+            "hints": [
+                "提示1：split 默认按任意空白分割",
+                "提示2：返回列表",
+                "提示3：可传入分隔符参数"
+            ],
+            "explanation": "split 将字符串按分隔符拆分成子字符串并返回列表。",
+            "example": "\"a b\".split() -> [\"a\",\"b\"]",
+            "options": {
+                "A": "按空白分割成子字符串列表",
+                "B": "把字符串转换为字符列表",
+                "C": "去除空格并返回字符串",
+                "D": "抛出异常"
+            }
+        },
+        {
+            "id": 2,
+            "title": "join 用法",
+            "content": "\"-\".join([\"a\",\"b\"]) 会返回？",
+            "answer": "A",
+            "hints": [
+                "提示1：join 在每个元素间插入连接符",
+                "提示2：列表元素需为字符串",
+                "提示3：返回字符串"
+            ],
+            "explanation": "join 将列表元素以指定连接符拼接成字符串。",
+            "example": "\" \".join([\"a\",\"b\"]) -> \"a b\"",
+            "options": {
+                "A": "a-b",
+                "B": "[\"a\",\"b\"]",
+                "C": "ab",
+                "D": "a b"
+            }
+        },
+        {
+            "id": 3,
+            "title": "split 与空字符串",
+            "content": "\"\".split() 的结果是什么？",
+            "answer": "A",
+            "hints": [
+                "提示1：split 默认按空白并忽略空项",
+                "提示2：空字符串没有单词",
+                "提示3：结果为空列表"
+            ],
+            "explanation": "空字符串调用 split() 返回空列表 []。",
+            "example": "\"\".split() -> []",
+            "options": {
+                "A": "[]（空列表）",
+                "B": "[\"\"]",
+                "C": "抛出异常",
+                "D": "空字符串"
+            }
+        },
+        {
+            "id": 6,
+            "title": "join 限制",
+            "content": "join 的参数有什么限制？",
+            "answer": "A",
+            "hints": [
+                "提示1：join 需要字符串元素",
+                "提示2：非字符串需先转换",
+                "提示3：可用 map(str, seq) 转换"
+            ],
+            "explanation": "join 要求序列中的每个元素都是字符串，否则需先转换为字符串。",
+            "example": "\" \".join(map(str, [1,2]))",
+            "options": {
+                "A": "所有元素必须是字符串",
+                "B": "元素必须是整数",
+                "C": "只能用于列表",
+                "D": "只支持字母"
+            }
+        },
+        {
+            "id": 7,
+            "title": "split maxsplit",
+            "content": "split(sep, maxsplit=1) 的作用是什么？",
+            "answer": "A",
+            "hints": [
+                "提示1：maxsplit 限制分割次数",
+                "提示2：分割后最多得到 maxsplit+1 项",
+                "提示3：常用于只需头部几个字段"
+            ],
+            "explanation": "maxsplit=1 意味着最多分割一次，得到两项结果。",
+            "example": "\"a b c\".split(None,1) -> [\"a\",\"b c\"]",
+            "options": {
+                "A": "最多分割一次，返回两部分",
+                "B": "分割所有但最多保留一项",
+                "C": "抛出异常",
+                "D": "忽略 sep 参数"
+            }
+        },
+        {
+            "id": 8,
+            "title": "字符列表",
+            "content": "list(\"abc\") 会得到什么？",
+            "answer": "A",
+            "hints": [
+                "提示1：list 可把字符串拆成字符列表",
+                "提示2：常用于逐字符处理",
+                "提示3：与 split 不同"
+            ],
+            "explanation": "list(\"abc\") 会把字符串拆成包含每个字符的列表。",
+            "example": "list(\"hi\") -> [\"h\",\"i\"]",
+            "options": {
+                "A": "[\"a\",\"b\",\"c\"]",
+                "B": "\"abc\"",
+                "C": "[\"abc\"]",
+                "D": "[]"
+            }
+        },
+        {
+            "id": 11,
+            "title": "join 与非字符串元素",
+            "content": "要连接包含整数的列表，正确做法是？",
+            "answer": "A",
+            "hints": [
+                "提示1：join 要求字符串元素",
+                "提示2：map(str, lst) 可把元素转换为字符串",
+                "提示3：否则会抛 TypeError"
+            ],
+            "explanation": "先用 map(str, lst) 把每个元素转换为字符串，再用 join 连接。",
+            "example": "\",\".join(map(str, [1,2]))",
+            "options": {
+                "A": "使用 map(str, lst) 然后 join",
+                "B": "直接 join(lst)",
+                "C": "先 sum(lst) 再 join",
+                "D": "使用 + 连接"
+            }
+        },
+        {
+            "id": 12,
+            "title": "split 参数 sep",
+            "content": "split(\"-\") 与 split() 的区别是？",
+            "answer": "A",
+            "hints": [
+                "提示1：指定 sep 会精确匹配分隔符",
+                "提示2：没指定时会按任意空白切分并去重",
+                "提示3：split(\"-\") 不会忽略空项"
+            ],
+            "explanation": "传入 sep 会用该字符精确分割，未传入则按任意空白分割。",
+            "example": "\"a-b\".split(\"-\") -> [\"a\",\"b\"]",
+            "options": {
+                "A": "前者按指定分隔符分割，后者按任意空白分割",
+                "B": "两者等价",
+                "C": "split() 更慢",
+                "D": "split(\"-\") 忽略空白"
+            }
+        },
+        {
+            "id": 13,
+            "title": "split 性能",
+            "content": "大量字符串拆分时应注意什么？",
+            "answer": "A",
+            "hints": [
+                "提示1：split 会创建新列表",
+                "提示2：若流式处理可使用生成器",
+                "提示3：注意内存开销"
+            ],
+            "explanation": "频繁拆分大量字符串会产生较多中间对象，应考虑流式或增量处理以节省内存。",
+            "example": "for line in file: process(line.split())",
+            "options": {
+                "A": "避免重复创建大中间列表，按需处理更好",
+                "B": "split 总是最快",
+                "C": "join 更慢",
+                "D": "直接操作字符串比 split 更低耗"
+            }
+        }
+    ],
+    "fill_questions": [
+        {
+            "id": 4,
+            "title": "字符串转列表（填空）",
+            "content": "把输入字符串按空白分割并打印元素数量。",
+            "explanation": "split 将字符串拆分为子字符串列表，len 取得元素个数。",
+            "example": "len(\"a b\".split()) == 2",
+            "input": "hello world",
+            "output": [
+                "2"
+            ],
+            "options": [
+                "split",
+                "join",
+                "list",
+                "strip"
+            ],
+            "answer": [
+                "split"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "s = input()"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "print(len(s."
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": "()))"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 5,
+            "title": "列表转字符串（填空）",
+            "content": "把输入单词用逗号连接并打印。",
+            "explanation": "使用 \",\".join(list) 将字符串列表按逗号连接。",
+            "example": "\",\".join([\"a\",\"b\"])",
+            "input": "a b",
+            "output": [
+                "a,b"
+            ],
+            "options": [
+                "join",
+                "split",
+                "replace",
+                "format"
+            ],
+            "answer": [
+                "join"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "print(\",\"."
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": "(input().split()))"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 9,
+            "title": "拆分并取首项（填空）",
+            "content": "打印输入字符串第一个字段。",
+            "explanation": "先 split 再取索引 0 即可得到第一个字段。",
+            "example": "s.split()[0]",
+            "input": "one two three",
+            "output": [
+                "one"
+            ],
+            "options": [
+                "split",
+                "join",
+                "strip",
+                "list"
+            ],
+            "answer": [
+                "split"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "s = input()"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "print(s."
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": "()[0])"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 10,
+            "title": "去除空白（填空）",
+            "content": "把输入左右空白去掉并按空白分割打印长度。",
+            "explanation": "strip() 去除两端空白，再 split() 分割得到两个字段。",
+            "example": "\" a b \".strip().split()",
+            "input": "  a b  ",
+            "output": [
+                "2"
+            ],
+            "options": [
+                "strip",
+                "split",
+                "rstrip",
+                "lstrip"
+            ],
+            "answer": [
+                "strip"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "s = input()"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "print(len(s."
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": "().split()))"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 14,
+            "title": "字符串到字符列表（填空）",
+            "content": "把输入字符串转换为字符列表并打印。",
+            "explanation": "list(s) 会把字符串拆解为字符列表。",
+            "example": "list(\"ab\") -> [\"a\",\"b\"]",
+            "input": "ab",
+            "output": [
+                "a b"
+            ],
+            "options": [
+                "s",
+                "s.split()",
+                "s.strip()",
+                "s.join()"
+            ],
+            "answer": [
+                "s"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "s = input()"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "print(*list("
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": "))"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 15,
+            "title": "组合练习（填空）",
+            "content": "把输入逗号分隔的数字转换为列表并打印总和。",
+            "explanation": "先用 split(\",\") 拆分字符串，再 map(int, ...) 转换为整数列表并求和。",
+            "example": "sum(map(int, \"1,2,3\".split(\",\")))",
+            "input": "1,2,3",
+            "output": [
+                "6"
+            ],
+            "options": [
+                "split",
+                "join",
+                "replace",
+                "strip"
+            ],
+            "answer": [
+                "split"
+            ],
+            "code_segments": {
+                "segments": [
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "s = input()"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_inline",
+                        "parts": [
+                            {
+                                "type": "code",
+                                "value": "nums = list(map(int, s."
+                            },
+                            {
+                                "type": "slot",
+                                "index": 0
+                            },
+                            {
+                                "type": "code",
+                                "value": "(\",\")))"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "code_block",
+                        "lines": [
+                            {
+                                "type": "code_line",
+                                "value": "print(sum(nums))"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}

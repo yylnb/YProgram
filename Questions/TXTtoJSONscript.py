@@ -22,7 +22,36 @@ CONFIG = {
     # 列表：每项是输入 txt 的路径（可以是相对或绝对路径）
     # 注意：Windows 路径请使用 r'...' 原始字符串或双反斜杠
     "input_txt_files": [
-        r"F:\project\YProgram\Questions\python1_stage1_unit1.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit1.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit2.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit3.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit4.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit5.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit6.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit7.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit8.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit9.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit10.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit11.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit12.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit13.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit14.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit15.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit16.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit17.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit18.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit19.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit20.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit21.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit22.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit23.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit24.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit25.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit26.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit27.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit28.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit29.txt",
+        r"F:\project\YProgram\Questions\python1\stage1\python1_stage1_unit30.txt",
     ],
     # 输出目录（如果为空则与输入文件同目录，且文件名改为 .json）
     "output_dir": r"./output_json",
@@ -178,149 +207,90 @@ def replace_underscores_with_slots(code: str) -> str:
 # ----------------------------
 # 规范化单题（把不同源字段映射到统一字段）
 # ----------------------------
+# —— 只展示核心变化，完整文件你可以直接替换 —— #
+
 def normalize_question(raw_q: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    输入 raw_q（为 dict），输出规范化 question dict。
-    输出格式参考之前约定：
-    - choice: {type, q_id, title, text, options(dict A..D), answer (A/B/... uppercase), hints, explanation, example}
-    - fill:   {type, q_id, title, text, raw_code (with __1__ placeholders), options(list), answer(list of ints 1-based), input, output, explanation, example}
-    """
     q = {}
-    # q_id
-    qid = raw_q.get('id') or raw_q.get('q_id') or raw_q.get('qid') or raw_q.get('ID')
+    warnings = []
+
+    # ---------- q_id ----------
+    qid = raw_q.get('id') or raw_q.get('q_id') or raw_q.get('qid')
     if qid is None:
-        raise ValueError("题目缺少 id 字段，无法继续：%r" % raw_q)
+        qid = f"unknown_{id(raw_q)}"
+        warnings.append("missing q_id")
     q['q_id'] = str(qid)
 
-    # type
-    t = raw_q.get('type') or raw_q.get('question_type') or raw_q.get('kind')
-    if not t:
-        raise ValueError(f"题目 {qid} 缺少 type 字段")
-    t = str(t).strip().lower()
-    if t not in ('choice','fill'):
-        if 'choice' in t:
-            t = 'choice'
-        elif 'fill' in t:
-            t = 'fill'
-        else:
-            raise ValueError(f"题目 {qid} 的 type 字段未知: {t}")
-    q['type'] = t
+    # ---------- type ----------
+    t = str(raw_q.get('type') or raw_q.get('question_type') or '').lower()
+    if any(k in t for k in ['choice', 'select', 'single']):
+        q['type'] = 'choice'
+    elif any(k in t for k in ['fill', 'blank', 'code', 'input']):
+        q['type'] = 'fill'
+    else:
+        q['type'] = 'choice'
+        warnings.append(f"unknown type '{t}', defaulted to choice")
 
-    # title
-    q['title'] = raw_q.get('title') or raw_q.get('name') or ''
+    # ---------- common ----------
+    q['title'] = raw_q.get('title', '')
+    q['text'] = raw_q.get('text') or raw_q.get('content') or ''
+    q['explanation'] = raw_q.get('explanation')
+    q['example'] = raw_q.get('example')
 
-    # text: 多个字段名兼容
-    q_text = raw_q.get('content') or raw_q.get('text') or raw_q.get('question') or ''
-    q['text'] = q_text
+    hints = raw_q.get('hints')
+    if isinstance(hints, str):
+        q['hints'] = [hints]
+    else:
+        q['hints'] = hints
 
-    # common fields
-    q['explanation'] = raw_q.get('explanation') or raw_q.get('explain') or None
-    q['example'] = raw_q.get('example') or None
-    q['hints'] = raw_q.get('hints') or None
-    # For fill: input / output
-    q['input'] = raw_q.get('input') if 'input' in raw_q else None
-    q['output'] = raw_q.get('output') if 'output' in raw_q else None
+    q['input'] = raw_q.get('input')
+    q['output'] = raw_q.get('output')
 
+    # ---------- choice ----------
     if q['type'] == 'choice':
-        # options: may be dict or list or string
-        opts = raw_q.get('options') or {}
+        opts = raw_q.get('options', {})
         if isinstance(opts, dict):
-            norm = {}
-            for k in ['A','B','C','D']:
-                if k in opts:
-                    norm[k] = opts[k]
-                elif k.lower() in opts:
-                    norm[k] = opts[k.lower()]
-            if len(norm) < 4:
-                vals = list(opts.values())
-                keys = ['A','B','C','D']
-                for i,k in enumerate(keys):
-                    if k not in norm:
-                        norm[k] = vals[i] if i < len(vals) else ''
-            q['options'] = norm
+            q['options'] = opts
         elif isinstance(opts, list):
-            keys = ['A','B','C','D']
-            norm = {}
-            for i,k in enumerate(keys):
-                norm[k] = opts[i] if i < len(opts) else ''
-            q['options'] = norm
-        elif isinstance(opts, str):
-            parts = [p.strip() for p in opts.split(',')]
-            keys = ['A','B','C','D']
-            norm = {}
-            for i,k in enumerate(keys):
-                norm[k] = parts[i] if i < len(parts) else ''
-            q['options'] = norm
+            q['options'] = dict(zip(['A','B','C','D'], opts))
         else:
-            q['options'] = {'A':'','B':'','C':'','D':''}
+            q['options'] = {}
 
-        # answer
-        raw_ans = raw_q.get('answer')
-        if raw_ans is None:
-            q['answer'] = None
-        else:
-            if isinstance(raw_ans, str):
-                a = raw_ans.strip().upper()
-                if a in ('A','B','C','D'):
-                    q['answer'] = a
-                else:
-                    try:
-                        num = int(a)
-                        if 1 <= num <= 4:
-                            q['answer'] = {1:'A',2:'B',3:'C',4:'D'}[num]
-                        else:
-                            q['answer'] = None
-                    except:
-                        q['answer'] = None
-            elif isinstance(raw_ans, int):
-                q['answer'] = {1:'A',2:'B',3:'C',4:'D'}.get(raw_ans)
+        ans = raw_q.get('answer')
+        if isinstance(ans, str):
+            ans = ans.strip().upper()
+            if ans in 'ABCD':
+                q['answer'] = ans
             else:
+                warnings.append(f"invalid answer '{ans}'")
                 q['answer'] = None
+        elif isinstance(ans, int):
+            q['answer'] = {1:'A',2:'B',3:'C',4:'D'}.get(ans)
+        else:
+            q['answer'] = None
 
-    else:  # fill
-        code_raw = raw_q.get('code') or raw_q.get('raw_code') or ''
-        code_with_slots = replace_underscores_with_slots(code_raw)
-        q['raw_code'] = code_with_slots
+    # ---------- fill ----------
+    else:
+        code = raw_q.get('code') or raw_q.get('raw_code') or ''
+        q['raw_code'] = replace_underscores_with_slots(code)
 
         opts = raw_q.get('options')
-        if isinstance(opts, str):
-            if '示例' in opts or '给出' in opts:
-                q['options'] = [opts.strip()]
-            else:
-                q['options'] = [p.strip() for p in opts.split(',') if p.strip()!='']
-        elif isinstance(opts, list):
+        if isinstance(opts, list):
             q['options'] = opts
+        elif isinstance(opts, str):
+            q['options'] = [o.strip() for o in opts.split(',')]
         else:
-            if isinstance(opts, dict):
-                q['options'] = list(opts.values())
-            else:
-                q['options'] = []
+            q['options'] = []
 
-        raw_ans = raw_q.get('answer')
-        if raw_ans is None:
-            q['answer'] = []
+        ans = raw_q.get('answer')
+        if isinstance(ans, list):
+            q['answer'] = [int(x) for x in ans if str(x).isdigit()]
+        elif isinstance(ans, str):
+            q['answer'] = [int(x) for x in re.findall(r'\d+', ans)]
         else:
-            if isinstance(raw_ans, str):
-                parts = [p.strip() for p in raw_ans.split(',') if p.strip()!='']
-                nums = []
-                for p in parts:
-                    try:
-                        nums.append(int(p))
-                    except:
-                        pass
-                q['answer'] = nums
-            elif isinstance(raw_ans, (list,tuple)):
-                nums = []
-                for a in raw_ans:
-                    try:
-                        nums.append(int(a))
-                    except:
-                        pass
-                q['answer'] = nums
-            elif isinstance(raw_ans, int):
-                q['answer'] = [raw_ans]
-            else:
-                q['answer'] = []
+            q['answer'] = []
+
+    if warnings:
+        q['_warnings'] = warnings
 
     return q
 

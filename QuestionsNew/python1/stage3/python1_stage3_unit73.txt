@@ -1,0 +1,25 @@
+```plaintext
+{
+  'unit': '第73单元：嵌套循环（字符串与列表）',
+  'questions': [
+    {'id':1,'type':'choice','title':'嵌套遍历','content':'要遍历二维字符矩阵常用方法？','options':{'A':'双重 for 循环','B':'单循环即可','C':'只用 while','D':'zip 不可用'},'answer':'A','hints':['行列两层循环','外层行内层列'],'explanation':'二维结构通常使用嵌套循环遍历。','example':'for row in mat:\n  for ch in row:'},
+    {'id':2,'type':'choice','title':'复杂度增加','content':'嵌套循环的时间复杂度通常如何变化？','options':{'A':'可能成平方级','B':'保持常数','C':'变为对数级','D':'不可确定'},'answer':'A','hints':['每层乘积关系','二重循环常为 O(n^2)'], 'explanation':'两层 n 的循环经常导致 O(n^2) 时间复杂度。','example':'for i in range(n):\n for j in range(n):'},
+    {'id':3,'type':'choice','title':'字符串嵌套','content':'遍历字符串列表并遍历每个字符串，正确写法？','options':{'A':'for s in lst:\n for ch in s','B':'for i in range(len(s))','C':'while True','D':'不能嵌套'},'answer':'A','hints':['先遍历列表再遍历字符串','顺序很重要'], 'explanation':'先迭代外层容器再迭代内层字符串是正确方法。','example':'for s in lst:\n  for ch in s:'},
+    {'id':4,'type':'fill','title':'矩阵求和','content':'补全：计算二维数字矩阵元素总和。','input':'[[1,2],[3,4]]','output':'10','code':'mat=[[int(x) for x in input().split()] for _ in range(2)]\ns=0\nfor row in mat:\n    for v in row:\n        s+=v\nprint(s)','options':'示例已给出','answer':'1','explanation':'嵌套循环累加每个元素。','example':'sum of elements'},
+    {'id':5,'type':'fill','title':'字符计数矩阵','content':'补全：统计每行中 a 的次数并打印。','input':'a b\naba','output':'1\n2','code':'lines=[input() for _ in range(2)]\nfor line in lines:\n    cnt=0\n    for ch in line:\n        if ch=="a":\n            cnt+=1\n    print(cnt)','options':'示例已给出','answer':'1','explanation':'对每行使用内层循环计数。','example':'line.count("a")'},
+    {'id':6,'type':'choice','title':'提前退出','content':'嵌套循环中想跳出内层但继续外层应使用？','options':{'A':'break 仅退出内层','B':'break 退出所有层','C':'continue 结束所有循环','D':'raise 终止程序'},'answer':'A','hints':['break 作用域为当前循环','外层循环仍会继续'], 'explanation':'break 只退出当前循环层，外层继续执行。','example':'break 在内层'},
+    {'id':7,'type':'choice','title':'标签跳出','content':'Python 原生是否支持标签式多层跳出？','options':{'A':'不支持','B':'支持 label','C':'通过 goto','D':'仅在 C 中支持'},'answer':'A','hints':['可用 flag 或 exception 实现多层跳出','无标签语法'], 'explanation':'Python 不支持标签跳出，可用标志位或抛出异常来中断多层循环。','example':'use flag or raise'},
+    {'id':8,'type':'choice','title':'内存与生成器','content':'处理大嵌套数据集时建议使用？','options':{'A':'生成器按需提供数据','B':'一次性读入全部并遍历','C':'优化为递归','D':'复制数据'},'answer':'A','hints':['避免一次性载入大数据','按需生成节省内存'], 'explanation':'生成器或迭代器可以节省内存并支持流式处理。','example':'for row in gen():'},
+    {'id':9,'type':'fill','title':'方阵对角和','content':'补全：计算方阵主对角线之和。','input':'3\n1 2 3\n4 5 6\n7 8 9','output':'15','code':'n=int(input())\nmat=[list(map(int,input().split())) for _ in range(n)]\ns=0\nfor i in range(n):\n    s+=mat[i][i]\nprint(s)','options':'示例已给出','answer':'1','explanation':'主对角线元素索引相等。','example':'i==j'},
+    {'id':10,'type':'fill','title':'计数出现位置','content':'补全：输出字符 x 在二维字符表中出现的总次数。','input':'2 2\naa\nab\na','output':'3','code':'r,c=map(int,input().split())\nmat=[input().strip() for _ in range(r)]\nch=input().strip()\ncnt=0\nfor row in mat:\n    for c in row:\n        if c==ch:\n            cnt+=1\nprint(cnt)','options':'示例已给出','answer':'1','explanation':'遍历所有字符并计数。','example':'nested loops count'},
+    {'id':11,'type':'choice','title':'生成器与嵌套','content':'嵌套生成器表达式能用于？','options':{'A':'构造扁平列表','B':'不可用','C':'只用于字符串','D':'只用于数字'},'answer':'A','hints':['可用于扁平化嵌套结构','注意可读性'], 'explanation':'嵌套生成器可以用于扁平化并生成单一序列。','example':'(x for row in mat for x in row)'},
+    {'id':12,'type':'choice','title':'索引错误','content':'在嵌套循环中常见索引错误原因？','options':{'A':'越界访问','B':'语法错误','C':'类型错误','D':'编译器缺陷'},'answer':'A','hints':['下标不小心越界','边界检查重要'], 'explanation':'越界是嵌套索引中常见问题，注意循环边界。','example':'range(len(row))'},
+    {'id':13,'type':'choice','title':'优化建议','content':'若嵌套循环瓶颈出现在内层，常见优化方式是？','options':{'A':'减少内层重复计算','B':'加更多循环','C':'增加嵌套层级','D':'改用递归'},'answer':'A','hints':['缓存内层不变计算','预处理数据'], 'explanation':'将不变的计算移出内层循环或使用缓存能显著提升效率。','example':'precompute values'},
+    {'id':14,'type':'fill','title':'拼接每行字符串','content':'补全：把二维字符矩阵每行拼接为字符串并打印。','input':'2\nab\ncd','output':'ab\ncd','code':'n=int(input())\nfor _ in range(n):\n    print("".join(list(input().strip())))','options':'示例已给出','answer':'1','explanation':'使用 join 将字符列表或行拼接为字符串。','example':'"".join(chars)'},
+    {'id':15,'type':'fill','title':'转置矩阵','content':'补全：输出矩阵的转置。','input':'2 3\n1 2 3\n4 5 6','output':'1 4\n2 5\n3 6','code':'r,c=map(int,input().split())\nmat=[list(map(int,input().split())) for _ in range(r)]\nfor j in range(c):\n    row=[]\n    for i in range(r):\n        row.append(str(mat[i][j]))\n    print(" ".join(row))','options':'示例已给出','answer':'1','explanation':'转置将行列互换。','example':'zip(*mat)'}
+  ]
+}
+
+```
+
+*** End Patch

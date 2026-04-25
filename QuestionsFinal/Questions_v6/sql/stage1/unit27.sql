@@ -1,0 +1,183 @@
+-- Generated SQL for global_unit=27 (stage=1 unit_local=27 unit_id=27)
+INSERT INTO `que_choice_py_1` (`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`) VALUES
+
+(
+  391,
+  27,
+  '奶茶和蛋糕',
+  '阿强想用逻辑运算符表达“我既要奶茶也要蛋糕”的愿望，他应该使用哪一个运算符呢？',
+  '["and", "or", "not", "&"]',
+  1,
+  '["‘既要…也要…’表示两者都需要满足。", "回想一下逻辑运算的真值表，哪个运算符在所有条件为真时才为真？", "and运算符在左右两边表达式都为True时，结果才为True。"]',
+  '‘既要…也要…’表示并列关系，要求所有条件同时满足。在逻辑运算中，`and`（与）运算符正是在其连接的所有操作数都为`True`时，结果才为`True`，完美对应此场景。',
+  '例如：hungry = True; thirsty = True; 那么 hungry and thirsty 的结果为 True。'
+),
+(
+  392,
+  27,
+  '电影二选一',
+  '小美说：“周末我可以看科幻片或者喜剧片。”如果用Python逻辑表达“科幻片或者喜剧片”，应该用哪个运算符？',
+  '["and", "or", "not", "|"]',
+  2,
+  '["‘或者’表示选择，满足其中一个即可。", "在逻辑运算中，哪个运算符只要有一个条件为真结果就为真？", "or运算符在至少一个操作数为True时，结果即为True。"]',
+  '日常用语中的‘或者’表示在多个选项中至少选择一个，对应于逻辑运算中的`or`（或）运算符。只要其连接的多个表达式中有一个为`True`，整个表达式的结果就为`True`。',
+  '例如：have_apple = False; have_banana = True; 那么 have_apple or have_banana 的结果为 True。'
+),
+(
+  393,
+  27,
+  '反转天气',
+  '程序员小王写道：is_raining = True。他想表达“天没下雨”，应该怎么写这个条件呢？',
+  '["is_raining", "not is_raining", "is_raining == False", "is_raining or False"]',
+  2,
+  '["思考如何对一个布尔值进行‘取反’操作。", "Python中有一个专门用于逻辑‘非’运算的运算符。", "`not`运算符可以将True变为False，将False变为True。"]',
+  '`not`（非）是一个一元逻辑运算符，用于对布尔值进行取反。`is_raining`为`True`，那么`not is_raining`的结果就是`False`，即“天没下雨”。选项C虽然结果相同，但`not`是更直接、更符合习惯的逻辑表达方式。',
+  '例如：happy = False; 那么 not happy 的结果为 True，表示“不高兴的反面”，即高兴。'
+),
+(
+  396,
+  27,
+  '运算符的优先级',
+  '以下哪个选项正确地描述了`and`、`or`、`not`的运算优先级？',
+  '["not > and > or", "and > or > not", "not > or > and", "and、or、not 优先级相同"]',
+  1,
+  '["逻辑运算符之间是有计算顺序的，就像乘除法优先于加减法。", "`not`是一个一元运算符，它对单个值进行操作。", "优先级从高到低是：`not` > `and` > `or`。如果不确定，可以用括号来明确顺序。"]',
+  '在Python中，逻辑运算符的优先级为：`not`（非）优先级最高，其次是`and`（与），`or`（或）的优先级最低。这决定了复合逻辑表达式的求值顺序。',
+  '在表达式 `not True or False and True` 中，先算 `not True` 得 False，再算 `False and True` 得 False，最后算 `False or False`，结果为 False。'
+),
+(
+  397,
+  27,
+  '点餐的“短路”',
+  '代码 `hungry = True; food = hungry or order_food()`。已知`order_food()`函数会打印‘开始做饭！’。最终会打印吗？为什么？',
+  '["会，因为`or`两边的表达式都会执行。", "不会，因为`hungry`为True，`or`运算‘短路’了。", "会，因为`hungry`为True，所以需要执行另一边。", "不会，因为`or`两边的表达式都不会执行。"]',
+  2,
+  '["思考`or`运算符的特性：只要第一个为真，结果就一定为真。", "在这种情况下，还有必要去计算右边的表达式吗？", "Python的`or`运算符采用‘短路求值’，第一个操作数为真时，直接返回真，不再计算第二个。"]',
+  '对于`or`运算符，如果**第一个操作数为`True`**，则无论第二个操作数是什么，整个表达式的结果已经确定为`True`。因此Python会“短路”求值，跳过对第二个操作数`order_food()`的计算，所以不会打印。',
+  '类似地，`False and do_something()`，因为`and`看到第一个是False，也会短路，不会执行`do_something()`。'
+),
+(
+  398,
+  27,
+  '登录验证逻辑',
+  '以下哪段代码能正确表示“用户名不为空且密码长度大于6位”的登录验证条件？',
+  '["if username != '''' and len(password) > 6:", "if username and len(password) > 6:", "if username != '''' or len(password) > 6:", "if not username and len(password) <= 6:"]',
+  1,
+  '[]',
+  '选项A明确检查用户名不是空字符串，并且密码长度大于6，逻辑清晰正确。选项B在特定情况下（如username本身为False或空值）也能工作，但选项A的表述意图更明确。选项C用了‘或’，选项D条件相反，均不符合要求。',
+  '更简洁的写法可能是 `if username and len(password) > 6:`，它利用空字符串在布尔上下文中为False的特性。'
+),
+(
+  401,
+  27,
+  '循环中的逻辑',
+  '小明的游戏角色生命值初始为5。以下哪段循环代码会让角色在‘生命值大于0且未中毒’的状态下一直战斗？',
+  '["while hp > 0 or not poisoned:", "while hp > 0 and not poisoned:", "while not (hp <= 0 and poisoned):", "while hp > 0 and poisoned:"]',
+  2,
+  '["‘且’表示两个条件必须同时满足，对应哪个运算符？", "‘未中毒’是‘中毒’的否定，如何用`poisoned`变量表示？", "循环要继续，必须满足两个条件：生命大于0 AND 状态不是中毒。"]',
+  '战斗持续的条件是两个子条件**同时**成立：`hp > 0`（生命大于0）和`not poisoned`（未中毒）。这正对应逻辑‘与’运算符`and`。选项A的‘或’逻辑过宽，角色中毒了但还有血也会继续战斗；选项C等价于`hp>0 or not poisoned`，逻辑同样过宽；选项D要求中毒，逻辑相反。',
+  '另一个常见循环条件：`while has_items and not reach_destination:` (还有物品且未到达目的地)。'
+),
+(
+  402,
+  27,
+  '真假判断大师',
+  '在Python中，`bool(0)`为False。请问表达式 `not 0 and 5 or 3` 的求值结果是什么？',
+  '["True", "False", "5", "3"]',
+  3,
+  '["逻辑运算符会返回最后一个参与求值的操作数的值，而不一定是布尔值。", "根据优先级：先算`not 0`。`not 0`等价于`not False`，结果是？", "然后计算 `(not 0) and 5`。由于`not 0`为True，所以这个表达式返回？最后和3进行`or`运算。"]',
+  '遵循优先级`not` > `and` > `or`。`not 0`为`True`。`True and 5`，`and`运算符在左值为真时返回右值，即`5`。最后`5 or 3`，`or`运算符在左值为真（5是非零数，布尔值为True）时直接返回左值`5`，发生短路，不再计算3。',
+  '类似地，`'''' or ''default''` 会返回 `''default''`，因为空字符串在布尔上下文中为False。'
+),
+(
+  403,
+  27,
+  '真值表的陷阱',
+  '已知`x = 10`, `y = 20`。请问表达式 `not (x > 5 and y < 25)` 的值是什么？',
+  '["True", "False", "10", "20"]',
+  2,
+  '["先计算括号里的 `x > 5 and y < 25`。x=10>5为True，y=20<25也为True。", "`True and True` 的结果是 True。", "然后计算外层的 `not True`，`not`运算符会对True取反。"]',
+  '先计算括号内：`x > 5`为`True`，`y < 25`也为`True`。`True and True`结果为`True`。最后计算`not True`，结果为`False`。整个表达式是对一个复合条件的否定。',
+  '这类似于德摩根定律的应用：`not (A and B)` 等价于 `(not A) or (not B)`。'
+);
+
+INSERT INTO `que_fill_py_1` (`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`) VALUES
+
+(
+  394,
+  27,
+  '入场许可',
+  '某公园规定：身高大于等于1.2米且年龄小于12岁的儿童可免费入场。请补全下面的检票代码。',
+  NULL,
+  NULL,
+  '{"segments": [{"type": "code_inline", "parts": [{"type": "code", "value": "height = 1.3\\n"}, {"type": "code", "value": "age = 10\\n"}, {"type": "code", "value": "if height >= 1.2 "}, {"type": "slot", "index": 0}, {"type": "code", "value": " age < 12:\\n"}, {"type": "code", "value": "    print(\\\"可以免费入园！\\\")"}]}]}',
+  '["and", "or", "not", "&", "&&", "&&&"]',
+  '[0]',
+  '判断条件要求两个条件（身高>=1.2和年龄<12）**同时**满足，因此需要使用逻辑‘与’运算符`and`来连接它们。',
+  '类似场景：判断一个数是否在1到10之间，可以写为 `if num >= 1 and num <= 10:`。'
+),
+(
+  395,
+  27,
+  '优惠券规则',
+  '商店促销规则：会员或者单笔消费满100元即可使用优惠券。请补全下面的判断代码。',
+  NULL,
+  NULL,
+  '{"segments": [{"type": "code_inline", "parts": [{"type": "code", "value": "is_member = False\\n"}, {"type": "code", "value": "total_price = 120\\n"}, {"type": "code", "value": "if is_member "}, {"type": "slot", "index": 0}, {"type": "code", "value": " total_price >= 100:\\n"}, {"type": "code", "value": "    print(\\\"可以使用优惠券！\\\")"}]}]}',
+  '["and", "or", "not", "|", "||", "&&"]',
+  '[1]',
+  '规则是满足两个条件（是会员、或消费满100）中的**任意一个**即可。因此应使用逻辑‘或’运算符`or`来连接条件。',
+  '类似场景：判断是否应该带伞：`if is_raining or weather_forecast == ''rainy'':`'
+),
+(
+  399,
+  27,
+  '三好学生评选',
+  '评选条件：品德为优，并且（语文或数学）成绩大于90分。请补全下面的判断逻辑。',
+  NULL,
+  NULL,
+  '{"segments": [{"type": "code_inline", "parts": [{"type": "code", "value": "moral = ''优''\\n"}, {"type": "code", "value": "chinese = 88\\n"}, {"type": "code", "value": "math = 95\\n"}, {"type": "code", "value": "if moral == ''优'' "}, {"type": "slot", "index": 0}, {"type": "code", "value": " ("}, {"type": "slot", "index": 1}, {"type": "code", "value": " > 90 "}, {"type": "slot", "index": 2}, {"type": "code", "value": " "}, {"type": "slot", "index": 3}, {"type": "code", "value": " > 90):\\n"}, {"type": "code", "value": "    print(\\\"符合三好学生条件\\\")"}]}]}',
+  '["and", "or", "chinese", "math", "and", "or", "not"]',
+  '[0, 2, 4, 5]',
+  '首先，总条件由‘品德为优’和‘（语文或数学）成绩大于90分’两部分用`and`连接。其次，括号内‘语文或数学’需要`or`连接两个具体科目的判断。填空顺序为：`and` -> `chinese` -> `or` -> `math`。',
+  '类似复杂条件：判断是否购买游戏，`if (money > 50 and on_sale) or is_free:`。'
+),
+(
+  400,
+  27,
+  '密码强度检查',
+  '帮助补全代码，检查密码强度：长度不小于8位，且必须同时包含数字和字母（简单版：判断是否全是数字或全是字母，这两种情况都算弱密码）。',
+  NULL,
+  NULL,
+  '{"segments": [{"type": "code_inline", "parts": [{"type": "code", "value": "pwd = \\\"abc123\\\"\\n"}, {"type": "code", "value": "is_weak = len(pwd) < 8 "}, {"type": "slot", "index": 0}, {"type": "code", "value": " pwd.isdigit() "}, {"type": "slot", "index": 1}, {"type": "code", "value": " pwd.isalpha()\\n"}, {"type": "code", "value": "if "}, {"type": "slot", "index": 2}, {"type": "code", "value": " is_weak:\\n"}, {"type": "code", "value": "    print(\\\"密码强度弱\\\")"}]}]}',
+  '["or", "and", "and", "or", "not", "is_weak"]',
+  '[0, 1, 3]',
+  '第一个空：弱密码条件1（长度<8）与条件2/3之间是‘或’关系，因为满足任意一个就是弱密码。第二个和第三个空：条件2（全是数字）和条件3（全是字母）之间也是‘或’关系。整个`is_weak`是描述‘弱密码’，最后判断时直接使用它即可，无需再取反。填空顺序为：`or` -> `or` -> `is_weak`。',
+  '简化理解：弱密码 = (太短) 或 (全是数字) 或 (全是字母)。所以判断时，直接检查`is_weak`是否为True。'
+),
+(
+  404,
+  27,
+  '智能家居判断',
+  '补全智能灯泡的开启逻辑：当（光线暗且是晚上）或有人移动时，自动开灯。其中`is_dark`、`is_night`、`motion_detected`均为布尔变量。',
+  NULL,
+  NULL,
+  '{"segments": [{"type": "code_inline", "parts": [{"type": "code", "value": "def auto_light(is_dark, is_night, motion_detected):\\n"}, {"type": "code", "value": "    if ("}, {"type": "slot", "index": 0}, {"type": "code", "value": " "}, {"type": "slot", "index": 1}, {"type": "code", "value": " "}, {"type": "slot", "index": 2}, {"type": "code", "value": ") "}, {"type": "slot", "index": 3}, {"type": "code", "value": " motion_detected:\\n"}, {"type": "code", "value": "        return True  # 开灯\\n"}, {"type": "code", "value": "    else:\\n"}, {"type": "code", "value": "        return False # 关灯"}]}]}',
+  '["is_dark", "and", "is_night", "and", "or"]',
+  '[0, 1, 2, 4]',
+  '开灯有两个可能的原因：1. 光线暗且是晚上（用`and`连接）。2. 有人移动。这两个原因之间是‘或’关系（满足任意一个即可开灯）。因此，括号内填`is_dark`、`and`、`is_night`，括号外与`motion_detected`用`or`连接。',
+  '类似判断：是否发送通知，`if (is_important and is_unread) or from_boss:`。'
+),
+(
+  405,
+  27,
+  '闰年判定官',
+  '公历闰年规则：能被4整除但不能被100整除，或者能被400整除的年份是闰年。请补全这个经典的判断函数。',
+  NULL,
+  NULL,
+  '{"segments": [{"type": "code_inline", "parts": [{"type": "code", "value": "def is_leap_year(year):\\n"}, {"type": "code", "value": "    return (year % 4 == 0 "}, {"type": "slot", "index": 0}, {"type": "code", "value": " year % 100 != 0) "}, {"type": "slot", "index": 1}, {"type": "code", "value": " year % 400 == 0"}]}]}',
+  '["and", "or", "not"]',
+  '[0, 1]',
+  '规则由两部分组成：‘能被4整除且不能被100整除’（用`and`连接），以及‘能被400整除’。这两部分之间是‘或’关系，因为满足任意一个就是闰年。因此，第一个空填`and`，第二个空填`or`。',
+  '这是逻辑运算符在实际算法中的一个经典应用，清晰地表达了复杂的自然语言规则。'
+);

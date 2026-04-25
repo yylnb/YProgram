@@ -1,0 +1,183 @@
+-- Generated SQL for global_unit=22 (stage=1 unit_local=22 unit_id=22)
+INSERT INTO `que_choice_py_1` (`q_id`, `unit_id`, `title`, `text`, `options`, `answer`, `hints`, `explanation`, `example`) VALUES
+
+(
+  316,
+  22,
+  'input的“礼物”',
+  '小明用 `data = input("请输入你的幸运数字：")` 收到了用户输入的 `8`，请问变量 `data` 的类型是什么？',
+  '["整数类型 (int)", "浮点数类型 (float)", "字符串类型 (str)", "列表类型 (list)"]',
+  3,
+  '["input函数就像一个‘信息接收器’。", "这个接收器不管收什么，都先装进‘文本袋子’。", "这个‘文本袋子’在Python里就是字符串类型。"]',
+  '无论用户在键盘上输入什么数字、字母或符号，`input()`函数默认都会将其作为字符串（str）类型返回并存储。所以输入`8`后，`data`是字符串"8"，而非整数8。',
+  '例如，`name = input("你叫什么？")`，输入“Python”，`name`就是字符串''Python''。'
+),
+(
+  317,
+  22,
+  '魔法变身术',
+  '阿强的程序需要用户输入年龄来计算是否成年。为了进行数字比较，他应该使用以下哪个“魔法”来转换类型？',
+  '["int()", "str()", "float()", "list()"]',
+  1,
+  '["年龄通常是像18、20这样的整数。", "我们需要把文本‘18’变成数字18。", "有一个函数专门负责把字符串变成整数。"]',
+  '`int()`函数可以将内容为整数的字符串（如"18"）转换为整数类型（18），这样才可以进行后续的数学运算或大小比较（如`age >= 18`）。',
+  '`age = int(input("请输入年龄："))`，输入"20"，`age`就是整数20。'
+),
+(
+  318,
+  22,
+  '转换“翻车”现场',
+  '下面哪一行代码，在用户输入“二十”时，可能会引发`ValueError`错误？',
+  '["num = input(\\\"请输入数字：\\\")", "num = int(\\\"20\\\")", "num = int(\\\"二十\\\")", "num = str(20)"]',
+  3,
+  '["`int()`函数只能‘认识’像‘123’这样的数字文本。", "想想‘二十’这个文本，能直接变成数字吗？", "`int(\\\"二十\\\")`会尝试转换，但发现无法理解。"]',
+  '`int()`函数只能将形式上完全是数字的字符串（如"20"）转换为整数。对于包含非数字字符（如汉字、字母）的字符串"二十"，`int()`无法识别其含义，因此会抛出`ValueError`异常。',
+  '`int("3.14")`也会报错，因为它是小数格式，应使用`float("3.14")`。'
+),
+(
+  321,
+  22,
+  '复习：input的暂停术',
+  '下列哪一项是`input()`函数最核心的功能？（复习input基础）',
+  '["在屏幕上打印一段话", "暂停程序运行，等待用户从键盘输入内容", "自动生成一个随机数", "检查用户输入的内容是否正确"]',
+  2,
+  '["想想程序运行到`input()`时会怎样？", "它是不是在等你做点什么？", "它的主要动作是‘等待’和‘接收’。"]',
+  '`input()`函数的核心作用是暂停当前程序的执行，在控制台显示提示信息（如果有），并等待用户通过键盘输入一串字符并按回车键确认，最后将这串字符作为字符串返回。',
+  '就像游戏中的对话选择，`input("你的选择是(A/B): ")`会让游戏暂停等你输入。'
+),
+(
+  322,
+  22,
+  '复习：数字的力量',
+  '在Python中，`10 / 3` 的结果是什么数据类型？（复习数字类型）',
+  '["整数 (int)", "字符串 (str)", "浮点数 (float)", "布尔值 (bool)"]',
+  3,
+  '["10除以3能整除吗？", "结果是3.333...，这是一个小数。", "在Python里，除法运算符`/`的结果总是小数类型。"]',
+  '在Python中，使用除法运算符`/`进行运算时，无论是否能整除，结果总是返回一个浮点数（float）。`10 / 3`的结果是`3.3333333333333335`，属于浮点类型。',
+  '`8 / 2`的结果是`4.0`，也是浮点数，而不是整数4。'
+),
+(
+  323,
+  22,
+  '综合：智能冰箱',
+  '冰箱记录苹果数量为字符串"5"，香蕉数量为整数`3`。代码`total = "5" + 3`会导致什么结果？',
+  '["正确计算总和为8", "将3转换为字符串，拼接得到\\\"53\\\"", "将\\\"5\\\"转换为整数，计算得到8", "程序报错 (TypeError)"]',
+  4,
+  '["注意`\\\"5\\\"`是字符串，`3`是整数。", "在Python中，字符串和整数能直接相加吗？", "`+`对字符串和数字的含义不同，直接混用会冲突。"]',
+  'Python中，`+`运算符对于字符串是拼接，对于数字是求和。当操作数类型不同（一个str，一个int）时，Python无法确定要执行哪种操作，因此会抛出`TypeError`异常，提示类型不支持。',
+  '需先统一类型：`total = int("5") + 3` 或 `total = "5" + str(3)`，目的不同。'
+),
+(
+  326,
+  22,
+  '精准的刻度',
+  '科学实验要求输入精确到小数点后两位的重量。为了正确处理类似“12.34”的输入，应该使用什么函数转换？',
+  '["int()", "str()", "float()", "round()"]',
+  3,
+  '["‘12.34’是一个包含小数点的数字文本。", "`int()`函数看到小数点会‘罢工’。", "需要一个能处理小数的转换函数。"]',
+  '`float()`函数专门用于将字符串或整数转换为浮点数（小数）。它可以正确处理像“12.34”、“5.0”甚至“-0.1”这样包含小数点、表示小数的字符串。',
+  '`weight = float("12.34")` 将得到浮点数 `12.34`，可以用于精确计算。'
+),
+(
+  327,
+  22,
+  '防错大师',
+  '为了避免用户输入“一百”导致`int()`转换崩溃，以下哪种预处理方法是无效的？',
+  '["使用`if user_input.isdigit():`进行判断", "直接使用`int(user_input)`，相信用户", "使用`try...except ValueError`捕获异常", "提示用户“请输入阿拉伯数字”"]',
+  2,
+  '["题目问的是‘无效’方法。", "‘一百’显然不是`int()`能接受的格式。", "不检查就直接转换，风险很高。"]',
+  '选项B“直接使用`int(user_input)`”是无效的防错方法，因为它没有对非数字字符串（如“一百”）做任何处理，程序会直接抛出`ValueError`异常并中断。其他选项都是有效的预防或处理措施。',
+  '有效方法示例：`try: num = int(input); except: print("输入无效")`。'
+),
+(
+  328,
+  22,
+  'eval的魔法与风险',
+  '关于`eval()`函数，例如`result = eval(input())`，以下说法正确的是？',
+  '["它只能将字符串转换成整数。", "它安全无害，可以随意使用。", "它会把输入的字符串当作Python表达式来执行。", "它的功能与`int()`完全相同。"]',
+  3,
+  '["`eval`是‘evaluate’（求值）的缩写。", "试试输入‘3+5*2’，看它会输出什么。", "它不仅仅做类型转换。"]',
+  '`eval()`函数会将传入的字符串参数当作有效的Python表达式来解析并执行。例如，输入`"3+5*2"`，它会计算出结果`13`。但这非常危险，因为用户可能输入恶意代码。',
+  '`eval("pow(2, 3)")`会返回8，因为它计算了2的3次方。但切勿用于处理不可信的输入。'
+);
+
+INSERT INTO `que_fill_py_1` (`q_id`, `unit_id`, `title`, `text`, `input`, `output`, `code`, `options`, `answer`, `explanation`, `example`) VALUES
+
+(
+  319,
+  22,
+  '凑个整钱数',
+  '帮收银员小美补全代码，让她把顾客输入的零钱金额（字符串）转换成整数，方便计算。',
+  '["8.5"]',
+  NULL,
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "# 顾客说他有这些零钱（元）"}, {"type": "code_line", "value": "coins_str = input(\\\"请输入零钱金额（如‘8.5’）：\\\")"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "coins_int = "}, {"type": "slot", "index": 0}, {"type": "code", "value": "(coins_str)"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "print(\\\"整数金额是：\\\", coins_int)"}]}]}',
+  '["int", "float", "str", "convert", "to_int", "change"]',
+  '[1]',
+  '顾客输入的是类似‘8.5’的带小数的字符串，要将其先转换为浮点数（float）类型，然后赋值给`coins_int`变量（虽然变量名是int，但值可以是float）。直接使用`int()`会丢失小数部分或报错。',
+  '类似地，处理价格‘19.9’：`price = float(input("..."))`。'
+),
+(
+  320,
+  22,
+  '计算购物车',
+  '小明想计算购物车里两件商品的总价。请帮他补全从输入到计算的关键步骤。',
+  '["30", "45.5"]',
+  '["总价为： 75.5"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "# 输入两件商品的价格"}, {"type": "code_line", "value": "price1_str = input(\\\"第一件商品价格：\\\") # 假设输入''30''"}, {"type": "code_line", "value": "price2_str = input(\\\"第二件商品价格：\\\") # 假设输入''45.5''"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "# 类型转换"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "price1 = "}, {"type": "slot", "index": 0}, {"type": "code", "value": "(price1_str) # 转换为数字"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "price2 = float("}, {"type": "slot", "index": 1}, {"type": "code", "value": ") # 转换为数字"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "# 计算总价"}, {"type": "code_line", "value": "total = price1 + price2"}, {"type": "code_line", "value": "print(\\\"总价为：\\\", total)"}]}]}',
+  '["int", "float", "price1_str", "price2_str", "str", "input", "total"]',
+  '[1, 3]',
+  '第一空，`price1_str`是字符串‘30’，要参与数学计算，需转换为数字。由于是整数，使用`int()`。第二空，`price2_str`是字符串‘45.5’，是小数，应使用`float()`函数进行转换，填入变量名`price2_str`。',
+  '通用模式：`数值变量 = 转换函数(字符串输入变量)`，如 `num = float(user_input)`。'
+),
+(
+  324,
+  22,
+  '复习填空：温度转换器',
+  '补全这个将华氏温度（字符串输入）转换为摄氏温度的程序。（复习数字运算与转换）',
+  '["77"]',
+  '["摄氏温度为： 25.0"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "# 温度转换程序：华氏度 -> 摄氏度"}, {"type": "code_line", "value": "# 公式：C = (F - 32) / 1.8"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "f_str = "}, {"type": "slot", "index": 0}, {"type": "code", "value": "(\\\"请输入华氏温度：\\\")"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "f = "}, {"type": "slot", "index": 1}, {"type": "code", "value": "(f_str)  # 转换为浮点数"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "c = (f - 32) / 1.8"}, {"type": "code_line", "value": "print(\\\"摄氏温度为：\\\", c)"}]}]}',
+  '["input", "float", "int", "print", "f", "f_str", "convert"]',
+  '[1, 2]',
+  '第一空，需要调用`input()`函数获取用户输入的字符串。第二空，为了进行小数运算`(f - 32) / 1.8`，必须将输入得到的字符串`f_str`转换为浮点数，因此使用`float()`函数。',
+  '类似应用：`km = float(input("请输入公里数："))`，然后进行`miles = km * 0.6214`计算。'
+),
+(
+  325,
+  22,
+  '综合填空：预算检查员',
+  '补全代码，判断用户输入的预算（字符串）是否足够支付单价为100元的商品。要求输出布尔值True或False。',
+  '["88"]',
+  '["预算是否足够？ False"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "budget_str = input(\\\"请输入你的预算（元）：\\\")"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "budget = "}, {"type": "slot", "index": 0}, {"type": "code", "value": "(budget_str)"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "is_enough = "}, {"type": "slot", "index": 1}, {"type": "code", "value": " >= 100"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "print(\\\"预算是否足够？\\\", is_enough)"}]}]}',
+  '["int", "float", "budget", "budget_str", "is_enough", "True", "100"]',
+  '[1, 3]',
+  '第一空，预算字符串（如‘88’）需要转换为数字才能与100比较。这里使用`int()`或`float()`均可，但通常预算为整数，用`int()`更合适。第二空，是比较预算数字是否大于等于100，因此填入已转换的变量名`budget`。',
+  '类似逻辑：`can_vote = int(age_str) >= 18`，判断年龄是否达到投票标准。'
+),
+(
+  329,
+  22,
+  '混合计算器',
+  '补全代码，实现以下功能：输入两个数字（字符串），将它们都转换为浮点数，然后输出它们的和与差。',
+  '["10.5", "3.2"]',
+  '["和为： 13.7", "差为： 7.3"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "a_str = input(\\\"请输入第一个数：\\\")"}, {"type": "code_line", "value": "b_str = input(\\\"请输入第二个数：\\\")"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "a = "}, {"type": "slot", "index": 0}, {"type": "code", "value": "(a_str)"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "b = "}, {"type": "slot", "index": 1}, {"type": "code", "value": "(b_str)"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "sum_ab = a + b"}, {"type": "code_line", "value": "diff_ab = a - b"}, {"type": "code_line", "value": "print(\\\"和为：\\\", sum_ab)"}, {"type": "code_line", "value": "print(\\\"差为：\\\", diff_ab)"}]}]}',
+  '["int", "float", "str", "a_str", "b_str", "sum_ab", "diff_ab"]',
+  '[2, 2]',
+  '两个空都需要将输入的字符串（如“10.5”）转换为浮点数，以便进行精确的加法和减法运算。因此，两空都应填入`float`。使用`int()`会丢失小数部分或对“10.5”报错。',
+  '通用模式：对可能含小数的输入，优先使用`float()`转换，如`x = float(input("输入一个数："))`。'
+),
+(
+  330,
+  22,
+  '类型转换四重奏',
+  '补全这个演示不同类型转换的代码。注意观察转换的顺序和结果。',
+  '["25"]',
+  '["整数： 25", "浮点数： 25.0", "字符串： 25", "再转整数： 25"]',
+  '{"segments": [{"type": "code_block", "lines": [{"type": "code_line", "value": "original = input(\\\"请输入一个整数：\\\")  # 假设输入''25''"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "to_int = "}, {"type": "slot", "index": 0}, {"type": "code", "value": "(original)"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "to_float = "}, {"type": "slot", "index": 1}, {"type": "code", "value": "(to_int)"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "to_str = "}, {"type": "slot", "index": 2}, {"type": "code", "value": "(to_float)"}]}, {"type": "code_inline", "parts": [{"type": "code", "value": "back_to_int = int("}, {"type": "slot", "index": 3}, {"type": "code", "value": ")"}]}, {"type": "code_block", "lines": [{"type": "code_line", "value": "print(\\\"整数：\\\", to_int)"}, {"type": "code_line", "value": "print(\\\"浮点数：\\\", to_float)"}, {"type": "code_line", "value": "print(\\\"字符串：\\\", to_str)"}, {"type": "code_line", "value": "print(\\\"再转整数：\\\", back_to_int)"}]}]}',
+  '["int", "float", "str", "original", "to_int", "to_float", "to_str"]',
+  '[1, 2, 3, 6]',
+  '第一空，将原始字符串‘25’转为整数，用`int`。第二空，将整数`to_int`转为浮点数，用`float`。第三空，将浮点数`to_float`转为字符串，用`str`。第四空，将字符串`to_str`（此时是‘25.0’）再转回整数，填入变量名`to_str`。注意`int(''25.0'')`是允许的，会得到25。',
+  '这展示了数据在不同类型间转换的链条：字符串 -> 整数 -> 浮点数 -> 字符串 -> 整数。'
+);

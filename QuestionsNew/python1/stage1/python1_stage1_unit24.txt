@@ -1,0 +1,274 @@
+[
+  {
+    'id': 1,
+    'type': 'choice',
+    'title': '数字格式化：保留小数',
+    'content': 'price = 3.4567，想用 f-string 显示为 "3.46"，下列哪个写法正确？',
+    'options': {
+      'A': 'f"{price:.2f}"',
+      'B': 'f"{price:.2}"',
+      'C': 'f"{price:2f}"',
+      'D': 'f"{price:.02f}"'
+    },
+    'answer': 'A',
+    'hints': [
+      '保留小数通常使用 . 后跟位数。',
+      '语法是 {变量:格式}。',
+      '".2f" 是常见的浮点格式说明。'
+    ],
+    'explanation': 'f"{price:.2f}" 会把浮点数格式化为两位小数并做四舍五入。',
+    'example': '例如 f"{3.14159:.3f}" → "3.142"。'
+  },
+
+  {
+    'id': 2,
+    'type': 'choice',
+    'title': '字符串对齐：左/右/居中',
+    'content': 'name = "Amy"，想用 f-string 在宽度 10 中右对齐显示，应使用哪种格式？',
+    'options': {
+      'A': 'f"{name:>10}"',
+      'B': 'f"{name:<10}"',
+      'C': 'f"{name:^10}"',
+      'D': 'f"{name:10}"'
+    },
+    'answer': 'A',
+    'hints': [
+      '> 表示右对齐，< 表示左对齐，^ 表示居中。',
+      '宽度直接写在冒号后面。',
+      '检查哪个选项用了 >。'
+    ],
+    'explanation': 'f"{name:>10}" 会在总宽 10 中把 name 右对齐。',
+    'example': '例如 f"{\"x\":^5}" → "  x  "。'
+  },
+
+  {
+    'id': 3,
+    'type': 'choice',
+    'title': '数字填充与对齐',
+    'content': 'n = 7，想用 f-string 显示为三位宽并在左边补零 "007"，正确写法是？',
+    'options': {
+      'A': 'f"{n:03d}"',
+      'B': 'f"{n:0>3}"',
+      'C': 'f"{n:03}"',
+      'D': 'f"{n:3d}"'
+    },
+    'answer': 'A',
+    'hints': [
+      '整数格式化常用 d。',
+      '0 填充通常写成 0 后跟宽度。',
+      '选项 A 是常见正确写法。'
+    ],
+    'explanation': 'f"{n:03d}" 使用零填充并指定整数格式 d，得到 "007"。',
+    'example': '例如 f"{5:04d}" → "0005"。'
+  },
+
+  {
+    'id': 4,
+    'type': 'fill',
+    'title': '在 f-string 中格式化百分比',
+    'content': '把 0.8532 显示为 "85.32%"（保留两位小数并乘 100）',
+    'input': 'rate = 0.8532',
+    'output': '85.32%',
+    'code': 'print(___"{___ * 100:.__f}%" )',
+    'options': 'f, rate, 2, .2f, .2, :.2f, 100',
+    'answer': '1,2,6,4',
+    'explanation': '需要 f-string：f"{rate * 100:.2f}%"；选项顺序对应 f, rate, : .2f, .2f（题中替换为相应编号）。',
+    'example': '例如 f"{0.5 * 100:.1f}%" → "50.0%"'
+  },
+
+  {
+    'id': 5,
+    'type': 'fill',
+    'title': '将整数按千分位格式化',
+    'content': '把 number = 1234567 用 f-string 格式化为 "1,234,567"（使用格式说明符）。',
+    'input': 'number = 1234567',
+    'output': '1,234,567',
+    'code': 'print(___"{___:__,d}" )',
+    'options': 'f, number, ,, _, :, ",d", ",d", ",_",
+    'answer': '1,2,8',
+    'explanation': '正确写法为 f"{number:,d}"，代表千位分隔符。这里选择 f, number, ",d" 对应位置。',
+    'example': '例如 f"{12345:,d}" → "12,345"'
+  },
+
+  {
+    'id': 6,
+    'type': 'choice',
+    'title': '复习 f-string 基础：变量插入',
+    'content': '若 name = "Tom"，下列哪一项是合法的 f-string 变体？',
+    'options': {
+      'A': 'f"Hello {name}"',
+      'B': '"Hello {name}"',
+      'C': 'f"Hello "+name',
+      'D': '"Hello " + {name}'
+    },
+    'answer': 'A',
+    'hints': [
+      'f-string 必须以 f 或 F 开头。',
+      '{} 内放变量。',
+      '选项 B 虽含 {} 但缺少 f 前缀。'
+    ],
+    'explanation': '只有 f"Hello {name}" 是正确的 f-string 写法。',
+    'example': 'f"User: {user}" 可以直接嵌入变量。'
+  },
+
+  {
+    'id': 7,
+    'type': 'choice',
+    'title': '复习 f-string 基础：表达式',
+    'content': '下列哪项能在 f-string 中进行运算并插入结果？',
+    'options': {
+      'A': 'f"{2 * 3}"',
+      'B': 'f"{2 * 3;}"',
+      'C': 'f"{2 **}"',
+      'D': 'f"{2 * }"'
+    },
+    'answer': 'A',
+    'hints': [
+      '花括号中允许合法表达式。',
+      '分号会导致语法错误。',
+      '选项 A 是正确完整表达式。'
+    ],
+    'explanation': 'f"{2 * 3}" 会插入表达式结果 "6"。',
+    'example': '例如 f"{a + b}" 可以直接插入计算值。'
+  },
+
+  {
+    'id': 8,
+    'type': 'choice',
+    'title': '复习 f-string 基础：花括号输出',
+    'content': '要在 f-string 中输出一个真实的花括号字符 "{"，应该怎么写？',
+    'options': {
+      'A': 'f"{{"',
+      'B': 'f"\\{"',
+      'C': 'f"{{{"',
+      'D': '"{"'
+    },
+    'answer': 'A',
+    'hints': [
+      '花括号本身是 f-string 的语法符号。',
+      '需要成对写两个花括号表示一个文字花括号。',
+      '选项 A 用两个花括号表示一个。'
+    ],
+    'explanation': '在 f-string 中用 "{{" 或 "}}" 来输出字面上的花括号。',
+    'example': 'f"Set = {{1,2,3}}" → 输出 Set = {1,2,3}'
+  },
+
+  {
+    'id': 9,
+    'type': 'fill',
+    'title': '复习：在 f-string 中使用变量',
+    'content': '补全 f-string，将 user 和 score 插入字符串 "User: Tom, Score: 95"。',
+    'input': 'user = "Tom"\nscore = 95',
+    'output': 'User: Tom, Score: 95',
+    'code': 'print(___"User: {___}, Score: {___}" )',
+    'options': 'f, user, score, name, "{", "}"',
+    'answer': '1,2,3',
+    'explanation': '需要 f-string：f"User: {user}, Score: {score}"。',
+    'example': '例如 f"ID: {id}, Age: {age}"'
+  },
+
+  {
+    'id': 10,
+    'type': 'fill',
+    'title': '复习：表达式与格式说明组合',
+    'content': '把 3.14159 显示为 "3.1416"（四舍五入到 4 位），用 f-string 完成。',
+    'input': 'pi = 3.14159',
+    'output': '3.1416',
+    'code': 'print(___"{___:.__f}" )',
+    'options': 'f, pi, .4f, :.4f, 4f, ":.4f", 4',
+    'answer': '1,2,4',
+    'explanation': '正确格式为 f"{pi:.4f}"，选项依次为 f, pi, : .4f。',
+    'example': 'f"{2/3:.3f}" → "0.667"'
+  },
+
+  {
+    'id': 11,
+    'type': 'choice',
+    'title': '格式化字符串：填充字符',
+    'content': '要把 s = "7" 格式化为 "*7*"（在左右各填充一个星号，总宽度 3），哪个 f-string 写法最合适？',
+    'options': {
+      'A': 'f"{s:*^3}"',
+      'B': 'f"{s:*>3}"',
+      'C': 'f"{s:*<3}"',
+      'D': 'f"{s:*3^}"'
+    },
+    'answer': 'A',
+    'hints': [
+      '^ 表示居中，左右填充字符写在最前面。',
+      '格式是 {变量:填充符对齐宽度}。',
+      '检查哪个选项使用了 ^ 并放置了填充符 *。'
+    ],
+    'explanation': 'f"{s:*^3}" 会让 s 居中并在两边用 * 填充，结果 "*7*".',
+    'example': 'f"{\"x\":-^5}" → "--x--"'
+  },
+
+  {
+    'id': 12,
+    'type': 'choice',
+    'title': '数字显示为科学计数法',
+    'content': 'x = 12345678，要用 f-string 输出为科学计数法（如 1.234568e+07），应使用哪个格式类型？',
+    'options': {
+      'A': 'f"{x:.6e}"',
+      'B': 'f"{x:.6f}"',
+      'C': 'f"{x:,.6f}"',
+      'D': 'f"{x:d}"'
+    },
+    'answer': 'A',
+    'hints': [
+      '科学计数法的格式字符是 e 或 E。',
+      '.6 表示保留小数位数。',
+      '选项 A 使用了 e。'
+    ],
+    'explanation': 'f"{x:.6e}" 会以科学计数法显示并保留 6 位小数。',
+    'example': 'f"{0.00123:.2e}" → "1.23e-03"'
+  },
+
+  {
+    'id': 13,
+    'type': 'choice',
+    'title': '控制符号显示（正负号）',
+    'content': '想让数字总带符号显示（正数带 +，负数带 -），应使用什么格式？',
+    'options': {
+      'A': 'f"{n:+d}"',
+      'B': 'f"{n:d}"',
+      'C': 'f"{n: d}"',
+      'D': 'f"{n:0d}"'
+    },
+    'answer': 'A',
+    'hints': [
+      '+ 号用于显式显示正负号。',
+      '在格式说明符位置放 +。',
+      '选项 A 使用了 +。'
+    ],
+    'explanation': 'f"{n:+d}" 会把正数显示为 "+X"，负数显示为 "-Y"。',
+    'example': 'n = 5 → f"{n:+d}" → "+5"'
+  },
+
+  {
+    'id': 14,
+    'type': 'fill',
+    'title': '用 f-string 控制小数填宽并补零',
+    'content': '将 value = 2.5 显示为 "002.50"（总宽 6，整数部分补零，保留两位小数）。',
+    'input': 'value = 2.5',
+    'output': '002.50',
+    'code': 'print(___"{___:0>6.__f}" )',
+    'options': 'f, value, 2, .2f, :0>6, 6, 0>6',
+    'answer': '1,2,6,4',
+    'explanation': '组合说明符为 0>6 表示左侧 0 填充到宽度 6，.2f 保留两位小数：f"{value:0>6.2f}"。',
+    'example': '例如 f"{3.1:0>6.2f}" → "003.10"'
+  },
+
+  {
+    'id': 15,
+    'type': 'fill',
+    'title': '混合示例：百分比与宽度',
+    'content': '将 ratio = 0.7563 显示为宽度 8，保留 1 位小数并带百分号（结果 "   75.6%")。',
+    'input': 'ratio = 0.7563',
+    'output': '   75.6%',
+    'code': 'print(___"{___ * 100:>8.__f}%" )',
+    'options': 'f, ratio, 1, .1f, :.1f, 100, >8',
+    'answer': '1,2,6,7,4',
+    'explanation': '需要 f-string：f"{ratio * 100:>8.1f}%"；步骤为乘 100、指定宽度 >8 与格式 .1f，然后再加 % 符号。',
+    'example': '例如 f"{0.5*100:>6.1f}%" → " 50.0%"'
+  }
+]
