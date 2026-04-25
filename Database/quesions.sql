@@ -53,19 +53,6 @@ ALTER TABLE `que_choice_java_1` ROW_FORMAT=DYNAMIC;
 
 
 -- ======= 填空题表：模板 (修改后) =======
--- 字段说明：
--- id          : 自增主键
--- q_id        : 题目全局 id（整型，用于与其他表关联）
--- unit_id     : 单元/章节 id
--- title       : 题目短标题
--- text        : JSON 数组，每个元素为一段文本。空位以空字符串 "" 或 null 作为分隔（序列化表达填空位置）
--- options     : JSON 数组，每个元素为可选填入的字符串（例如 ["s1","s2","s3"]）
--- answer      : JSON 数组，按空位顺序存放 options 的索引（1-based），例如 [1,2]
--- explanation : 题解（TEXT）
--- example     : 示例（TEXT）
--- created_at/updated_at : 时间戳
--- 索引：q_id, unit_id
-
 
 -- -- 创建 Python 填空表
 CREATE TABLE IF NOT EXISTS `que_fill_py_1` (
